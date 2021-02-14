@@ -43,6 +43,10 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+!UnityWebBrowserServer/*.sln
+!UnityWebBrowserServer/*.csproj
+UnityWebBrowserServer/bin/*
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
