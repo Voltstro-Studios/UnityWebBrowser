@@ -1,4 +1,5 @@
 ﻿using System;
+using Xilium.CefGlue;
 using ZeroMQ;
 
 namespace UnityWebBrowserServer
@@ -7,6 +8,37 @@ namespace UnityWebBrowserServer
 	{
 		public static void Main(string[] args)
 		{
+			//Setup CEF
+			CefRuntime.Load();
+
+			CefMainArgs cefMainArgs = new CefMainArgs(new string[0]);
+			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
+
+			CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
+
+			CefSettings cefSettings = new CefSettings
+			{
+				WindowlessRenderingEnabled = true,
+				NoSandbox = true,
+				LogFile = "cef.log"
+			};
+
+			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
+
+			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
+			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
+
+			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
+			{
+				BackgroundColor = new CefColor(255, 60, 85, 115),
+				JavaScript = CefState.Enabled,
+				LocalStorage = CefState.Disabled
+			};
+
+			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(1920, 1080));
+			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, "https://google.com");
+
+			//Setup server
 			using ZContext context = new ZContext();
 			using ZSocket responder = new ZSocket(context, ZSocketType.REP);
 			responder.Bind("tcp://*:5555");
@@ -18,8 +50,12 @@ namespace UnityWebBrowserServer
 				if(message == 1)
 					break;
 
-				responder.Send(new ZFrame("Hello World!"));
+				CefRuntime.DoMessageLoopWork();
+				responder.Send(new ZFrame(cefClient.GetPixels()));
 			}
+
+			cefClient.Dispose();
+			CefRuntime.Shutdown();
 		}
 	}
 }

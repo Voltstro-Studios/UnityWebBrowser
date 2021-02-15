@@ -1,3 +1,6 @@
 [submodule "ThirdParty/ClrZmq4"]
 	path = ThirdParty/ClrZmq4
 	url = https://github.com/zeromq/clrzmq4
+[submodule "ThirdParty/CefGlue"]
+	path = ThirdParty/CefGlue
+	url = https://gitlab.com/xiliumhq/chromiumembedded/cefglue

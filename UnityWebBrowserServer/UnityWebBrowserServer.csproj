@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
   </ItemGroup>
 

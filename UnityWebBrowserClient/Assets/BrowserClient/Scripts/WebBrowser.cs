@@ -6,8 +6,9 @@ public class WebBrowser : MonoBehaviour
 	private WebBrowserClient browserClient = new WebBrowserClient();
 
 	private void Start()
-    {
-	    browserClient.Init();
+	{
+		browserClient.Init();
+		GetComponent<MeshRenderer>().material.mainTexture = browserClient.BrowserTexture;
     }
 
 	private void FixedUpdate()
