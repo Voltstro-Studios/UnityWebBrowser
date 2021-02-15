@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using ZeroMQ;
-using Debug = UnityEngine.Debug;
 
 [Serializable]
 public class WebBrowserClient
@@ -20,7 +16,7 @@ public class WebBrowserClient
 
 	public void Init()
 	{
-		BrowserTexture = new Texture2D(1920, 1080, TextureFormat.BGRA32, false);
+		BrowserTexture = new Texture2D(1920, 1080, TextureFormat.BGRA32, false, true);
 
 		//Start the server process
 		serverProcess = new Process
@@ -48,18 +44,6 @@ public class WebBrowserClient
 			return;
 
 		BrowserTexture.LoadRawTextureData(bytes);
-
-		int xN = BrowserTexture.width;
-		int yN = BrowserTexture.height;
-
-		for (int i = 0; i < xN; i++)
-		{
-			for (int j = 0; j < yN; j++)
-			{
-				BrowserTexture.SetPixel(xN - i - 1, j, BrowserTexture.GetPixel(i, j));
-			}
-		}
-
 		BrowserTexture.Apply(false);
     }
 
@@ -69,16 +53,5 @@ public class WebBrowserClient
 
 		requester.Dispose();
 		context.Dispose();
-    }
-
-    private string JoinByteArray(byte[] bytes)
-    {
-		StringBuilder sBuilder = new StringBuilder();
-		foreach (byte b in bytes)
-		{
-			sBuilder.Append($"{b}, ");
-		}
-
-		return sBuilder.ToString();
     }
 }

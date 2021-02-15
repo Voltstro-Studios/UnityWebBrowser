@@ -47,6 +47,9 @@ ExportedObj/
 !UnityWebBrowserServer/*.csproj
 UnityWebBrowserServer/bin/*
 
+UnityWebBrowserClient/GPUCache/*
+UnityWebBrowserClient/cef.log
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
