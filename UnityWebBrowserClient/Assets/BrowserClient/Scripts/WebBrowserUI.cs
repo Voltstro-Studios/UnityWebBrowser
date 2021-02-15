@@ -1,18 +1,19 @@
-using System;
-using Cysharp.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(MeshRenderer))]
-public class WebBrowser : MonoBehaviour
+[RequireComponent(typeof(RawImage))]
+public class WebBrowserUI : MonoBehaviour
 {
 	public WebBrowserClient browserClient = new WebBrowserClient();
 
 	private void Start()
 	{
 		browserClient.Init();
-		GetComponent<MeshRenderer>().material.mainTexture = browserClient.BrowserTexture;
+		GetComponent<RawImage>().texture = browserClient.BrowserTexture;
 		browserClient.Update().Forget();
-    }
+	}
 
 	private void OnDestroy()
 	{
