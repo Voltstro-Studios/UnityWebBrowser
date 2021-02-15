@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WebBrowser : MonoBehaviour
 {
-	private WebBrowserClient browserClient = new WebBrowserClient();
+	public WebBrowserClient browserClient = new WebBrowserClient();
 
 	private void Start()
 	{
