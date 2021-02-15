@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using ZeroMQ;
 
@@ -13,6 +14,8 @@ public class WebBrowserClient
 	private Process serverProcess;
 	private ZContext context;
 	private ZSocket requester;
+
+	private bool isRunning;
 
 	public void Init()
 	{
@@ -31,24 +34,34 @@ public class WebBrowserClient
 		context = new ZContext();
 		requester = new ZSocket(context, ZSocketType.REQ);
 		requester.Connect(ipcEndpoint);
+		isRunning = true;
 	}
 
-    public void FixedUpdate()
+    public async UniTaskVoid Update()
     {
-	    requester.Send(new ZFrame((byte) 0));
+	    while (isRunning)
+	    {
+		    requester.Send(new ZFrame((byte) 0));
 
-	    using ZFrame reply = requester.ReceiveFrame();
-	    byte[] bytes = reply.Read();
+		    using ZFrame reply = requester.ReceiveFrame();
+		    if (!isRunning)
+			    break;
 
-		if(reply == null || reply.Length == 0)
-			return;
+		    byte[] bytes = reply.Read();
 
-		BrowserTexture.LoadRawTextureData(bytes);
-		BrowserTexture.Apply(false);
+		    if(reply == null || reply.Length == 0)
+			    continue;
+
+		    BrowserTexture.LoadRawTextureData(bytes);
+		    BrowserTexture.Apply(false);
+
+		    await UniTask.Delay(100);
+	    }
     }
 
     public void Shutdown()
     {
+	    isRunning = false;
 	    requester.Send(new ZFrame((byte) 1));
 
 		requester.Dispose();

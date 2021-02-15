@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class WebBrowser : MonoBehaviour
@@ -9,12 +10,8 @@ public class WebBrowser : MonoBehaviour
 	{
 		browserClient.Init();
 		GetComponent<MeshRenderer>().material.mainTexture = browserClient.BrowserTexture;
+		browserClient.Update().Forget();
     }
-
-	private void FixedUpdate()
-	{
-		browserClient.FixedUpdate();
-	}
 
 	private void OnDestroy()
 	{
