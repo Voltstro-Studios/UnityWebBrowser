@@ -7,13 +7,14 @@ namespace UnityWebBrowserServer
 {
 	public class Program
 	{
+		[CommandLineArgument("url")] public static string InitialUrl = "https://google.com";
 		[CommandLineArgument("width")] public static int Width = 1920;
 		[CommandLineArgument("height")] public static int Height = 1080;
 
 		public static void Main(string[] args)
 		{
 			CommandLineParser.Init(args);
-			Console.WriteLine($"Starting CEF with {Width}x{Height}");
+			Console.WriteLine($"Starting CEF with {Width}x{Height} at {InitialUrl}");
 
 			//Setup CEF
 			CefRuntime.Load();
@@ -43,7 +44,7 @@ namespace UnityWebBrowserServer
 			};
 
 			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
-			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, "https://google.com");
+			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
 
 			//Setup server
 			using ZContext context = new ZContext();
