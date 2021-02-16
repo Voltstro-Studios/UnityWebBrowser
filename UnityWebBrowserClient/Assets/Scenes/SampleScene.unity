@@ -682,6 +682,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
-    initialUrl: https://youtube.com
+    initialUrl: https://google.com
     width: 1920
     height: 1080
