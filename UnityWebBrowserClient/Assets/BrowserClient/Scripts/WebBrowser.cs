@@ -10,8 +10,8 @@ public class WebBrowser : MonoBehaviour
 	private void Start()
 	{
 		browserClient.Init();
+		browserClient.Start().Forget();
 		GetComponent<MeshRenderer>().material.mainTexture = browserClient.BrowserTexture;
-		browserClient.Update().Forget();
     }
 
 	private void OnDestroy()

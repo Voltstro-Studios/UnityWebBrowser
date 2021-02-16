@@ -1,4 +1,5 @@
 ﻿using System;
+using Voltstro.CommandLineParser;
 using Xilium.CefGlue;
 using ZeroMQ;
 
@@ -6,8 +7,14 @@ namespace UnityWebBrowserServer
 {
 	public class Program
 	{
+		[CommandLineArgument("width")] public static int Width = 1920;
+		[CommandLineArgument("height")] public static int Height = 1080;
+
 		public static void Main(string[] args)
 		{
+			CommandLineParser.Init(args);
+			Console.WriteLine($"Starting CEF with {Width}x{Height}");
+
 			//Setup CEF
 			CefRuntime.Load();
 
@@ -35,7 +42,7 @@ namespace UnityWebBrowserServer
 				LocalStorage = CefState.Disabled
 			};
 
-			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(1920, 1080));
+			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
 			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, "https://google.com");
 
 			//Setup server

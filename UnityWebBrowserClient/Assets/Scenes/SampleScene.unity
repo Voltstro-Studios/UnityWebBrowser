@@ -170,6 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
+    width: 1920
+    height: 1080
 --- !u!23 &340805392
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -679,3 +681,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
+    width: 1920
+    height: 1080
