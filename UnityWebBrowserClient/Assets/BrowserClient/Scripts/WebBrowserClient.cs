@@ -11,6 +11,8 @@ public class WebBrowserClient
 
 	public string initialUrl = "https://google.com";
 
+	public string browserServerPath = @"..\UnityWebBrowserServer\bin\Debug\netcoreapp3.1\UnityWebBrowserServer.exe";
+
 	public int width = 1920;
 	public int height = 1080;
 
@@ -33,9 +35,7 @@ public class WebBrowserClient
 		serverProcess = new Process
 		{
 			//TODO: Figure out path, once we have converted the server to C++ for cross-platform
-			StartInfo = new ProcessStartInfo(
-				$"D:/Projects/2021/UnityWebBrowser/UnityWebBrowserServer/bin/Debug/netcoreapp3.1/UnityWebBrowserServer.exe",
-				$"-width {width} -height {height} -url {initialUrl}")
+			StartInfo = new ProcessStartInfo(browserServerPath, $"-width {width} -height {height} -url {initialUrl}")
 		};
 		serverProcess.Start();
 
