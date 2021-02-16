@@ -34,7 +34,7 @@ public class WebBrowserClient
 		{
 			//TODO: Figure out path, once we have converted the server to C++ for cross-platform
 			StartInfo = new ProcessStartInfo(
-				$"C:/Users/Liam/Documents/Projects/2021/UnityWebBrowser/UnityWebBrowserServer/bin/Debug/netcoreapp3.1/UnityWebBrowserServer.exe",
+				$"D:/Projects/2021/UnityWebBrowser/UnityWebBrowserServer/bin/Debug/netcoreapp3.1/UnityWebBrowserServer.exe",
 				$"-width {width} -height {height} -url {initialUrl}")
 		};
 		serverProcess.Start();

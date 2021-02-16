@@ -28,7 +28,8 @@ namespace UnityWebBrowserServer
 			{
 				WindowlessRenderingEnabled = true,
 				NoSandbox = true,
-				LogFile = "cef.log"
+				LogFile = "cef.log",
+				MultiThreadedMessageLoop = true
 			};
 
 			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
@@ -58,7 +59,6 @@ namespace UnityWebBrowserServer
 				if(message == 1)
 					break;
 
-				CefRuntime.DoMessageLoopWork();
 				responder.Send(new ZFrame(cefClient.GetPixels()));
 			}
 
