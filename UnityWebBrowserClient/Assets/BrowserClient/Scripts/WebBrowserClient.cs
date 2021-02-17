@@ -17,6 +17,8 @@ public class WebBrowserClient
 	public int width = 1920;
 	public int height = 1080;
 
+	public int eventPollingTime = 20;
+
 	public Texture2D BrowserTexture { get; private set; }
 
 	private Process serverProcess;
@@ -68,7 +70,7 @@ public class WebBrowserClient
 			BrowserTexture.LoadRawTextureData(bytes);
 			BrowserTexture.Apply(false);
 
-			await UniTask.Delay(10);
+			await UniTask.Delay(eventPollingTime);
 		}
 	}
 
