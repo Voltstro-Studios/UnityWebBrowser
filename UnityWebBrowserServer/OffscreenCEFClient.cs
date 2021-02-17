@@ -49,7 +49,7 @@ namespace UnityWebBrowserServer
 		public void ProcessEventData(EventData data)
 		{
 			//Keys down
-			foreach (int i in data.keysDown)
+			foreach (int i in data.KeysDown)
 			{
 				KeyEvent(new CefKeyEvent
 				{
@@ -59,7 +59,7 @@ namespace UnityWebBrowserServer
 			}
 
 			//Keys up
-			foreach (int i in data.keysUp)
+			foreach (int i in data.KeysUp)
 			{
 				KeyEvent(new CefKeyEvent
 				{
@@ -69,7 +69,7 @@ namespace UnityWebBrowserServer
 			}
 
 			//Chars
-			foreach (char c in data.chars)
+			foreach (char c in data.Chars)
 			{
 				KeyEvent(new CefKeyEvent
 				{

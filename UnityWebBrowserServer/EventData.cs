@@ -2,12 +2,12 @@
 {
 	public struct EventData
 	{
-		public bool shutdown;
+		public bool Shutdown;
 
-		public int[] keysDown;
+		public int[] KeysDown;
 
-		public int[] keysUp;
+		public int[] KeysUp;
 
-		public string chars;
+		public string Chars;
 	}
 }

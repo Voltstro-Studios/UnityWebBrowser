@@ -103,15 +103,15 @@ public class WebBrowserClient
 
 	public void SetData(string chars, int[] keysDown, int[] keysUp)
 	{
-		eventData.keysDown = keysDown;
-		eventData.keysUp = keysUp;
-		eventData.chars = chars;
+		eventData.KeysDown = keysDown;
+		eventData.KeysUp = keysUp;
+		eventData.Chars = chars;
 	}
 
 	public void Shutdown()
     {
 	    isRunning = false;
-	    eventData.shutdown = true;
+	    eventData.Shutdown = true;
 	    requester.Send(new ZFrame(JsonConvert.SerializeObject(eventData)));
 
 		requester.Dispose();

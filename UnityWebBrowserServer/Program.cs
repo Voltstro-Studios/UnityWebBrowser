@@ -62,7 +62,7 @@ namespace UnityWebBrowserServer
 				{
 					EventData data = JsonConvert.DeserializeObject<EventData>(json);
 
-					if(data.shutdown)
+					if(data.Shutdown)
 						break;
 
 					cefClient.ProcessEventData(data);
