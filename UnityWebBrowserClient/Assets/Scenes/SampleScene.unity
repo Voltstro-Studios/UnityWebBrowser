@@ -683,7 +683,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
-    initialUrl: https://google.com
+    initialUrl: file://C:\Users\Liam\Documents\Projects\2021\UnityWebBrowser\text.html
     browserServerPath: ..\UnityWebBrowserServer\bin\Debug\netcoreapp3.1\UnityWebBrowserServer.exe
     width: 1920
     height: 1080

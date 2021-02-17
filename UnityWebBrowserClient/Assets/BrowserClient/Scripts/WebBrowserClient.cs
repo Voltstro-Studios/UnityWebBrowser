@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 using ZeroMQ;
 
@@ -24,8 +25,11 @@ public class WebBrowserClient
 
 	private bool isRunning;
 
+	private EventData eventData;
+
 	public void Init()
 	{
+		eventData = new EventData();
 		BrowserTexture = new Texture2D(width, height, TextureFormat.BGRA32, false, true);
 	}
 
@@ -49,7 +53,8 @@ public class WebBrowserClient
 
 		while (isRunning)
 		{
-			requester.Send(new ZFrame((byte) 0));
+			string data = JsonConvert.SerializeObject(eventData);
+			requester.Send(new ZFrame(data));
 
 			using ZFrame reply = requester.ReceiveFrame();
 			if (!isRunning)
@@ -63,14 +68,22 @@ public class WebBrowserClient
 			BrowserTexture.LoadRawTextureData(bytes);
 			BrowserTexture.Apply(false);
 
-			await UniTask.Delay(100);
+			await UniTask.Delay(10);
 		}
+	}
+
+	public void SetData(string chars, int[] keysDown, int[] keysUp)
+	{
+		eventData.keysDown = keysDown;
+		eventData.keysUp = keysUp;
+		eventData.chars = chars;
 	}
 
 	public void Shutdown()
     {
 	    isRunning = false;
-	    requester.Send(new ZFrame((byte) 1));
+	    eventData.shutdown = true;
+	    requester.Send(new ZFrame(JsonConvert.SerializeObject(eventData)));
 
 		requester.Dispose();
 		context.Dispose();

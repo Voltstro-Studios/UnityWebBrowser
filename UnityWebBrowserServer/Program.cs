@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Voltstro.CommandLineParser;
 using Xilium.CefGlue;
 using ZeroMQ;
@@ -55,10 +56,22 @@ namespace UnityWebBrowserServer
 			while (true)
 			{
 				using ZFrame request = responder.ReceiveFrame();
-				byte message = request.ReadAsByte();
-				if(message == 1)
-					break;
+				string json = request.ReadString();
+				Console.WriteLine(json);
+				try
+				{
+					EventData data = JsonConvert.DeserializeObject<EventData>(json);
 
+					if(data.shutdown)
+						break;
+
+					cefClient.ProcessEventData(data);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e);
+				}
+				
 				responder.Send(new ZFrame(cefClient.GetPixels()));
 			}
 

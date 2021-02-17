@@ -10,6 +10,7 @@ namespace UnityWebBrowserServer
 		private CefBrowserHost host;
 		private OffscreenLoadHandler loadHandler;
 		private OffscreenRenderHandler renderHandler;
+		private OffscreenLifespanHandler lifespanHandler;
 		private CefSize size;
 
 		private static readonly object sPixelLock = new object();
@@ -19,6 +20,7 @@ namespace UnityWebBrowserServer
 		{
 			loadHandler = new OffscreenLoadHandler(this);
 			renderHandler = new OffscreenRenderHandler(this);
+			lifespanHandler = new OffscreenLifespanHandler();
 
 			sPixelBuffer = new byte[size.Width * size.Height * 4];
 
@@ -44,6 +46,44 @@ namespace UnityWebBrowserServer
 			return pixelBytes;
 		}
 
+		public void ProcessEventData(EventData data)
+		{
+			//Keys down
+			foreach (int i in data.keysDown)
+			{
+				KeyEvent(new CefKeyEvent
+				{
+					WindowsKeyCode = i,
+					EventType = CefKeyEventType.KeyDown
+				});
+			}
+
+			//Keys up
+			foreach (int i in data.keysUp)
+			{
+				KeyEvent(new CefKeyEvent
+				{
+					WindowsKeyCode = i,
+					EventType = CefKeyEventType.KeyUp
+				});
+			}
+
+			//Chars
+			foreach (char c in data.chars)
+			{
+				KeyEvent(new CefKeyEvent
+				{
+					WindowsKeyCode = c,
+					EventType = CefKeyEventType.Char
+				});
+			}
+		}
+
+		private void KeyEvent(CefKeyEvent keyEvent)
+		{
+			lifespanHandler.Browser.GetHost().SendKeyEvent(keyEvent);
+		}
+
 		protected override CefLoadHandler GetLoadHandler()
 		{
 			return loadHandler;
@@ -54,7 +94,12 @@ namespace UnityWebBrowserServer
 			return renderHandler;
 		}
 
-		internal class OffscreenLoadHandler : CefLoadHandler
+		protected override CefLifeSpanHandler GetLifeSpanHandler()
+		{
+			return lifespanHandler;
+		}
+
+		private class OffscreenLoadHandler : CefLoadHandler
 		{
 			private readonly OffscreenCEFClient client;
 
@@ -79,7 +124,7 @@ namespace UnityWebBrowserServer
 			}
 		}
 
-		internal class OffscreenRenderHandler : CefRenderHandler
+		private class OffscreenRenderHandler : CefRenderHandler
 		{
 			private OffscreenCEFClient client;
 
@@ -144,6 +189,21 @@ namespace UnityWebBrowserServer
 
 			protected override void OnImeCompositionRangeChanged(CefBrowser browser, CefRange selectedRange, CefRectangle[] characterBounds)
 			{
+			}
+		}
+
+		private class OffscreenLifespanHandler : CefLifeSpanHandler
+		{
+			public CefBrowser Browser;
+
+			protected override void OnAfterCreated(CefBrowser browser)
+			{
+				Browser = browser;
+			}
+
+			protected override bool DoClose(CefBrowser browser)
+			{
+				return false;
 			}
 		}
 
