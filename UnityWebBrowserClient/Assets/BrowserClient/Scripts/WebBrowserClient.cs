@@ -32,7 +32,12 @@ public class WebBrowserClient
 
 	public void Init()
 	{
-		eventData = new EventData();
+		eventData = new EventData
+		{
+			KeysDown = new int[0],
+			KeysUp = new int[0],
+			Chars = ""
+		};
 		BrowserTexture = new Texture2D(width, height, TextureFormat.BGRA32, false, true);
 	}
 
