@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
-using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using ZeroMQ;
+using Debug = UnityEngine.Debug;
 
 [Serializable]
 public class WebBrowserClient
@@ -17,7 +18,7 @@ public class WebBrowserClient
 	public int width = 1920;
 	public int height = 1080;
 
-	public int eventPollingTime = 20;
+	public float eventPollingTime = 0.01f;
 
 	public Texture2D BrowserTexture { get; private set; }
 
@@ -35,7 +36,7 @@ public class WebBrowserClient
 		BrowserTexture = new Texture2D(width, height, TextureFormat.BGRA32, false, true);
 	}
 
-	public async UniTaskVoid Start()
+	public IEnumerator Start()
 	{
 		//Start the server process
 		serverProcess = new Process
@@ -47,18 +48,44 @@ public class WebBrowserClient
 
 		//Start our client
 		context = new ZContext();
-		requester = new ZSocket(context, ZSocketType.REQ);
-		requester.Connect(ipcEndpoint);
+		requester = new ZSocket(context, ZSocketType.REQ)
+		{
+			SendTimeout = new TimeSpan(0, 0, 2),
+			ReceiveTimeout = new TimeSpan(0, 0, 2)
+		};
+
+		requester.Connect(ipcEndpoint, out ZError error);
+
+		if (!Equals(error, ZError.None))
+		{
+			Debug.LogError("Server failed to start for some reason!");
+
+			yield break; 
+		}
+
 		isRunning = true;
 
-		await UniTask.Delay(100);
+		yield return new WaitForSeconds(0.100f);
 
 		while (isRunning)
 		{
 			string data = JsonConvert.SerializeObject(eventData);
-			requester.Send(new ZFrame(data));
+			requester.Send(new ZFrame(data), out error);
 
-			using ZFrame reply = requester.ReceiveFrame();
+			if (!Equals(error, ZError.None))
+			{
+				Debug.LogError("Failed to send to server for some reason!");
+				continue; 
+			}
+
+			using ZFrame reply = requester.ReceiveFrame(out error);
+
+			if (!Equals(error, ZError.None))
+			{
+				Debug.LogError("Failed to receive from server for some reason!");
+				continue; 
+			}
+
 			if (!isRunning)
 				break;
 
@@ -70,7 +97,7 @@ public class WebBrowserClient
 			BrowserTexture.LoadRawTextureData(bytes);
 			BrowserTexture.Apply(false);
 
-			await UniTask.Delay(eventPollingTime);
+			yield return new WaitForSeconds(eventPollingTime);
 		}
 	}
 

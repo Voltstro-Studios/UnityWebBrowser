@@ -14,7 +14,7 @@ public class WebBrowserUI : MonoBehaviour
 	private void Start()
 	{
 		browserClient.Init();
-		browserClient.Start().Forget();
+		StartCoroutine(browserClient.Start());
 		GetComponent<RawImage>().texture = browserClient.BrowserTexture;
 	}
 

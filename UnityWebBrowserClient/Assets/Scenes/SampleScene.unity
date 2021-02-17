@@ -174,6 +174,7 @@ MonoBehaviour:
     browserServerPath: D:/Projects/2021/UnityWebBrowser/UnityWebBrowserServer/bin/Debug/netcoreapp3.1/UnityWebBrowserServer.exe
     width: 1920
     height: 1080
+    eventPollingTime: 0.2
 --- !u!23 &340805392
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -683,7 +684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
-    initialUrl: file://C:\Users\Liam\Documents\Projects\2021\UnityWebBrowser\text.html
+    initialUrl: https://google.com
     browserServerPath: ..\UnityWebBrowserServer\bin\Debug\netcoreapp3.1\UnityWebBrowserServer.exe
     width: 1920
     height: 1080
+    eventPollingTime: 0.01
