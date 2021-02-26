@@ -77,6 +77,11 @@ public class WebBrowserClient
 			string data = JsonConvert.SerializeObject(eventData);
 			requester.Send(new ZFrame(data), out error);
 
+			eventData.LeftDown = false;
+			eventData.LeftUp = false;
+			eventData.RightDown = false;
+			eventData.RightUp = false;
+
 			if (!Equals(error, ZError.None))
 			{
 				Debug.LogError("Failed to send to server for some reason!");
@@ -106,11 +111,17 @@ public class WebBrowserClient
 		}
 	}
 
-	public void SetData(string chars, int[] keysDown, int[] keysUp)
+	public void SetKeyboardData(string chars, int[] keysDown, int[] keysUp)
 	{
 		eventData.KeysDown = keysDown;
 		eventData.KeysUp = keysUp;
 		eventData.Chars = chars;
+	}
+
+	public void SetMousePosData(int x, int y)
+	{
+		eventData.MouseX = x;
+		eventData.MouseY = y;
 	}
 
 	public void Shutdown()

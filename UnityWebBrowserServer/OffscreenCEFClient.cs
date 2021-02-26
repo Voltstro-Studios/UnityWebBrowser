@@ -77,11 +77,54 @@ namespace UnityWebBrowserServer
 					EventType = CefKeyEventType.Char
 				});
 			}
+
+			//Mouse
+			MouseMoveEvent(new CefMouseEvent
+			{
+				X = data.MouseX,
+				Y = data.MouseY
+			});
+
+			if(data.LeftDown)
+				MouseClickEvent(new CefMouseEvent
+				{
+					X = data.MouseX,
+					Y = data.MouseY
+				}, CefMouseButtonType.Left, false);
+			else if(data.LeftUp)
+				MouseClickEvent(new CefMouseEvent
+				{
+					X = data.MouseX,
+					Y = data.MouseY
+				}, CefMouseButtonType.Left, true);
+
+			if(data.RightDown)
+				MouseClickEvent(new CefMouseEvent
+				{
+					X = data.MouseX,
+					Y = data.MouseY
+				}, CefMouseButtonType.Right, false);
+			else if(data.RightUp)
+				MouseClickEvent(new CefMouseEvent
+				{
+					X = data.MouseX,
+					Y = data.MouseY
+				}, CefMouseButtonType.Right, true);
 		}
 
 		private void KeyEvent(CefKeyEvent keyEvent)
 		{
 			lifespanHandler.Browser.GetHost().SendKeyEvent(keyEvent);
+		}
+
+		private void MouseMoveEvent(CefMouseEvent mouseEvent)
+		{
+			lifespanHandler.Browser.GetHost().SendMouseMoveEvent(mouseEvent, false);
+		}
+
+		private void MouseClickEvent(CefMouseEvent mouseEvent, CefMouseButtonType button, bool mouseUp)
+		{
+			lifespanHandler.Browser.GetHost().SendMouseClickEvent(mouseEvent, button, mouseUp, 1);
 		}
 
 		protected override CefLoadHandler GetLoadHandler()

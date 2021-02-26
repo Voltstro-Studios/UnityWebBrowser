@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(RawImage))]
 public class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+	public RawImage image;
 	public WebBrowserClient browserClient = new WebBrowserClient();
 
 	private Coroutine pointerKeyboardHandler;
@@ -18,7 +18,8 @@ public class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	{
 		browserClient.Init();
 		StartCoroutine(browserClient.Start());
-		GetComponent<RawImage>().texture = browserClient.BrowserTexture;
+		image.texture = browserClient.BrowserTexture;
+		image.uvRect = new Rect(0f, 0f, 1f, -1f);
 	}
 
 	private void OnDestroy()
@@ -35,7 +36,7 @@ public class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 	{
 		StopCoroutine(pointerKeyboardHandler);
 
-		browserClient.SetData("", new int[0], new int[0]);
+		browserClient.SetKeyboardData("", new int[0], new int[0]);
 	}
 
 	private IEnumerator HandlerPointerAndKeyboardData()
@@ -53,9 +54,23 @@ public class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 					keysUp.Add((int)key);
 			}
 
-			browserClient.SetData(Input.inputString, keysDown.ToArray(), keysUp.ToArray());
+			browserClient.SetKeyboardData(Input.inputString, keysDown.ToArray(), keysUp.ToArray());
+
+			Vector2 pos = GetScreenCoords();
+
+			browserClient.SetMousePosData((int)pos.x, (int)pos.y);
 
 			yield return 0;
 		}
+	}
+
+	private Vector2 GetScreenCoords()
+	{
+		GraphicRaycaster raycaster = GetComponentInParent<GraphicRaycaster>();
+		Vector3 mousepos = Input.mousePosition;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, mousepos, raycaster.eventCamera, out Vector2 localPos);
+
+		return localPos;
+
 	}
 }
