@@ -546,7 +546,7 @@ MonoBehaviour:
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
     initialUrl: https://google.com
-    browserServerPath: ..\UnityWebBrowserServer\bin\Debug\netcoreapp3.1\UnityWebBrowserServer.exe
+    browserServerPath: ..\UnityWebBrowserServer\bin\Debug\net5.0\UnityWebBrowserServer.exe
     width: 1920
     height: 1080
     eventPollingTime: 0.01
