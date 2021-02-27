@@ -52,6 +52,12 @@ namespace UnityWebBrowser
 		public int errorsTillFail = 4;
 
 		/// <summary>
+		///		Show the CEF browser process console?
+		/// </summary>
+		[Tooltip("Show the CEF browser process console?")]
+		public bool showProcessConsole = false;
+
+		/// <summary>
 		///		Texture that the browser will paint to
 		/// </summary>
 		public Texture2D BrowserTexture { get; private set; }
@@ -90,6 +96,10 @@ namespace UnityWebBrowser
 			serverProcess = new Process
 			{
 				StartInfo = new ProcessStartInfo(WebBrowserUtils.GetCefProcessPath(), $"-width {width} -height {height} -url {initialUrl}")
+				{
+					CreateNoWindow = !showProcessConsole,
+					UseShellExecute = showProcessConsole
+				},
 			};
 			serverProcess.Start();
 
