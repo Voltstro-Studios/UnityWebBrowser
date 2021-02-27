@@ -149,7 +149,7 @@ public class WebBrowserClient
 	    isRunning = false;
 	    eventData.Shutdown = true;
 
-		if(errorCount > errorsTillFail)
+		if(errorCount != errorsTillFail)
 			requester.Send(new ZFrame(JsonConvert.SerializeObject(eventData)));
 
 		requester.Dispose();
