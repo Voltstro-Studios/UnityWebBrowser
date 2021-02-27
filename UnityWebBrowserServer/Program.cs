@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using Utf8Json;
 using Voltstro.CommandLineParser;
 using Xilium.CefGlue;
 using ZeroMQ;
@@ -60,8 +60,7 @@ namespace UnityWebBrowserServer
 				Console.WriteLine(json);
 				try
 				{
-					EventData data = JsonConvert.DeserializeObject<EventData>(json);
-
+					EventData data = JsonSerializer.Deserialize<EventData>(json);
 					if(data.Shutdown)
 						break;
 
