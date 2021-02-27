@@ -43,12 +43,12 @@ ExportedObj/
 *.opendb
 *.VC.db
 
-!UnityWebBrowserServer/*.sln
-!UnityWebBrowserServer/*.csproj
-UnityWebBrowserServer/bin/*
+!src/UnityWebBrowserServer/*.sln
+!src/UnityWebBrowserServer/*.csproj
+src/UnityWebBrowserServer/bin/*
 
-UnityWebBrowserClient/GPUCache/*
-UnityWebBrowserClient/cef.log
+src/UnityWebBrowserClient/GPUCache/*
+src/UnityWebBrowserClient/cef.log
 
 # Unity3D generated meta files
 *.pidb.meta
