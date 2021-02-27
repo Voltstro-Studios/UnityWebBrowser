@@ -1,0 +1,16 @@
+{
+    "name": "UnityWebBrowser",
+    "rootNamespace": "UnityWebBrowser",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "ZeroMQ.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
