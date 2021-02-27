@@ -253,6 +253,10 @@ namespace CefBrowserProcess
 			{
 			}
 
+			protected override void OnCursorChange(CefBrowser browser, IntPtr cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo)
+			{
+			}
+
 			protected override void OnScrollOffsetChanged(CefBrowser browser, double x, double y)
 			{
 			}
