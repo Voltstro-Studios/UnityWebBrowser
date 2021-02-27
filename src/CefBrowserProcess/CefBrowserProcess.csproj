@@ -3,6 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
+    <Authors>Voltstro-Studios</Authors>
+    <Company>Voltstro-Studios</Company>
+    <Description>Windowless browser process</Description>
+    <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
