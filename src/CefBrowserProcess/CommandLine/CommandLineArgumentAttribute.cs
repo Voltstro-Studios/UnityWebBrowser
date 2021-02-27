@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Voltstro.CommandLineParser
+namespace CefBrowserProcess.CommandLine
 {
 	/// <summary>
 	///     An <see cref="Attribute" /> for making a static field be set when the supplied arguments is provided

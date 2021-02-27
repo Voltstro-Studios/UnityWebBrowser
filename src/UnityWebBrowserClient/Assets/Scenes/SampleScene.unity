@@ -546,10 +546,11 @@ MonoBehaviour:
   browserClient:
     ipcEndpoint: tcp://127.0.0.1:5555
     initialUrl: https://google.com
-    browserServerPath: ..\UnityWebBrowserServer\bin\Debug\net5.0\UnityWebBrowserServer.exe
+    browserServerPath: ..\CefBrowserProcess\bin\Debug\net5.0\UnityWebBrowserServer.exe
     width: 1920
     height: 1080
     eventPollingTime: 0.01
+    errorsTillFail: 4
 --- !u!222 &1607613438
 CanvasRenderer:
   m_ObjectHideFlags: 0

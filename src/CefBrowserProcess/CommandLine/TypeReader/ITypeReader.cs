@@ -1,4 +1,4 @@
-﻿namespace Voltstro.CommandLineParser.TypeReaders
+﻿namespace CefBrowserProcess.CommandLine.TypeReader
 {
 	/// <summary>
 	///     The interface for a type reader

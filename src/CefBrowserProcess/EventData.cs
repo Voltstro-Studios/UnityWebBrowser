@@ -1,4 +1,4 @@
-﻿namespace UnityWebBrowserServer
+﻿namespace CefBrowserProcess
 {
 	public struct EventData
 	{

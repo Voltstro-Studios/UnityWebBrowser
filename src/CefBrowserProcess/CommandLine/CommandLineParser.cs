@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Voltstro.CommandLineParser.TypeReaders;
+using CefBrowserProcess.CommandLine.TypeReader;
 
-namespace Voltstro.CommandLineParser
+namespace CefBrowserProcess.CommandLine
 {
 	/// <summary>
 	///     The main class for parsing command line arguments
@@ -15,10 +15,7 @@ namespace Voltstro.CommandLineParser
 		private static readonly Dictionary<Type, ITypeReader> TypeReaders = new Dictionary<Type, ITypeReader>
 		{
 			[typeof(string)] = new StringReader(),
-			[typeof(int)] = new IntReader(),
-			[typeof(byte)] = new ByteReader(),
-			[typeof(float)] = new FloatReader(),
-			[typeof(bool)] = new BoolReader()
+			[typeof(int)] = new IntReader()
 		};
 
 		/// <summary>

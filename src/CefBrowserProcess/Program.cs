@@ -1,12 +1,12 @@
 ﻿using System;
+using CefBrowserProcess.CommandLine;
 using Utf8Json;
-using Voltstro.CommandLineParser;
 using Xilium.CefGlue;
 using ZeroMQ;
 
-namespace UnityWebBrowserServer
+namespace CefBrowserProcess
 {
-	public class Program
+	public static class Program
 	{
 		[CommandLineArgument("url")] public static string InitialUrl = "https://google.com";
 		[CommandLineArgument("width")] public static int Width = 1920;

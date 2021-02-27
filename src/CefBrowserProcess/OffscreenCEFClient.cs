@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowserServer
+namespace CefBrowserProcess
 {
 	public class OffscreenCEFClient : CefClient, IDisposable
 	{

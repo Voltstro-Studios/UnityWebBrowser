@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Voltstro.CommandLineParser.TypeReaders
+namespace CefBrowserProcess.CommandLine.TypeReader
 {
 	/// <summary>
 	///     A default reader for <see cref="int" />

@@ -43,9 +43,9 @@ ExportedObj/
 *.opendb
 *.VC.db
 
-!src/UnityWebBrowserServer/*.sln
-!src/UnityWebBrowserServer/*.csproj
-src/UnityWebBrowserServer/bin/*
+!src/CefBrowserProcess/*.sln
+!src/CefBrowserProcess/*.csproj
+src/CefBrowserProcess/bin/*
 
 src/UnityWebBrowserClient/GPUCache/*
 src/UnityWebBrowserClient/cef.log
