@@ -20,11 +20,15 @@ public class WebBrowserClient
 
 	public float eventPollingTime = 0.01f;
 
+	public int errorsTillFail = 4;
+
 	public Texture2D BrowserTexture { get; private set; }
 
 	private Process serverProcess;
 	private ZContext context;
 	private ZSocket requester;
+
+	private int errorCount;
 
 	private bool isRunning;
 
@@ -55,8 +59,9 @@ public class WebBrowserClient
 		context = new ZContext();
 		requester = new ZSocket(context, ZSocketType.REQ)
 		{
-			SendTimeout = new TimeSpan(0, 0, 2),
-			ReceiveTimeout = new TimeSpan(0, 0, 2)
+			SendTimeout = new TimeSpan(0, 0, 4),
+			ReceiveTimeout = new TimeSpan(0, 0, 4),
+			Linger = new TimeSpan(0, 0, 4)
 		};
 
 		requester.Connect(ipcEndpoint, out ZError error);
@@ -69,6 +74,7 @@ public class WebBrowserClient
 		}
 
 		isRunning = true;
+		errorCount = 0;
 
 		yield return new WaitForSeconds(0.100f);
 
@@ -84,15 +90,26 @@ public class WebBrowserClient
 
 			if (!Equals(error, ZError.None))
 			{
-				Debug.LogError("Failed to send to server for some reason!");
-				continue; 
+				errorCount++;
+				Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
+
+				if (errorCount >= errorsTillFail)
+				{
+					Shutdown();
+
+					Debug.LogError($"Connection failed {errorCount} times! Quitting!");
+
+					yield break;
+				}
+
+				continue;
 			}
 
 			using ZFrame reply = requester.ReceiveFrame(out error);
 
 			if (!Equals(error, ZError.None))
 			{
-				Debug.LogError("Failed to receive from server for some reason!");
+				Debug.LogWarning("Failed to receive from server for some reason!");
 				continue; 
 			}
 
@@ -126,9 +143,14 @@ public class WebBrowserClient
 
 	public void Shutdown()
     {
+		if(!isRunning)
+			return;
+
 	    isRunning = false;
 	    eventData.Shutdown = true;
-	    requester.Send(new ZFrame(JsonConvert.SerializeObject(eventData)));
+
+		if(errorCount > errorsTillFail)
+			requester.Send(new ZFrame(JsonConvert.SerializeObject(eventData)));
 
 		requester.Dispose();
 		context.Dispose();
