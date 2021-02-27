@@ -19,10 +19,8 @@ namespace CefBrowserProcess
 
 			//Setup CEF
 			CefRuntime.Load();
-
 			CefMainArgs cefMainArgs = new CefMainArgs(new string[0]);
 			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
-
 			CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
 
 			CefSettings cefSettings = new CefSettings
@@ -33,6 +31,7 @@ namespace CefBrowserProcess
 				MultiThreadedMessageLoop = true
 			};
 
+			//Init CEF and create windowless window
 			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
 
 			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
@@ -45,10 +44,11 @@ namespace CefBrowserProcess
 				LocalStorage = CefState.Disabled
 			};
 
+			//Create cef browser
 			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
 			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
 
-			//Setup server
+			//Setup ZMQ
 			using ZContext context = new ZContext();
 			using ZSocket responder = new ZSocket(context, ZSocketType.REP);
 			responder.Bind("tcp://*:5555");
@@ -57,6 +57,8 @@ namespace CefBrowserProcess
 			{
 				using ZFrame request = responder.ReceiveFrame();
 				string json = request.ReadString();
+
+				//Parse the data we get, and process it
 				Console.WriteLine(json);
 				try
 				{
@@ -71,9 +73,11 @@ namespace CefBrowserProcess
 					Console.WriteLine(e);
 				}
 				
+				//Send back the CEF pixels
 				responder.Send(new ZFrame(cefClient.GetPixels()));
 			}
 
+			//Shutdown
 			cefClient.Dispose();
 			CefRuntime.Shutdown();
 		}

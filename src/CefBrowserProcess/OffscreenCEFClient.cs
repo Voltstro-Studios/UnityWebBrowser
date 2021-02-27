@@ -5,47 +5,68 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess
 {
+	/// <summary>
+	///		Offscreen CEF
+	/// </summary>
 	public class OffscreenCEFClient : CefClient, IDisposable
 	{
-		private CefBrowserHost host;
-		private OffscreenLoadHandler loadHandler;
-		private OffscreenRenderHandler renderHandler;
-		private OffscreenLifespanHandler lifespanHandler;
 		private CefSize size;
+		private CefBrowserHost host;
 
-		private static readonly object sPixelLock = new object();
-		private byte[] sPixelBuffer;
+		private readonly OffscreenLoadHandler loadHandler;
+		private readonly OffscreenRenderHandler renderHandler;
+		private readonly OffscreenLifespanHandler lifespanHandler;
 
+		private readonly byte[] pixelBuffer;
+		private static readonly object PixelLock = new object();
+
+		/// <summary>
+		///		Creates a new <see cref="OffscreenCEFClient"/> instance
+		/// </summary>
+		/// <param name="size">The size of the window</param>
 		public OffscreenCEFClient(CefSize size)
 		{
 			loadHandler = new OffscreenLoadHandler(this);
 			renderHandler = new OffscreenRenderHandler(this);
 			lifespanHandler = new OffscreenLifespanHandler();
 
-			sPixelBuffer = new byte[size.Width * size.Height * 4];
+			pixelBuffer = new byte[size.Width * size.Height * 4];
 
 			this.size = size;
 		}
 
+		/// <summary>
+		///		Destroys the <see cref="OffscreenCEFClient"/> instance
+		/// </summary>
 		public void Dispose()
 		{
 			host?.CloseBrowser(true);
 			host?.Dispose();
+			GC.SuppressFinalize(this);
 		}
 
+		/// <summary>
+		///		Gets the pixel data of the CEF window
+		/// </summary>
+		/// <returns></returns>
 		public byte[] GetPixels()
 		{
 			if(host == null)
-				return new byte[0];
+				return Array.Empty<byte>();
 
-			byte[] pixelBytes = new byte[sPixelBuffer.Length];
-			lock (sPixelLock)
+			//Copy the pixel buffer
+			byte[] pixelBytes = new byte[pixelBuffer.Length];
+			lock (PixelLock)
 			{
-				Array.Copy(sPixelBuffer, pixelBytes, sPixelBuffer.Length);
+				Array.Copy(pixelBuffer, pixelBytes, pixelBuffer.Length);
 			}
 			return pixelBytes;
 		}
 
+		/// <summary>
+		///		Process event data
+		/// </summary>
+		/// <param name="data"></param>
 		public void ProcessEventData(EventData data)
 		{
 			//Keys down
@@ -142,6 +163,9 @@ namespace CefBrowserProcess
 			return lifespanHandler;
 		}
 
+		/// <summary>
+		///		Offscreen load handler
+		/// </summary>
 		private class OffscreenLoadHandler : CefLoadHandler
 		{
 			private readonly OffscreenCEFClient client;
@@ -167,9 +191,12 @@ namespace CefBrowserProcess
 			}
 		}
 
+		/// <summary>
+		///		Offscreen render handler
+		/// </summary>
 		private class OffscreenRenderHandler : CefRenderHandler
 		{
-			private OffscreenCEFClient client;
+			private readonly OffscreenCEFClient client;
 
 			internal OffscreenRenderHandler(OffscreenCEFClient client)
 			{
@@ -206,9 +233,9 @@ namespace CefBrowserProcess
 			{
 				if (browser != null)
 				{
-					lock (sPixelLock)
+					lock (PixelLock)
 					{
-						Marshal.Copy(buffer, client.sPixelBuffer, 0, client.sPixelBuffer.Length);
+						Marshal.Copy(buffer, client.pixelBuffer, 0, client.pixelBuffer.Length);
 					}
 				}
 			}
@@ -235,6 +262,9 @@ namespace CefBrowserProcess
 			}
 		}
 
+		/// <summary>
+		///		Offscreen lifespan handler
+		/// </summary>
 		private class OffscreenLifespanHandler : CefLifeSpanHandler
 		{
 			public CefBrowser Browser;
@@ -250,6 +280,9 @@ namespace CefBrowserProcess
 			}
 		}
 
+		/// <summary>
+		///		Offscreen app
+		/// </summary>
 		public class OffscreenCEFApp : CefApp
 		{
 		}
