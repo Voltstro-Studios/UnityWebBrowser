@@ -4,3 +4,6 @@ locales/*
 *.dat
 *.bin
 *.exe
+
+!libzmq.dll
+!ZeroMQ.dll
