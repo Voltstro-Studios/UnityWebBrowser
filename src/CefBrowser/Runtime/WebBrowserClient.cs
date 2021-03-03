@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 using ZeroMQ;
 using Debug = UnityEngine.Debug;
@@ -63,10 +64,8 @@ namespace UnityWebBrowser
 		public Texture2D BrowserTexture { get; private set; }
 
 		private Process serverProcess;
-		private ZContext context;
-		private ZSocket requester;
-
-		private int errorCount;
+		private Thread workerThread;
+		private WebBrowserWorkerThread webBrowserWorkerThread;
 
 		private bool isRunning;
 
@@ -84,14 +83,7 @@ namespace UnityWebBrowser
 				Chars = ""
 			};
 			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
-		}
 
-		/// <summary>
-		///		Starts the process and IPC
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator Start()
-		{
 			//Start the server process
 			serverProcess = new Process
 			{
@@ -103,71 +95,32 @@ namespace UnityWebBrowser
 			};
 			serverProcess.Start();
 
-			//Start our client
-			context = new ZContext();
-			requester = new ZSocket(context, ZSocketType.REQ)
+			//Start our worker thread
+			workerThread = new Thread(() =>
 			{
-				SendTimeout = new TimeSpan(0, 0, 4),
-				ReceiveTimeout = new TimeSpan(0, 0, 4),
-				Linger = new TimeSpan(0, 0, 4)
-			};
+				webBrowserWorkerThread = new WebBrowserWorkerThread(errorsTillFail, ipcEndpoint);
+				webBrowserWorkerThread.StartIpc();
+			});
+			workerThread.Start();
+		}
 
-			requester.Connect(ipcEndpoint, out ZError error);
-
-			if (!Equals(error, ZError.None))
-			{
-				Debug.LogError("Server failed to start for some reason!");
-
-				yield break; 
-			}
-
+		/// <summary>
+		///		Starts the process and IPC
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator Start()
+		{
 			isRunning = true;
-			errorCount = 0;
-
-			yield return new WaitForSeconds(0.100f);
-
 			while (isRunning)
 			{
-				string data = JsonUtility.ToJson(eventData);
-
-				requester.Send(new ZFrame(data), out error);
-
-				eventData.LeftDown = false;
-				eventData.LeftUp = false;
-				eventData.RightDown = false;
-				eventData.RightUp = false;
-
-				if (!Equals(error, ZError.None))
-				{
-					errorCount++;
-					Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
-
-					if (errorCount >= errorsTillFail)
-					{
-						Shutdown();
-
-						Debug.LogError($"Connection failed {errorCount} times! Quitting!");
-
-						yield break;
-					}
-
+				if(webBrowserWorkerThread == null)
 					continue;
-				}
 
-				using ZFrame reply = requester.ReceiveFrame(out error);
+				webBrowserWorkerThread.EventData = eventData;
 
-				if (!Equals(error, ZError.None))
-				{
-					Debug.LogWarning("Failed to receive from server for some reason!");
-					continue; 
-				}
+				byte[] bytes = webBrowserWorkerThread.Pixels;
 
-				if (!isRunning)
-					break;
-
-				byte[] bytes = reply.Read();
-
-				if(reply == null || reply.Length == 0)
+				if(bytes == null || bytes.Length == 0)
 					continue;
 
 				BrowserTexture.LoadRawTextureData(bytes);
@@ -196,13 +149,10 @@ namespace UnityWebBrowser
 				return;
 
 			isRunning = false;
-			eventData.Shutdown = true;
+			if(workerThread.IsAlive)
+				workerThread.Abort();
 
-			if(errorCount != errorsTillFail)
-				requester.Send(new ZFrame(JsonUtility.ToJson(eventData)));
-
-			requester.Dispose();
-			context.Dispose();
+			serverProcess.Kill();
 		}
 	}
 }
