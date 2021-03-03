@@ -3,13 +3,11 @@ using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
-using ZeroMQ;
-using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
 {
 	/// <summary>
-	///		Handles communication between the CEF process and Unity
+	///		Handles managing the process and worker thread
 	/// </summary>
 	[Serializable]
 	public class WebBrowserClient

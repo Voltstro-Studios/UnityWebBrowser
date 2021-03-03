@@ -5,8 +5,16 @@ using ZeroMQ;
 
 namespace UnityWebBrowser
 {
-    public class WebBrowserWorkerThread
+	/// <summary>
+	///		Handles communication between Unity and the CEF process
+	/// </summary>
+    internal sealed class WebBrowserWorkerThread
     {
+		/// <summary>
+		///		Creates a new <see cref="WebBrowserWorkerThread"/> instance
+		/// </summary>
+		/// <param name="errorsTillFail"></param>
+		/// <param name="ipcEndpoint"></param>
 	    public WebBrowserWorkerThread(int errorsTillFail, string ipcEndpoint)
 	    {
 		    this.errorsTillFail = errorsTillFail;
@@ -63,6 +71,10 @@ namespace UnityWebBrowser
 		    }
 	    }
 
+		/// <summary>
+		///		The the communication between Unity and the CEF process
+		///		<para>The CEF process is assumed to be running before calling this!</para>
+		/// </summary>
 		public void StartIpc()
 	    {
 		    //Start our client
@@ -88,10 +100,11 @@ namespace UnityWebBrowser
 
 			    while (isRunning)
 			    {
+					//Convert our event data to json and send it
 				    string data = JsonUtility.ToJson(EventData);
-
 				    requester.Send(new ZFrame(data), out error);
 
+					//Reset our even data
 				    EventData currentData = EventData;
 				    currentData.LeftDown = false;
 				    currentData.LeftUp = false;
@@ -102,6 +115,7 @@ namespace UnityWebBrowser
 				    currentData.KeysUp = Array.Empty<int>();
 				    EventData = currentData;
 
+					//Check errors
 				    if (!Equals(error, ZError.None))
 				    {
 					    errorCount++;
@@ -116,8 +130,10 @@ namespace UnityWebBrowser
 					    continue;
 				    }
 
+					//Get our reply
 				    using ZFrame reply = requester.ReceiveFrame(out error);
 
+					//Check errors
 				    if (!Equals(error, ZError.None))
 				    {
 					    Debug.LogWarning("Failed to receive from server for some reason!");
@@ -127,12 +143,14 @@ namespace UnityWebBrowser
 				    if (!isRunning)
 					    break;
 
+					//Read pixel data
 				    byte[] bytes = reply.Read();
 				    Pixels = bytes;
 			    }
 		    }
 		    catch (ThreadAbortException)
 		    {
+				//Shutdown
 			    isRunning = false;
 			    if(errorCount != errorsTillFail)
 				    requester.Send(new ZFrame(JsonUtility.ToJson(new EventData
