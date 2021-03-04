@@ -33,7 +33,7 @@ Write-Output "Downloading CEF version: $($cefVersion) ..."
 #   https://cef-builds.spotifycdn.com/cef_binary_[CEF-VERSION]_windows64_minimal.tar.bz2
 #   Example: https://cef-builds.spotifycdn.com/cef_binary_85.3.12+g3e94ebf+chromium-85.0.4183.121_windows64_minimal.tar.bz2
 
-#Invoke-WebRequest -Uri "https://cef-builds.spotifycdn.com/$($cefBinTarBz2FileName)" -OutFile $cefBinTarBz2FileLocation
+Invoke-WebRequest -Uri "https://cef-builds.spotifycdn.com/$($cefBinTarBz2FileName)" -OutFile $cefBinTarBz2FileLocation
 
 Write-Output "Downloaded CEF to $($cefBinTarBz2FileLocation)"
 
@@ -49,11 +49,18 @@ $cefBinTarFileLocation = "$($cefTempDirectory)$($cefBinTarFileName)"
 #Copy files
 Write-Output "Copying files..."
 
-$cefBinReleaseLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_minimal/Release/").Path
-$cefBinResourcesLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_minimal/Resources/").Path
+$cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_minimal/").Path
+$cefBinReleaseLocation = "$($cefExtractedLocation)Release/"
+$cefBinResourcesLocation = "$($cefExtractedLocation)Resources/"
 $cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/).Path
 
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.dll" | Copy-Item -Destination $cefBinLocation
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.bin" | Copy-Item -Destination $cefBinLocation
+Get-ChildItem -Path "$($cefBinReleaseLocation)*.dll" | Copy-Item -Destination $cefBinLocation -PassThru
+Get-ChildItem -Path "$($cefBinReleaseLocation)*.bin" | Copy-Item -Destination $cefBinLocation -PassThru
 
-Copy-Item -Path $cefBinResourcesLocation -Destination $cefBinLocation -Recurse -Force
+Copy-Item -Path "$($cefExtractedLocation)README.txt" -Destination $cefBinLocation -Force -PassThru
+Copy-Item -Path "$($cefExtractedLocation)LICENSE.txt" -Destination $cefBinLocation -Force -PassThru
+
+Copy-Item -Path "$($cefBinResourcesLocation)/*" -Destination $cefBinLocation -Recurse -Force -PassThru
+
+Write-Output "Cleaning up..."
+Remove-Item -Path $cefTempDirectory -Force -Recurse
