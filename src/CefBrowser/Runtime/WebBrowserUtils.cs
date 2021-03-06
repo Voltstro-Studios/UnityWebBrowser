@@ -1,5 +1,4 @@
 using System.IO;
-using UnityEngine;
 
 namespace UnityWebBrowser
 {
@@ -10,10 +9,15 @@ namespace UnityWebBrowser
 	    public static string GetCefProcessPath()
 	    {
 #if UNITY_EDITOR
-		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/CefBrowserProcess.exe");
+		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/");
 #else
-			return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/CefBrowserProcess.exe");
+			return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
 #endif
+	    }
+
+	    public static string GetCefProcessApplication()
+	    {
+		    return $"{GetCefProcessPath()}/CefBrowserProcess.exe";
 	    }
     }
 }

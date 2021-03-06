@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 using ZeroMQ;
 using Debug = UnityEngine.Debug;
@@ -92,10 +93,17 @@ namespace UnityWebBrowser
 		/// <returns></returns>
 		public IEnumerator Start()
 		{
+			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
+			if (!File.Exists(cefProcessPath))
+			{
+				Debug.LogError("The CEF browser process doesn't exist!");
+				yield break;
+			}
+
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(WebBrowserUtils.GetCefProcessPath(), $"-width {width} -height {height} -url {initialUrl}")
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl}")
 				{
 					CreateNoWindow = !showProcessConsole,
 					UseShellExecute = showProcessConsole
