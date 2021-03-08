@@ -211,6 +211,8 @@ namespace UnityWebBrowser
 
 			requester.Dispose();
 			context.Dispose();
+
+			serverProcess.Kill();
 		}
 	}
 }
