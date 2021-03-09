@@ -173,6 +173,7 @@ namespace UnityWebBrowser
 
 		internal void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
 		{
+			//TODO: Maybe don't send if all empty
 			if(!SendData(new KeyboardEvent
 			{
 				Chars = chars,

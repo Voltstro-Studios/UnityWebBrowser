@@ -9,6 +9,7 @@
     <Company>Voltstro-Studios</Company>
     <Description>Windowless browser process</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
