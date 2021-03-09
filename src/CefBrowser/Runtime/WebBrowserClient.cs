@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using ZeroMQ;
 using Debug = UnityEngine.Debug;
@@ -71,19 +72,11 @@ namespace UnityWebBrowser
 
 		private bool isRunning;
 
-		private EventData eventData;
-
 		/// <summary>
 		///		Inits the browser client
 		/// </summary>
 		public void Init()
 		{
-			eventData = new EventData
-			{
-				KeysDown = new int[0],
-				KeysUp = new int[0],
-				Chars = ""
-			};
 			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
 		}
 
@@ -136,31 +129,8 @@ namespace UnityWebBrowser
 
 			while (isRunning)
 			{
-				string data = JsonUtility.ToJson(eventData);
-
-				requester.Send(new ZFrame(data), out error);
-
-				eventData.LeftDown = false;
-				eventData.LeftUp = false;
-				eventData.RightDown = false;
-				eventData.RightUp = false;
-
-				if (!Equals(error, ZError.None))
-				{
-					errorCount++;
-					Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
-
-					if (errorCount >= errorsTillFail)
-					{
-						Shutdown();
-
-						Debug.LogError($"Connection failed {errorCount} times! Quitting!");
-
-						yield break;
-					}
-
+				if(!SendData(new PingEvent()))
 					continue;
-				}
 
 				using ZFrame reply = requester.ReceiveFrame(out error);
 
@@ -185,34 +155,82 @@ namespace UnityWebBrowser
 			}
 		}
 
-		public void SetKeyboardData(string chars, int[] keysDown, int[] keysUp)
-		{
-			eventData.KeysDown = keysDown;
-			eventData.KeysUp = keysUp;
-			eventData.Chars = chars;
-		}
-
-		public void SetMousePosData(int x, int y)
-		{
-			eventData.MouseX = x;
-			eventData.MouseY = y;
-		}
-
 		public void Shutdown()
 		{
 			if(!isRunning)
 				return;
 
-			isRunning = false;
-			eventData.Shutdown = true;
+			if (errorCount != errorsTillFail)
+				SendData(new ShutdownEvent());
 
-			if(errorCount != errorsTillFail)
-				requester.Send(new ZFrame(JsonUtility.ToJson(eventData)));
+			isRunning = false;
 
 			requester.Dispose();
 			context.Dispose();
 
 			serverProcess.Kill();
+		}
+
+		internal void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
+		{
+			if(!SendData(new KeyboardEvent
+			{
+				Chars = chars,
+				KeysDown = keysDown,
+				KeysUp = keysUp
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+
+			if (!Equals(error, ZError.None))
+			{
+				Debug.LogError("Failed to receive!");
+				return;
+			}
+
+			if (frame.ReadInt32() != (int) EventType.Ping)
+			{
+				Debug.LogError($"Got an incorrect response for a {nameof(KeyboardEvent)}!");
+			}
+		}
+
+		internal bool SendData(IEventData data)
+		{
+			string json = JsonConvert.SerializeObject(data);
+			return SendData(new ZFrame(json));
+		}
+
+		/// <summary>
+		///		Send data to the other process
+		/// </summary>
+		/// <param name="frame"></param>
+		/// <returns>Returns true if successful</returns>
+		internal bool SendData(ZFrame frame)
+		{
+			if (!isRunning)
+				return false;
+
+			requester.SendFrame(frame, out ZError error);
+
+			if (!Equals(error, ZError.None))
+			{
+				errorCount++;
+				Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
+
+				if (errorCount >= errorsTillFail)
+				{
+					Shutdown();
+
+					Debug.LogError($"Connection failed {errorCount} times! Quitting!");
+
+					return false;
+				}
+
+				SendData(frame);
+			}
+
+			return true;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using UnityWebBrowser;
 using Xilium.CefGlue;
 
 namespace CefBrowserProcess
@@ -63,14 +64,10 @@ namespace CefBrowserProcess
 			return pixelBytes;
 		}
 
-		/// <summary>
-		///		Process event data
-		/// </summary>
-		/// <param name="data"></param>
-		public void ProcessEventData(EventData data)
+		public void ProcessKeyboardEvent(KeyboardEvent keyboardEvent)
 		{
 			//Keys down
-			foreach (int i in data.KeysDown)
+			foreach (int i in keyboardEvent.KeysDown)
 			{
 				KeyEvent(new CefKeyEvent
 				{
@@ -80,7 +77,7 @@ namespace CefBrowserProcess
 			}
 
 			//Keys up
-			foreach (int i in data.KeysUp)
+			foreach (int i in keyboardEvent.KeysUp)
 			{
 				KeyEvent(new CefKeyEvent
 				{
@@ -90,7 +87,7 @@ namespace CefBrowserProcess
 			}
 
 			//Chars
-			foreach (char c in data.Chars)
+			foreach (char c in keyboardEvent.Chars)
 			{
 				KeyEvent(new CefKeyEvent
 				{
@@ -98,39 +95,6 @@ namespace CefBrowserProcess
 					EventType = CefKeyEventType.Char
 				});
 			}
-
-			//Mouse
-			MouseMoveEvent(new CefMouseEvent
-			{
-				X = data.MouseX,
-				Y = data.MouseY
-			});
-
-			if(data.LeftDown)
-				MouseClickEvent(new CefMouseEvent
-				{
-					X = data.MouseX,
-					Y = data.MouseY
-				}, CefMouseButtonType.Left, false);
-			else if(data.LeftUp)
-				MouseClickEvent(new CefMouseEvent
-				{
-					X = data.MouseX,
-					Y = data.MouseY
-				}, CefMouseButtonType.Left, true);
-
-			if(data.RightDown)
-				MouseClickEvent(new CefMouseEvent
-				{
-					X = data.MouseX,
-					Y = data.MouseY
-				}, CefMouseButtonType.Right, false);
-			else if(data.RightUp)
-				MouseClickEvent(new CefMouseEvent
-				{
-					X = data.MouseX,
-					Y = data.MouseY
-				}, CefMouseButtonType.Right, true);
 		}
 
 		private void KeyEvent(CefKeyEvent keyEvent)

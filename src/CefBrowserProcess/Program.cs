@@ -1,5 +1,7 @@
 ﻿using System;
 using CefBrowserProcess.CommandLine;
+using CefBrowserProcess.EventData;
+using UnityWebBrowser;
 using Utf8Json;
 using Xilium.CefGlue;
 using ZeroMQ;
@@ -62,19 +64,29 @@ namespace CefBrowserProcess
 				Console.WriteLine(json);
 				try
 				{
-					EventData data = JsonSerializer.Deserialize<EventData>(json);
-					if(data.Shutdown)
-						break;
+					IEventData data = EventDataParser.ReadData(json);
 
-					cefClient.ProcessEventData(data);
+					if (data.EventType == EventType.Shutdown)
+					{
+						Console.WriteLine("Shutting down CEF process...");
+						break;
+					}
+
+					if(data.EventType == EventType.Ping)
+					{
+						responder.Send(new ZFrame(cefClient.GetPixels()));
+					}
+
+					else if (data.EventType == EventType.KeyboardEvent)
+					{
+						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
+						responder.Send(new ZFrame((int) EventType.Ping));
+					}
 				}
 				catch (Exception e)
 				{
 					Console.WriteLine(e);
 				}
-				
-				//Send back the CEF pixels
-				responder.Send(new ZFrame(cefClient.GetPixels()));
 			}
 
 			//Shutdown

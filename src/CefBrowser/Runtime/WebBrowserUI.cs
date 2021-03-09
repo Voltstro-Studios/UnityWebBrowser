@@ -46,8 +46,6 @@ namespace UnityWebBrowser
 		public void OnPointerExit(PointerEventData eventData)
 		{
 			StopCoroutine(pointerKeyboardHandler);
-
-			browserClient.SetKeyboardData("", new int[0], new int[0]);
 		}
 
 		private IEnumerator HandlerPointerAndKeyboardData()
@@ -65,11 +63,9 @@ namespace UnityWebBrowser
 						keysUp.Add((int)key);
 				}
 
-				browserClient.SetKeyboardData(Input.inputString, keysDown.ToArray(), keysUp.ToArray());
+				browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
 
-				Vector2 pos = GetScreenCoords();
-
-				browserClient.SetMousePosData((int)pos.x, (int)pos.y);
+				//Vector2 pos = GetScreenCoords();
 
 				yield return 0;
 			}
