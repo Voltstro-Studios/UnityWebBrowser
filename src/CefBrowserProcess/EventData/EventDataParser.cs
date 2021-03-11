@@ -42,8 +42,8 @@ namespace CefBrowserProcess.EventData
 						KeysDown = jsonObject["KeysDown"].ToObject<int[]>(),
 						Chars = jsonObject["Chars"].ToObject<string>()
 					};
-				case EventType.MouseEvent:
-					return new MouseEvent()
+				case EventType.MouseMoveEvent:
+					return new MouseMoveEvent()
 					{
 						MouseX = jsonObject["MouseX"].ToObject<int>(),
 						MouseY = jsonObject["MouseY"].ToObject<int>()

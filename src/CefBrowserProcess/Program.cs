@@ -80,9 +80,9 @@ namespace CefBrowserProcess
 						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
 						responder.Send(new ZFrame((int) EventType.Ping));
 					}
-					else if (data.EventType == EventType.MouseEvent)
+					else if (data.EventType == EventType.MouseMoveEvent)
 					{
-						cefClient.ProcessMouseEvent((MouseEvent)data);
+						cefClient.ProcessMouseEvent((MouseMoveEvent)data);
 						responder.Send(new ZFrame((int) EventType.Ping));
 					}
 				}

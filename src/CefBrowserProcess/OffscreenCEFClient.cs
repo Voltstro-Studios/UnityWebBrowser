@@ -97,7 +97,7 @@ namespace CefBrowserProcess
 			}
 		}
 
-		public void ProcessMouseEvent(MouseEvent mouseEvent)
+		public void ProcessMouseEvent(MouseMoveEvent mouseEvent)
 		{
 			MouseMoveEvent(new CefMouseEvent
 			{

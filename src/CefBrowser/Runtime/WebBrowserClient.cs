@@ -186,7 +186,7 @@ namespace UnityWebBrowser
 		/// <param name="mouseY"></param>
 		public void SendMouseMoveEvent(int mouseX, int mouseY)
 		{
-			if(!SendData(new MouseEvent
+			if(!SendData(new MouseMoveEvent
 			{
 				MouseX = mouseX,
 				MouseY = mouseY
@@ -194,7 +194,7 @@ namespace UnityWebBrowser
 				return;
 
 			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(MouseEvent));
+			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
 		}
 
 		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)
