@@ -166,7 +166,6 @@ namespace UnityWebBrowser
 		/// <param name="chars"></param>
 		public void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
 		{
-			//TODO: Maybe don't send if all empty
 			if(!SendData(new KeyboardEvent
 			{
 				Chars = chars,
@@ -179,17 +178,16 @@ namespace UnityWebBrowser
 			HandleEventReceiving(frame, error, nameof(KeyboardEvent));
 		}
 
-		/// <summary>
-		///		Sends a mouse event to the CEF process
-		/// </summary>
-		/// <param name="mouseX"></param>
-		/// <param name="mouseY"></param>
-		public void SendMouseMoveEvent(int mouseX, int mouseY)
+		///  <summary>
+		/// 		Sends a mouse event to the CEF process
+		///  </summary>
+		///  <param name="mousePos"></param>
+		public void SendMouseMoveEvent(Vector2 mousePos)
 		{
 			if(!SendData(new MouseMoveEvent
 			{
-				MouseX = mouseX,
-				MouseY = mouseY
+				MouseX = (int)mousePos.x,
+				MouseY = (int)mousePos.y
 			}))
 				return;
 
@@ -197,18 +195,19 @@ namespace UnityWebBrowser
 			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
 		}
 
-		/// <summary>
-		///		Sends a mouse click event to the CEF process
-		/// </summary>
-		/// <param name="mouseX"></param>
-		/// <param name="mouseY"></param>
-		/// <param name="clickType"></param>
-		public void SendMouseClickEvent(int mouseX, int mouseY, int clickCount, MouseClickType clickType, MouseEventType eventType)
+		///  <summary>
+		/// 		Sends a mouse click event to the CEF process
+		///  </summary>
+		///  <param name="mousePos"></param>
+		///  <param name="clickCount"></param>
+		///  <param name="clickType"></param>
+		///  <param name="eventType"></param>
+		public void SendMouseClickEvent(Vector2 mousePos, int clickCount, MouseClickType clickType, MouseEventType eventType)
 		{
 			if(!SendData(new MouseClickEvent
 			{
-				MouseX = mouseX,
-				MouseY = mouseY,
+				MouseX = (int)mousePos.x,
+				MouseY = (int)mousePos.y,
 				MouseClickCount = clickCount,
 				MouseClickType = clickType,
 				MouseEventType = eventType
@@ -219,6 +218,12 @@ namespace UnityWebBrowser
 			HandleEventReceiving(frame, error, nameof(MouseClickEvent));
 		}
 
+		/// <summary>
+		///		Sends a mouse scroll event
+		/// </summary>
+		/// <param name="mouseX"></param>
+		/// <param name="mouseY"></param>
+		/// <param name="mouseScroll"></param>
 		public void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
 		{
 			if(!SendData(new MouseScrollEvent

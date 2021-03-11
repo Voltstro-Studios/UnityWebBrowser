@@ -20,6 +20,7 @@ namespace UnityWebBrowser
 
 		private RawImage image;
 		private Coroutine pointerKeyboardHandler;
+		private Vector2 lastSuccessfulMousePositionSent;
 
 		private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
 
@@ -64,16 +65,22 @@ namespace UnityWebBrowser
 						keysUp.Add((int)key);
 				}
 
-				browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
+				if(keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(Input.inputString))
+					browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
 				if (GetMousePosition(out Vector2 pos))
 				{
-					browserClient.SendMouseMoveEvent((int)pos.x, (int)pos.y);
+					if (lastSuccessfulMousePositionSent != pos)
+					{
+						browserClient.SendMouseMoveEvent(pos);
+						lastSuccessfulMousePositionSent = pos;
+					}
 
 					//Mouse scroll
 					float scroll = Input.GetAxis("Mouse ScrollWheel");
 					scroll *= browserClient.BrowserTexture.height;
 
-					browserClient.SendMouseScrollEvent((int)pos.x, (int)pos.y, (int)scroll);
+					if(scroll != 0)
+						browserClient.SendMouseScrollEvent((int)pos.x, (int)pos.y, (int)scroll);
 				}
 				
 				yield return 0;
@@ -91,7 +98,7 @@ namespace UnityWebBrowser
 			};
 
 			if(GetMousePosition(out Vector2 pos))
-				browserClient.SendMouseClickEvent((int)pos.x, (int)pos.y, eventData.clickCount, clickType, MouseEventType.Down);
+				browserClient.SendMouseClickEvent(pos, eventData.clickCount, clickType, MouseEventType.Down);
 		}
 
 		public void OnPointerUp(PointerEventData eventData)
@@ -105,7 +112,7 @@ namespace UnityWebBrowser
 			};
 
 			if(GetMousePosition(out Vector2 pos))
-				browserClient.SendMouseClickEvent((int)pos.x, (int)pos.y, eventData.clickCount, clickType, MouseEventType.Up);
+				browserClient.SendMouseClickEvent(pos, eventData.clickCount, clickType, MouseEventType.Up);
 		}
 
 		private bool GetMousePosition(out Vector2 pos)
