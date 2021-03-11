@@ -65,6 +65,13 @@ namespace UnityWebBrowser
 		/// </summary>
 		public Texture2D BrowserTexture { get; private set; }
 
+		/// <summary>
+		///		<see cref="ILogger"/> that we log to
+		/// </summary>
+		public ILogger Logger { get; private set; } = Debug.unityLogger;
+
+		private const string LoggingTag = "[Web Browser]";
+
 		private Process serverProcess;
 		private ZContext context;
 		private ZSocket requester;
@@ -88,9 +95,11 @@ namespace UnityWebBrowser
 		public IEnumerator Start()
 		{
 			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
+			LogDebug($"Starting CEF browser process from {cefProcessPath}");
+
 			if (!File.Exists(cefProcessPath))
 			{
-				Debug.LogError("The CEF browser process doesn't exist!");
+				LogError("The CEF browser process doesn't exist!");
 				yield break;
 			}
 
@@ -118,7 +127,7 @@ namespace UnityWebBrowser
 
 			if (!Equals(error, ZError.None))
 			{
-				Debug.LogError("Server failed to start for some reason!");
+				LogError("Server failed to start for some reason!");
 
 				yield break; 
 			}
@@ -137,7 +146,7 @@ namespace UnityWebBrowser
 
 				if (!Equals(error, ZError.None))
 				{
-					Debug.LogWarning("Failed to receive from server for some reason!");
+					LogWarning("Failed to receive from server for some reason!");
 					continue; 
 				}
 
@@ -155,6 +164,47 @@ namespace UnityWebBrowser
 				yield return new WaitForSeconds(eventPollingTime);
 			}
 		}
+
+		#region Logging
+
+		/// <summary>
+		///		Logs a debug message
+		/// </summary>
+		/// <param name="message"></param>
+		public void LogDebug(object message)
+		{
+			Logger.Log(LogType.Log, LoggingTag, message);
+		}
+
+		/// <summary>
+		///		Logs a warning
+		/// </summary>
+		/// <param name="message"></param>
+		public void LogWarning(object message)
+		{
+			Logger.LogWarning(LoggingTag, message);
+		}
+
+		/// <summary>
+		///		Logs a error
+		/// </summary>
+		/// <param name="message"></param>
+		public void LogError(object message)
+		{
+			Logger.LogError(LoggingTag, message);
+		}
+
+		/// <summary>
+		///		Replaces the logger the web browser will use
+		/// </summary>
+		/// <param name="logger"></param>
+		/// <exception cref="ArgumentNullException"></exception>
+		public void ReplaceLogger(ILogger logger)
+		{
+			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		#endregion
 
 		#region CEF process events
 
@@ -242,12 +292,12 @@ namespace UnityWebBrowser
 		{
 			if (!Equals(error, ZError.None))
 			{
-				Debug.LogError("Failed to receive!");
+				LogError("Failed to receive!");
 				return;
 			}
 
 			if (frame.ReadInt32() != (int) EventType.Ping)
-				Debug.LogError($"Got an incorrect response for a {eventName}!");
+				LogError($"Got an incorrect response for a {eventName}!");
 		}
 
 		#endregion
@@ -283,13 +333,13 @@ namespace UnityWebBrowser
 			{
 				//It didn't send for some reason
 				errorCount++;
-				Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
+				LogWarning($"Failed to send to server for some reason! {errorCount}");
 
 				//We have hit our error count
 				if (errorCount >= errorsTillFail)
 				{
 					Dispose();
-					Debug.LogError($"Connection failed {errorCount} times! Quitting!");
+					LogError($"Connection failed {errorCount} times! Quitting!");
 					return false;
 				}
 
