@@ -74,22 +74,19 @@ namespace CefBrowserProcess
 					if(data.EventType == EventType.Ping)
 					{
 						responder.Send(new ZFrame(cefClient.GetPixels()));
+						continue;
 					}
-					else if (data.EventType == EventType.KeyboardEvent)
-					{
+
+					if (data.EventType == EventType.KeyboardEvent)
 						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
-						responder.Send(new ZFrame((int) EventType.Ping));
-					}
 					else if (data.EventType == EventType.MouseMoveEvent)
-					{
 						cefClient.ProcessMouseMoveEvent((MouseMoveEvent)data);
-						responder.Send(new ZFrame((int) EventType.Ping));
-					}
 					else if (data.EventType == EventType.MouseClickEvent)
-					{
 						cefClient.ProcessMouseClickEvent((MouseClickEvent)data);
-						responder.Send(new ZFrame((int) EventType.Ping));
-					}
+					else if(data.EventType == EventType.MouseScrollEvent)
+						cefClient.ProcessMouseScrollEvent((MouseScrollEvent)data);
+
+					responder.Send(new ZFrame((int) EventType.Ping));
 				}
 				catch (Exception e)
 				{

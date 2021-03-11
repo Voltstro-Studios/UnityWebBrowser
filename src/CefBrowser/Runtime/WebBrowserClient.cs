@@ -216,7 +216,21 @@ namespace UnityWebBrowser
 				return;
 
 			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
+			HandleEventReceiving(frame, error, nameof(MouseClickEvent));
+		}
+
+		public void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
+		{
+			if(!SendData(new MouseScrollEvent
+			{
+				MouseX = mouseX,
+				MouseY = mouseY,
+				MouseScroll = mouseScroll
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+			HandleEventReceiving(frame, error, nameof(MouseScrollEvent));
 		}
 
 		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)

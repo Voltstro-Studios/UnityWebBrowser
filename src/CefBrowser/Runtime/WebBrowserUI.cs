@@ -65,8 +65,16 @@ namespace UnityWebBrowser
 				}
 
 				browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
-				if(GetMousePosition(out Vector2 pos))
+				if (GetMousePosition(out Vector2 pos))
+				{
 					browserClient.SendMouseMoveEvent((int)pos.x, (int)pos.y);
+
+					//Mouse scroll
+					float scroll = Input.GetAxis("Mouse ScrollWheel");
+					scroll *= browserClient.BrowserTexture.height;
+
+					browserClient.SendMouseScrollEvent((int)pos.x, (int)pos.y, (int)scroll);
+				}
 				
 				yield return 0;
 			}

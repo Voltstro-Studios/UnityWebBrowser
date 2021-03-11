@@ -117,6 +117,15 @@ namespace CefBrowserProcess
 				mouseClickEvent.MouseEventType == MouseEventType.Up);
 		}
 
+		public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
+		{
+			MouseScrollEvent(new CefMouseEvent
+			{
+				X = mouseScrollEvent.MouseX,
+				Y = mouseScrollEvent.MouseY
+			}, mouseScrollEvent.MouseScroll);
+		}
+
 		private void KeyEvent(CefKeyEvent keyEvent)
 		{
 			lifespanHandler.Browser.GetHost().SendKeyEvent(keyEvent);
@@ -130,6 +139,11 @@ namespace CefBrowserProcess
 		private void MouseClickEvent(CefMouseEvent mouseEvent, int clickCount, CefMouseButtonType button, bool mouseUp)
 		{
 			lifespanHandler.Browser.GetHost().SendMouseClickEvent(mouseEvent, button, mouseUp, clickCount);
+		}
+
+		private void MouseScrollEvent(CefMouseEvent mouseEvent, int scroll)
+		{
+			lifespanHandler.Browser.GetHost().SendMouseWheelEvent(mouseEvent, 0, scroll);
 		}
 
 		protected override CefLoadHandler GetLoadHandler()
