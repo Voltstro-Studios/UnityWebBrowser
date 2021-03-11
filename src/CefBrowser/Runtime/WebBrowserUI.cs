@@ -10,7 +10,7 @@ namespace UnityWebBrowser
 	[AddComponentMenu("Browser/Web Browser UI")]
 	[HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
 	[RequireComponent(typeof(RawImage))]
-	public sealed class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+	public sealed class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 	{
 		/// <summary>
 		///		The <see cref="WebBrowserClient"/>, what handles the communication between the CEF process and Unity
@@ -65,18 +65,53 @@ namespace UnityWebBrowser
 				}
 
 				browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
-
-				if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, Input.mousePosition,
-					out Vector2 pos))
-				{
-					pos.x *= browserClient.width;
-					pos.y *= browserClient.height;
-
+				if(GetMousePosition(out Vector2 pos))
 					browserClient.SendMouseMoveEvent((int)pos.x, (int)pos.y);
-				}
-
+				
 				yield return 0;
 			}
+		}
+
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			MouseClickType clickType = eventData.button switch
+			{
+				PointerEventData.InputButton.Left => MouseClickType.Left,
+				PointerEventData.InputButton.Right => MouseClickType.Right,
+				PointerEventData.InputButton.Middle => MouseClickType.Middle,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+			if(GetMousePosition(out Vector2 pos))
+				browserClient.SendMouseClickEvent((int)pos.x, (int)pos.y, eventData.clickCount, clickType, MouseEventType.Down);
+		}
+
+		public void OnPointerUp(PointerEventData eventData)
+		{
+			MouseClickType clickType = eventData.button switch
+			{
+				PointerEventData.InputButton.Left => MouseClickType.Left,
+				PointerEventData.InputButton.Right => MouseClickType.Right,
+				PointerEventData.InputButton.Middle => MouseClickType.Middle,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+			if(GetMousePosition(out Vector2 pos))
+				browserClient.SendMouseClickEvent((int)pos.x, (int)pos.y, eventData.clickCount, clickType, MouseEventType.Up);
+		}
+
+		private bool GetMousePosition(out Vector2 pos)
+		{
+			if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, Input.mousePosition,
+				out pos))
+			{
+				pos.x *= browserClient.width;
+				pos.y *= browserClient.height;
+
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

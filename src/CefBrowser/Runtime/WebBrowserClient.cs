@@ -197,6 +197,28 @@ namespace UnityWebBrowser
 			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
 		}
 
+		/// <summary>
+		///		Sends a mouse click event to the CEF process
+		/// </summary>
+		/// <param name="mouseX"></param>
+		/// <param name="mouseY"></param>
+		/// <param name="clickType"></param>
+		public void SendMouseClickEvent(int mouseX, int mouseY, int clickCount, MouseClickType clickType, MouseEventType eventType)
+		{
+			if(!SendData(new MouseClickEvent
+			{
+				MouseX = mouseX,
+				MouseY = mouseY,
+				MouseClickCount = clickCount,
+				MouseClickType = clickType,
+				MouseEventType = eventType
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
+		}
+
 		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)
 		{
 			if (!Equals(error, ZError.None))

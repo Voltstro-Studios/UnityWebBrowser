@@ -43,10 +43,19 @@ namespace CefBrowserProcess.EventData
 						Chars = jsonObject["Chars"].ToObject<string>()
 					};
 				case EventType.MouseMoveEvent:
-					return new MouseMoveEvent()
+					return new MouseMoveEvent
 					{
 						MouseX = jsonObject["MouseX"].ToObject<int>(),
 						MouseY = jsonObject["MouseY"].ToObject<int>()
+					};
+				case EventType.MouseClickEvent:
+					return new MouseClickEvent
+					{
+						MouseX = jsonObject["MouseX"].ToObject<int>(),
+						MouseY = jsonObject["MouseY"].ToObject<int>(),
+						MouseClickCount = jsonObject["MouseClickCount"].ToObject<int>(),
+						MouseClickType = (MouseClickType) jsonObject["MouseClickType"].ToObject<int>(),
+						MouseEventType = (MouseEventType) jsonObject["MouseEventType"].ToObject<int>()
 					};
 				default:
 					throw new ArgumentOutOfRangeException();
