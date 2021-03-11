@@ -36,7 +36,7 @@ namespace UnityWebBrowser
 
 		private void OnDestroy()
 		{
-			browserClient.Shutdown();
+			browserClient.Dispose();
 		}
 
 		public void OnPointerEnter(PointerEventData eventData)
@@ -72,7 +72,7 @@ namespace UnityWebBrowser
 					pos.x *= browserClient.width;
 					pos.y *= browserClient.height;
 
-					browserClient.SendMouseEvent((int)pos.x, (int)pos.y);
+					browserClient.SendMouseMoveEvent((int)pos.x, (int)pos.y);
 				}
 
 				yield return 0;

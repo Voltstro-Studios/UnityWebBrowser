@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Security;
 using Newtonsoft.Json;
 using UnityEngine;
 using ZeroMQ;
@@ -13,7 +14,7 @@ namespace UnityWebBrowser
 	///		Handles managing the process and worker thread
 	/// </summary>
 	[Serializable]
-	public class WebBrowserClient
+	public class WebBrowserClient : IDisposable
 	{
 		/// <summary>
 		///		The initial URl the browser will start at
@@ -57,7 +58,7 @@ namespace UnityWebBrowser
 		///		Show the CEF browser process console?
 		/// </summary>
 		[Tooltip("Show the CEF browser process console?")]
-		public bool showProcessConsole = false;
+		public bool showProcessConsole;
 
 		/// <summary>
 		///		Texture that the browser will paint to
@@ -145,7 +146,7 @@ namespace UnityWebBrowser
 
 				byte[] bytes = reply.Read();
 
-				if(reply == null || reply.Length == 0)
+				if(reply.Length == 0)
 					continue;
 
 				BrowserTexture.LoadRawTextureData(bytes);
@@ -155,7 +156,128 @@ namespace UnityWebBrowser
 			}
 		}
 
-		public void Shutdown()
+		#region CEF process events
+
+		/// <summary>
+		///		Sends a keyboard event to the CEF process
+		/// </summary>
+		/// <param name="keysDown"></param>
+		/// <param name="keysUp"></param>
+		/// <param name="chars"></param>
+		public void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
+		{
+			//TODO: Maybe don't send if all empty
+			if(!SendData(new KeyboardEvent
+			{
+				Chars = chars,
+				KeysDown = keysDown,
+				KeysUp = keysUp
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+			HandleEventReceiving(frame, error, nameof(KeyboardEvent));
+		}
+
+		/// <summary>
+		///		Sends a mouse event to the CEF process
+		/// </summary>
+		/// <param name="mouseX"></param>
+		/// <param name="mouseY"></param>
+		public void SendMouseMoveEvent(int mouseX, int mouseY)
+		{
+			if(!SendData(new MouseEvent
+			{
+				MouseX = mouseX,
+				MouseY = mouseY
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+			HandleEventReceiving(frame, error, nameof(MouseEvent));
+		}
+
+		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)
+		{
+			if (!Equals(error, ZError.None))
+			{
+				Debug.LogError("Failed to receive!");
+				return;
+			}
+
+			if (frame.ReadInt32() != (int) EventType.Ping)
+				Debug.LogError($"Got an incorrect response for a {eventName}!");
+		}
+
+		#endregion
+
+		#region Data Methods
+
+		/// <summary>
+		///		Send an event to the browser process
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		[SecurityCritical]
+		protected bool SendData(IEventData data)
+		{
+			string json = JsonConvert.SerializeObject(data);
+			return SendData(new ZFrame(json));
+		}
+
+		/// <summary>
+		///		Send data to the browser process
+		/// </summary>
+		/// <param name="frame"></param>
+		/// <returns>Returns true if successful</returns>
+		[SecurityCritical]
+		protected bool SendData(ZFrame frame)
+		{
+			if (!isRunning)
+				return false;
+
+			//Send frame
+			requester.SendFrame(frame, out ZError error);
+			if (!Equals(error, ZError.None))
+			{
+				//It didn't send for some reason
+				errorCount++;
+				Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
+
+				//We have hit our error count
+				if (errorCount >= errorsTillFail)
+				{
+					Dispose();
+					Debug.LogError($"Connection failed {errorCount} times! Quitting!");
+					return false;
+				}
+
+				//Try to send it again
+				SendData(frame);
+			}
+
+			return true;
+		}
+
+		#endregion
+
+		#region Destroying
+
+		~WebBrowserClient()
+		{
+			ReleaseResources();
+		}
+		
+		/// <summary>
+		///		Destroys this <see cref="WebBrowserClient"/> instance
+		/// </summary>
+		public void Dispose()
+		{
+			ReleaseResources();
+			GC.SuppressFinalize(this);
+		}
+
+		private void ReleaseResources()
 		{
 			if(!isRunning)
 				return;
@@ -169,92 +291,9 @@ namespace UnityWebBrowser
 			context.Dispose();
 
 			serverProcess.Kill();
+			serverProcess.Dispose();
 		}
 
-		internal void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
-		{
-			//TODO: Maybe don't send if all empty
-			if(!SendData(new KeyboardEvent
-			{
-				Chars = chars,
-				KeysDown = keysDown,
-				KeysUp = keysUp
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-
-			if (!Equals(error, ZError.None))
-			{
-				Debug.LogError("Failed to receive!");
-				return;
-			}
-
-			if (frame.ReadInt32() != (int) EventType.Ping)
-			{
-				Debug.LogError($"Got an incorrect response for a {nameof(KeyboardEvent)}!");
-			}
-		}
-
-		internal void SendMouseEvent(int mouseX, int mouseY)
-		{
-			if(!SendData(new MouseEvent
-			{
-				MouseX = mouseX,
-				MouseY = mouseY
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-
-			if (!Equals(error, ZError.None))
-			{
-				Debug.LogError("Failed to receive!");
-				return;
-			}
-
-			if (frame.ReadInt32() != (int) EventType.Ping)
-			{
-				Debug.LogError($"Got an incorrect response for a {nameof(MouseEvent)}!");
-			}
-		}
-
-		internal bool SendData(IEventData data)
-		{
-			string json = JsonConvert.SerializeObject(data);
-			return SendData(new ZFrame(json));
-		}
-
-		/// <summary>
-		///		Send data to the other process
-		/// </summary>
-		/// <param name="frame"></param>
-		/// <returns>Returns true if successful</returns>
-		internal bool SendData(ZFrame frame)
-		{
-			if (!isRunning)
-				return false;
-
-			requester.SendFrame(frame, out ZError error);
-
-			if (!Equals(error, ZError.None))
-			{
-				errorCount++;
-				Debug.LogWarning($"Failed to send to server for some reason! {errorCount}");
-
-				if (errorCount >= errorsTillFail)
-				{
-					Shutdown();
-
-					Debug.LogError($"Connection failed {errorCount} times! Quitting!");
-
-					return false;
-				}
-
-				SendData(frame);
-			}
-
-			return true;
-		}
+		#endregion
 	}
 }
