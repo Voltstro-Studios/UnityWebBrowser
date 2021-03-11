@@ -83,16 +83,8 @@ namespace UnityWebBrowser
 		/// <summary>
 		///		Inits the browser client
 		/// </summary>
+		/// <exception cref="FileNotFoundException"></exception>
 		public void Init()
-		{
-			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
-		}
-
-		/// <summary>
-		///		Starts the process and IPC
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator Start()
 		{
 			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
 			LogDebug($"Starting CEF browser process from {cefProcessPath}");
@@ -100,7 +92,7 @@ namespace UnityWebBrowser
 			if (!File.Exists(cefProcessPath))
 			{
 				LogError("The CEF browser process doesn't exist!");
-				yield break;
+				throw new FileNotFoundException("CEF browser process could not be found!");
 			}
 
 			//Start the server process
@@ -113,6 +105,17 @@ namespace UnityWebBrowser
 				},
 			};
 			serverProcess.Start();
+
+			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
+		}
+
+		/// <summary>
+		///		Starts the process and IPC
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator Start()
+		{
+			LogDebug("Starting communications between CEF process and Unity...");
 
 			//Start our client
 			context = new ZContext();
