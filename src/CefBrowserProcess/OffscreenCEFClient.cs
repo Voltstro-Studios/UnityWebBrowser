@@ -97,6 +97,15 @@ namespace CefBrowserProcess
 			}
 		}
 
+		public void ProcessMouseEvent(MouseEvent mouseEvent)
+		{
+			MouseMoveEvent(new CefMouseEvent
+			{
+				X = mouseEvent.MouseX,
+				Y = mouseEvent.MouseY
+			});
+		}
+
 		private void KeyEvent(CefKeyEvent keyEvent)
 		{
 			lifespanHandler.Browser.GetHost().SendKeyEvent(keyEvent);

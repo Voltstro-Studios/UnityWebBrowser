@@ -75,10 +75,14 @@ namespace CefBrowserProcess
 					{
 						responder.Send(new ZFrame(cefClient.GetPixels()));
 					}
-
 					else if (data.EventType == EventType.KeyboardEvent)
 					{
 						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
+						responder.Send(new ZFrame((int) EventType.Ping));
+					}
+					else if (data.EventType == EventType.MouseEvent)
+					{
+						cefClient.ProcessMouseEvent((MouseEvent)data);
 						responder.Send(new ZFrame((int) EventType.Ping));
 					}
 				}

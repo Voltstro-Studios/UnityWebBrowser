@@ -18,6 +18,7 @@ namespace UnityWebBrowser
 		[Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
 		public WebBrowserClient browserClient = new WebBrowserClient();
 
+		private RawImage image;
 		private Coroutine pointerKeyboardHandler;
 
 		private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
@@ -28,7 +29,7 @@ namespace UnityWebBrowser
 			browserClient.Init();
 			StartCoroutine(browserClient.Start());
 
-			RawImage image = GetComponent<RawImage>();
+			image = GetComponent<RawImage>();
 			image.texture = browserClient.BrowserTexture;
 			image.uvRect = new Rect(0f, 0f, 1f, -1f);
 		}
@@ -65,20 +66,17 @@ namespace UnityWebBrowser
 
 				browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
 
-				//Vector2 pos = GetScreenCoords();
+				if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, Input.mousePosition,
+					out Vector2 pos))
+				{
+					pos.x *= browserClient.width;
+					pos.y *= browserClient.height;
+
+					browserClient.SendMouseEvent((int)pos.x, (int)pos.y);
+				}
 
 				yield return 0;
 			}
-		}
-
-		//TODO: CEF does it mouse point from top left origin, so we need to calculate that, not the center
-		private Vector2 GetScreenCoords()
-		{
-			GraphicRaycaster raycaster = GetComponentInParent<GraphicRaycaster>();
-			Vector3 mousepos = Input.mousePosition;
-			RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, mousepos, raycaster.eventCamera, out Vector2 localPos);
-
-			return localPos;
 		}
 	}
 }

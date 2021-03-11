@@ -196,6 +196,29 @@ namespace UnityWebBrowser
 			}
 		}
 
+		internal void SendMouseEvent(int mouseX, int mouseY)
+		{
+			if(!SendData(new MouseEvent
+			{
+				MouseX = mouseX,
+				MouseY = mouseY
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+
+			if (!Equals(error, ZError.None))
+			{
+				Debug.LogError("Failed to receive!");
+				return;
+			}
+
+			if (frame.ReadInt32() != (int) EventType.Ping)
+			{
+				Debug.LogError($"Got an incorrect response for a {nameof(MouseEvent)}!");
+			}
+		}
+
 		internal bool SendData(IEventData data)
 		{
 			string json = JsonConvert.SerializeObject(data);
