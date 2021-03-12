@@ -105,6 +105,8 @@ namespace UnityWebBrowser
 				List<int> keysUp = new List<int>();
 
 #if ENABLE_INPUT_SYSTEM
+
+				//We need to find all keys that were pressed and released
 				foreach (KeyControl key in Keyboard.current.allKeys)
 				{
 					try
@@ -121,12 +123,14 @@ namespace UnityWebBrowser
 					}
 				}
 
+				//Send our input if any key is down or up
 				if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(currentInputBuffer))
 				{
 					browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), currentInputBuffer);
 					currentInputBuffer = "";
 				}
 #else
+				//We need to find all keys that were pressed and released
 				foreach (KeyCode key in Keymap)
 				{
 					//Why are mouse buttons considered key codes???

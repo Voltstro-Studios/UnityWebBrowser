@@ -7,8 +7,16 @@ using UnityEngine.InputSystem;
 
 namespace UnityWebBrowser.Input
 {
+	/// <summary>
+	///		Helper class for inputs
+	/// </summary>
     public static class WebBrowserInputHelper
     {
+		/// <summary>
+		///		Converts a <see cref="KeyCode"/> to <see cref="WindowKeys"/>
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 	    public static WindowKeys UnityKeyCodeToWindowKey(this KeyCode key)
 	    {
 		    switch (key)
@@ -201,6 +209,12 @@ namespace UnityWebBrowser.Input
 	    }
 
 #if ENABLE_INPUT_SYSTEM
+
+		/// <summary>
+		///		Converts a <see cref="Key"/> to <see cref="WindowKeys"/>
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 	    public static WindowKeys UnityKeyToWindowKey(this Key key)
 	    {
 		    switch (key)
