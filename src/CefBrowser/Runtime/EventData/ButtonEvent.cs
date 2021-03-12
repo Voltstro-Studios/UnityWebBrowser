@@ -4,6 +4,7 @@ namespace UnityWebBrowser
 	{
 		Back,
 		Forward,
+		Refresh,
 		NavigateUrl
 	}
 

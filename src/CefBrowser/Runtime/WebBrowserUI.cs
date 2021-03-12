@@ -49,6 +49,14 @@ namespace UnityWebBrowser
 			browserClient.SendButtonEvent(ButtonType.NavigateUrl, url);
 		}
 
+		/// <summary>
+		///		Refreshes the browser
+		/// </summary>
+		public void Refresh()
+		{
+			browserClient.SendButtonEvent(ButtonType.Refresh);
+		}
+
 		private void Start()
 		{
 			//Start the browser client

@@ -136,6 +136,9 @@ namespace CefBrowserProcess
 				case ButtonType.Forward:
 					GoForward();
 					break;
+				case ButtonType.Refresh:
+					Refresh();
+					break;
 				case ButtonType.NavigateUrl:
 					NavigateUrl(buttonEvent.UrlToNavigate);
 					break;
@@ -179,6 +182,11 @@ namespace CefBrowserProcess
 		{
 			if(lifespanHandler.Browser.CanGoForward)
 				lifespanHandler.Browser.GoForward();
+		}
+
+		private void Refresh()
+		{
+			lifespanHandler.Browser.Reload();
 		}
 
 		protected override CefLoadHandler GetLoadHandler()
