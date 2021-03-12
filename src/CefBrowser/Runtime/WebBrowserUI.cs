@@ -24,6 +24,31 @@ namespace UnityWebBrowser
 
 		private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
 
+		/// <summary>
+		///		Makes the browser go back a page
+		/// </summary>
+		public void GoBack()
+		{
+			browserClient.SendButtonEvent(ButtonType.Back);
+		}
+
+		/// <summary>
+		///		Make the browser go forward a page
+		/// </summary>
+		public void GoForward()
+		{
+			browserClient.SendButtonEvent(ButtonType.Forward);
+		}
+
+		/// <summary>
+		///		Makes the browser go to a url
+		/// </summary>
+		/// <param name="url"></param>
+		public void NavigateUrl(string url)
+		{
+			browserClient.SendButtonEvent(ButtonType.NavigateUrl, url);
+		}
+
 		private void Start()
 		{
 			//Start the browser client

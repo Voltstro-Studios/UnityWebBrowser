@@ -7,6 +7,7 @@ namespace UnityWebBrowser
         KeyboardEvent = 3,
         MouseMoveEvent = 4,
         MouseClickEvent = 5,
-        MouseScrollEvent = 6
+        MouseScrollEvent = 6,
+        ButtonEvent = 7
     }
 }

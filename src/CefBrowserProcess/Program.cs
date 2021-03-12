@@ -79,6 +79,8 @@ namespace CefBrowserProcess
 
 					if (data.EventType == EventType.KeyboardEvent)
 						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
+					else if (data.EventType == EventType.ButtonEvent)
+						cefClient.ProcessButtonEvent((ButtonEvent)data);
 					else if (data.EventType == EventType.MouseMoveEvent)
 						cefClient.ProcessMouseMoveEvent((MouseMoveEvent)data);
 					else if (data.EventType == EventType.MouseClickEvent)

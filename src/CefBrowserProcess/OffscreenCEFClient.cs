@@ -126,6 +126,24 @@ namespace CefBrowserProcess
 			}, mouseScrollEvent.MouseScroll);
 		}
 
+		public void ProcessButtonEvent(ButtonEvent buttonEvent)
+		{
+			switch (buttonEvent.ButtonType)
+			{
+				case ButtonType.Back:
+					GoBack();
+					break;
+				case ButtonType.Forward:
+					GoForward();
+					break;
+				case ButtonType.NavigateUrl:
+					NavigateUrl(buttonEvent.UrlToNavigate);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
 		private void KeyEvent(CefKeyEvent keyEvent)
 		{
 			lifespanHandler.Browser.GetHost().SendKeyEvent(keyEvent);
@@ -144,6 +162,23 @@ namespace CefBrowserProcess
 		private void MouseScrollEvent(CefMouseEvent mouseEvent, int scroll)
 		{
 			lifespanHandler.Browser.GetHost().SendMouseWheelEvent(mouseEvent, 0, scroll);
+		}
+
+		private void NavigateUrl(string url)
+		{
+			lifespanHandler.Browser.GetMainFrame().LoadUrl(url);
+		}
+
+		private void GoBack()
+		{
+			if(lifespanHandler.Browser.CanGoBack)
+				lifespanHandler.Browser.GoBack();
+		}
+
+		private void GoForward()
+		{
+			if(lifespanHandler.Browser.CanGoForward)
+				lifespanHandler.Browser.GoForward();
 		}
 
 		protected override CefLoadHandler GetLoadHandler()

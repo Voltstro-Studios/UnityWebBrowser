@@ -1,7 +1,9 @@
 {
     "name": "UnityWebBrowser",
     "rootNamespace": "UnityWebBrowser",
-    "references": [],
+    "references": [
+        "Unity.TextMeshPro"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -12,6 +14,12 @@
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "3.0",
+            "define": "TMP_ENABLED"
+        }
+    ],
     "noEngineReferences": false
 }

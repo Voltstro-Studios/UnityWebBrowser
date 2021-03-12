@@ -291,6 +291,22 @@ namespace UnityWebBrowser
 			HandleEventReceiving(frame, error, nameof(MouseScrollEvent));
 		}
 
+		public void SendButtonEvent(ButtonType buttonType, string url = null)
+		{
+			if(buttonType == ButtonType.NavigateUrl && string.IsNullOrWhiteSpace(url))
+				return;
+
+			if(!SendData(new ButtonEvent
+			{
+				ButtonType = buttonType,
+				UrlToNavigate = url
+			}))
+				return;
+
+			using ZFrame frame = requester.ReceiveFrame(out ZError error);
+			HandleEventReceiving(frame, error, nameof(ButtonEvent));
+		}
+
 		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)
 		{
 			if (!Equals(error, ZError.None))

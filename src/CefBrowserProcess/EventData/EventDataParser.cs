@@ -71,6 +71,12 @@ namespace CefBrowserProcess.EventData
 						MouseY = jsonObject.GetValue("MouseY").ToObject<int>(),
 						MouseScroll = jsonObject.GetValue("MouseScroll").ToObject<int>()
 					};
+				case EventType.ButtonEvent:
+					return new ButtonEvent
+					{
+						ButtonType = (ButtonType) jsonObject.GetValue("ButtonType").ToObject<int>(),
+						UrlToNavigate = jsonObject.GetValue("UrlToNavigate").ToObject<string>()
+					};
 				default:
 					throw new ArgumentOutOfRangeException();
 				// ReSharper restore PossibleNullReferenceException
