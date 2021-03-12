@@ -2,7 +2,8 @@
     "name": "UnityWebBrowser",
     "rootNamespace": "UnityWebBrowser",
     "references": [
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

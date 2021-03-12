@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityWebBrowser.Input;
+
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+#endif
 
 namespace UnityWebBrowser
 {
@@ -22,7 +28,11 @@ namespace UnityWebBrowser
 		private Coroutine pointerKeyboardHandler;
 		private Vector2 lastSuccessfulMousePositionSent;
 
+#if ENABLE_INPUT_SYSTEM
+		private string currentInputBuffer;
+#else
 		private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+#endif
 
 		/// <summary>
 		///		Makes the browser go back a page
@@ -66,6 +76,10 @@ namespace UnityWebBrowser
 			image = GetComponent<RawImage>();
 			image.texture = browserClient.BrowserTexture;
 			image.uvRect = new Rect(0f, 0f, 1f, -1f);
+
+#if ENABLE_INPUT_SYSTEM
+			Keyboard.current.onTextInput += c => currentInputBuffer += c;
+#endif
 		}
 
 		private void OnDestroy()
@@ -90,16 +104,53 @@ namespace UnityWebBrowser
 				List<int> keysDown = new List<int>();
 				List<int> keysUp = new List<int>();
 
-				foreach (KeyCode key in Keymap)
+#if ENABLE_INPUT_SYSTEM
+				foreach (KeyControl key in Keyboard.current.allKeys)
 				{
-					if(Input.GetKeyDown(key))
-						keysDown.Add((int)key);
-					if(Input.GetKeyUp(key))
-						keysUp.Add((int)key);
+					try
+					{
+						if (key.wasPressedThisFrame)
+							keysDown.Add((int) key.keyCode.UnityKeyToWindowKey());
+
+						if (key.wasReleasedThisFrame)
+							keysUp.Add((int) key.keyCode.UnityKeyToWindowKey());
+					}
+					catch (Exception)
+					{
+						browserClient.LogWarning($"Unsupported key conversion attempted! Key: {key}");
+					}
 				}
 
-				if(keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(Input.inputString))
-					browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), Input.inputString);
+				if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(currentInputBuffer))
+				{
+					browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), currentInputBuffer);
+					currentInputBuffer = "";
+				}
+#else
+				foreach (KeyCode key in Keymap)
+				{
+					//Why are mouse buttons considered key codes???
+					if(key == KeyCode.Mouse0 || key == KeyCode.Mouse1 || key == KeyCode.Mouse2 
+					   || key == KeyCode.Mouse3 || key == KeyCode.Mouse4 
+					   || key == KeyCode.Mouse5 || key == KeyCode.Mouse6)
+						continue;
+
+					try
+					{
+						if (UnityEngine.Input.GetKeyDown(key))
+							keysDown.Add((int) key.UnityKeyCodeToWindowKey());
+						if (UnityEngine.Input.GetKeyUp(key))
+							keysUp.Add((int) key.UnityKeyCodeToWindowKey());
+					}
+					catch (Exception)
+					{
+						browserClient.LogWarning($"Unsupported key conversion attempted! KeyCode: {key}");
+					}
+				}
+
+				if(keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(UnityEngine.Input.inputString))
+					browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(), UnityEngine.Input.inputString);
+#endif
 				if (GetMousePosition(out Vector2 pos))
 				{
 					if (lastSuccessfulMousePositionSent != pos)
@@ -109,7 +160,11 @@ namespace UnityWebBrowser
 					}
 
 					//Mouse scroll
-					float scroll = Input.GetAxis("Mouse ScrollWheel");
+#if ENABLE_INPUT_SYSTEM
+					float scroll = Mouse.current.scroll.ReadValue().y;
+#else
+					float scroll = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
+#endif
 					scroll *= browserClient.BrowserTexture.height;
 
 					if(scroll != 0)
@@ -150,8 +205,13 @@ namespace UnityWebBrowser
 
 		private bool GetMousePosition(out Vector2 pos)
 		{
-			if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, Input.mousePosition,
-				out pos))
+#if ENABLE_INPUT_SYSTEM
+			Vector2 mousePos = Mouse.current.position.ReadValue();
+#else
+			Vector2 mousePos = UnityEngine.Input.mousePosition;
+#endif
+
+			if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, mousePos, out pos))
 			{
 				pos.x *= browserClient.width;
 				pos.y *= browserClient.height;
