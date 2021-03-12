@@ -386,6 +386,8 @@ namespace UnityWebBrowser
 
 			serverProcess.Kill();
 			serverProcess.Dispose();
+
+			LogDebug("Web browser shutdown.");
 		}
 
 		#endregion
