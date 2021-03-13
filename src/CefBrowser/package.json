@@ -7,5 +7,12 @@
   "author": "Voltstro",
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "2.0.0"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Basic",
+      "description": "Basic browser window prefab",
+      "path": "Samples~/Basic"
+    }
+  ]
 }
