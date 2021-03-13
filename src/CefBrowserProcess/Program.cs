@@ -12,6 +12,7 @@ namespace CefBrowserProcess
 		[CommandLineArgument("url")] public static string InitialUrl = "https://google.com";
 		[CommandLineArgument("width")] public static int Width = 1920;
 		[CommandLineArgument("height")] public static int Height = 1080;
+		[CommandLineArgument("port")] public static int Port = 5555;
 
 		public static void Main(string[] args)
 		{
@@ -52,7 +53,8 @@ namespace CefBrowserProcess
 			//Setup ZMQ
 			using ZContext context = new ZContext();
 			using ZSocket responder = new ZSocket(context, ZSocketType.REP);
-			responder.Bind("tcp://*:5555");
+
+			responder.Bind($"tcp://127.0.0.1:{Port}");
 
 			while (true)
 			{

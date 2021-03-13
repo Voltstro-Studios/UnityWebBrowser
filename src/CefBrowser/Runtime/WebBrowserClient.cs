@@ -36,11 +36,11 @@ namespace UnityWebBrowser
 		public uint height = 1080;
 
 		/// <summary>
-		///		The endpoint for the browser process
+		///		The port to communicate with the browser process on
 		/// </summary>
-		[Header("IPC Settings")]
-		[Tooltip("The endpoint for the browser process")]
-		public string ipcEndpoint = "tcp://127.0.0.1:5555";
+		[Header("IPC Settings")] 
+		[Tooltip("The port to communicate with the browser process on")]
+		public int port = 5555;
 
 		/// <summary>
 		///		The time between each frame sent the browser process
@@ -98,7 +98,7 @@ namespace UnityWebBrowser
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl}")
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port}")
 				{
 					CreateNoWindow = !showProcessConsole,
 					UseShellExecute = showProcessConsole
@@ -126,7 +126,7 @@ namespace UnityWebBrowser
 				Linger = new TimeSpan(0, 0, 4)
 			};
 
-			requester.Connect(ipcEndpoint, out ZError error);
+			requester.Connect($"tcp://127.0.0.1:{port}", out ZError error);
 
 			if (!Equals(error, ZError.None))
 			{
