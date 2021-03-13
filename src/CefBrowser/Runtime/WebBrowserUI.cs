@@ -165,7 +165,15 @@ namespace UnityWebBrowser
 
 					//Mouse scroll
 #if ENABLE_INPUT_SYSTEM
-					float scroll = Mouse.current.scroll.ReadValue().y;
+
+					//Mouse scroll wheel in the new input system is fucked, its value is either 120 or -120,
+					//no in-between or -1.0 to 1.0 like the old input system. Why Unity.
+					//And nobody knows anything about it because I guess no one uses the scroll wheel like this
+					float scroll = Mouse.current.scroll.y.ReadValue();
+					if (scroll > 0)
+						scroll = 0.2f;
+					if (scroll < 0)
+						scroll = -0.2f;
 #else
 					float scroll = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
 #endif
