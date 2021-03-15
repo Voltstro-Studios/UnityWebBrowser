@@ -34,7 +34,7 @@ steps:
     overWrite: true
     
 - task: CmdLine@2
-  displayLine: Deploy Package
+  displayName: Deploy Package
   inputs:
     workingDirectory: '..\UnityWebBrowserPackage'
     script: |
