@@ -2,8 +2,15 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 steps:
 - checkout: self
 - checkout: git://UnityWebBrowser/UnityWebBrowser
+
+- task: CmdLine@2
+  displayName: Download CEF
+  inputs:
+    script: 'pwsh download-cef-binaries.ps1'
+    workingDirectory: s/UnityWebBrowser/scripts/
+
