@@ -8,6 +8,15 @@ steps:
 - checkout: self
   submodules: true
   path: 'UnityWebBrowserSource'
+  
+- task: PowerShell@2
+  displayName: "Create repository folder (workaround)"
+  inputs:
+  targetType: inline
+  script: |
+    New-Item -Path ../ -Name "UnityWebBrowserPackage" -ItemType "directory"
+  pwsh: true
+  
 - checkout: git://UnityWebBrowser/UnityWebBrowser
   submodules: true
   path: 'UnityWebBrowserPackage'
