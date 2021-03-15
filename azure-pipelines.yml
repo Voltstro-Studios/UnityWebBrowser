@@ -12,7 +12,7 @@ steps:
 - task: CmdLine@2
   displayName: "Create repository folder (workaround)"
   inputs:
-    script: 'pwsh New-Item -Path ../ -Name "UnityWebBrowserPackage" -ItemType "directory"'
+    script: 'pwsh -Command New-Item -Path ../ -Name "UnityWebBrowserPackage" -ItemType "directory"'
   
 - checkout: git://UnityWebBrowser/UnityWebBrowser
   submodules: true
