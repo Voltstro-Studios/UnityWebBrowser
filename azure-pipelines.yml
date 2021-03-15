@@ -6,7 +6,11 @@ pool:
 
 steps:
 - checkout: self
+  submodules: true
+  path: 'UnityWebBrowserSource'
 - checkout: git://UnityWebBrowser/UnityWebBrowser
+  submodules: true
+  path: 'UnityWebBrowserPackage'
 
 - task: CmdLine@2
   displayName: Download CEF
