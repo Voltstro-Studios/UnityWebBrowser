@@ -16,5 +16,5 @@ steps:
   displayName: Download CEF
   inputs:
     script: 'pwsh download-cef-binaries.ps1'
-    workingDirectory: 'UnityWebBrowserSource\scripts'
+    workingDirectory: '..\UnityWebBrowserSource\scripts'
 
