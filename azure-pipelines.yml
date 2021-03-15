@@ -21,7 +21,7 @@ steps:
 - task: CmdLine@2
   displayName: Build CEF Process and deploy
   inputs:
-    script: 'pwsh publish-browserprocess-and-copy-win64.ps11'
+    script: 'pwsh publish-browserprocess-and-copy-win64.ps1'
     workingDirectory: '..\UnityWebBrowserSource\scripts'
     
 - task: CopyFiles@2
