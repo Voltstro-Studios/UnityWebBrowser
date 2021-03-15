@@ -24,11 +24,11 @@ steps:
     script: 'pwsh publish-browserprocess-and-copy-win64.ps11'
     workingDirectory: '..\UnityWebBrowserSource\scripts'
     
- - task: CopyFiles@2
-   displayName: Copy files to package repo
-   inputs:
-     sourceFolder: ..\UnityWebBrowserSource\src\CefBrowser
-     contents: '**' 
-     targetFolder: ..\UnityWebBrowserPackage
-     cleanTargetFolder: true
-     overWrite: true
+- task: CopyFiles@2
+  displayName: Copy files to package repo
+  inputs:
+    sourceFolder: ..\UnityWebBrowserSource\src\CefBrowser
+    contents: '**' 
+    targetFolder: ..\UnityWebBrowserPackage
+    cleanTargetFolder: true
+    overWrite: true
