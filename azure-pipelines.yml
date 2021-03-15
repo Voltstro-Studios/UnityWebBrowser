@@ -38,8 +38,8 @@ steps:
   inputs:
     workingDirectory: '..\UnityWebBrowserPackage'
     script: |
-    git config --global user.name "Azure Pipelines"
-    git config --global user.email "azuredevops@microsoft.com"
-    git add *
-    git commit -m "Deploy Package"
-    git push
+      git config --global user.name "Azure Pipelines"
+      git config --global user.email "azuredevops@microsoft.com"
+      git add *
+      git commit -m "Deploy Package"
+      git push
