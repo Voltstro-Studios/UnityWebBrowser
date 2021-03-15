@@ -7,7 +7,7 @@ pool:
 steps:
 - checkout: self
   submodules: true
-  path: 'UnityWebBrowserSource'
+  path: 's/UnityWebBrowserSource'
   
 - task: CmdLine@2
   displayName: "Create repository folder (workaround)"
@@ -16,33 +16,33 @@ steps:
   
 - checkout: git://UnityWebBrowser/UnityWebBrowser
   submodules: true
-  path: 'UnityWebBrowserPackage'
+  path: 's/UnityWebBrowserPackage'
 
 - task: CmdLine@2
   displayName: Download CEF
   inputs:
     script: 'pwsh download-cef-binaries.ps1'
-    workingDirectory: '..\UnityWebBrowserSource\scripts'
+    workingDirectory: 'UnityWebBrowserSource\scripts'
 
 - task: CmdLine@2
   displayName: Build CEF Process and deploy
   inputs:
     script: 'pwsh publish-browserprocess-and-copy-win64.ps1'
-    workingDirectory: '..\UnityWebBrowserSource\scripts'
+    workingDirectory: 'UnityWebBrowserSource\scripts'
     
 - task: CopyFiles@2
   displayName: Copy files to package repo
   inputs:
-    sourceFolder: ..\UnityWebBrowserSource\src\CefBrowser
+    sourceFolder: UnityWebBrowserSource\src\CefBrowser
     contents: '**' 
-    targetFolder: ..\UnityWebBrowserPackage
+    targetFolder: UnityWebBrowserPackage
     cleanTargetFolder: true
     overWrite: true
     
 - task: CmdLine@2
   displayName: Deploy Package
   inputs:
-    workingDirectory: '..\UnityWebBrowserPackage'
+    workingDirectory: 'UnityWebBrowserPackage'
     script: |
       git config --global user.name "Azure Pipelines"
       git config --global user.email "azuredevops@microsoft.com"
