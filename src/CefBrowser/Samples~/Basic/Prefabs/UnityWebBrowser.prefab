@@ -1081,8 +1081,8 @@ MonoBehaviour:
     initialUrl: https://google.com
     width: 1920
     height: 1080
-    ipcEndpoint: tcp://127.0.0.1:5555
-    eventPollingTime: 0.01
+    port: 5555
+    eventPollingTime: 0.1
     errorsTillFail: 4
     showProcessConsole: 0
 --- !u!114 &7454210984040730581

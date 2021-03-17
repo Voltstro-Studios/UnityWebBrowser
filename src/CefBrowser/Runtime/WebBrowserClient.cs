@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Security;
-using Newtonsoft.Json;
 using UnityEngine;
 using ZeroMQ;
 using Debug = UnityEngine.Debug;
@@ -46,7 +44,7 @@ namespace UnityWebBrowser
 		///		The time between each frame sent the browser process
 		/// </summary>
 		[Tooltip("The time between each frame sent the browser process")]
-		public float eventPollingTime = 0.01f;
+		public float eventPollingTime = 0.1f;
 
 		/// <summary>
 		///		How many errors until we will just fail
@@ -69,16 +67,33 @@ namespace UnityWebBrowser
 		///		<see cref="ILogger"/> that we log to
 		/// </summary>
 		public ILogger Logger { get; private set; } = Debug.unityLogger;
-
 		private const string LoggingTag = "[Web Browser]";
 
 		private Process serverProcess;
-		private ZContext context;
-		private ZSocket requester;
-
-		private int errorCount;
-
+		private WebBrowserEventDispatcher eventDispatcher;
+		
 		private bool isRunning;
+
+		private object pixelsLock = new object();
+		private byte[] pixels;
+
+		public byte[] Pixels
+		{
+			get
+			{
+				lock (pixelsLock)
+				{
+					return pixels;
+				}
+			}
+			set
+			{
+				lock (pixelsLock)
+				{
+					pixels = value;
+				}
+			}
+		}
 
 		/// <summary>
 		///		Inits the browser client
@@ -107,6 +122,8 @@ namespace UnityWebBrowser
 			serverProcess.Start();
 
 			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
+			eventDispatcher = new WebBrowserEventDispatcher(new TimeSpan(0, 0, 4), port);
+			eventDispatcher.StartDispatchingEvents();
 		}
 
 		/// <summary>
@@ -116,56 +133,28 @@ namespace UnityWebBrowser
 		public IEnumerator Start()
 		{
 			LogDebug("Starting communications between CEF process and Unity...");
-
-			//Start our client
-			context = new ZContext();
-			requester = new ZSocket(context, ZSocketType.REQ)
-			{
-				SendTimeout = new TimeSpan(0, 0, 4),
-				ReceiveTimeout = new TimeSpan(0, 0, 4),
-				Linger = new TimeSpan(0, 0, 4)
-			};
-
-			requester.Connect($"tcp://127.0.0.1:{port}", out ZError error);
-
-			if (!Equals(error, ZError.None))
-			{
-				LogError("Server failed to start for some reason!");
-
-				yield break; 
-			}
-
 			isRunning = true;
-			errorCount = 0;
-
-			yield return new WaitForSeconds(0.100f);
 
 			while (isRunning)
 			{
-				if(!SendData(new PingEvent()))
+				yield return new WaitForSecondsRealtime(eventPollingTime);
+
+				eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
+
+				byte[] pixelData = Pixels;
+
+				if(pixelData == null || pixelData.Length == 0)
 					continue;
 
-				using ZFrame reply = requester.ReceiveFrame(out error);
-
-				if (!Equals(error, ZError.None))
-				{
-					LogWarning("Failed to receive from server for some reason!");
-					continue; 
-				}
-
-				if (!isRunning)
-					break;
-
-				byte[] bytes = reply.Read();
-
-				if(reply.Length == 0)
-					continue;
-
-				BrowserTexture.LoadRawTextureData(bytes);
+				BrowserTexture.LoadRawTextureData(pixelData);
 				BrowserTexture.Apply(false);
-
-				yield return new WaitForSeconds(eventPollingTime);
 			}
+		}
+
+		private void LoadPixels(ZFrame frame)
+		{
+			Pixels = frame.Read();
+			frame.Dispose();
 		}
 
 		#region Logging
@@ -219,16 +208,12 @@ namespace UnityWebBrowser
 		/// <param name="chars"></param>
 		public void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
 		{
-			if(!SendData(new KeyboardEvent
+			eventDispatcher.QueueEvent(new KeyboardEvent
 			{
-				Chars = chars,
 				KeysDown = keysDown,
-				KeysUp = keysUp
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(KeyboardEvent));
+				KeysUp = keysUp,
+				Chars = chars
+			}, HandelEvent);
 		}
 
 		///  <summary>
@@ -237,15 +222,11 @@ namespace UnityWebBrowser
 		///  <param name="mousePos"></param>
 		public void SendMouseMoveEvent(Vector2 mousePos)
 		{
-			if(!SendData(new MouseMoveEvent
+			eventDispatcher.QueueEvent(new MouseMoveEvent
 			{
 				MouseX = (int)mousePos.x,
 				MouseY = (int)mousePos.y
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(MouseMoveEvent));
+			}, HandelEvent);
 		}
 
 		///  <summary>
@@ -257,18 +238,14 @@ namespace UnityWebBrowser
 		///  <param name="eventType"></param>
 		public void SendMouseClickEvent(Vector2 mousePos, int clickCount, MouseClickType clickType, MouseEventType eventType)
 		{
-			if(!SendData(new MouseClickEvent
+			eventDispatcher.QueueEvent(new MouseClickEvent
 			{
 				MouseX = (int)mousePos.x,
 				MouseY = (int)mousePos.y,
 				MouseClickCount = clickCount,
 				MouseClickType = clickType,
 				MouseEventType = eventType
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(MouseClickEvent));
+			}, HandelEvent);
 		}
 
 		/// <summary>
@@ -279,94 +256,31 @@ namespace UnityWebBrowser
 		/// <param name="mouseScroll"></param>
 		public void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
 		{
-			if(!SendData(new MouseScrollEvent
+			eventDispatcher.QueueEvent(new MouseScrollEvent
 			{
+				MouseScroll = mouseScroll,
 				MouseX = mouseX,
-				MouseY = mouseY,
-				MouseScroll = mouseScroll
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(MouseScrollEvent));
+				MouseY = mouseY
+			}, HandelEvent);
 		}
 
+		/// <summary>
+		///		Sends a button event
+		/// </summary>
+		/// <param name="buttonType"></param>
+		/// <param name="url"></param>
 		public void SendButtonEvent(ButtonType buttonType, string url = null)
 		{
-			if(buttonType == ButtonType.NavigateUrl && string.IsNullOrWhiteSpace(url))
-				return;
-
-			if(!SendData(new ButtonEvent
+			eventDispatcher.QueueEvent(new ButtonEvent
 			{
 				ButtonType = buttonType,
 				UrlToNavigate = url
-			}))
-				return;
-
-			using ZFrame frame = requester.ReceiveFrame(out ZError error);
-			HandleEventReceiving(frame, error, nameof(ButtonEvent));
+			}, HandelEvent);
 		}
 
-		private void HandleEventReceiving(ZFrame frame, ZError error, string eventName)
+		private void HandelEvent(ZFrame frame)
 		{
-			if (!Equals(error, ZError.None))
-			{
-				LogError("Failed to receive!");
-				return;
-			}
-
-			if (frame.ReadInt32() != (int) EventType.Ping)
-				LogError($"Got an incorrect response for a {eventName}!");
-		}
-
-		#endregion
-
-		#region Data Methods
-
-		/// <summary>
-		///		Send an event to the browser process
-		/// </summary>
-		/// <param name="data"></param>
-		/// <returns></returns>
-		[SecurityCritical]
-		protected bool SendData(IEventData data)
-		{
-			string json = JsonConvert.SerializeObject(data);
-			return SendData(new ZFrame(json));
-		}
-
-		/// <summary>
-		///		Send data to the browser process
-		/// </summary>
-		/// <param name="frame"></param>
-		/// <returns>Returns true if successful</returns>
-		[SecurityCritical]
-		protected bool SendData(ZFrame frame)
-		{
-			if (!isRunning)
-				return false;
-
-			//Send frame
-			requester.SendFrame(frame, out ZError error);
-			if (!Equals(error, ZError.None))
-			{
-				//It didn't send for some reason
-				errorCount++;
-				LogWarning($"Failed to send to server for some reason! {errorCount}");
-
-				//We have hit our error count
-				if (errorCount >= errorsTillFail)
-				{
-					Dispose();
-					LogError($"Connection failed {errorCount} times! Quitting!");
-					return false;
-				}
-
-				//Try to send it again
-				SendData(frame);
-			}
-
-			return true;
+			frame.Dispose();
 		}
 
 		#endregion
@@ -392,15 +306,10 @@ namespace UnityWebBrowser
 			if(!isRunning)
 				return;
 
-			if (errorCount != errorsTillFail)
-				SendData(new ShutdownEvent());
+			eventDispatcher.Dispose();
 
-			isRunning = false;
-
-			requester.Dispose();
-			context.Dispose();
-
-			serverProcess.Kill();
+			if(!serverProcess.HasExited)
+				serverProcess.Kill();
 			serverProcess.Dispose();
 
 			LogDebug("Web browser shutdown.");
