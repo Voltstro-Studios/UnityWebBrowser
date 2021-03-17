@@ -33,6 +33,11 @@ namespace UnityWebBrowser
 	    private readonly object requesterLock = new object();
 	    private readonly ZSocket requester;
 
+		/// <summary>
+		///		Creates a new <see cref="WebBrowserEventDispatcher"/> instance
+		/// </summary>
+		/// <param name="timeOutTime"></param>
+		/// <param name="port"></param>
         internal WebBrowserEventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
 	        eventsQueue = new Queue<KeyValuePair<IEventData, Action<ZFrame>>>();
@@ -55,8 +60,9 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Queues an event
         /// </summary>
-        /// <param name="eventData"></param>
-        /// <param name="onReceive"></param>
+        /// <param name="eventData">The data to send</param>
+        /// <param name="onReceive"><see cref="Action{T}"/> to be called when the <see cref="ZFrame"/> is received.
+        /// BE-AWARE! This is called on the event dispatcher thread!</param>
         internal void QueueEvent(IEventData eventData, Action<ZFrame> onReceive = null)
         {
 	        lock (eventsQueueLock)
@@ -77,6 +83,9 @@ namespace UnityWebBrowser
 	        return data;
         }
 
+		/// <summary>
+		///		Starts to dispatch events to the browser process
+		/// </summary>
         internal void StartDispatchingEvents()
         {
 	        eventDispatcherThread = new Thread(DispatchEventsThread);

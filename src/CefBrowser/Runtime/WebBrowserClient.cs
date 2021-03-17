@@ -77,6 +77,10 @@ namespace UnityWebBrowser
 		private object pixelsLock = new object();
 		private byte[] pixels;
 
+		/// <summary>
+		///		Raw pixel data of the browser.
+		///		<para>Try to use <see cref="BrowserTexture"/> for displaying a texture instead of this!</para>
+		/// </summary>
 		public byte[] Pixels
 		{
 			get
@@ -86,7 +90,7 @@ namespace UnityWebBrowser
 					return pixels;
 				}
 			}
-			set
+			private set
 			{
 				lock (pixelsLock)
 				{
@@ -127,7 +131,7 @@ namespace UnityWebBrowser
 		}
 
 		/// <summary>
-		///		Starts the process and IPC
+		///		Starts updating the <see cref="BrowserTexture"/> data
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerator Start()
