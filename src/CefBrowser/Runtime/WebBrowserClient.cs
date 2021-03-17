@@ -34,8 +34,9 @@ namespace UnityWebBrowser
 		public uint height = 1080;
 		
 		/// <summary>
-		///		The background <see cref="Color"/> of the webpage
+		///		The background <see cref="Color32"/> of the webpage
 		/// </summary>
+		[Tooltip("The background color of the webpage")]
 		public Color32 backgroundColor = new Color32(255, 255, 255, 255);
 
 		/// <summary>

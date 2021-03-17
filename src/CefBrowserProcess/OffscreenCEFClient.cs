@@ -64,6 +64,10 @@ namespace CefBrowserProcess
 			return pixelBytes;
 		}
 
+		/// <summary>
+		///		Process a <see cref="KeyboardEvent"/>
+		/// </summary>
+		/// <param name="keyboardEvent"></param>
 		public void ProcessKeyboardEvent(KeyboardEvent keyboardEvent)
 		{
 			//Keys down
@@ -97,6 +101,10 @@ namespace CefBrowserProcess
 			}
 		}
 
+		/// <summary>
+		///		Process a <see cref="UnityWebBrowser.MouseMoveEvent"/>
+		/// </summary>
+		/// <param name="mouseEvent"></param>
 		public void ProcessMouseMoveEvent(MouseMoveEvent mouseEvent)
 		{
 			MouseMoveEvent(new CefMouseEvent
@@ -106,6 +114,10 @@ namespace CefBrowserProcess
 			});
 		}
 
+		/// <summary>
+		///		Process a <see cref="UnityWebBrowser.MouseClickEvent"/>
+		/// </summary>
+		/// <param name="mouseClickEvent"></param>
 		public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
 		{
 			MouseClickEvent(new CefMouseEvent
@@ -117,6 +129,10 @@ namespace CefBrowserProcess
 				mouseClickEvent.MouseEventType == MouseEventType.Up);
 		}
 
+		/// <summary>
+		///		Process a <see cref="UnityWebBrowser.MouseScrollEvent"/>
+		/// </summary>
+		/// <param name="mouseScrollEvent"></param>
 		public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
 		{
 			MouseScrollEvent(new CefMouseEvent
@@ -126,6 +142,10 @@ namespace CefBrowserProcess
 			}, mouseScrollEvent.MouseScroll);
 		}
 
+		/// <summary>
+		///		Process a <see cref="UnityWebBrowser.ButtonEvent"/>
+		/// </summary>
+		/// <param name="buttonEvent"></param>
 		public void ProcessButtonEvent(ButtonEvent buttonEvent)
 		{
 			switch (buttonEvent.ButtonType)
