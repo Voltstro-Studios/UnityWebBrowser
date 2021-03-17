@@ -32,6 +32,11 @@ namespace UnityWebBrowser
 		/// </summary>
 		[Tooltip("The height of the browser")]
 		public uint height = 1080;
+		
+		/// <summary>
+		///		The background <see cref="Color"/> of the webpage
+		/// </summary>
+		public Color32 backgroundColor = new Color32(255, 255, 255, 255);
 
 		/// <summary>
 		///		The port to communicate with the browser process on
@@ -117,7 +122,8 @@ namespace UnityWebBrowser
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port}")
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} " +
+				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
 				{
 					CreateNoWindow = !showProcessConsole,
 					UseShellExecute = showProcessConsole

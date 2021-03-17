@@ -108,12 +108,19 @@ namespace UnityWebBrowser
 					SendEvent(eventToSend.Key);
 
 					//Wait to receive the event
-					ZFrame frame;
-					lock (requesterLock)
+					try
 					{
-						frame = requester.ReceiveFrame();
+						ZFrame frame;
+						lock (requesterLock)
+						{
+							frame = requester.ReceiveFrame();
+						}
+						
+						eventToSend.Value?.Invoke(frame);
 					}
-					eventToSend.Value?.Invoke(frame);
+					catch (ZException)
+					{
+					}
 		        }
 	        }
 	        catch (ThreadAbortException)

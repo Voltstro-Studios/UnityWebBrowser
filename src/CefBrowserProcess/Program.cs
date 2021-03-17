@@ -12,6 +12,12 @@ namespace CefBrowserProcess
 		[CommandLineArgument("url")] public static string InitialUrl = "https://google.com";
 		[CommandLineArgument("width")] public static int Width = 1920;
 		[CommandLineArgument("height")] public static int Height = 1080;
+
+		[CommandLineArgument("bcr")] public static int BackgroundCRed = 255;
+		[CommandLineArgument("bcg")] public static int BackgroundCGreen = 255;
+		[CommandLineArgument("bcb")] public static int BackgroundCBlue = 255;
+		[CommandLineArgument("bca")] public static int BackgroundCAlpha = 255;
+
 		[CommandLineArgument("port")] public static int Port = 5555;
 
 		public static void Main(string[] args)
@@ -38,10 +44,10 @@ namespace CefBrowserProcess
 
 			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
 			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
-
+			
 			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
 			{
-				BackgroundColor = new CefColor(255, 60, 85, 115),
+				BackgroundColor = new CefColor((byte)BackgroundCAlpha, (byte)BackgroundCRed, (byte)BackgroundCGreen, (byte)BackgroundCBlue),
 				JavaScript = CefState.Enabled,
 				LocalStorage = CefState.Disabled
 			};
