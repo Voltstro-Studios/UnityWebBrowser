@@ -44,7 +44,7 @@ namespace UnityWebBrowser
 		///		The time between each frame sent the browser process
 		/// </summary>
 		[Tooltip("The time between each frame sent the browser process")]
-		public float eventPollingTime = 0.1f;
+		public float eventPollingTime = 0.04f;
 
 		/// <summary>
 		///		How many errors until we will just fail

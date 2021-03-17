@@ -1082,7 +1082,7 @@ MonoBehaviour:
     width: 1920
     height: 1080
     port: 5555
-    eventPollingTime: 0.1
+    eventPollingTime: 0.04
     errorsTillFail: 4
     showProcessConsole: 0
 --- !u!114 &7454210984040730581
