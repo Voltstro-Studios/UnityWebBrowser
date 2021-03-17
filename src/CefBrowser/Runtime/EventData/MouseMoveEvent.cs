@@ -1,6 +1,10 @@
 using System;
 
-namespace UnityWebBrowser
+#if BROWSER_PROCESS
+namespace CefBrowserProcess.EventData
+#else
+namespace UnityWebBrowser.EventData
+#endif
 {
 	[Serializable]
     public class MouseMoveEvent : IEventData

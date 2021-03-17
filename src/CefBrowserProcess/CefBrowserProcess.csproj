@@ -10,6 +10,7 @@
     <Description>Windowless browser process</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <DefineConstants>BROWSER_PROCESS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

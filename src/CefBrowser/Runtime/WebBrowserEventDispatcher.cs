@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Newtonsoft.Json;
+using UnityWebBrowser.EventData;
 using ZeroMQ;
 
 namespace UnityWebBrowser

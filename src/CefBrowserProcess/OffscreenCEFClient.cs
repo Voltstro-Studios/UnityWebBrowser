@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using UnityWebBrowser;
+using CefBrowserProcess.EventData;
 using Xilium.CefGlue;
 
 namespace CefBrowserProcess
@@ -102,7 +102,7 @@ namespace CefBrowserProcess
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.MouseMoveEvent"/>
+		///		Process a <see cref="EventData.MouseMoveEvent"/>
 		/// </summary>
 		/// <param name="mouseEvent"></param>
 		public void ProcessMouseMoveEvent(MouseMoveEvent mouseEvent)
@@ -115,7 +115,7 @@ namespace CefBrowserProcess
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.MouseClickEvent"/>
+		///		Process a <see cref="EventData.MouseClickEvent"/>
 		/// </summary>
 		/// <param name="mouseClickEvent"></param>
 		public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
@@ -130,7 +130,7 @@ namespace CefBrowserProcess
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.MouseScrollEvent"/>
+		///		Process a <see cref="EventData.MouseScrollEvent"/>
 		/// </summary>
 		/// <param name="mouseScrollEvent"></param>
 		public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
@@ -143,7 +143,7 @@ namespace CefBrowserProcess
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.ButtonEvent"/>
+		///		Process a <see cref="ButtonEvent"/>
 		/// </summary>
 		/// <param name="buttonEvent"></param>
 		public void ProcessButtonEvent(ButtonEvent buttonEvent)

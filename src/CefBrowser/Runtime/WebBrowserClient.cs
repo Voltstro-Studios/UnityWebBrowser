@@ -3,6 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityWebBrowser.EventData;
 using ZeroMQ;
 using Debug = UnityEngine.Debug;
 
