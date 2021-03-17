@@ -88,8 +88,8 @@ namespace UnityWebBrowser
 		/// </summary>
         internal void StartDispatchingEvents()
         {
-	        eventDispatcherThread = new Thread(DispatchEventsThread);
-            eventDispatcherThread.Start();
+	        eventDispatcherThread = new Thread(DispatchEventsThread) {Name = "Web Browser Event Dispatcher Thread"};
+	        eventDispatcherThread.Start();
         }
 
         private void DispatchEventsThread()
