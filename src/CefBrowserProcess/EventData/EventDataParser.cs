@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityWebBrowser.EventData;
 using JsonReader = Newtonsoft.Json.JsonReader;
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 using JsonWriter = Newtonsoft.Json.JsonWriter;

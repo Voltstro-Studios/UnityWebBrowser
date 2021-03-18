@@ -1,6 +1,7 @@
 ﻿using System;
 using CefBrowserProcess.CommandLine;
 using CefBrowserProcess.EventData;
+using UnityWebBrowser.EventData;
 using Xilium.CefGlue;
 using ZeroMQ;
 
