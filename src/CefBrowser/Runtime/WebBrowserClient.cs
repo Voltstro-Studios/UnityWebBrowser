@@ -134,7 +134,7 @@ namespace UnityWebBrowser
 				},
 				EnableRaisingEvents = true
 			};
-			serverProcess.OutputDataReceived += ProcessLog;
+			serverProcess.OutputDataReceived += HandleCefProcessLog;
 			serverProcess.Start();
 			serverProcess.BeginOutputReadLine();
 			serverProcess.BeginErrorReadLine();
@@ -142,12 +142,6 @@ namespace UnityWebBrowser
 			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
 			eventDispatcher = new WebBrowserEventDispatcher(new TimeSpan(0, 0, 4), port);
 			eventDispatcher.StartDispatchingEvents();
-		}
-
-		private void ProcessLog(object sender, DataReceivedEventArgs e)
-		{
-			if(!serverProcess.HasExited)
-				LogDebug(e.Data);
 		}
 
 		/// <summary>
@@ -218,6 +212,22 @@ namespace UnityWebBrowser
 		public void ReplaceLogger(ILogger logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		private void HandleCefProcessLog(object sender, DataReceivedEventArgs e)
+		{
+			if (serverProcess.HasExited) return;
+
+			if(e.Data.StartsWith("DEBUG "))
+				LogDebug(e.Data.Replace("DEBUG ", ""));
+			else if(e.Data.StartsWith("INFO "))
+				LogDebug(e.Data.Replace("INFO ", ""));
+			else if(e.Data.StartsWith("WARN "))
+				LogWarning(e.Data.Replace("WARN ", ""));
+			else if(e.Data.StartsWith("ERROR "))
+				LogError(e.Data.Replace("ERROR ", ""));
+			else
+				LogDebug(e.Data);
 		}
 
 		#endregion

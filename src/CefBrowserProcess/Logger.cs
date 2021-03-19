@@ -13,22 +13,22 @@ namespace CefBrowserProcess
 		public static void Debug(string message)
 		{
 			if(DebugLog)
-				OutWriter.WriteLine($"[Debug] {message}");
+				OutWriter.WriteLine($"DEBUG {message}");
 		}
 
 		public static void Info(string message)
 		{
-			OutWriter.WriteLine($"[Info] {message}");
+			OutWriter.WriteLine($"INFO {message}");
 		}
 
 		public static void Warn(string message)
 		{
-			OutWriter.WriteLine($"[Warn] {message}");
+			OutWriter.WriteLine($"WARN {message}");
 		}
 
 		public static void Error(string message)
 		{
-			OutWriter.WriteLine($"[Error] {message}");
+			OutWriter.WriteLine($"ERROR {message}");
 		}
 	}
 }
