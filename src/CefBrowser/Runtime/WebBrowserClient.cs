@@ -60,12 +60,6 @@ namespace UnityWebBrowser
 		public int errorsTillFail = 4;
 
 		/// <summary>
-		///		Show the CEF browser process console?
-		/// </summary>
-		[Tooltip("Show the CEF browser process console?")]
-		public bool showProcessConsole;
-
-		/// <summary>
 		///		Enables debug logging for the CEF browser process
 		/// </summary>
 		[Tooltip("Enables debug logging for the CEF browser process")]
@@ -133,8 +127,8 @@ namespace UnityWebBrowser
 				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} -debug {debugLog} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
 				{
-					CreateNoWindow = !showProcessConsole,
-					UseShellExecute = showProcessConsole,
+					CreateNoWindow = true,
+					UseShellExecute = false,
 					RedirectStandardOutput = true,
 					RedirectStandardError = true
 				},
