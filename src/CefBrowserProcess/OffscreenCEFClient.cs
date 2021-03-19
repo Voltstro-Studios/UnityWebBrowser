@@ -17,6 +17,7 @@ namespace CefBrowserProcess
 		private readonly OffscreenLoadHandler loadHandler;
 		private readonly OffscreenRenderHandler renderHandler;
 		private readonly OffscreenLifespanHandler lifespanHandler;
+		private readonly OffscreenDisplayHandler displayHandler;
 
 		private readonly byte[] pixelBuffer;
 		private static readonly object PixelLock = new object();
@@ -30,6 +31,7 @@ namespace CefBrowserProcess
 			loadHandler = new OffscreenLoadHandler(this);
 			renderHandler = new OffscreenRenderHandler(this);
 			lifespanHandler = new OffscreenLifespanHandler();
+			displayHandler = new OffscreenDisplayHandler();
 
 			pixelBuffer = new byte[size.Width * size.Height * 4];
 
@@ -224,6 +226,11 @@ namespace CefBrowserProcess
 			return lifespanHandler;
 		}
 
+		protected override CefDisplayHandler GetDisplayHandler()
+		{
+			return displayHandler;
+		}
+
 		/// <summary>
 		///		Offscreen load handler
 		/// </summary>
@@ -342,6 +349,34 @@ namespace CefBrowserProcess
 			protected override bool DoClose(CefBrowser browser)
 			{
 				return false;
+			}
+		}
+
+		private class OffscreenDisplayHandler : CefDisplayHandler
+		{
+			protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
+			{
+				switch (level)
+				{
+					case CefLogSeverity.Disable:
+						break;
+					case CefLogSeverity.Verbose:
+					case CefLogSeverity.Default:
+					case CefLogSeverity.Info:
+						Logger.Info($"CEF: {message}");
+						break;
+					case CefLogSeverity.Warning:
+						Logger.Warn($"CEF: {message}");
+						break;
+					case CefLogSeverity.Error:
+					case CefLogSeverity.Fatal:
+						Logger.Error($"CEF: {message}");
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(level), level, null);
+				}
+
+				return true;
 			}
 		}
 

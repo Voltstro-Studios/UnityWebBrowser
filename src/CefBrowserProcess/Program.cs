@@ -76,7 +76,7 @@ namespace CefBrowserProcess
 
 					if (data.EventType == EventType.Shutdown)
 					{
-						Console.WriteLine("Shutting down CEF process...");
+						Logger.Debug("Got shutdown message...");
 						break;
 					}
 

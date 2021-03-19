@@ -21,6 +21,11 @@ namespace CefBrowserProcess
 			OutWriter.WriteLine($"[Info] {message}");
 		}
 
+		public static void Warn(string message)
+		{
+			OutWriter.WriteLine($"[Warn] {message}");
+		}
+
 		public static void Error(string message)
 		{
 			OutWriter.WriteLine($"[Error] {message}");
