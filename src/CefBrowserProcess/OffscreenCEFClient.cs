@@ -249,13 +249,20 @@ namespace CefBrowserProcess
 					client.host = browser.GetHost();
 
 				if(frame.IsMain)
-					Console.WriteLine($"START: {browser?.GetMainFrame().Url}");
+					Logger.Info($"START: {browser?.GetMainFrame().Url}");
 			}
 
 			protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
 			{
 				if(frame.IsMain)
-					Console.WriteLine($"END: {browser.GetMainFrame().Url}, {httpStatusCode}");
+					Logger.Info($"END: {browser.GetMainFrame().Url}, {httpStatusCode}");
+			}
+
+			protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode, string errorText, string failedUrl)
+			{
+				frame.LoadUrl($"data:text/html,<h1>An error occurred while loading!</h1><p>Error: {errorText}<br>(Code {errorCode})</p>");
+
+				Logger.Error($"An error occured while loading! Error: {errorText} (Code: {errorCode})");
 			}
 		}
 
