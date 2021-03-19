@@ -26,7 +26,7 @@ namespace CefBrowserProcess
 
 			//Setup CEF
 			CefRuntime.Load();
-			CefMainArgs cefMainArgs = new CefMainArgs(new string[0]);
+			CefMainArgs cefMainArgs = new CefMainArgs(args);
 			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
 			CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
 
