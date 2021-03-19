@@ -23,7 +23,6 @@ namespace CefBrowserProcess
 		public static void Main(string[] args)
 		{
 			CommandLineParser.Init(args);
-			Console.WriteLine($"Starting CEF with {Width}x{Height} at {InitialUrl}");
 
 			//Setup CEF
 			CefRuntime.Load();
@@ -52,6 +51,8 @@ namespace CefBrowserProcess
 				LocalStorage = CefState.Disabled
 			};
 
+			Logger.Info("Starting CEF client...");
+
 			//Create cef browser
 			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
 			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
@@ -68,7 +69,7 @@ namespace CefBrowserProcess
 				string json = request.ReadString();
 
 				//Parse the data we get, and process it
-				Console.WriteLine(json);
+				Logger.Debug(json);
 				try
 				{
 					IEventData data = EventDataParser.ReadData(json);
@@ -98,9 +99,10 @@ namespace CefBrowserProcess
 
 					responder.Send(new ZFrame((int) EventType.Ping));
 				}
-				catch (Exception e)
+				catch (Exception ex)
 				{
-					Console.WriteLine(e);
+					Logger.Error($"An exception occurred in the CEF process! {ex.Message}");
+					break;
 				}
 			}
 

@@ -66,6 +66,12 @@ namespace UnityWebBrowser
 		public bool showProcessConsole;
 
 		/// <summary>
+		///		Enables debug logging for the CEF browser process
+		/// </summary>
+		[Tooltip("Enables debug logging for the CEF browser process")]
+		public bool debugLog;
+
+		/// <summary>
 		///		Texture that the browser will paint to
 		/// </summary>
 		public Texture2D BrowserTexture { get; private set; }
@@ -124,18 +130,30 @@ namespace UnityWebBrowser
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} " +
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} -debug {debugLog} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
 				{
 					CreateNoWindow = !showProcessConsole,
-					UseShellExecute = showProcessConsole
+					UseShellExecute = showProcessConsole,
+					RedirectStandardOutput = true,
+					RedirectStandardError = true
 				},
+				EnableRaisingEvents = true
 			};
+			serverProcess.OutputDataReceived += ProcessLog;
 			serverProcess.Start();
+			serverProcess.BeginOutputReadLine();
+			serverProcess.BeginErrorReadLine();
 
 			BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, true);
 			eventDispatcher = new WebBrowserEventDispatcher(new TimeSpan(0, 0, 4), port);
 			eventDispatcher.StartDispatchingEvents();
+		}
+
+		private void ProcessLog(object sender, DataReceivedEventArgs e)
+		{
+			if(!serverProcess.HasExited)
+				LogDebug(e.Data);
 		}
 
 		/// <summary>

@@ -15,7 +15,8 @@ namespace CefBrowserProcess.CommandLine
 		private static readonly Dictionary<Type, ITypeReader> TypeReaders = new Dictionary<Type, ITypeReader>
 		{
 			[typeof(string)] = new StringReader(),
-			[typeof(int)] = new IntReader()
+			[typeof(int)] = new IntReader(),
+			[typeof(bool)] = new BoolReader()
 		};
 
 		/// <summary>
