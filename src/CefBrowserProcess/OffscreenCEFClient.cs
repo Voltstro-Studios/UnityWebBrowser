@@ -162,7 +162,7 @@ namespace CefBrowserProcess
 					Refresh();
 					break;
 				case ButtonType.NavigateUrl:
-					NavigateUrl(buttonEvent.UrlToNavigate);
+					LoadUrl(buttonEvent.UrlToNavigate);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -189,9 +189,14 @@ namespace CefBrowserProcess
 			lifespanHandler.Browser.GetHost().SendMouseWheelEvent(mouseEvent, 0, scroll);
 		}
 
-		private void NavigateUrl(string url)
+		private void LoadUrl(string url)
 		{
 			lifespanHandler.Browser.GetMainFrame().LoadUrl(url);
+		}
+
+		private void LoadHtml(string html)
+		{
+			lifespanHandler.Browser.GetMainFrame().LoadUrl($"data:text/html,{html}");
 		}
 
 		private void GoBack()
@@ -249,20 +254,29 @@ namespace CefBrowserProcess
 					client.host = browser.GetHost();
 
 				if(frame.IsMain)
-					Logger.Info($"START: {browser?.GetMainFrame().Url}");
+					Logger.Debug($"START: {browser?.GetMainFrame().Url}");
 			}
 
 			protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
 			{
 				if(frame.IsMain)
-					Logger.Info($"END: {browser.GetMainFrame().Url}, {httpStatusCode}");
+					Logger.Debug($"END: {browser.GetMainFrame().Url}, {httpStatusCode}");
 			}
 
 			protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode, string errorText, string failedUrl)
 			{
-				frame.LoadUrl($"data:text/html,<h1>An error occurred while loading!</h1><p>Error: {errorText}<br>(Code {errorCode})</p>");
+				string html = 
+$@"<style>
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+body {{
+font-family: 'Ubuntu', sans-serif;
+}}
+</style>
+<h2>An error occurred while trying to load '{failedUrl}'!</h2>
+<p>Error: {errorText}<br>(Code: {(int)errorCode})</p>";
+				client.LoadHtml(html);
 
-				Logger.Error($"An error occured while loading! Error: {errorText} (Code: {errorCode})");
+				Logger.Error($"An error occurred while trying to load '{failedUrl}'! Error: {errorText} (Code: {errorCode})");
 			}
 		}
 
