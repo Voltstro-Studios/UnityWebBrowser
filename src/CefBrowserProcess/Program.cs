@@ -9,7 +9,7 @@ namespace CefBrowserProcess
 {
 	public static class Program
 	{
-		[CommandLineArgument("url")] public static string InitialUrl = "https://google.com";
+		[CommandLineArgument("url")] public static string InitialUrl = "https://voltstro.dev";
 		[CommandLineArgument("width")] public static int Width = 1920;
 		[CommandLineArgument("height")] public static int Height = 1080;
 

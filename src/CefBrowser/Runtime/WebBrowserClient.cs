@@ -20,7 +20,7 @@ namespace UnityWebBrowser
 		/// </summary>
 		[Header("Browser Settings")]
 		[Tooltip("The initial URl the browser will start at")]
-		public string initialUrl = "https://google.com";
+		public string initialUrl = "https://voltstro.dev";
 
 		/// <summary>
 		///		The width of the browser
