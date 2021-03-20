@@ -67,13 +67,13 @@ namespace UnityWebBrowser
 		/// <summary>
 		///		<see cref="ILogger"/> that we log to
 		/// </summary>
-		public ILogger Logger { get; private set; } = Debug.unityLogger;
+		internal ILogger Logger { get; private set; } = Debug.unityLogger;
 		private const string LoggingTag = "[Web Browser]";
+
+		internal bool isRunning;
 
 		private Process serverProcess;
 		private WebBrowserEventDispatcher eventDispatcher;
-		
-		private bool isRunning;
 
 		private object pixelsLock = new object();
 		private byte[] pixels;
@@ -104,7 +104,7 @@ namespace UnityWebBrowser
 		///		Inits the browser client
 		/// </summary>
 		/// <exception cref="FileNotFoundException"></exception>
-		public void Init()
+		internal void Init()
 		{
 			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
 			LogDebug($"Starting CEF browser process from {cefProcessPath}");
@@ -142,7 +142,7 @@ namespace UnityWebBrowser
 		///		Starts updating the <see cref="BrowserTexture"/> data
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerator Start()
+		internal IEnumerator Start()
 		{
 			LogDebug("Starting communications between CEF process and Unity...");
 			isRunning = true;
@@ -175,7 +175,7 @@ namespace UnityWebBrowser
 		///		Logs a debug message
 		/// </summary>
 		/// <param name="message"></param>
-		public void LogDebug(object message)
+		internal void LogDebug(object message)
 		{
 			Logger.Log(LogType.Log, LoggingTag, message);
 		}
@@ -184,7 +184,7 @@ namespace UnityWebBrowser
 		///		Logs a warning
 		/// </summary>
 		/// <param name="message"></param>
-		public void LogWarning(object message)
+		internal void LogWarning(object message)
 		{
 			Logger.LogWarning(LoggingTag, message);
 		}
@@ -193,7 +193,7 @@ namespace UnityWebBrowser
 		///		Logs a error
 		/// </summary>
 		/// <param name="message"></param>
-		public void LogError(object message)
+		internal void LogError(object message)
 		{
 			Logger.LogError(LoggingTag, message);
 		}
@@ -203,7 +203,7 @@ namespace UnityWebBrowser
 		/// </summary>
 		/// <param name="logger"></param>
 		/// <exception cref="ArgumentNullException"></exception>
-		public void ReplaceLogger(ILogger logger)
+		internal void ReplaceLogger(ILogger logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
@@ -234,7 +234,7 @@ namespace UnityWebBrowser
 		/// <param name="keysDown"></param>
 		/// <param name="keysUp"></param>
 		/// <param name="chars"></param>
-		public void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
+		internal void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
 		{
 			eventDispatcher.QueueEvent(new KeyboardEvent
 			{
@@ -248,7 +248,7 @@ namespace UnityWebBrowser
 		/// 		Sends a mouse event to the CEF process
 		///  </summary>
 		///  <param name="mousePos"></param>
-		public void SendMouseMoveEvent(Vector2 mousePos)
+		internal void SendMouseMoveEvent(Vector2 mousePos)
 		{
 			eventDispatcher.QueueEvent(new MouseMoveEvent
 			{
@@ -264,7 +264,7 @@ namespace UnityWebBrowser
 		///  <param name="clickCount"></param>
 		///  <param name="clickType"></param>
 		///  <param name="eventType"></param>
-		public void SendMouseClickEvent(Vector2 mousePos, int clickCount, MouseClickType clickType, MouseEventType eventType)
+		internal void SendMouseClickEvent(Vector2 mousePos, int clickCount, MouseClickType clickType, MouseEventType eventType)
 		{
 			eventDispatcher.QueueEvent(new MouseClickEvent
 			{
@@ -282,7 +282,7 @@ namespace UnityWebBrowser
 		/// <param name="mouseX"></param>
 		/// <param name="mouseY"></param>
 		/// <param name="mouseScroll"></param>
-		public void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
+		internal void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
 		{
 			eventDispatcher.QueueEvent(new MouseScrollEvent
 			{
@@ -297,12 +297,24 @@ namespace UnityWebBrowser
 		/// </summary>
 		/// <param name="buttonType"></param>
 		/// <param name="url"></param>
-		public void SendButtonEvent(ButtonType buttonType, string url = null)
+		internal void SendButtonEvent(ButtonType buttonType, string url = null)
 		{
 			eventDispatcher.QueueEvent(new ButtonEvent
 			{
 				ButtonType = buttonType,
 				UrlToNavigate = url
+			}, HandelEvent);
+		}
+
+		/// <summary>
+		///		Makes the cef client load html
+		/// </summary>
+		/// <param name="html"></param>
+		internal void LoadHtmlEvent(string html)
+		{
+			eventDispatcher.QueueEvent(new LoadHtmlEvent
+			{
+				Html = html
 			}, HandelEvent);
 		}
 

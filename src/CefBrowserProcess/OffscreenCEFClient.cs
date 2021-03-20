@@ -194,7 +194,7 @@ namespace CefBrowserProcess
 			lifespanHandler.Browser.GetMainFrame().LoadUrl(url);
 		}
 
-		private void LoadHtml(string html)
+		public void LoadHtml(string html)
 		{
 			lifespanHandler.Browser.GetMainFrame().LoadUrl($"data:text/html,{html}");
 		}

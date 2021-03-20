@@ -38,16 +38,24 @@ namespace UnityWebBrowser
 		/// <summary>
 		///		Makes the browser go back a page
 		/// </summary>
+		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void GoBack()
 		{
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
 			browserClient.SendButtonEvent(ButtonType.Back);
 		}
 
 		/// <summary>
 		///		Make the browser go forward a page
 		/// </summary>
+		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void GoForward()
 		{
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
 			browserClient.SendButtonEvent(ButtonType.Forward);
 		}
 
@@ -55,17 +63,46 @@ namespace UnityWebBrowser
 		///		Makes the browser go to a url
 		/// </summary>
 		/// <param name="url"></param>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void NavigateUrl(string url)
 		{
+			if (string.IsNullOrWhiteSpace(url))
+				throw new ArgumentNullException(nameof(url));
+
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
 			browserClient.SendButtonEvent(ButtonType.NavigateUrl, url);
 		}
 
 		/// <summary>
 		///		Refreshes the browser
 		/// </summary>
+		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void Refresh()
 		{
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
 			browserClient.SendButtonEvent(ButtonType.Refresh);
+		}
+
+		/// <summary>
+		///		Loads HTML code
+		/// </summary>
+		/// <param name="html"></param>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="WebBrowserNotReadyException"></exception>
+		public void LoadHtml(string html)
+		{
+			if (string.IsNullOrWhiteSpace(html))
+				throw new ArgumentNullException(nameof(html));
+
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
+			browserClient.LoadHtmlEvent(html);
 		}
 
 		private void Start()

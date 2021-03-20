@@ -77,6 +77,11 @@ namespace CefBrowserProcess.EventData
 						ButtonType = (ButtonType) jsonObject.GetValue("ButtonType").ToObject<int>(),
 						UrlToNavigate = jsonObject.GetValue("UrlToNavigate").ToObject<string>()
 					};
+				case EventType.LoadHtmlEvent:
+					return new LoadHtmlEvent
+					{
+						Html = jsonObject.GetValue("Html").ToObject<string>()
+					};
 				default:
 					throw new ArgumentOutOfRangeException();
 				// ReSharper restore PossibleNullReferenceException
