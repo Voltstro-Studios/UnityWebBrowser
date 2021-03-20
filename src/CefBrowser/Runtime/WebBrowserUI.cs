@@ -105,6 +105,21 @@ namespace UnityWebBrowser
 			browserClient.LoadHtmlEvent(html);
 		}
 
+		/// <summary>
+		///		Executes JS
+		/// </summary>
+		/// <param name="js"></param>
+		public void ExecuteJs(string js)
+		{
+			if (string.IsNullOrWhiteSpace(js))
+				throw new ArgumentNullException(nameof(js));
+
+			if (!browserClient.isRunning)
+				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+
+			browserClient.ExecuteJsEvent(js);
+		}
+
 		private void Start()
 		{
 			//Start the browser client

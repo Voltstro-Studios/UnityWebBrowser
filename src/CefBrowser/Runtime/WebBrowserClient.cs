@@ -226,7 +226,7 @@ namespace UnityWebBrowser
 
 		#endregion
 
-		#region CEF process events
+		#region CEF Events
 
 		/// <summary>
 		///		Sends a keyboard event to the CEF process
@@ -315,6 +315,18 @@ namespace UnityWebBrowser
 			eventDispatcher.QueueEvent(new LoadHtmlEvent
 			{
 				Html = html
+			}, HandelEvent);
+		}
+
+		/// <summary>
+		///		Executes JS in the cef client
+		/// </summary>
+		/// <param name="js"></param>
+		internal void ExecuteJsEvent(string js)
+		{
+			eventDispatcher.QueueEvent(new ExecuteJsEvent
+			{
+				Js = js
 			}, HandelEvent);
 		}
 

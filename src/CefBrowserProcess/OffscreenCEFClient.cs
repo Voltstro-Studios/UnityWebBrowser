@@ -199,6 +199,11 @@ namespace CefBrowserProcess
 			lifespanHandler.Browser.GetMainFrame().LoadUrl($"data:text/html,{html}");
 		}
 
+		public void ExecuteJs(string js)
+		{
+			lifespanHandler.Browser.GetMainFrame().ExecuteJavaScript(js, "", 0);
+		}
+
 		private void GoBack()
 		{
 			if(lifespanHandler.Browser.CanGoBack)

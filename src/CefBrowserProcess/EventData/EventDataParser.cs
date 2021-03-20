@@ -82,6 +82,11 @@ namespace CefBrowserProcess.EventData
 					{
 						Html = jsonObject.GetValue("Html").ToObject<string>()
 					};
+				case EventType.ExecuteJsEvent:
+					return new ExecuteJsEvent
+					{
+						Js = jsonObject.GetValue("Js").ToObject<string>()
+					};
 				default:
 					throw new ArgumentOutOfRangeException();
 				// ReSharper restore PossibleNullReferenceException

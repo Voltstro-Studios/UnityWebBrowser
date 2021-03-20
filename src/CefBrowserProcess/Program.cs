@@ -98,6 +98,8 @@ namespace CefBrowserProcess
 						cefClient.ProcessMouseScrollEvent((MouseScrollEvent)data);
 					else if(data.EventType == EventType.LoadHtmlEvent)
 						cefClient.LoadHtml((data as LoadHtmlEvent)?.Html);
+					else if(data.EventType == EventType.ExecuteJsEvent)
+						cefClient.ExecuteJs((data as ExecuteJsEvent).Js);
 
 					responder.Send(new ZFrame((int) EventType.Ping));
 				}

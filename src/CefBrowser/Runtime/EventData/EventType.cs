@@ -9,6 +9,7 @@ namespace UnityWebBrowser.EventData
         MouseClickEvent = 5,
         MouseScrollEvent = 6,
         ButtonEvent = 7,
-        LoadHtmlEvent = 8
+        LoadHtmlEvent = 8,
+        ExecuteJsEvent = 9
     }
 }
