@@ -209,7 +209,7 @@ namespace UnityWebBrowser
 		/// </summary>
 		/// <param name="logger"></param>
 		/// <exception cref="ArgumentNullException"></exception>
-		internal void ReplaceLogger(ILogger logger)
+		public void ReplaceLogger(ILogger logger)
 		{
 			Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
