@@ -70,6 +70,18 @@ Right now we only support Windows, however a Linux version is on the TO-DO. MacO
 
 Other OSes such as Android and IOS cannot be supported due to the lack of knowledge on how to develop for this OSes.
 
+## Screenshots
+
+<details>
+  <summary>Click to expand!</summary>
+
+![Screenshot 1](media/Screenshot-Editor1.png)
+![Screenshot 2](media/Screenshot-Editor2.png)
+![Screenshot 3](media/Screenshot-Editor3.png)
+![Screenshot 4](media/Screenshot-InPlayer.png)
+
+</details>
+
 # Authors
 
 * **Voltstro** - *Initial work* - [Voltstro](https://github.com/Voltstro)
