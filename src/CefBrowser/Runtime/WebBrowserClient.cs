@@ -54,12 +54,6 @@ namespace UnityWebBrowser
 		public float eventPollingTime = 0.04f;
 
 		/// <summary>
-		///		How many errors until we will just fail
-		/// </summary>
-		[Tooltip("How many errors until we will just fail")]
-		public int errorsTillFail = 4;
-
-		/// <summary>
 		///		Enables debug logging for the CEF browser process
 		/// </summary>
 		[Tooltip("Enables debug logging for the CEF browser process")]
