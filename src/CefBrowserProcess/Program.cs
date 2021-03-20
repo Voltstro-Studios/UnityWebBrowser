@@ -20,6 +20,8 @@ namespace CefBrowserProcess
 
 		[CommandLineArgument("port")] public static int Port = 5555;
 
+		[CommandLineArgument("javascript")] public static bool JavaScript = true;
+
 		public static void Main(string[] args)
 		{
 			CommandLineParser.Init(args);
@@ -43,13 +45,15 @@ namespace CefBrowserProcess
 
 			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
 			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
-			
+
 			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
 			{
 				BackgroundColor = new CefColor((byte)BackgroundCAlpha, (byte)BackgroundCRed, (byte)BackgroundCGreen, (byte)BackgroundCBlue),
-				JavaScript = CefState.Enabled,
+				JavaScript = JavaScript ? CefState.Enabled : CefState.Disabled,
 				LocalStorage = CefState.Disabled
 			};
+
+			Logger.Debug($"CEF starting with these options:\nJS: {JavaScript}\nBackgroundC: {BackgroundCAlpha} {BackgroundCRed} {BackgroundCGreen} {BackgroundCBlue}");
 
 			Logger.Info("Starting CEF client...");
 

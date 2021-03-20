@@ -41,6 +41,12 @@ namespace UnityWebBrowser
 		public Color32 backgroundColor = new Color32(255, 255, 255, 255);
 
 		/// <summary>
+		///		Enable or disable JavaScript
+		/// </summary>
+		[Tooltip("Enable or disable JavaScript")]
+		public bool javascript = true;
+
+		/// <summary>
 		///		The port to communicate with the browser process on
 		/// </summary>
 		[Header("IPC Settings")] 
@@ -118,7 +124,7 @@ namespace UnityWebBrowser
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} -debug {debugLog} " +
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} -debug {debugLog} -javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
 				{
 					CreateNoWindow = true,
