@@ -41,7 +41,7 @@ namespace UnityWebBrowser
 		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void GoBack()
 		{
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.SendButtonEvent(ButtonType.Back);
@@ -53,7 +53,7 @@ namespace UnityWebBrowser
 		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void GoForward()
 		{
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.SendButtonEvent(ButtonType.Forward);
@@ -70,7 +70,7 @@ namespace UnityWebBrowser
 			if (string.IsNullOrWhiteSpace(url))
 				throw new ArgumentNullException(nameof(url));
 
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.SendButtonEvent(ButtonType.NavigateUrl, url);
@@ -82,7 +82,7 @@ namespace UnityWebBrowser
 		/// <exception cref="WebBrowserNotReadyException"></exception>
 		public void Refresh()
 		{
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.SendButtonEvent(ButtonType.Refresh);
@@ -99,7 +99,7 @@ namespace UnityWebBrowser
 			if (string.IsNullOrWhiteSpace(html))
 				throw new ArgumentNullException(nameof(html));
 
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.LoadHtmlEvent(html);
@@ -114,7 +114,7 @@ namespace UnityWebBrowser
 			if (string.IsNullOrWhiteSpace(js))
 				throw new ArgumentNullException(nameof(js));
 
-			if (!browserClient.isRunning)
+			if (!browserClient.IsRunning)
 				throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
 			browserClient.ExecuteJsEvent(js);

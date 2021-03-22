@@ -76,7 +76,12 @@ namespace UnityWebBrowser
 		internal ILogger Logger { get; private set; } = Debug.unityLogger;
 		private const string LoggingTag = "[Web Browser]";
 
-		internal bool isRunning;
+		private bool isRunning;
+
+		/// <summary>
+		///		Is the web browser client running?
+		/// </summary>
+		public bool IsRunning => isRunning;
 
 		private Process serverProcess;
 		private WebBrowserEventDispatcher eventDispatcher;
