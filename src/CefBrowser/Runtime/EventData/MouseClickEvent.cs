@@ -1,5 +1,8 @@
 namespace UnityWebBrowser.EventData
 {
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
 	public enum MouseClickType
 	{
 		Left,
@@ -7,12 +10,18 @@ namespace UnityWebBrowser.EventData
 		Right
 	}
 
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
 	public enum MouseEventType
 	{
 		Down,
 		Up
 	}
 
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
     public class MouseClickEvent : IEventData
     {
 	    public EventType EventType { get; set; } = EventType.MouseClickEvent;

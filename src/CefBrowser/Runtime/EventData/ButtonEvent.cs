@@ -8,7 +8,10 @@ namespace UnityWebBrowser.EventData
 		NavigateUrl
 	}
 
-    public class ButtonEvent : IEventData
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
+	public class ButtonEvent : IEventData
     {
 	    public EventType EventType { get; set; } = EventType.ButtonEvent;
 

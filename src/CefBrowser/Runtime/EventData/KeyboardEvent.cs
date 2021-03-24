@@ -2,7 +2,9 @@ using System;
 
 namespace UnityWebBrowser.EventData
 {
-    [Serializable]
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
     public class KeyboardEvent : IEventData
     {
 	    public EventType EventType { get; set; } = EventType.KeyboardEvent;

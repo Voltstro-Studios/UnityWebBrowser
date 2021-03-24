@@ -1,8 +1,8 @@
-using System;
-
 namespace UnityWebBrowser.EventData
 {
-	[Serializable]
+#if !BROWSER_PROCESS
+	[UnityEngine.Scripting.Preserve]
+#endif
     public class MouseMoveEvent : IEventData
     {
 	    public EventType EventType { get; set; } = EventType.MouseMoveEvent;
