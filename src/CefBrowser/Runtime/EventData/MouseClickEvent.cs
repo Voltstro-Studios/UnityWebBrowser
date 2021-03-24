@@ -17,12 +17,12 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.MouseClickEvent;
 
-	    public int MouseX;
-	    public int MouseY;
+	    public int MouseX { get; set; }
+	    public int MouseY { get; set; }
 
-	    public int MouseClickCount;
+	    public int MouseClickCount { get; set; }
 
-	    public MouseClickType MouseClickType;
-	    public MouseEventType MouseEventType;
+	    public MouseClickType MouseClickType { get; set; }
+	    public MouseEventType MouseEventType { get; set; }
     }
 }

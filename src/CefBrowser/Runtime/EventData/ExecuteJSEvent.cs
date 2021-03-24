@@ -4,6 +4,6 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.ExecuteJsEvent;
 
-	    public string Js;
+	    public string Js { get; set; }
     }
 }

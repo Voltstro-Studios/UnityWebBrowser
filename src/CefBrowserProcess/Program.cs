@@ -77,6 +77,8 @@ namespace CefBrowserProcess
 				try
 				{
 					IEventData data = EventDataParser.ReadData(json);
+					if (data == null)
+						continue;
 
 					if (data.EventType == EventType.Shutdown)
 					{
@@ -103,7 +105,7 @@ namespace CefBrowserProcess
 					else if(data.EventType == EventType.LoadHtmlEvent)
 						cefClient.LoadHtml((data as LoadHtmlEvent)?.Html);
 					else if(data.EventType == EventType.ExecuteJsEvent)
-						cefClient.ExecuteJs((data as ExecuteJsEvent).Js);
+						cefClient.ExecuteJs((data as ExecuteJsEvent)?.Js);
 
 					responder.Send(new ZFrame((int) EventType.Ping));
 				}

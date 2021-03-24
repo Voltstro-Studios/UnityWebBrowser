@@ -4,9 +4,9 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.MouseScrollEvent;
 
-	    public int MouseX;
-	    public int MouseY;
+	    public int MouseX { get; set; }
+	    public int MouseY { get; set; }
 
-	    public int MouseScroll;
+	    public int MouseScroll { get; set; }
     }
 }

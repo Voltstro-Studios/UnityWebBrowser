@@ -4,6 +4,6 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.LoadHtmlEvent;
 
-	    public string Html;
+	    public string Html { get; set; }
     }
 }

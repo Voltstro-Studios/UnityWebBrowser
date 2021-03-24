@@ -12,8 +12,8 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.ButtonEvent;
 
-	    public ButtonType ButtonType;
+	    public ButtonType ButtonType { get; set; }
 
-	    public string UrlToNavigate;
+	    public string UrlToNavigate { get; set; }
     }
 }

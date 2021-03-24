@@ -7,9 +7,9 @@ namespace UnityWebBrowser.EventData
     {
 	    public EventType EventType { get; set; } = EventType.KeyboardEvent;
 
-	    public int[] KeysUp;
-	    public int[] KeysDown;
+	    public int[] KeysUp { get; set; }
+	    public int[] KeysDown { get; set; }
 
-	    public string Chars;
+	    public string Chars { get; set; }
     }
 }
