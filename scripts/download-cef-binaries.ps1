@@ -20,8 +20,8 @@ foreach($content in $cefGlueVersionfileContent)
 New-Item -Path "../src/ThirdParty/Libs/cef/" -Name "temp" -ItemType "directory" -Force
 
 #Some variables that we will use
-$cefBinTarBz2FileName = "cef_binary_$($cefVersion)_windows64_minimal.tar.bz2"
-$cefBinTarFileName = "cef_binary_$($cefVersion)_windows64_minimal.tar"
+$cefBinTarBz2FileName = "cef_binary_$($cefVersion)_windows64_beta_minimal.tar.bz2"
+$cefBinTarFileName = "cef_binary_$($cefVersion)_windows64_beta_minimal.tar"
 $cefTempDirectory = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/temp/).Path
 $cefBinTarBz2FileLocation = "$($cefTempDirectory)$($cefBinTarBz2FileName)"
 
@@ -49,7 +49,7 @@ $cefBinTarFileLocation = "$($cefTempDirectory)$($cefBinTarFileName)"
 #Copy files
 Write-Output "Copying files..."
 
-$cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_minimal/").Path
+$cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_beta_minimal/").Path
 $cefBinReleaseLocation = "$($cefExtractedLocation)Release/"
 $cefBinResourcesLocation = "$($cefExtractedLocation)Resources/"
 $cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/).Path

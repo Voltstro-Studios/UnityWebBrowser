@@ -1,15 +1,15 @@
 Chromium Embedded Framework (CEF) Minimal Binary Distribution for Windows
 -------------------------------------------------------------------------------
 
-Date:             October 02, 2020
+Date:             March 23, 2021
 
-CEF Version:      85.3.12+g3e94ebf+chromium-85.0.4183.121
+CEF Version:      90.0.4+gdc12a89+chromium-90.0.4430.30
 CEF URL:          https://bitbucket.org/chromiumembedded/cef.git
-                  @3e94ebf031b28b5cee81b9f75905a477e53f9bcf
+                  @dc12a89f28f628cca699acbfe3cb0bf4f9612957
 
-Chromium Version: 85.0.4183.121
+Chromium Version: 90.0.4430.30
 Chromium URL:     https://chromium.googlesource.com/chromium/src.git
-                  @9c29385424e19b60bbd8bbe7b1e5a6f0fc21c1a5
+                  @5e981e45e3d9b89ca83194d856877df448a3074c
 
 This distribution contains the minimial components necessary to build and
 distribute an application using CEF on the Windows platform. Please see
@@ -91,21 +91,11 @@ run but any related functionality may become broken or disabled.
   CefSettings.pack_loading_disabled. The resources directory path can be
   customized using CefSettings.resources_dir_path.
 
-  * cef.pak
-  * cef_100_percent.pak
-  * cef_200_percent.pak
+  * chrome_100_percent.pak
+  * chrome_200_percent.pak
+  * resources.pak
     These files contain non-localized resources used by CEF, Chromium and Blink.
     Without these files arbitrary Web components may display incorrectly.
-
-  * cef_extensions.pak
-    This file contains non-localized resources required for extension loading.
-    Pass the `--disable-extensions` command-line flag to disable use of this
-    file. Without this file components that depend on the extension system,
-    such as the PDF viewer, will not function.
-
-  * devtools_resources.pak
-    This file contains non-localized resources required for Chrome Developer
-    Tools. Without this file Chrome Developer Tools will not function.
 
 * Angle and Direct3D support.
   * d3dcompiler_47.dll (required for Windows Vista and newer)
