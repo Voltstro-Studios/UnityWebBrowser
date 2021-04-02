@@ -372,7 +372,7 @@ namespace UnityWebBrowser
 			eventDispatcher.Dispose();
 
 			if(!serverProcess.HasExited)
-				serverProcess.Kill();
+				serverProcess.KillTree();
 			serverProcess.Dispose();
 
 			LogDebug("Web browser shutdown.");
