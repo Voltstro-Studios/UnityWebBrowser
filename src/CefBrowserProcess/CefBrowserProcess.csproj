@@ -11,7 +11,7 @@
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <DefineConstants>BROWSER_PROCESS</DefineConstants>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

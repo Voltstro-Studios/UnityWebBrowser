@@ -1,7 +1,7 @@
 {
   "name": "dev.voltstro.unitywebbrowser",
   "displayName": "Unity Web Browser",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "unity": "2020.2",
   "description": "Adds a functional web browser into Unity",
   "author": "Voltstro",
