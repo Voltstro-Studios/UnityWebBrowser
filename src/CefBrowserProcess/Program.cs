@@ -27,10 +27,32 @@ namespace CefBrowserProcess
 			CommandLineParser.Init(args);
 
 			//Setup CEF
-			CefRuntime.Load();
+			try
+			{
+				CefRuntime.Load();
+			}
+			catch (DllNotFoundException)
+			{
+				Logger.Error("Failed to load the CEF runtime as the required CEF libs are missing!");
+				return;
+			}
+			catch (CefVersionMismatchException)
+			{
+				Logger.Error(
+					$"Failed to load the CEF runtime as the installed CEF libs are incompatible! Expected version CEF version: {CefRuntime.ChromeVersion}.");
+				return;
+			}
+			catch (Exception ex)
+			{
+				Logger.ErrorException(ex, "Failed to load the CEF runtime for some reason!");
+				return;
+			}
+			
 			CefMainArgs cefMainArgs = new CefMainArgs(args);
 			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
-			CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
+			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
+			if (exitCode != -1)
+				return;
 
 			CefSettings cefSettings = new CefSettings
 			{
@@ -58,8 +80,17 @@ namespace CefBrowserProcess
 			Logger.Info("Starting CEF client...");
 
 			//Create cef browser
-			OffscreenCEFClient cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
-			CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
+			OffscreenCEFClient cefClient;
+			try
+			{
+				cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
+				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
+			}
+			catch (Exception ex)
+			{
+				Logger.ErrorException(ex, "Something when wrong while creating the CEF client!");
+				return;
+			}
 
 			//Setup ZMQ
 			using ZContext context = new ZContext();
@@ -111,7 +142,7 @@ namespace CefBrowserProcess
 				}
 				catch (Exception ex)
 				{
-					Logger.Error($"An exception occurred in the CEF process! {ex.Message}");
+					Logger.ErrorException(ex, "An error occurred while processing event data!");
 					break;
 				}
 			}

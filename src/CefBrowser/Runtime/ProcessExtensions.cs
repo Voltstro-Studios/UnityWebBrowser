@@ -83,7 +83,8 @@ namespace UnityWebBrowser
                 FileName = fileName,
                 Arguments = arguments,
                 RedirectStandardOutput = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
 
             Process process = Process.Start(startInfo);

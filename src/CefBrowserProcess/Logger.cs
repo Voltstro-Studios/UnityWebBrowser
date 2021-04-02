@@ -30,5 +30,14 @@ namespace CefBrowserProcess
 		{
 			OutWriter.WriteLine($"ERROR {message}");
 		}
+
+		public static void ErrorException(Exception ex, string baseMessage)
+		{
+			string errorMessage = $"{baseMessage} {ex.Message}";
+			if (DebugLog)
+				errorMessage += $"\nSTACK: {ex.StackTrace}";
+
+			Error(errorMessage);
+		}
 	}
 }
