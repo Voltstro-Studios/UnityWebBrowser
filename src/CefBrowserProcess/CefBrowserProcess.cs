@@ -16,7 +16,8 @@ namespace CefBrowserProcess
 
 		private bool isRunning;
 
-		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, FileInfo logPath, string[] cefArgs)
+		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, 
+			FileSystemInfo logPath, FileSystemInfo cachePath, string[] cefArgs)
 		{
 			ipcPort = port;
 
@@ -48,11 +49,16 @@ namespace CefBrowserProcess
 			if (exitCode != -1)
 				throw new Exception();
 
+			string cachePathArgument = null;
+			if (cachePath != null)
+				cachePathArgument = cachePath.FullName;
+
 			CefSettings cefSettings = new CefSettings
 			{
 				WindowlessRenderingEnabled = true,
 				NoSandbox = true,
 				LogFile = logPath.FullName,
+				CachePath = cachePathArgument,
 				MultiThreadedMessageLoop = true
 			};
 

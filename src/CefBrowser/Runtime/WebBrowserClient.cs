@@ -47,6 +47,12 @@ namespace UnityWebBrowser
 		public bool javascript = true;
 
 		/// <summary>
+		///		Enable or disable the cache
+		/// </summary>
+		[Tooltip("Enable or disable the cache")]
+		public bool cache = true;
+
+		/// <summary>
 		///		The port to communicate with the browser process on
 		/// </summary>
 		[Header("IPC Settings")] 
@@ -131,6 +137,29 @@ namespace UnityWebBrowser
 			}
 		}
 
+		private FileInfo cachePath;
+
+		/// <summary>
+		///		The path to the cache
+		/// </summary>
+		/// <exception cref="WebBrowserRunningException"></exception>
+		/// <exception cref="ArgumentException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		public FileInfo CachePath
+		{
+			get => cachePath;
+			set
+			{
+				if (IsRunning)
+					throw new WebBrowserRunningException();
+
+				if (!cache)
+					throw new ArgumentException("The cache is disabled!");
+
+				cachePath = value ?? throw new ArgumentNullException(nameof(value));
+			}
+		}
+
 		private Process serverProcess;
 		private WebBrowserEventDispatcher eventDispatcher;
 
@@ -140,8 +169,7 @@ namespace UnityWebBrowser
 		/// <exception cref="FileNotFoundException"></exception>
 		internal void Init()
 		{
-			LogPath ??= new FileInfo($"{WebBrowserUtils.GetCefMainDirectory()}/cef.log");
-
+			//Get the path to the CEF browser process and make sure it exists
 			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
 			LogDebug($"Starting CEF browser process from {cefProcessPath}");
 
@@ -151,11 +179,25 @@ namespace UnityWebBrowser
 				throw new FileNotFoundException("CEF browser process could not be found!");
 			}
 
+			//Setup log path
+			LogPath ??= new FileInfo($"{WebBrowserUtils.GetCefMainDirectory()}/cef.log");
+
+			//Setup cache path
+			//As funny and stupid you might think this is by just setting the text to be "null", we need to pass it like that if there is no cache
+			string cachePathArgument = "null";
+			cachePath ??= new FileInfo(WebBrowserUtils.GetCefMainDirectory());
+			if (cache)
+				cachePathArgument = cachePath.FullName;
+
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -initial-url {initialUrl} -port {port} -debug {debugLog} -javascript {javascript} " +
-				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} -log-path {logPath.FullName}")
+				StartInfo = new ProcessStartInfo(cefProcessPath, $" -initial-url \"{initialUrl}\" " +
+				                                                 $"-width {width} -height {height} " +
+				                                                 $"-javascript {javascript} " +
+				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
+				                                                 $"-log-path \"{logPath.FullName}\" -cache-path \"{cachePathArgument}\" " +
+				                                                 $"-port {port} -debug {debugLog}")
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,
