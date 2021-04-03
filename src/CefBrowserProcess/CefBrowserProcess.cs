@@ -8,6 +8,8 @@ namespace CefBrowserProcess
 {
 	public class CefBrowserProcess : IDisposable
 	{
+		private const int EventPassingNumErrorsAllowed = 4;
+
 		private readonly int ipcPort;
 		private readonly OffscreenCEFClient cefClient;
 
@@ -91,6 +93,7 @@ namespace CefBrowserProcess
 			responder.Bind($"tcp://127.0.0.1:{ipcPort}");
 
 			isRunning = true;
+			int eventPassingErrorCount = 0;
 			while (isRunning)
 			{
 				using ZFrame request = responder.ReceiveFrame();
@@ -136,7 +139,11 @@ namespace CefBrowserProcess
 				}
 				catch (Exception ex)
 				{
-					Logger.ErrorException(ex, "An error occurred while processing event data!");
+					eventPassingErrorCount++;
+					Logger.ErrorException(ex, $"An error occurred while processing event data! Times left: {EventPassingNumErrorsAllowed - eventPassingErrorCount}");
+
+					if (eventPassingErrorCount < EventPassingNumErrorsAllowed) continue;
+
 					isRunning = false;
 					break;
 				}
