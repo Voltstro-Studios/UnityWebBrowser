@@ -1,155 +1,70 @@
 ﻿using System;
-using CefBrowserProcess.CommandLine;
-using CefBrowserProcess.EventData;
-using UnityWebBrowser.EventData;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using Xilium.CefGlue;
-using ZeroMQ;
 
 namespace CefBrowserProcess
 {
 	public static class Program
 	{
-		[CommandLineArgument("url")] public static string InitialUrl = "https://voltstro.dev";
-		[CommandLineArgument("width")] public static int Width = 1920;
-		[CommandLineArgument("height")] public static int Height = 1080;
-
-		[CommandLineArgument("bcr")] public static int BackgroundCRed = 255;
-		[CommandLineArgument("bcg")] public static int BackgroundCGreen = 255;
-		[CommandLineArgument("bcb")] public static int BackgroundCBlue = 255;
-		[CommandLineArgument("bca")] public static int BackgroundCAlpha = 255;
-
-		[CommandLineArgument("port")] public static int Port = 5555;
-
-		[CommandLineArgument("javascript")] public static bool JavaScript = true;
-
-		public static void Main(string[] args)
+		public static int Main(string[] args)
 		{
-			CommandLineParser.Init(args);
-
-			//Setup CEF
-			try
+			RootCommand rootCommand = new RootCommand
 			{
-				CefRuntime.Load();
-			}
-			catch (DllNotFoundException)
-			{
-				Logger.Error("Failed to load the CEF runtime as the required CEF libs are missing!");
-				return;
-			}
-			catch (CefVersionMismatchException)
-			{
-				Logger.Error(
-					$"Failed to load the CEF runtime as the installed CEF libs are incompatible! Expected version CEF version: {CefRuntime.ChromeVersion}.");
-				return;
-			}
-			catch (Exception ex)
-			{
-				Logger.ErrorException(ex, "Failed to load the CEF runtime for some reason!");
-				return;
-			}
-			
-			CefMainArgs cefMainArgs = new CefMainArgs(args);
-			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
-			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
-			if (exitCode != -1)
-				return;
-
-			CefSettings cefSettings = new CefSettings
-			{
-				WindowlessRenderingEnabled = true,
-				NoSandbox = true,
-				LogFile = "cef.log",
-				MultiThreadedMessageLoop = true
+				new Option<string>("-initial-url",
+					() => "https://voltstro.dev",
+					"The initial URL"),
+				new Option<int>("-width",
+					() => 1920,
+					"The width of the window"),
+				new Option<int>("-height",
+					() => 1080,
+					"The height of the window"),
+				new Option<byte>("-bcr",
+					() => 255,
+					"Background color (red)"),
+				new Option<byte>("-bcg",
+					() => 255,
+					"Background color (green)"),
+				new Option<byte>("-bcb",
+					() => 255,
+					"Background color (blue)"),
+				new Option<byte>("-bca",
+					() => 255,
+					"Background color (alpha)"),
+				new Option<int>("-port",
+					() => 5555,
+					"IPC port"),
+				new Option<bool>("-javascript",
+					() => true,
+					"Enable or disable javascript"),
+				new Option<bool>("-debug", 
+					() => false,
+					"Use debug logging?")
 			};
-
-			//Init CEF and create windowless window
-			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
-
-			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
-			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
-
-			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
+			rootCommand.Description = "Process for windowless CEF rendering.";
+			//CEF launches the same process multiple times for its sub-process and passes args to them, so we need to ignore unknown tokens
+			rootCommand.TreatUnmatchedTokensAsErrors = false;
+			rootCommand.Handler = CommandHandler.Create<string, int, int, byte, byte, byte, byte, int, bool, bool>(
+				(initialUrl, width, height, bcr, bcg, bcb, bca, port, javaScript, debug) =>
 			{
-				BackgroundColor = new CefColor((byte)BackgroundCAlpha, (byte)BackgroundCRed, (byte)BackgroundCGreen, (byte)BackgroundCBlue),
-				JavaScript = JavaScript ? CefState.Enabled : CefState.Disabled,
-				LocalStorage = CefState.Disabled
-			};
-
-			Logger.Debug($"CEF starting with these options:\nJS: {JavaScript}\nBackgroundC: {BackgroundCAlpha} {BackgroundCRed} {BackgroundCGreen} {BackgroundCBlue}");
-
-			Logger.Info("Starting CEF client...");
-
-			//Create cef browser
-			OffscreenCEFClient cefClient;
-			try
-			{
-				cefClient = new OffscreenCEFClient(new CefSize(Width, Height));
-				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, InitialUrl);
-			}
-			catch (Exception ex)
-			{
-				Logger.ErrorException(ex, "Something when wrong while creating the CEF client!");
-				return;
-			}
-
-			//Setup ZMQ
-			using ZContext context = new ZContext();
-			using ZSocket responder = new ZSocket(context, ZSocketType.REP);
-
-			responder.Bind($"tcp://127.0.0.1:{Port}");
-
-			while (true)
-			{
-				using ZFrame request = responder.ReceiveFrame();
-				string json = request.ReadString();
-
-				//Parse the data we get, and process it
-				Logger.Debug(json);
+				Logger.DebugLog = debug;
+				CefBrowserProcess browserProcess = null;
 				try
 				{
-					IEventData data = EventDataParser.ReadData(json);
-					if (data == null)
-						continue;
-
-					if (data.EventType == EventType.Shutdown)
-					{
-						Logger.Debug("Got shutdown message...");
-						break;
-					}
-
-					if(data.EventType == EventType.Ping)
-					{
-						responder.Send(new ZFrame(cefClient.GetPixels()));
-						continue;
-					}
-
-					if (data.EventType == EventType.KeyboardEvent)
-						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
-					else if (data.EventType == EventType.ButtonEvent)
-						cefClient.ProcessButtonEvent((ButtonEvent)data);
-					else if (data.EventType == EventType.MouseMoveEvent)
-						cefClient.ProcessMouseMoveEvent((MouseMoveEvent)data);
-					else if (data.EventType == EventType.MouseClickEvent)
-						cefClient.ProcessMouseClickEvent((MouseClickEvent)data);
-					else if(data.EventType == EventType.MouseScrollEvent)
-						cefClient.ProcessMouseScrollEvent((MouseScrollEvent)data);
-					else if(data.EventType == EventType.LoadHtmlEvent)
-						cefClient.LoadHtml((data as LoadHtmlEvent)?.Html);
-					else if(data.EventType == EventType.ExecuteJsEvent)
-						cefClient.ExecuteJs((data as ExecuteJsEvent)?.Js);
-
-					responder.Send(new ZFrame((int) EventType.Ping));
+					browserProcess = new CefBrowserProcess(initialUrl, width, height,
+						new CefColor(bca, bcr, bcg, bcb), port, javaScript, args);
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
-					Logger.ErrorException(ex, "An error occurred while processing event data!");
-					break;
+					browserProcess?.Dispose();
+					return;
 				}
-			}
-
-			//Shutdown
-			cefClient.Dispose();
-			CefRuntime.Shutdown();
+				
+				browserProcess.HandelEventsLoop();
+				browserProcess.Dispose();
+			});
+			return rootCommand.InvokeAsync(args).Result;
 		}
 	}
 }

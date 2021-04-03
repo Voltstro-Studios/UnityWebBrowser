@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using CefBrowserProcess.CommandLine;
 
 namespace CefBrowserProcess
 {
 	public static class Logger
 	{
-		[CommandLineArgument("debug")] public static bool DebugLog = false;
+		public static bool DebugLog = false;
 
 		private static readonly TextWriter OutWriter = Console.Out;
 

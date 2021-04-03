@@ -129,7 +129,7 @@ namespace UnityWebBrowser
 			//Start the server process
 			serverProcess = new Process
 			{
-				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -url {initialUrl} -port {port} -debug {debugLog} -javascript {javascript} " +
+				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -initial-url {initialUrl} -port {port} -debug {debugLog} -javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
 				{
 					CreateNoWindow = true,
