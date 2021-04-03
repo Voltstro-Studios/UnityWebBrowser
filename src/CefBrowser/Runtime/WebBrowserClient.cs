@@ -184,10 +184,10 @@ namespace UnityWebBrowser
 
 			//Setup cache path
 			//As funny and stupid you might think this is by just setting the text to be "null", we need to pass it like that if there is no cache
-			string cachePathArgument = "null";
+			string cachePathArgument = "";
 			cachePath ??= new FileInfo(WebBrowserUtils.GetCefMainDirectory());
 			if (cache)
-				cachePathArgument = cachePath.FullName;
+				cachePathArgument = $"-cache-path \"{cachePath.FullName}\" ";
 
 			//Start the server process
 			serverProcess = new Process
@@ -196,7 +196,7 @@ namespace UnityWebBrowser
 				                                                 $"-width {width} -height {height} " +
 				                                                 $"-javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
-				                                                 $"-log-path \"{logPath.FullName}\" -cache-path \"{cachePathArgument}\" " +
+				                                                 $"-log-path \"{logPath.FullName}\" {cachePathArgument}" +
 				                                                 $"-port {port} -debug {debugLog}")
 				{
 					CreateNoWindow = true,
