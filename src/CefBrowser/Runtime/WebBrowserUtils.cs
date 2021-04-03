@@ -17,6 +17,19 @@ namespace UnityWebBrowser
 #endif
 
 		/// <summary>
+		///		Gets the main directory where logs and cache is stored
+		/// </summary>
+		/// <returns></returns>
+	    public static string GetCefMainDirectory()
+	    {
+#if UNITY_EDITOR
+		    return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
+#else
+			return Application.dataPath;
+#endif
+	    }
+
+		/// <summary>
 		///		Gets the folder that the cef process application lives in
 		/// </summary>
 		/// <returns></returns>

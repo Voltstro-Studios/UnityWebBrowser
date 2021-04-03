@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using CefBrowserProcess.EventData;
 using UnityWebBrowser.EventData;
 using Xilium.CefGlue;
@@ -15,7 +16,7 @@ namespace CefBrowserProcess
 
 		private bool isRunning;
 
-		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, string[] cefArgs)
+		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, FileInfo logPath, string[] cefArgs)
 		{
 			ipcPort = port;
 
@@ -51,7 +52,7 @@ namespace CefBrowserProcess
 			{
 				WindowlessRenderingEnabled = true,
 				NoSandbox = true,
-				LogFile = "cef.log",
+				LogFile = logPath.FullName,
 				MultiThreadedMessageLoop = true
 			};
 

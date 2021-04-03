@@ -76,15 +76,7 @@ namespace UnityWebBrowser
 		internal ILogger Logger { get; private set; } = Debug.unityLogger;
 		private const string LoggingTag = "[Web Browser]";
 
-		private bool isRunning;
-
-		/// <summary>
-		///		Is the web browser client running?
-		/// </summary>
-		public bool IsRunning => isRunning;
-
-		private Process serverProcess;
-		private WebBrowserEventDispatcher eventDispatcher;
+		#region Pixels
 
 		private object pixelsLock = new object();
 		private byte[] pixels;
@@ -111,12 +103,45 @@ namespace UnityWebBrowser
 			}
 		}
 
+		#endregion
+
+		/// <summary>
+		///		Is the web browser client running?
+		/// </summary>
+		public bool IsRunning => isRunning;
+		
+		private bool isRunning;
+
+		private FileInfo logPath;
+
+		/// <summary>
+		///		The path that CEF will log to
+		/// </summary>
+		/// <exception cref="WebBrowserRunningException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		public FileInfo LogPath
+		{
+			get => logPath;
+			set
+			{
+				if (IsRunning)
+					throw new WebBrowserRunningException();
+
+				logPath = value ?? throw new ArgumentNullException(nameof(value));
+			}
+		}
+
+		private Process serverProcess;
+		private WebBrowserEventDispatcher eventDispatcher;
+
 		/// <summary>
 		///		Inits the browser client
 		/// </summary>
 		/// <exception cref="FileNotFoundException"></exception>
 		internal void Init()
 		{
+			LogPath ??= new FileInfo($"{WebBrowserUtils.GetCefMainDirectory()}/cef.log");
+
 			string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
 			LogDebug($"Starting CEF browser process from {cefProcessPath}");
 
@@ -130,7 +155,7 @@ namespace UnityWebBrowser
 			serverProcess = new Process
 			{
 				StartInfo = new ProcessStartInfo(cefProcessPath, $"-width {width} -height {height} -initial-url {initialUrl} -port {port} -debug {debugLog} -javascript {javascript} " +
-				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a}")
+				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} -log-path {logPath.FullName}")
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,

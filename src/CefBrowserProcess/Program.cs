@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 using Xilium.CefGlue;
 
 namespace CefBrowserProcess
@@ -40,20 +41,23 @@ namespace CefBrowserProcess
 					"Enable or disable javascript"),
 				new Option<bool>("-debug", 
 					() => false,
-					"Use debug logging?")
+					"Use debug logging?"),
+				new Option<FileInfo>("-log-path", 
+					() => new FileInfo("cef.log"),
+					"The path to where the CEF log will be")
 			};
 			rootCommand.Description = "Process for windowless CEF rendering.";
 			//CEF launches the same process multiple times for its sub-process and passes args to them, so we need to ignore unknown tokens
 			rootCommand.TreatUnmatchedTokensAsErrors = false;
-			rootCommand.Handler = CommandHandler.Create<string, int, int, byte, byte, byte, byte, int, bool, bool>(
-				(initialUrl, width, height, bcr, bcg, bcb, bca, port, javaScript, debug) =>
+			rootCommand.Handler = CommandHandler.Create<string, int, int, byte, byte, byte, byte, int, bool, bool, FileInfo>(
+				(initialUrl, width, height, bcr, bcg, bcb, bca, port, javaScript, debug, logPath) =>
 			{
 				Logger.DebugLog = debug;
 				CefBrowserProcess browserProcess = null;
 				try
 				{
 					browserProcess = new CefBrowserProcess(initialUrl, width, height,
-						new CefColor(bca, bcr, bcg, bcb), port, javaScript, args);
+						new CefColor(bca, bcr, bcg, bcb), port, javaScript, logPath, args);
 				}
 				catch (Exception)
 				{
