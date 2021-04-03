@@ -185,7 +185,7 @@ namespace UnityWebBrowser
 			//Setup cache path
 			//As funny and stupid you might think this is by just setting the text to be "null", we need to pass it like that if there is no cache
 			string cachePathArgument = "";
-			cachePath ??= new FileInfo(WebBrowserUtils.GetCefMainDirectory());
+			cachePath ??= new FileInfo($"{WebBrowserUtils.GetCefMainDirectory()}/CEFCache");
 			if (cache)
 				cachePathArgument = $"-cache-path \"{cachePath.FullName}\" ";
 
