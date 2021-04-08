@@ -9,7 +9,7 @@
     <Company>Voltstro-Studios</Company>
     <Description>Windowless browser process</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
-    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <DefineConstants>BROWSER_PROCESS</DefineConstants>
     <Version>1.2.0</Version>
   </PropertyGroup>
@@ -29,10 +29,6 @@
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Include="..\CefBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
-  </ItemGroup>
 
   <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
     <Content Include="..\ThirdParty\Libs\zmq\libzmq.dll">
@@ -40,27 +36,27 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dll">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.pak">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.pak">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.bin">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dat">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\locales\*.pak">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\locales\*.pak">
       <Link>locales\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -83,21 +79,20 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.bin">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.dat">
+    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\locales\*.pak">
-      <Link>locales\%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CefBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
   </ItemGroup>
 
   <ItemGroup>
