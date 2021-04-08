@@ -64,7 +64,7 @@ $cefBinReleaseLocation = "$($cefExtractedLocation)Release/"
 $cefBinResourcesLocation = "$($cefExtractedLocation)Resources/"
 $cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/windows-x64).Path
 
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.so" | Copy-Item -Destination $cefBinLocation -PassThru
+Get-ChildItem -Path "$($cefBinReleaseLocation)*.dll" | Copy-Item -Destination $cefBinLocation -PassThru
 Get-ChildItem -Path "$($cefBinReleaseLocation)*.bin" | Copy-Item -Destination $cefBinLocation -PassThru
 
 Copy-Item -Path "$($cefExtractedLocation)README.txt" -Destination $cefBinLocation -Force -PassThru

@@ -1,9 +1,12 @@
 locales/*
 *.pak
 *.dll
+*.so
 *.dat
 *.bin
 *.exe
+chrome-sandbox
+*.txt
 
 !libzmq.dll
 !ZeroMQ.dll
