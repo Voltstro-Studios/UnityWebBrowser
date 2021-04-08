@@ -20,8 +20,9 @@ foreach($content in $cefGlueVersionfileContent)
 New-Item -Path "../src/ThirdParty/Libs/cef/" -Name "temp" -ItemType "directory" -Force
 
 #Some variables that we will use
-$cefBinTarBz2FileName = "cef_binary_$($cefVersion)_windows64_beta_minimal.tar.bz2"
-$cefBinTarFileName = "cef_binary_$($cefVersion)_windows64_beta_minimal.tar"
+$cefLongName = "cef_binary_$($cefVersion)_windows64_beta_minimal"
+$cefBinTarBz2FileName = "$($cefLongName).tar.bz2"
+$cefBinTarFileName = "$($cefLongName).tar"
 $cefTempDirectory = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/temp/).Path
 $cefBinTarBz2FileLocation = "$($cefTempDirectory)$($cefBinTarBz2FileName)"
 
@@ -40,21 +41,30 @@ Write-Output "Downloaded CEF to $($cefBinTarBz2FileLocation)"
 #Extraction
 Write-Output "Extracting files..."
 
-#TODO: Linux has built in tar extraction stuff (I think)
-& ../src/devtools/7zip/win-x64/7za.exe x $cefBinTarBz2FileLocation "-o$($cefTempDirectory)" *.* -r -y
+$7zipApp = ""
+if($IsLinux)
+{
+    $7zipApp = "../src/DevTools/7zip/linux-x64/7zz"
+}
+else
+{
+    $7zipApp = ".../src/DevTools/7zip/win-x64/7za.exe"
+}
+
+& "$7zipApp" x $cefBinTarBz2FileLocation "-o$($cefTempDirectory)" *.tar -r -y
 
 $cefBinTarFileLocation = "$($cefTempDirectory)$($cefBinTarFileName)"
-& ../src/devtools/7zip/win-x64/7za.exe x $cefBinTarFileLocation "-o$($cefTempDirectory)" *.* -r -y
+& $7zipApp x $cefBinTarFileLocation "-o$($cefTempDirectory)" "$($cefLongName)/" -r -y
 
 #Copy files
 Write-Output "Copying files..."
 
-$cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/cef_binary_$($cefVersion)_windows64_beta_minimal/").Path
+$cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/$($cefLongName)/").Path
 $cefBinReleaseLocation = "$($cefExtractedLocation)Release/"
 $cefBinResourcesLocation = "$($cefExtractedLocation)Resources/"
-$cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/).Path
+$cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/windows-x64).Path
 
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.dll" | Copy-Item -Destination $cefBinLocation -PassThru
+Get-ChildItem -Path "$($cefBinReleaseLocation)*.so" | Copy-Item -Destination $cefBinLocation -PassThru
 Get-ChildItem -Path "$($cefBinReleaseLocation)*.bin" | Copy-Item -Destination $cefBinLocation -PassThru
 
 Copy-Item -Path "$($cefExtractedLocation)README.txt" -Destination $cefBinLocation -Force -PassThru

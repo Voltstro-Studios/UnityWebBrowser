@@ -1,0 +1,7 @@
+locales/*
+*.pak
+*.so
+*.dat
+*.bin
+chrome-sandbox
+*.txt

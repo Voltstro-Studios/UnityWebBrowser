@@ -3,3 +3,4 @@ locales/*
 *.dll
 *.dat
 *.bin
+*.txt
