@@ -9,7 +9,7 @@
     <Company>Voltstro-Studios</Company>
     <Description>Windowless browser process</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
     <DefineConstants>BROWSER_PROCESS</DefineConstants>
     <Version>1.2.0</Version>
   </PropertyGroup>
@@ -24,13 +24,30 @@
       .allowedextension
     </AllowedReferenceRelatedFileExtensions> 
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
+
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
+  <!-- This sets up our defines -->
+  <PropertyGroup>
+    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
+    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(IsWindows)'=='true'">
+    <DefinesConstants>WINDOWS;$(DefineConstants)</DefinesConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='linux-x64' OR '$(IsLinux)'=='true'">
+    <DefineConstants>LINUX;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <!-- We need to copy different files depending on the OS -->
+  <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(IsWindows)'=='true'">
     <Content Include="..\ThirdParty\Libs\zmq\libzmq.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -63,7 +80,8 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
+  <!-- Files we need on Linux -->
+  <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64' OR '$(IsLinux)'=='true'">
     <Content Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -79,24 +97,19 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.bin">
+    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dat">
+    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\CefBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 
 </Project>

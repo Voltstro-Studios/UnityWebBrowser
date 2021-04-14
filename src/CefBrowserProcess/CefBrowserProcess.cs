@@ -42,13 +42,6 @@ namespace CefBrowserProcess
 				Logger.ErrorException(ex, "Failed to load the CEF runtime for some reason!");
 				throw new Exception();
 			}
-			
-			CefMainArgs cefMainArgs = new CefMainArgs(cefArgs);
-			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
-			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
-			if (exitCode != -1)
-				throw new Exception();
-
 			string cachePathArgument = null;
 			if (cachePath != null)
 				cachePathArgument = cachePath.FullName;
@@ -59,8 +52,24 @@ namespace CefBrowserProcess
 				NoSandbox = true,
 				LogFile = logPath.FullName,
 				CachePath = cachePathArgument,
-				MultiThreadedMessageLoop = true
+				MultiThreadedMessageLoop = true,
+				LogSeverity = CefLogSeverity.Verbose,
+				Locale = "en-US",
+				ExternalMessagePump = false,
+#if LINUX
+				ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
+				LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
+				BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, "cefsimple")
+#endif
 			};
+			
+			CefMainArgs cefMainArgs = new CefMainArgs(cefArgs);
+			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
+#if WINDOWS
+			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
+			if (exitCode != -1)
+				throw new Exception();
+#endif
 
 			//Init CEF and create windowless window
 			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
