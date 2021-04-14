@@ -20,7 +20,7 @@ foreach($content in $cefGlueVersionfileContent)
 New-Item -Path "../src/ThirdParty/Libs/cef/" -Name "temp" -ItemType "directory" -Force
 
 #Some variables that we will use
-$cefLongName = "cef_binary_$($cefVersion)_linux64_beta_minimal"
+$cefLongName = "cef_binary_$($cefVersion)_linux64_beta_client"
 $cefBinTarBz2FileName = "$($cefLongName).tar.bz2"
 $cefBinTarFileName = "$($cefLongName).tar"
 $cefTempDirectory = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/temp/).Path
@@ -61,17 +61,9 @@ Write-Output "Copying files..."
 
 $cefExtractedLocation = (Resolve-Path -Path "$($cefTempDirectory)/$($cefLongName)/").Path
 $cefBinReleaseLocation = "$($cefExtractedLocation)Release/"
-$cefBinResourcesLocation = "$($cefExtractedLocation)Resources/"
 $cefBinLocation = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/linux-x64).Path
 
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.so" | Copy-Item -Destination $cefBinLocation -PassThru
-Get-ChildItem -Path "$($cefBinReleaseLocation)*.bin" | Copy-Item -Destination $cefBinLocation -PassThru
-Copy-Item -Path "$($cefBinReleaseLocation)chrome-sandbox" -Destination $cefBinLocation -PassThru
-
-Copy-Item -Path "$($cefExtractedLocation)README.txt" -Destination $cefBinLocation -Force -PassThru
-Copy-Item -Path "$($cefExtractedLocation)LICENSE.txt" -Destination $cefBinLocation -Force -PassThru
-
-Copy-Item -Path "$($cefBinResourcesLocation)/*" -Destination $cefBinLocation -Recurse -Force -PassThru
+Copy-Item -Path "$($cefBinReleaseLocation)/*" -Destination $cefBinLocation -Force -PassThru -Recurse
 
 Write-Output "Cleaning up..."
 Remove-Item -Path $cefTempDirectory -Force -Recurse

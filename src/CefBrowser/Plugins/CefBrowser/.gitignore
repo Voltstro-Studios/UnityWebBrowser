@@ -6,6 +6,7 @@ locales/*
 *.bin
 *.exe
 chrome-sandbox
+cefsimple
 *.txt
 
 !libzmq.dll

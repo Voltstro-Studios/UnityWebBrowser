@@ -86,6 +86,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+
+    <Content Include="..\ThirdParty\Libs\cef\linux-x64\cefsimple">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     
     <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
