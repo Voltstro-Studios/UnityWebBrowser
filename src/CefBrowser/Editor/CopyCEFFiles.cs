@@ -9,14 +9,22 @@ using UnityWebBrowser;
 
 public static class CopyCEFFiles
 {
-	private static string[] fileTypes = new[] {".pak", ".exe", ".dat", ".bin"};
+	private static string[] fileTypes = new[] {".pak", ".exe", ".dat", ".bin", "chrome-sandbox", "cefsimple", "CefBrowserProcess"};
 
 	[PostProcessBuild(1)]
 	public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
 	{
 		pathToBuiltProject = Path.GetDirectoryName(pathToBuiltProject);
-		string buildPluginsDir =
-			Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/x86_64/");
+		string buildPluginsDir = null;
+		if(target == BuildTarget.StandaloneWindows64)
+			buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/x86_64/");
+		else if(target == BuildTarget.StandaloneLinux64)
+			buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/");
+		else
+		{
+			Debug.LogError("Unsupported platform for Unity Web Browser! Not copying any browser files.");
+			return;
+		}
 		string cefProcessDir = WebBrowserUtils.GetCefProcessPath();
 		string cefProcessDirParent = Directory.GetParent(cefProcessDir).Name;
 
