@@ -7,6 +7,7 @@ locales/*
 *.exe
 chrome-sandbox
 cefsimple
+CefBrowserProcess
 *.txt
 
 !libzmq.dll
