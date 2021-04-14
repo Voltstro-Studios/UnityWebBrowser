@@ -202,9 +202,10 @@ namespace UnityWebBrowser
 					CreateNoWindow = true,
 					UseShellExecute = false,
 					RedirectStandardOutput = true,
-					RedirectStandardError = true
+					RedirectStandardError = true,
+					WorkingDirectory = WebBrowserUtils.GetCefProcessPath()
 				},
-				EnableRaisingEvents = true
+				EnableRaisingEvents = true,
 			};
 			serverProcess.OutputDataReceived += HandleCefProcessLog;
 			serverProcess.Start();

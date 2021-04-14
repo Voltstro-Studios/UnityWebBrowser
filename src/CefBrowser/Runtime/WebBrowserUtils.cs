@@ -35,10 +35,14 @@ namespace UnityWebBrowser
 		/// <returns></returns>
 	    public static string GetCefProcessPath()
 	    {
-#if UNITY_EDITOR
-		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/");
-#else
-			return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
+#if UNITY_EDITOR_LINUX
+		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/linux-x64/");
+#elif UNITY_EDITOR_WIN
+		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/windows-x64/");
+#elif UNITY_STANDALONE_WIN
+		    return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
+#elif UNITY_STANDALONE_LINUX
+		    return Path.GetFullPath($"{Application.dataPath}/Plugins/");
 #endif
 	    }
 
@@ -48,7 +52,11 @@ namespace UnityWebBrowser
 		/// <returns></returns>
 	    public static string GetCefProcessApplication()
 	    {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 		    return $"{GetCefProcessPath()}/CefBrowserProcess.exe";
+#else
+		    return $"{GetCefProcessPath()}/CefBrowserProcess";
+#endif
 	    }
 
 		/// <summary>
