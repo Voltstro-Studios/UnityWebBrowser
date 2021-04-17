@@ -47,33 +47,33 @@
   </PropertyGroup>
 
   <!-- We need to copy different files depending on the OS -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(IsWindows)'=='true'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
     <Content Include="..\ThirdParty\Libs\zmq\libzmq.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dll">
+    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.pak">
+    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.pak">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.bin">
+    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\*.dat">
+    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
 
-    <Content Include="..\ThirdParty\Libs\cef\win-x64\locales\*.pak">
+    <Content Include="..\ThirdParty\Libs\cef\windows-x64\locales\*.pak">
       <Link>locales\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -81,7 +81,7 @@
   </ItemGroup>
 
   <!-- Files we need on Linux -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64' OR '$(IsLinux)'=='true'">
+  <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
     <Content Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -109,6 +109,12 @@
 
     <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+
+    <Content Include="..\ThirdParty\Libs\cef\linux-x64\locales\*.pak">
+      <Link>locales\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
