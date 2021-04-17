@@ -82,6 +82,11 @@
 
   <!-- Files we need on Linux -->
   <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
+    <Content Include="..\ThirdParty\Libs\zmq\libzmq.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    
     <Content Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
