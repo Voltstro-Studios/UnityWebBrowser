@@ -36,9 +36,6 @@ namespace CefBrowserProcess
 				new Option<byte>("-bca",
 					() => 255,
 					"Background color (alpha)"),
-				new Option<FileInfo>("-log-path", 
-					() => new FileInfo("cef.log"),
-					"The path to where the CEF log will be"),
 				new Option<FileInfo>("-cache-path", 
 					() => null, 
 					"The path to the cache (null for no cache)"),
@@ -47,7 +44,13 @@ namespace CefBrowserProcess
 					"IPC port"),
 				new Option<bool>("-debug", 
 					() => false,
-					"Use debug logging?")
+					"Use debug logging?"),
+				new Option<FileInfo>("-log-path", 
+					() => new FileInfo("cef.log"),
+					"The path to where the CEF log will be"),
+				new Option<CefLogSeverity>("-log-severity", 
+					() => CefLogSeverity.Default,
+					"The path to where the CEF log will be"),
 			};
 			rootCommand.Description = "Process for windowless CEF rendering.";
 			//CEF launches the same process multiple times for its sub-process and passes args to them, so we need to ignore unknown tokens
@@ -60,7 +63,7 @@ namespace CefBrowserProcess
 				{
 					browserProcess = new CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
 						new CefColor(parsedArgs.Bca, parsedArgs.Bcr, parsedArgs.Bcg, parsedArgs.Bcb),
-						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.CachePath, args);
+						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, args);
 				}
 				catch (Exception)
 				{
@@ -84,10 +87,11 @@ namespace CefBrowserProcess
 			public byte Bcg { get; set; }
 			public byte Bcb { get; set; }
 			public byte Bca { get; set; }
-			public FileInfo LogPath { get; set; }
 			public FileInfo CachePath { get; set; }
 			public int Port { get; set; }
 			public bool Debug { get; set; }
+			public FileInfo LogPath { get; set; }
+			public CefLogSeverity LogSeverity { get; set; }
 		}
 	}
 }

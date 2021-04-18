@@ -386,7 +386,6 @@ font-family: 'Ubuntu', sans-serif;
 				{
 					case CefLogSeverity.Disable:
 						break;
-					case CefLogSeverity.Verbose:
 					case CefLogSeverity.Default:
 					case CefLogSeverity.Info:
 						Logger.Info($"CEF: {message}");
@@ -397,6 +396,9 @@ font-family: 'Ubuntu', sans-serif;
 					case CefLogSeverity.Error:
 					case CefLogSeverity.Fatal:
 						Logger.Error($"CEF: {message}");
+						break;
+					case CefLogSeverity.Verbose:
+						Logger.Debug($"CEF: {message}");
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(level), level, null);

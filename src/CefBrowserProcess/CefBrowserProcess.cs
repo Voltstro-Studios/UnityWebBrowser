@@ -17,7 +17,7 @@ namespace CefBrowserProcess
 		private bool isRunning;
 
 		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, 
-			FileSystemInfo logPath, FileSystemInfo cachePath, string[] cefArgs)
+			FileSystemInfo logPath, CefLogSeverity logSeverity, FileSystemInfo cachePath, string[] cefArgs)
 		{
 			ipcPort = port;
 
@@ -53,7 +53,7 @@ namespace CefBrowserProcess
 				LogFile = logPath.FullName,
 				CachePath = cachePathArgument,
 				MultiThreadedMessageLoop = true,
-				LogSeverity = CefLogSeverity.Verbose,
+				LogSeverity = logSeverity,
 				Locale = "en-US",
 				ExternalMessagePump = false,
 #if LINUX

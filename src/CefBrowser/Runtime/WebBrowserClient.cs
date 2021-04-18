@@ -72,6 +72,12 @@ namespace UnityWebBrowser
 		public bool debugLog;
 
 		/// <summary>
+		///		The log severity. Only messages of this severity level or higher will be logged
+		/// </summary>
+		[Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
+		public CefLogSeverity logSeverity;
+
+		/// <summary>
 		///		Texture that the browser will paint to
 		/// </summary>
 		public Texture2D BrowserTexture { get; private set; }
@@ -196,7 +202,7 @@ namespace UnityWebBrowser
 				                                                 $"-width {width} -height {height} " +
 				                                                 $"-javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
-				                                                 $"-log-path \"{logPath.FullName}\" {cachePathArgument}" +
+				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument}" +
 				                                                 $"-port {port} -debug {debugLog}")
 				{
 					CreateNoWindow = true,
@@ -447,5 +453,17 @@ namespace UnityWebBrowser
 		}
 
 		#endregion
+		
+		public enum CefLogSeverity
+		{
+			Default,
+			Verbose,
+			Debug = Verbose,
+			Info,
+			Warning,
+			Error,
+			Fatal,
+			Disable
+		}
 	}
 }
