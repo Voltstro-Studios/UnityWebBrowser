@@ -97,7 +97,7 @@ namespace CefBrowserProcess
 			{
 				KeyEvent(new CefKeyEvent
 				{
-					WindowsKeyCode = c,
+					Character = c,
 					EventType = CefKeyEventType.Char
 				});
 			}
