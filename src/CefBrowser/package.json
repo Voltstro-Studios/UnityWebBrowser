@@ -1,8 +1,8 @@
 {
   "name": "dev.voltstro.unitywebbrowser",
   "displayName": "Unity Web Browser",
-  "version": "1.2.0",
-  "unity": "2020.2",
+  "version": "1.3.0",
+  "unity": "2020.3",
   "description": "Adds a functional web browser into Unity",
   "author": "Voltstro",
   "dependencies": {
