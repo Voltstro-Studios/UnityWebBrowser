@@ -10,7 +10,6 @@
     <Description>Windowless browser process</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-    <DefineConstants>BROWSER_PROCESS</DefineConstants>
     <Version>1.3.0</Version>
   </PropertyGroup>
 
@@ -33,17 +32,12 @@
   </ItemGroup>
 
   <!-- This sets up our defines -->
-  <PropertyGroup>
-    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(IsWindows)'=='true'">
-    <DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
+    <DefineConstants>WINDOWS;BROWSER_PROCESS</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='linux-x64' OR '$(IsLinux)'=='true'">
-    <DefineConstants>LINUX;$(DefineConstants)</DefineConstants>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
+    <DefineConstants>LINUX;BROWSER_PROCESS</DefineConstants>
   </PropertyGroup>
 
   <!-- We need to copy different files depending on the OS -->
