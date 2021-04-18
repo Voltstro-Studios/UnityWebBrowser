@@ -38,7 +38,7 @@ namespace UnityWebBrowser
 #if UNITY_EDITOR_LINUX
 		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/linux-x64/");
 #elif UNITY_EDITOR_WIN
-		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/windows-x64/");
+		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/win-x64/");
 #elif UNITY_STANDALONE_WIN
 		    return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
 #elif UNITY_STANDALONE_LINUX

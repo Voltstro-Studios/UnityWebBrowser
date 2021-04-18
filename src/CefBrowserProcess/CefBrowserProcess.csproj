@@ -39,7 +39,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(IsWindows)'=='true'">
-    <DefinesConstants>WINDOWS;$(DefineConstants)</DefinesConstants>
+    <DefineConstants>WINDOWS;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='linux-x64' OR '$(IsLinux)'=='true'">

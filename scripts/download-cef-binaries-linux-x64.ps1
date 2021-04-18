@@ -48,7 +48,7 @@ if($IsLinux)
 }
 else
 {
-    $7zipApp = ".../src/DevTools/7zip/win-x64/7za.exe"
+    $7zipApp = "../src/DevTools/7zip/win-x64/7za.exe"
 }
 
 & "$7zipApp" x $cefBinTarBz2FileLocation "-o$($cefTempDirectory)" *.tar -r -y
