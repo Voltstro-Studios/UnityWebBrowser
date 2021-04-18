@@ -32,6 +32,9 @@ namespace UnityWebBrowser
 #if ENABLE_INPUT_SYSTEM
 		private string currentInputBuffer;
 #else
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+		#error Unity Web Browser on linux does not support old input system!
+#endif
 		private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
 #endif
 
