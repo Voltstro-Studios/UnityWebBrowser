@@ -20,7 +20,7 @@ foreach($content in $cefGlueVersionfileContent)
 New-Item -Path "../src/ThirdParty/Libs/cef/" -Name "temp" -ItemType "directory" -Force
 
 #Some variables that we will use
-$cefLongName = "cef_binary_$($cefVersion)_windows64_beta_minimal"
+$cefLongName = "cef_binary_$($cefVersion)_windows64_minimal"
 $cefBinTarBz2FileName = "$($cefLongName).tar.bz2"
 $cefBinTarFileName = "$($cefLongName).tar"
 $cefTempDirectory = (Resolve-Path -Path ../src/ThirdParty/Libs/cef/temp/).Path
