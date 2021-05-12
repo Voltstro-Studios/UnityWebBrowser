@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="NativeDefines.props" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -11,6 +13,7 @@
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
     <Version>1.3.1</Version>
+    <DefineConstants>BROWSER_PROCESS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -31,17 +34,8 @@
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
   </ItemGroup>
 
-  <!-- This sets up our defines -->
-  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
-    <DefineConstants>WINDOWS;BROWSER_PROCESS</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
-    <DefineConstants>LINUX;BROWSER_PROCESS</DefineConstants>
-  </PropertyGroup>
-
   <!-- We need to copy different files depending on the OS -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
+  <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
     <Content Include="..\ThirdParty\Libs\zmq\libzmq.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -75,7 +69,7 @@
   </ItemGroup>
 
   <!-- Files we need on Linux -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)'=='linux-x64'">
+  <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
     <Content Include="..\ThirdParty\Libs\zmq\libzmq.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -121,5 +115,7 @@
   <ItemGroup>
     <Compile Include="..\CefBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
   </ItemGroup>
+
+  <Import Project="NatvieDefines.targets" />
 
 </Project>

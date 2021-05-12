@@ -1,0 +1,15 @@
+<Project>
+    <!-- https://gist.github.com/Voltstro/c5e8db35a6aadf812cabb96c6bb1387d -->
+    
+    <PropertyGroup Condition="'$(IsWindowsBuild)'=='true'">
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsLinuxBuild)'=='true'">
+        <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsOSXBuild)'=='true'">
+        <DefineConstants>$(DefineConstants);OSX</DefineConstants>
+    </PropertyGroup>
+</Project>

@@ -1,0 +1,21 @@
+<Project>
+    <!-- https://gist.github.com/Voltstro/c5e8db35a6aadf812cabb96c6bb1387d -->
+    
+    <PropertyGroup>
+        <IsWindowsPC Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindowsPC>
+        <IsOSXPC Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSXPC>
+        <IsLinuxPC Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinuxPC>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier.Contains(`win`))'=='true' OR ('$(RuntimeIdentifier)'=='' AND '$(IsWindowsPC)'=='true')">
+        <IsWindowsBuild>true</IsWindowsBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier.Contains(`linux`))'=='true' OR ('$(RuntimeIdentifier)'=='' AND '$(IsLinuxPC)'=='true')">
+        <IsLinuxBuild>true</IsLinuxBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifierContains(`osx`))'=='true' OR ('$(RuntimeIdentifier)'=='' AND '$(IsOSXPC)'=='true')">
+        <IsOSXBuild>true</IsOSXBuild>
+    </PropertyGroup>
+</Project>
