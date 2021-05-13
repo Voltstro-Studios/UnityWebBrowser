@@ -13,13 +13,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+        
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/CefBrowserProcess/
+      
     - name: Build
       run: dotnet build --no-restore
       working-directory: src/CefBrowserProcess/
