@@ -110,6 +110,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+
+    <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
   </ItemGroup>
 
   <ItemGroup>
