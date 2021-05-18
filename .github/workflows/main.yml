@@ -18,10 +18,12 @@ jobs:
         lfs: false
         path: 'UnityWebBrowserSource/'
         
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: UnityWebBrowserSource/src/CefBrowserProcess/
+    - name: Download CEF
+      shell: pwsh
+      run: download-cef-binaries-windows-x64.ps1
+      working-directory: UnityWebBrowserSource/scripts/
       
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: UnityWebBrowserSource/src/CefBrowserProcess/
+    - name: Build CefBrowserProcess
+      shell: pwsh
+      run: publish-browserprocess-win64.ps1
+      working-directory: UnityWebBrowserSource/scripts/
