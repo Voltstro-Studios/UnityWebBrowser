@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build-windows:
+    name: 'Windows Build'
     runs-on: windows-latest
 
     steps:
@@ -17,11 +17,6 @@ jobs:
         submodules: 'recursive'
         lfs: false
         path: 'UnityWebBrowserSource/'
-        
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
         
     - name: Restore dependencies
       run: dotnet restore
