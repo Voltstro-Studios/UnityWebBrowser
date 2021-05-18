@@ -20,10 +20,10 @@ jobs:
         
     - name: Download CEF
       shell: pwsh
-      run: '& download-cef-binaries-windows-x64.ps1'
+      run: '& ./download-cef-binaries-windows-x64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
       
     - name: Build CefBrowserProcess
       shell: pwsh
-      run: '& publish-browserprocess-win64.ps1'
+      run: '& ./publish-browserprocess-win64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
