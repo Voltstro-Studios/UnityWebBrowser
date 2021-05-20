@@ -6,12 +6,21 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess
 {
+	/// <summary>
+	///		Main class for this program
+	/// </summary>
 	public static class Program
 	{
+		/// <summary>
+		///		Entry point
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static int Main(string[] args)
 		{
 			RootCommand rootCommand = new RootCommand
 			{
+				//We got a lot of arguments
 				new Option<string>("-initial-url",
 					() => "https://voltstro.dev",
 					"The initial URL"),
@@ -57,10 +66,14 @@ namespace CefBrowserProcess
 			rootCommand.TreatUnmatchedTokensAsErrors = false;
 			rootCommand.Handler = CommandHandler.Create<Arguments>(parsedArgs =>
 			{
+				//Is debug log enabled or not
 				Logger.DebugLog = parsedArgs.Debug;
+
+				//Create CefBrowserProcess class, which is responsible for basically everything
 				CefBrowserProcess browserProcess = null;
 				try
 				{
+					//Create it with our parsed arguments
 					browserProcess = new CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
 						new CefColor(parsedArgs.Bca, parsedArgs.Bcr, parsedArgs.Bcg, parsedArgs.Bcb),
 						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, args);
@@ -68,15 +81,22 @@ namespace CefBrowserProcess
 				catch (Exception)
 				{
 					browserProcess?.Dispose();
+					Environment.Exit(0);
 					return;
 				}
 				
+				//Start our events loop
 				browserProcess.HandelEventsLoop();
+				
+				//The end
 				browserProcess.Dispose();
 			});
+			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.InvokeAsync(args).Result;
 		}
 
+		// ReSharper disable UnusedAutoPropertyAccessor.Local
+		// ReSharper disable once ClassNeverInstantiated.Local
 		private class Arguments
 		{
 			public string InitialUrl { get; set; }
@@ -93,5 +113,6 @@ namespace CefBrowserProcess
 			public FileInfo LogPath { get; set; }
 			public CefLogSeverity LogSeverity { get; set; }
 		}
+		// ReSharper restore UnusedAutoPropertyAccessor.Local
 	}
 }

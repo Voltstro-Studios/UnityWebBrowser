@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using CefBrowserProcess.EventData;
 using UnityWebBrowser.EventData;
@@ -7,6 +7,9 @@ using ZeroMQ;
 
 namespace CefBrowserProcess
 {
+	/// <summary>
+	///		Main class responsible for managing CEF and the events
+	/// </summary>
 	public class CefBrowserProcess : IDisposable
 	{
 		private const int EventPassingNumErrorsAllowed = 4;
@@ -16,6 +19,20 @@ namespace CefBrowserProcess
 
 		private bool isRunning;
 
+		/// <summary>
+		///		Creates a new <see cref="CefBrowserProcess"/> instance
+		/// </summary>
+		/// <param name="initialUrl"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="backgroundColor"></param>
+		/// <param name="port"></param>
+		/// <param name="javaScript"></param>
+		/// <param name="logPath"></param>
+		/// <param name="logSeverity"></param>
+		/// <param name="cachePath"></param>
+		/// <param name="cefArgs"></param>
+		/// <exception cref="Exception"></exception>
 		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, 
 			FileSystemInfo logPath, CefLogSeverity logSeverity, FileSystemInfo cachePath, string[] cefArgs)
 		{
@@ -42,10 +59,13 @@ namespace CefBrowserProcess
 				Logger.ErrorException(ex, "Failed to load the CEF runtime for some reason!");
 				throw new Exception();
 			}
+			
+			//Do we have a cache or not, if not CEF will run in "incognito" mode.
 			string cachePathArgument = null;
 			if (cachePath != null)
 				cachePathArgument = cachePath.FullName;
 
+			//Setup the CEF settings
 			CefSettings cefSettings = new CefSettings
 			{
 				WindowlessRenderingEnabled = true,
@@ -57,26 +77,31 @@ namespace CefBrowserProcess
 				Locale = "en-US",
 				ExternalMessagePump = false,
 #if LINUX
+				//On Linux we need to tell CEF where everything is
 				ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
 				LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
 				BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, "cefsimple")
 #endif
 			};
 			
+			//Set up CEF args and the CEF app
 			CefMainArgs cefMainArgs = new CefMainArgs(cefArgs);
 			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
 #if WINDOWS
+			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
 			if (exitCode != -1)
 				throw new Exception();
 #endif
 
-			//Init CEF and create windowless window
+			//Init CEF
 			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
 
+			//Create a CEF window and set it to windowless
 			CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
 			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
 
+			//Create our CEF browser settings
 			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
 			{
 				BackgroundColor = backgroundColor,
@@ -100,6 +125,9 @@ namespace CefBrowserProcess
 			}
 		}
 
+		/// <summary>
+		///		Starts a loop that deals with the incoming events
+		/// </summary>
 		public void HandelEventsLoop()
 		{
 			//Setup ZMQ
@@ -112,6 +140,7 @@ namespace CefBrowserProcess
 			int eventPassingErrorCount = 0;
 			while (isRunning)
 			{
+				//Get the json that was sent to us
 				using ZFrame request = responder.ReceiveFrame();
 				string json = request.ReadString();
 
