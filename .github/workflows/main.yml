@@ -1,4 +1,4 @@
-name: .NET
+name: Build
 
 on:
   push:
@@ -7,24 +7,47 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
+  # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
+  
+  build-windows:
+    name: 'Windows Build'
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
+        lfs: false
+        path: 'UnityWebBrowserSource/'
         
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-        
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: src/CefBrowserProcess/
+    - name: Download CEF
+      shell: pwsh
+      run: '& ./download-cef-binaries-windows-x64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
       
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: src/CefBrowserProcess/
+    - name: Build CefBrowserProcess
+      shell: pwsh
+      run: '& ./publish-browserprocess-win64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
+      
+  build-linux:
+    name: 'Linux Build'
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        lfs: false
+        path: 'UnityWebBrowserSource/'
+        
+    - name: Download CEF
+      shell: pwsh
+      run: '& ./download-cef-binaries-linux-x64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
+      
+    - name: Build CefBrowserProcess
+      shell: pwsh
+      run: '& ./publish-browserprocess-linux64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
