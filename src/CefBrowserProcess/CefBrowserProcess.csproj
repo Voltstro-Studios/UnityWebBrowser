@@ -31,7 +31,7 @@
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
 
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
   </ItemGroup>
 
   <!-- We need to copy different files depending on the OS -->
