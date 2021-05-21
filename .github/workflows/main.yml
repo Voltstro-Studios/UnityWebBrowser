@@ -51,3 +51,22 @@ jobs:
       shell: pwsh
       run: '& ./publish-browserprocess-linux64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
+
+  upload-package:
+    name: 'Upload Package'
+    runs-on: ubuntu-20.04
+    needs: [build-windows, build-linux]
+    
+    steps:
+    - uses: actions/checkout@v2
+      name: 'Checkout Source'
+      with:
+        submodules: 'recursive'
+        lfs: false
+        path: 'UnityWebBrowserSource/'
+    - uses: actions/checkout@v2
+      name: 'Checkout Package'
+      with:
+        lfs: false
+        path: 'UnityWebBrowserPackage/'
+        token: ${{ secrets.UNITY_PACKAGE_TOKEN }}
