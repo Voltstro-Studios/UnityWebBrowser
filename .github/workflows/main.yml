@@ -64,9 +64,11 @@ jobs:
         submodules: 'recursive'
         lfs: false
         path: 'UnityWebBrowserSource/'
+        
     - uses: actions/checkout@v2
       name: 'Checkout Package'
       with:
+        repository: 'https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git'
         lfs: false
         path: 'UnityWebBrowserPackage/'
         token: ${{ secrets.UNITY_PACKAGE_TOKEN }}
