@@ -31,6 +31,12 @@ jobs:
       run: '& ./publish-browserprocess-win64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
       
+    - uses: actions/upload-artifact@v2.2.3
+      name: Upload Build
+      with:
+        name: Windows-CefBrowserProcess
+        path: UnityWebBrowserSource/src/CefBrowserProcess/bin/Release/win-x64/publish/
+      
   build-linux:
     name: 'Linux Build'
     runs-on: ubuntu-20.04
@@ -51,7 +57,13 @@ jobs:
       shell: pwsh
       run: '& ./publish-browserprocess-linux64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
-
+    
+    - uses: actions/upload-artifact@v2.2.3
+      name: Upload Build
+      with:
+        name: Linux-CefBrowserProcess
+        path: UnityWebBrowserSource/src/CefBrowserProcess/bin/Release/linux-x64/publish/
+      
   upload-package:
     name: 'Upload Package'
     runs-on: ubuntu-20.04
@@ -64,11 +76,22 @@ jobs:
         submodules: 'recursive'
         lfs: false
         path: 'UnityWebBrowserSource/'
-        
-    - uses: actions/checkout@v2
-      name: 'Checkout Package'
+    
+    - uses: shimataro/ssh-key-action@v2
+      name: 'Install SSH Key'
       with:
-        repository: 'https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git'
-        lfs: false
-        path: 'UnityWebBrowserPackage/'
-        token: ${{ secrets.UNITY_PACKAGE_TOKEN }}
+        name: Unity-Package
+        key: ${{ secrets.UNITY_PACKAGE_KEY }}
+        known_hosts: 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf'
+        config: |
+          Host gitlab.com
+            PreferredAuthentications publickey
+            IdentityFile ~/.ssh/Unity-Package
+            
+    - uses: actions/download-artifact@v2
+      with:
+        path: .
+        
+    - name: Setup and Release
+      shell: pwsh
+      run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
