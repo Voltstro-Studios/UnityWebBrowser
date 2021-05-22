@@ -35,7 +35,7 @@ This project avoids these issues by running CEF in a separate process and using 
 ### Prerequisites
 
 ```
-Unity 2020.2.x
+Unity 2020.3.x
 ```
 
 To install it via the package manager you will need to:
