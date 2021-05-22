@@ -1,0 +1,53 @@
+#Separate workflow for PRs, as the main one will upload potential changes to the package repo
+
+name: Build-PR
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
+  # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
+  
+  build-windows:
+    name: 'Windows Build'
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        lfs: false
+        path: 'UnityWebBrowserSource/'
+        
+    - name: Download CEF
+      shell: pwsh
+      run: '& ./download-cef-binaries-windows-x64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
+      
+    - name: Build CefBrowserProcess
+      shell: pwsh
+      run: '& ./publish-browserprocess-win64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
+      
+  build-linux:
+    name: 'Linux Build'
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        lfs: false
+        path: 'UnityWebBrowserSource/'
+        
+    - name: Download CEF
+      shell: pwsh
+      run: '& ./download-cef-binaries-linux-x64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/
+      
+    - name: Build CefBrowserProcess
+      shell: pwsh
+      run: '& ./publish-browserprocess-linux64.ps1'
+      working-directory: UnityWebBrowserSource/scripts/

@@ -3,8 +3,6 @@ name: Build
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
@@ -31,6 +29,7 @@ jobs:
       run: '& ./publish-browserprocess-win64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
       
+    #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
       name: Upload Build
       with:
@@ -58,6 +57,7 @@ jobs:
       run: '& ./publish-browserprocess-linux64.ps1'
       working-directory: UnityWebBrowserSource/scripts/
     
+    #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
       name: Upload Build
       with:
@@ -77,6 +77,7 @@ jobs:
         lfs: false
         path: 'UnityWebBrowserSource/'
     
+    #SSH key to write to the GitLab repo
     - uses: shimataro/ssh-key-action@v2
       name: 'Install SSH Key'
       with:
@@ -87,10 +88,12 @@ jobs:
           Host gitlab.com
             IdentityFile ~/.ssh/Unity-Package
             
+    #Download our artifacts from the previous jobs
     - uses: actions/download-artifact@v2
       with:
         path: .
         
+    #Our powershell script will take over from here
     - name: Setup and Release
       shell: pwsh
       run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
