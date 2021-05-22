@@ -1,9 +1,8 @@
 git clone https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git
-Copy-Item -Path UnityWebBrowserSource/src/CefBrowser/ -Destination Package/ -Recurse -Force -PassThru
+Get-ChildItem -Path UnityWebBrowserSource/src/CefBrowser/ | Copy-Item -Destination Package/ -Recurse -Container -Force -PassThru
 
-Copy-Item -Path Linux-CefBrowserProcess/ -Destination Package/Plugins/CefBrowser/linux-x64/ -Force -Recurse -PassThru
-Copy-Item -Path Windows-CefBrowserProcess/ -Destination Package/Plugins/CefBrowser/win-x64/ -Force -Recurse -PassThru
-Remove-Item -Path Package/Plugins/CefBrowser/.gitignore -Force
+Get-ChildItem -Path Linux-CefBrowserProcess/ | Copy-Item -Destination Package/Plugins/CefBrowser/linux-x64 -Recurse -Container -Force -PassThru
+Get-ChildItem -Path Windows-CefBrowserProcess/ | Copy-Item -Destination Package/Plugins/CefBrowser/win-x64 -Recurse -Container -Force -PassThru
 
 Set-Location -path "Package/"
 git config --global user.name "Voltstro"

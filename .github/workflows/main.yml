@@ -95,3 +95,4 @@ jobs:
     - name: Setup and Release
       shell: pwsh
       run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
+      working-directory: .
