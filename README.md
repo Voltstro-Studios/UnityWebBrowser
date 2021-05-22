@@ -52,7 +52,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2020.2.x
+Unity 2020.3.x
 .NET 5 SDK
 Powershell Core
 ```
