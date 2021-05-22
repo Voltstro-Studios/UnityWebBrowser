@@ -83,6 +83,9 @@ jobs:
         name: Unity-Package
         key: ${{ secrets.UNITY_PACKAGE_KEY }}
         known_hosts: 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf'
+        config: |
+          Host gitlab.com
+            IdentityFile ~/.ssh/Unity-Package
             
     - uses: actions/download-artifact@v2
       with:
