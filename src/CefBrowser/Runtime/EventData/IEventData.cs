@@ -1,10 +1,12 @@
+using UnityEngine.Scripting;
+
 namespace UnityWebBrowser.EventData
 {
 #if !BROWSER_PROCESS
-	[UnityEngine.Scripting.Preserve]
+    [Preserve]
 #endif
-	public interface IEventData
+    public interface IEventData
     {
-	    public EventType EventType { get; set; }
+        public EventType EventType { get; set; }
     }
 }

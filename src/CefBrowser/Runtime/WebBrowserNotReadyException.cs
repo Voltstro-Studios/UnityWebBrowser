@@ -3,16 +3,16 @@ using System;
 namespace UnityWebBrowser
 {
 	/// <summary>
-	///		The web browser is not ready exception
+	///     The web browser is not ready exception
 	/// </summary>
-    public class WebBrowserNotReadyException : Exception
+	public class WebBrowserNotReadyException : Exception
     {
-	    public WebBrowserNotReadyException()
-	    {
-	    }
+        public WebBrowserNotReadyException()
+        {
+        }
 
-	    public WebBrowserNotReadyException(string message) : base(message)
-	    {
-	    }
+        public WebBrowserNotReadyException(string message) : base(message)
+        {
+        }
     }
 }

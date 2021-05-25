@@ -1,7 +1,9 @@
+using UnityEngine.Scripting;
+
 namespace UnityWebBrowser.EventData
 {
 #if !BROWSER_PROCESS
-	[UnityEngine.Scripting.Preserve]
+    [Preserve]
 #endif
     public enum EventType
     {

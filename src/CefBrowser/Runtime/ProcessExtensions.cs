@@ -21,7 +21,7 @@ namespace UnityWebBrowser
 
         public static void KillTree(this Process process, TimeSpan timeout)
         {
-	        if (IsWindows)
+            if (IsWindows)
             {
                 RunProcessAndWaitForExit(
                     "taskkill",
@@ -33,50 +33,45 @@ namespace UnityWebBrowser
             {
                 HashSet<int> children = new HashSet<int>();
                 GetAllChildIdsUnix(process.Id, children, timeout);
-                foreach (int childId in children)
-                {
-                    KillProcessUnix(childId, timeout);
-                }
+                foreach (int childId in children) KillProcessUnix(childId, timeout);
                 KillProcessUnix(process.Id, timeout);
             }
         }
 
         private static void GetAllChildIdsUnix(int parentId, ISet<int> children, TimeSpan timeout)
         {
-	        int exitCode = RunProcessAndWaitForExit(
+            int exitCode = RunProcessAndWaitForExit(
                 "pgrep",
                 $"-P {parentId}",
                 timeout,
                 out string stdout);
 
-	        if (exitCode != 0 || string.IsNullOrEmpty(stdout)) return;
-	        using StringReader reader = new StringReader(stdout);
-			while (true)
-			{
-				string text = reader.ReadLine();
-				if (text == null)
-				{
-					return;
-				}
+            if (exitCode != 0 || string.IsNullOrEmpty(stdout)) return;
+            using StringReader reader = new StringReader(stdout);
+            while (true)
+            {
+                string text = reader.ReadLine();
+                if (text == null) return;
 
-				if (!int.TryParse(text, out int id)) continue;
+                if (!int.TryParse(text, out int id)) continue;
 
-				children.Add(id);
-				// Recursively get the children
-				GetAllChildIdsUnix(id, children, timeout);
-			}
-		}
+                children.Add(id);
+                // Recursively get the children
+                GetAllChildIdsUnix(id, children, timeout);
+            }
+        }
 
         private static void KillProcessUnix(int processId, TimeSpan timeout)
         {
-			RunProcessAndWaitForExit(
-				"kill",
-				$"-TERM {processId}",
-				timeout,
-				out string _);
-		}
+            RunProcessAndWaitForExit(
+                "kill",
+                $"-TERM {processId}",
+                timeout,
+                out string _);
+        }
 
-        private static int RunProcessAndWaitForExit(string fileName, string arguments, TimeSpan timeout, out string stdout)
+        private static int RunProcessAndWaitForExit(string fileName, string arguments, TimeSpan timeout,
+            out string stdout)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -90,14 +85,10 @@ namespace UnityWebBrowser
             Process process = Process.Start(startInfo);
 
             stdout = null;
-            if (process.WaitForExit((int)timeout.TotalMilliseconds))
-            {
+            if (process.WaitForExit((int) timeout.TotalMilliseconds))
                 stdout = process.StandardOutput.ReadToEnd();
-            }
             else
-            {
                 process.Kill();
-            }
 
             return process.ExitCode;
         }
