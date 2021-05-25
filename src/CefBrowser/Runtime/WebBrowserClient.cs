@@ -87,7 +87,7 @@ namespace UnityWebBrowser
 		///		The time between each frame sent the browser process
 		/// </summary>
 		[Tooltip("The time between each frame sent the browser process")]
-		public float eventPollingTime = 0.04f;
+		public float eventPollingTime = 0.045f;
 
 		/// <summary>
 		///		Enables debug logging for the CEF browser process
@@ -244,8 +244,8 @@ namespace UnityWebBrowser
 				                                                 $"-javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
 				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument} " +
-				                                                 $"-port {port} -debug {debugLog} " +
-																												 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument} ")
+				                                                 $"-port {port} -debug {debugLog} " + 
+				                                                 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument}")
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,
