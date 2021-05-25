@@ -53,6 +53,30 @@ namespace UnityWebBrowser
 		public bool cache = true;
 
 		/// <summary>
+		///		Enable or disable WebRTC
+		/// </summary>
+		[Tooltip("Enable or disable media streaming")]
+		public bool mediaStream = false;
+
+		/// <summary>
+		///		Disable proxy server
+		/// </summary>
+		[Tooltip("Disable proxy server")]
+		public bool noProxyServer = false;
+
+		/// <summary>
+		///		Enable or disable remote debugging
+		/// </summary>
+		[Tooltip("Enable or disable remote debugging")]
+		public bool remoteDebugging = false;
+
+		/// <summary>
+		///		The port to to use for remote debugging
+		/// </summary>
+		[Tooltip("The port to to use for remote debugging")]
+		public int remoteDebuggingPort = 9022;
+
+		/// <summary>
 		///		The port to communicate with the browser process on
 		/// </summary>
 		[Header("IPC Settings")] 
@@ -195,6 +219,23 @@ namespace UnityWebBrowser
 			if (cache)
 				cachePathArgument = $"-cache-path \"{cachePath.FullName}\" ";
 
+			//Setup media streaming
+			//I don't have a funny thing to say
+			string mediaStreamArgument = "";
+			if (mediaStream)
+				mediaStreamArgument = $"-enable-media-stream";
+
+			//Setup remote debugging
+			//Again, I don't have a funny thing to say
+			string remoteDebuggingArgument = "";
+			if (remoteDebugging)
+				remoteDebuggingArgument = $"-remote-debugging-port={remoteDebuggingPort}";
+
+			//Setup no proxy server
+			string noProxyServerArgument = "";
+			if (noProxyServer)
+				noProxyServerArgument = "-no-proxy-server";
+
 			//Start the server process
 			serverProcess = new Process
 			{
@@ -202,8 +243,9 @@ namespace UnityWebBrowser
 				                                                 $"-width {width} -height {height} " +
 				                                                 $"-javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
-				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument}" +
-				                                                 $"-port {port} -debug {debugLog}")
+				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument} " +
+				                                                 $"-port {port} -debug {debugLog} " +
+																												 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument} ")
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,
