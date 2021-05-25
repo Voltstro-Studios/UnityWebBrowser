@@ -59,9 +59,9 @@ namespace UnityWebBrowser
 		public bool mediaStream = false;
 
 		/// <summary>
-		///		Do not use proxy server (slight initialization speedup)
+		///		Disable proxy server
 		/// </summary>
-		[Tooltip("Enable or disable media streaming")]
+		[Tooltip("Disable proxy server")]
 		public bool noProxyServer = false;
 
 		/// <summary>
@@ -71,9 +71,9 @@ namespace UnityWebBrowser
 		public bool remoteDebugging = false;
 
 		/// <summary>
-		///		Remote debugging port
+		///		The port to to use for remote debugging
 		/// </summary>
-		[Tooltip("The port to to use for remote debugging if enabled")]
+		[Tooltip("The port to to use for remote debugging")]
 		public int remoteDebuggingPort = 9022;
 
 		/// <summary>
@@ -243,9 +243,9 @@ namespace UnityWebBrowser
 				                                                 $"-width {width} -height {height} " +
 				                                                 $"-javascript {javascript} " +
 				                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
-				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument}" +
-				                                                 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument} "+
-																 "-port {port} -debug {debugLog}")
+				                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument} " +
+				                                                 $"-port {port} -debug {debugLog} " +
+																												 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument} ")
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,
