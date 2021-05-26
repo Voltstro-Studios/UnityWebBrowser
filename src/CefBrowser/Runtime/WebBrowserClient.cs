@@ -187,43 +187,63 @@ namespace UnityWebBrowser
             }
 
             string cefMainDirectory = WebBrowserUtils.GetCefMainDirectory();
+
+            //Start to build our arguments
+            WebBrowserArgsBuilder argsBuilder = new WebBrowserArgsBuilder();
             
-            //Setup log path
+            //Initial URL
+            argsBuilder.AppendArgument("initial-url", initialUrl, true);
+            
+            //Width & Height
+            argsBuilder.AppendArgument("width", width);
+            argsBuilder.AppendArgument("height", height);
+            
+            //Javascript
+            argsBuilder.AppendArgument("javascript", javascript);
+            
+            //Background color
+            argsBuilder.AppendArgument("bcr", backgroundColor.r);
+            argsBuilder.AppendArgument("bcg", backgroundColor.g);
+            argsBuilder.AppendArgument("bcb", backgroundColor.b);
+            argsBuilder.AppendArgument("bca", backgroundColor.a);
+
+            //Logging
             LogPath ??= new FileInfo($"{cefMainDirectory}/cef.log");
+            argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
+            argsBuilder.AppendArgument("log-severity", logSeverity);
+            argsBuilder.AppendArgument("debug", debugLog);
+            
+            //IPC port
+            argsBuilder.AppendArgument("port", port);
 
-            //Setup cache path
-            string cachePathArgument = "";
-            cachePath ??= new FileInfo($"{cefMainDirectory}/CEFCache");
+            //Cache, if cache is disabled Chromium will go into "incognito" mode
             if (cache)
-                cachePathArgument = $"-cache-path \"{cachePath.FullName}\" ";
-
+            {
+                cachePath ??= new FileInfo($"{cefMainDirectory}/CEFCache");
+                argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
+            }
+            
+            //Add all our arguments that go directly to CEF last
+            
             //Setup media streaming
-            //I don't have a funny thing to say
-            string mediaStreamArgument = "";
-            if (mediaStream)
-                mediaStreamArgument = "-enable-media-stream";
-
+            if(mediaStream)
+                argsBuilder.AppendCefArgument("enable-media-stream");
+            
             //Setup remote debugging
-            //Again, I don't have a funny thing to say
-            string remoteDebuggingArgument = "";
-            if (remoteDebugging)
-                remoteDebuggingArgument = $"-remote-debugging-port={remoteDebuggingPort}";
-
+            if(remoteDebugging)
+                argsBuilder.AppendCefArgument("remote-debugging-port", remoteDebuggingPort);
+            
             //Setup no proxy server
-            string noProxyServerArgument = "";
-            if (noProxyServer)
-                noProxyServerArgument = "-no-proxy-server";
-
+            if(noProxyServer)
+                argsBuilder.AppendCefArgument("no-proxy-server");
+            
+            //Final built arguments
+            string arguments = argsBuilder.ToString();
+            
             //Start the server process
             serverProcess = new Process
             {
-                StartInfo = new ProcessStartInfo(cefProcessPath, $"-initial-url \"{initialUrl}\" " +
-                                                                 $"-width {width} -height {height} " +
-                                                                 $"-javascript {javascript} " +
-                                                                 $"-bcr {backgroundColor.r} -bcg {backgroundColor.g} -bcb {backgroundColor.b} -bca {backgroundColor.a} " +
-                                                                 $"-log-path \"{logPath.FullName}\" -log-severity {logSeverity} {cachePathArgument} " +
-                                                                 $"-port {port} -debug {debugLog} " +
-                                                                 $"{noProxyServerArgument} {mediaStreamArgument} {remoteDebuggingArgument}")
+                StartInfo = new ProcessStartInfo(cefProcessPath, arguments)
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,
