@@ -46,8 +46,14 @@ namespace CefBrowserProcess
 					() => 255,
 					"Background color (alpha)"),
 				new Option<FileInfo>("-cache-path", 
-					() => null, 
+					() => null,
 					"The path to the cache (null for no cache)"),
+				new Option<string>("-proxy-username",
+					() => null,
+					"The username to use in proxy auth"),
+				new Option<string>("-proxy-password",
+					() => null, 
+					"The proxy auth password"),
 				new Option<int>("-port",
 					() => 5555,
 					"IPC port"),
@@ -76,7 +82,11 @@ namespace CefBrowserProcess
 					//Create it with our parsed arguments
 					browserProcess = new CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
 						new CefColor(parsedArgs.Bca, parsedArgs.Bcr, parsedArgs.Bcg, parsedArgs.Bcb),
-						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, args);
+						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, new ProxySettings
+						{
+							Username = parsedArgs.ProxyUsername,
+							Password = parsedArgs.ProxyPassword
+						}, args);
 				}
 				catch (Exception)
 				{
@@ -108,6 +118,8 @@ namespace CefBrowserProcess
 			public byte Bcb { get; set; }
 			public byte Bca { get; set; }
 			public FileInfo CachePath { get; set; }
+			public string ProxyUsername { get; set; }
+			public string ProxyPassword { get; set; }
 			public int Port { get; set; }
 			public bool Debug { get; set; }
 			public FileInfo LogPath { get; set; }

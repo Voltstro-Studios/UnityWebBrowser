@@ -26,6 +26,31 @@ namespace UnityWebBrowser
             Fatal,
             Disable
         }
+        
+        /// <summary>
+        ///     Settings used to auth with the proxy
+        /// </summary>
+        [Serializable]
+        public struct ProxySettings
+        {
+            /// <summary>
+            ///     The proxy username (leave blank for no username)
+            /// </summary>
+            [Tooltip("The proxy username (leave blank for no username)")]
+            public string username;
+            
+            /// <summary>
+            ///     The proxy password (leave blank for no password)
+            /// </summary>
+            [Tooltip("The proxy password (leave blank for no password)")]
+            public string password;
+            
+            /// <summary>
+            ///     Don't use a proxy server, directly connect. (Can leave to faster initialization times)
+            /// </summary>
+            [Tooltip("Don't use a proxy server, directly connect. (Can leave to faster initialization times)")]
+            public bool noProxyServer;
+        }
 
         private const string LoggingTag = "[Web Browser]";
 
@@ -70,9 +95,9 @@ namespace UnityWebBrowser
         public bool mediaStream;
 
         /// <summary>
-        ///     Disable proxy server
+        ///     Proxy Settings
         /// </summary>
-        [Tooltip("Disable proxy server")] public bool noProxyServer;
+        [Tooltip("Proxy settings")] public ProxySettings proxySettings;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -81,9 +106,9 @@ namespace UnityWebBrowser
         public bool remoteDebugging;
 
         /// <summary>
-        ///     The port to to use for remote debugging
+        ///     The port to use for remote debugging
         /// </summary>
-        [Tooltip("The port to to use for remote debugging")]
+        [Tooltip("The port to use for remote debugging")]
         public int remoteDebuggingPort = 9022;
 
         /// <summary>
@@ -233,9 +258,17 @@ namespace UnityWebBrowser
             if(remoteDebugging)
                 argsBuilder.AppendCefArgument("remote-debugging-port", remoteDebuggingPort);
             
-            //Setup no proxy server
-            if(noProxyServer)
+            //Setup proxy
+            if(proxySettings.noProxyServer)
                 argsBuilder.AppendCefArgument("no-proxy-server");
+            else
+            {
+                if(!string.IsNullOrWhiteSpace(proxySettings.username))
+                    argsBuilder.AppendArgument("proxy-username", proxySettings.username, true);
+                
+                if(!string.IsNullOrWhiteSpace(proxySettings.password))
+                    argsBuilder.AppendArgument("proxy-password", proxySettings.password, true);
+            }
             
             //Final built arguments
             string arguments = argsBuilder.ToString();

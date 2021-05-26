@@ -18,7 +18,8 @@ namespace CefBrowserProcess
 		private readonly OffscreenRenderHandler renderHandler;
 		private readonly OffscreenLifespanHandler lifespanHandler;
 		private readonly OffscreenDisplayHandler displayHandler;
-
+		private readonly OffscreenRequestHandler requestHandler;
+		
 		private readonly byte[] pixelBuffer;
 		private static readonly object PixelLock = new object();
 
@@ -26,12 +27,13 @@ namespace CefBrowserProcess
 		///		Creates a new <see cref="OffscreenCEFClient"/> instance
 		/// </summary>
 		/// <param name="size">The size of the window</param>
-		public OffscreenCEFClient(CefSize size)
+		public OffscreenCEFClient(CefSize size, ProxySettings proxySettings)
 		{
 			loadHandler = new OffscreenLoadHandler(this);
 			renderHandler = new OffscreenRenderHandler(this);
 			lifespanHandler = new OffscreenLifespanHandler();
 			displayHandler = new OffscreenDisplayHandler();
+			requestHandler = new OffscreenRequestHandler(proxySettings);
 
 			pixelBuffer = new byte[size.Width * size.Height * 4];
 
@@ -245,6 +247,11 @@ namespace CefBrowserProcess
 			return displayHandler;
 		}
 
+		protected override CefRequestHandler GetRequestHandler()
+		{
+			return requestHandler;
+		}
+
 		/// <summary>
 		///		Offscreen load handler
 		/// </summary>
@@ -405,6 +412,33 @@ font-family: 'Ubuntu', sans-serif;
 				}
 
 				return true;
+			}
+		}
+
+		private class OffscreenRequestHandler : CefRequestHandler
+		{
+			public OffscreenRequestHandler(ProxySettings proxySettings)
+			{
+				this.proxySettings = proxySettings;
+			}
+			
+			private readonly ProxySettings proxySettings;
+			
+			protected override CefResourceRequestHandler GetResourceRequestHandler(CefBrowser browser, CefFrame frame, CefRequest request,
+				bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling)
+			{
+				return null;
+			}
+
+			protected override bool GetAuthCredentials(CefBrowser browser, string originUrl, bool isProxy, string host, int port, string realm,
+				string scheme, CefAuthCallback callback)
+			{
+				if (isProxy)
+				{
+					callback.Continue(proxySettings.Username, proxySettings.Password);
+				}
+				
+				return base.GetAuthCredentials(browser, originUrl, isProxy, host, port, realm, scheme, callback);
 			}
 		}
 

@@ -19,22 +19,23 @@ namespace CefBrowserProcess
 
 		private bool isRunning;
 
-		/// <summary>
-		///		Creates a new <see cref="CefBrowserProcess"/> instance
-		/// </summary>
-		/// <param name="initialUrl"></param>
-		/// <param name="width"></param>
-		/// <param name="height"></param>
-		/// <param name="backgroundColor"></param>
-		/// <param name="port"></param>
-		/// <param name="javaScript"></param>
-		/// <param name="logPath"></param>
-		/// <param name="logSeverity"></param>
-		/// <param name="cachePath"></param>
-		/// <param name="cefArgs"></param>
-		/// <exception cref="Exception"></exception>
+		///  <summary>
+		/// 		Creates a new <see cref="CefBrowserProcess"/> instance
+		///  </summary>
+		///  <param name="initialUrl"></param>
+		///  <param name="width"></param>
+		///  <param name="height"></param>
+		///  <param name="backgroundColor"></param>
+		///  <param name="port"></param>
+		///  <param name="javaScript"></param>
+		///  <param name="logPath"></param>
+		///  <param name="logSeverity"></param>
+		///  <param name="cachePath"></param>
+		///  <param name="proxySettings"></param>
+		///  <param name="cefArgs"></param>
+		///  <exception cref="Exception"></exception>
 		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, 
-			FileSystemInfo logPath, CefLogSeverity logSeverity, FileSystemInfo cachePath, string[] cefArgs)
+			FileSystemInfo logPath, CefLogSeverity logSeverity, FileSystemInfo cachePath, ProxySettings proxySettings, string[] cefArgs)
 		{
 			ipcPort = port;
 
@@ -120,7 +121,7 @@ namespace CefBrowserProcess
 			//Create cef browser
 			try
 			{
-				cefClient = new OffscreenCEFClient(new CefSize(width, height));
+				cefClient = new OffscreenCEFClient(new CefSize(width, height), proxySettings);
 				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, initialUrl);
 			}
 			catch (Exception ex)
