@@ -281,6 +281,12 @@ namespace CefBrowserProcess
 
 			protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode, string errorText, string failedUrl)
 			{
+				if(errorCode is CefErrorCode.Aborted 
+					or CefErrorCode.BLOCKED_BY_RESPONSE 
+					or CefErrorCode.BLOCKED_BY_CLIENT 
+					or CefErrorCode.BLOCKED_BY_CSP)
+					return;
+				
 				string html = 
 $@"<style>
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
