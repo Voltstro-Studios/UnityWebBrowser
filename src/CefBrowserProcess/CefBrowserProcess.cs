@@ -109,7 +109,12 @@ namespace CefBrowserProcess
 				LocalStorage = CefState.Disabled
 			};
 
-			Logger.Debug($"CEF starting with these options:\nJS: {javaScript}\nBackgroundColor: {backgroundColor}");
+			Logger.Debug($"CEF starting with these options:" +
+			             $"\nJS: {javaScript}" +
+			             $"\nBackgroundColor: {backgroundColor}" +
+			             $"\nCache Path: {cachePathArgument}" +
+			             $"\nLog Path: {logPath.FullName}" +
+			             $"\nLog Severity: {logSeverity}");
 			Logger.Info("Starting CEF client...");
 
 			//Create cef browser
