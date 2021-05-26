@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace UnityWebBrowser
 {
+    /// <summary>
+    ///     Creates a <see cref="string"/> 
+    /// </summary>
     internal class WebBrowserArgsBuilder
     {
         private readonly List<string> arguments;
@@ -11,34 +14,52 @@ namespace UnityWebBrowser
             arguments = new List<string>();
         }
 
-        public void AppendArgument(string arg, object parm = null, bool quotes = false)
+        /// <summary>
+        ///     Adds an argument
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="parameters"></param>
+        /// <param name="quotes"></param>
+        public void AppendArgument(string arg, object parameters = null, bool quotes = false)
         {
             string builtArg = $"-{arg}";
-            if(string.IsNullOrEmpty(parm.ToString())) return;
+            if(parameters == null || string.IsNullOrEmpty(parameters.ToString())) 
+                return;
             
             //We got spaces
             if (quotes)
-                builtArg += $" \"{parm}\"";
+                builtArg += $" \"{parameters}\"";
             else
-                builtArg += $" {parm}";
+                builtArg += $" {parameters}";
             
             arguments.Add(builtArg);
         }
         
-        public void AppendCefArgument(string arg, object parm = null, bool quotes = false)
+        /// <summary>
+        ///     Adds an argument to be used by CEF itself
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="parameters"></param>
+        /// <param name="quotes"></param>
+        public void AppendCefArgument(string arg, object parameters = null, bool quotes = false)
         {
             string builtArg = $"-{arg}";
-            if (string.IsNullOrEmpty(parm.ToString())) return;
+            if (parameters == null || string.IsNullOrEmpty(parameters.ToString())) 
+                return;
             
             //We got spaces
             if (quotes)
-                builtArg += $"=\"{parm}\"";
+                builtArg += $"=\"{parameters}\"";
             else
-                builtArg += $"={parm}";
+                builtArg += $"={parameters}";
             
             arguments.Add(builtArg);
         }
 
+        /// <summary>
+        ///     Gets the joined arguments <see cref="string"/>
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Join(" ", arguments);
