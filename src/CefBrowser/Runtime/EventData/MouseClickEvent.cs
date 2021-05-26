@@ -1,9 +1,7 @@
-using UnityEngine.Scripting;
-
 namespace UnityWebBrowser.EventData
 {
 #if !BROWSER_PROCESS
-    [Preserve]
+    [UnityEngine.Scripting.Preserve]
 #endif
     public enum MouseClickType
     {
@@ -13,7 +11,7 @@ namespace UnityWebBrowser.EventData
     }
 
 #if !BROWSER_PROCESS
-    [Preserve]
+    [UnityEngine.Scripting.Preserve]
 #endif
     public enum MouseEventType
     {
@@ -22,7 +20,7 @@ namespace UnityWebBrowser.EventData
     }
 
 #if !BROWSER_PROCESS
-    [Preserve]
+    [UnityEngine.Scripting.Preserve]
 #endif
     public class MouseClickEvent : IEventData
     {

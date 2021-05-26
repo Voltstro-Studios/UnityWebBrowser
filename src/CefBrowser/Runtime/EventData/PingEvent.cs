@@ -1,9 +1,7 @@
-using UnityEngine.Scripting;
-
 namespace UnityWebBrowser.EventData
 {
 #if !BROWSER_PROCESS
-    [Preserve]
+    [UnityEngine.Scripting.Preserve]
 #endif
     public class PingEvent : IEventData
     {
