@@ -27,6 +27,7 @@ namespace CefBrowserProcess.Browser
 		///  <param name="proxySettings"></param>
 		public BrowserProcessCEFClient(CefSize size, ProxySettings proxySettings)
 		{
+			//Setup our handlers
 			loadHandler = new BrowserProcessCEFLoadHandler(this);
 			renderHandler = new BrowserProcessCEFRenderHandler(size);
 			lifespanHandler = new BrowserProcessCEFLifespanHandler();

@@ -3,6 +3,10 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess.Models
 {
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
+    /// <summary>
+    ///     Launch arguments for the app
+    /// </summary>
     public class LaunchArguments
     {
         public string InitialUrl { get; set; }
@@ -21,4 +25,5 @@ namespace CefBrowserProcess.Models
         public FileInfo LogPath { get; set; }
         public CefLogSeverity LogSeverity { get; set; }
     }
+    // ReSharper restore UnusedAutoPropertyAccessor.Global
 }

@@ -3,6 +3,9 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess.Browser
 {
+    /// <summary>
+    ///     <see cref="CefLoadHandler"/> implementation
+    /// </summary>
     public class BrowserProcessCEFLoadHandler : CefLoadHandler
     {
         private readonly BrowserProcessCEFClient client;

@@ -5,12 +5,15 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess.Browser
 {
+	/// <summary>
+	///		<see cref="CefRenderHandler"/> implementation
+	/// </summary>
 	public class BrowserProcessCEFRenderHandler : CefRenderHandler
 	{
 		private readonly CefSize cefSize;
 
         private readonly object pixelsLock;
-        private byte[] pixels;
+        private readonly byte[] pixels;
         public byte[] Pixels
         {
 	        get
@@ -61,6 +64,7 @@ namespace CefBrowserProcess.Browser
         {
         	if (browser != null)
         	{
+	            //Copy our pixel buffer to our pixels
 	            lock(pixelsLock)
 	            {
 		            Marshal.Copy(buffer, pixels, 0, pixels.Length);

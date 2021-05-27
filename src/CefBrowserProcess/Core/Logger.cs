@@ -3,6 +3,9 @@ using System.IO;
 
 namespace CefBrowserProcess.Core
 {
+	/// <summary>
+	///		Logs stuff to stdout
+	/// </summary>
 	public static class Logger
 	{
 		public static bool DebugLog = false;

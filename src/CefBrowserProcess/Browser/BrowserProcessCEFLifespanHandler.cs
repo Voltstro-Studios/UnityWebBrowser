@@ -3,6 +3,9 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess.Browser
 {
+    /// <summary>
+    ///     <see cref="CefLifeSpanHandler"/> implementation
+    /// </summary>
     public class BrowserProcessCEFLifespanHandler : CefLifeSpanHandler
     {
         public event Action<CefBrowser> AfterCreated; 

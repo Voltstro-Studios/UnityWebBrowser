@@ -1,6 +1,9 @@
 namespace CefBrowserProcess.Models
 {
-    public struct ProxySettings
+    /// <summary>
+    ///     Settings for the proxy
+    /// </summary>
+    public readonly struct ProxySettings
     {
         public ProxySettings(string username, string password)
         {
@@ -8,7 +11,14 @@ namespace CefBrowserProcess.Models
             Password = password;
         }
         
-        public string Username { get; init; }
-        public string Password { get; init; }
+        /// <summary>
+        ///     The username to use for auth with the proxy
+        /// </summary>
+        public string Username { get; }
+        
+        /// <summary>
+        ///     The password to use for auth with the proxy
+        /// </summary>
+        public string Password { get; }
     }
 }

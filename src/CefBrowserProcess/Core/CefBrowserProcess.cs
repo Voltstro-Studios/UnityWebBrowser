@@ -9,7 +9,10 @@ using ZeroMQ;
 namespace CefBrowserProcess.Core
 {
 	/// <summary>
-	///		Main class responsible for managing CEF and the events
+	///		Main class responsible for the app
+	///		<para>
+	///			This class handles managing CEF and talks back to the client using ZMQ
+	///		</para>
 	/// </summary>
 	public class CefBrowserProcess : IDisposable
 	{

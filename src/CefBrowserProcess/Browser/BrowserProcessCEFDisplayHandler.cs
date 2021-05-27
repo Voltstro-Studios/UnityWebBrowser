@@ -4,6 +4,9 @@ using Xilium.CefGlue;
 
 namespace CefBrowserProcess.Browser
 {
+    /// <summary>
+    ///     <see cref="CefDisplayHandler"/> implementation
+    /// </summary>
     public class BrowserProcessCEFDisplayHandler : CefDisplayHandler
     {
         protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
