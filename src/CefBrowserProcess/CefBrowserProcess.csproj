@@ -9,7 +9,7 @@
     <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
     <Authors>Voltstro-Studios</Authors>
     <Company>Voltstro-Studios</Company>
-    <Description>Windowless browser process</Description>
+    <Description>External process to handel rendering with CEF</Description>
     <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
     <Version>1.4.0</Version>
@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>true</Optimize>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <AllowedReferenceRelatedFileExtensions>
@@ -36,80 +37,93 @@
 
   <!-- We need to copy different files depending on the OS -->
   <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
-    <Content Include="..\ThirdParty\Libs\zmq\libzmq.dll">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\libzmq.dll" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    </ContentWithTargetPath>
 
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.bin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\*.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\windows-x64\locales\*.pak">
-      <Link>locales\%(Filename)%(Extension)</Link>
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.dll" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.pak" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.bin" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+    
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.dat" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
   </ItemGroup>
 
   <!-- Files we need on Linux -->
   <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
-    <Content Include="..\ThirdParty\Libs\zmq\libzmq.so">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\libzmq.so" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    </ContentWithTargetPath>
 
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\cefsimple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.bin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\*.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-
-    <Content Include="..\ThirdParty\Libs\cef\linux-x64\locales\*.pak">
-      <Link>locales\%(Filename)%(Extension)</Link>
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\cefsimple" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.so" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.pak" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.bin" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.dat" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
+
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ContentWithTargetPath>
 
     <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
   </ItemGroup>

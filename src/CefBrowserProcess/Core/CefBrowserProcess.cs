@@ -70,9 +70,9 @@ namespace CefBrowserProcess.Core
 				ExternalMessagePump = false,
 #if LINUX
 				//On Linux we need to tell CEF where everything is
-				ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
-				LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
-				BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, "cefsimple")
+				ResourcesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory),
+				LocalesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory, "locales"),
+				BrowserSubprocessPath = System.IO.Path.Combine(Environment.CurrentDirectory, "cefsimple")
 #endif
 			};
 			
