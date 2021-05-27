@@ -72,7 +72,7 @@ namespace CefBrowserProcess
 			rootCommand.Description = "Process for windowless CEF rendering.";
 			//CEF launches the same process multiple times for its sub-process and passes args to them, so we need to ignore unknown tokens
 			rootCommand.TreatUnmatchedTokensAsErrors = false;
-			rootCommand.Handler = CommandHandler.Create<Arguments>(parsedArgs =>
+			rootCommand.Handler = CommandHandler.Create<LaunchArguments>(parsedArgs =>
 			{
 				//Is debug log enabled or not
 				Logger.DebugLog = parsedArgs.Debug;
@@ -82,13 +82,7 @@ namespace CefBrowserProcess
 				try
 				{
 					//Create it with our parsed arguments
-					browserProcess = new Core.CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
-						new CefColor(parsedArgs.Bca, parsedArgs.Bcr, parsedArgs.Bcg, parsedArgs.Bcb),
-						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, new ProxySettings
-						{
-							Username = parsedArgs.ProxyUsername,
-							Password = parsedArgs.ProxyPassword
-						}, args);
+					browserProcess = new Core.CefBrowserProcess(parsedArgs, args);
 				}
 				catch (Exception)
 				{
@@ -106,27 +100,5 @@ namespace CefBrowserProcess
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.InvokeAsync(args).Result;
 		}
-
-		// ReSharper disable UnusedAutoPropertyAccessor.Local
-		// ReSharper disable once ClassNeverInstantiated.Local
-		private class Arguments
-		{
-			public string InitialUrl { get; set; }
-			public int Width { get; set; }
-			public int Height { get; set; }
-			public bool JavaScript { get; set; }
-			public byte Bcr { get; set; }
-			public byte Bcg { get; set; }
-			public byte Bcb { get; set; }
-			public byte Bca { get; set; }
-			public FileInfo CachePath { get; set; }
-			public string ProxyUsername { get; set; }
-			public string ProxyPassword { get; set; }
-			public int Port { get; set; }
-			public bool Debug { get; set; }
-			public FileInfo LogPath { get; set; }
-			public CefLogSeverity LogSeverity { get; set; }
-		}
-		// ReSharper restore UnusedAutoPropertyAccessor.Local
 	}
 }

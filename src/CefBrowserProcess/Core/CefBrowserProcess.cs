@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using CefBrowserProcess.Browser;
 using CefBrowserProcess.EventData;
 using CefBrowserProcess.Models;
@@ -24,22 +23,12 @@ namespace CefBrowserProcess.Core
 		///  <summary>
 		/// 		Creates a new <see cref="CefBrowserProcess"/> instance
 		///  </summary>
-		///  <param name="initialUrl"></param>
-		///  <param name="width"></param>
-		///  <param name="height"></param>
-		///  <param name="backgroundColor"></param>
-		///  <param name="port"></param>
-		///  <param name="javaScript"></param>
-		///  <param name="logPath"></param>
-		///  <param name="logSeverity"></param>
-		///  <param name="cachePath"></param>
-		///  <param name="proxySettings"></param>
+		///  <param name="launchArguments"></param>
 		///  <param name="cefArgs"></param>
 		///  <exception cref="Exception"></exception>
-		public CefBrowserProcess(string initialUrl, int width, int height, CefColor backgroundColor, int port, bool javaScript, 
-			FileSystemInfo logPath, CefLogSeverity logSeverity, FileSystemInfo cachePath, ProxySettings proxySettings, string[] cefArgs)
+		public CefBrowserProcess(LaunchArguments launchArguments, string[] cefArgs)
 		{
-			ipcPort = port;
+			ipcPort = launchArguments.Port;
 
 			//Setup CEF
 			try
@@ -65,18 +54,18 @@ namespace CefBrowserProcess.Core
 			
 			//Do we have a cache or not, if not CEF will run in "incognito" mode.
 			string cachePathArgument = null;
-			if (cachePath != null)
-				cachePathArgument = cachePath.FullName;
+			if (launchArguments.CachePath != null)
+				cachePathArgument = launchArguments.CachePath.FullName;
 
 			//Setup the CEF settings
 			CefSettings cefSettings = new CefSettings
 			{
 				WindowlessRenderingEnabled = true,
 				NoSandbox = true,
-				LogFile = logPath.FullName,
+				LogFile = launchArguments.LogPath.FullName,
 				CachePath = cachePathArgument,
 				MultiThreadedMessageLoop = true,
-				LogSeverity = logSeverity,
+				LogSeverity = launchArguments.LogSeverity,
 				Locale = "en-US",
 				ExternalMessagePump = false,
 #if LINUX
@@ -105,26 +94,29 @@ namespace CefBrowserProcess.Core
 			cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
 
 			//Create our CEF browser settings
+			CefColor backgroundColor = new CefColor(launchArguments.Bca, launchArguments.Bcr, launchArguments.Bcg,
+				launchArguments.Bcb);
 			CefBrowserSettings cefBrowserSettings = new CefBrowserSettings
 			{
 				BackgroundColor = backgroundColor,
-				JavaScript = javaScript ? CefState.Enabled : CefState.Disabled,
+				JavaScript = launchArguments.JavaScript ? CefState.Enabled : CefState.Disabled,
 				LocalStorage = CefState.Disabled
 			};
 
 			Logger.Debug($"CEF starting with these options:" +
-			             $"\nJS: {javaScript}" +
+			             $"\nJS: {launchArguments.JavaScript}" +
 			             $"\nBackgroundColor: {backgroundColor}" +
 			             $"\nCache Path: {cachePathArgument}" +
-			             $"\nLog Path: {logPath.FullName}" +
-			             $"\nLog Severity: {logSeverity}");
+			             $"\nLog Path: {launchArguments.LogPath.FullName}" +
+			             $"\nLog Severity: {launchArguments.LogSeverity}");
 			Logger.Info("Starting CEF client...");
 
 			//Create cef browser
 			try
 			{
-				cefClient = new BrowserProcessCEFClient(new CefSize(width, height), proxySettings);
-				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, initialUrl);
+				cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
+					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword));
+				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
 			}
 			catch (Exception ex)
 			{
