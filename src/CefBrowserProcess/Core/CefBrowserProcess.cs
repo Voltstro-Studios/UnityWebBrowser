@@ -1,11 +1,13 @@
 using System;
 using System.IO;
+using CefBrowserProcess.Browser;
 using CefBrowserProcess.EventData;
+using CefBrowserProcess.Models;
 using UnityWebBrowser.EventData;
 using Xilium.CefGlue;
 using ZeroMQ;
 
-namespace CefBrowserProcess
+namespace CefBrowserProcess.Core
 {
 	/// <summary>
 	///		Main class responsible for managing CEF and the events
@@ -15,7 +17,7 @@ namespace CefBrowserProcess
 		private const int EventPassingNumErrorsAllowed = 4;
 
 		private readonly int ipcPort;
-		private readonly OffscreenCEFClient cefClient;
+		private readonly BrowserProcessCEFClient cefClient;
 
 		private bool isRunning;
 
@@ -87,7 +89,7 @@ namespace CefBrowserProcess
 			
 			//Set up CEF args and the CEF app
 			CefMainArgs cefMainArgs = new CefMainArgs(cefArgs);
-			OffscreenCEFClient.OffscreenCEFApp cefApp = new OffscreenCEFClient.OffscreenCEFApp();
+			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp();
 #if WINDOWS
 			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
@@ -121,7 +123,7 @@ namespace CefBrowserProcess
 			//Create cef browser
 			try
 			{
-				cefClient = new OffscreenCEFClient(new CefSize(width, height), proxySettings);
+				cefClient = new BrowserProcessCEFClient(new CefSize(width, height), proxySettings);
 				CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, initialUrl);
 			}
 			catch (Exception ex)

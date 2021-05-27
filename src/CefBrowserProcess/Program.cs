@@ -2,6 +2,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
+using CefBrowserProcess.Core;
+using CefBrowserProcess.Models;
 using Xilium.CefGlue;
 
 namespace CefBrowserProcess
@@ -76,11 +78,11 @@ namespace CefBrowserProcess
 				Logger.DebugLog = parsedArgs.Debug;
 
 				//Create CefBrowserProcess class, which is responsible for basically everything
-				CefBrowserProcess browserProcess = null;
+				Core.CefBrowserProcess browserProcess = null;
 				try
 				{
 					//Create it with our parsed arguments
-					browserProcess = new CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
+					browserProcess = new Core.CefBrowserProcess(parsedArgs.InitialUrl, parsedArgs.Width, parsedArgs.Height,
 						new CefColor(parsedArgs.Bca, parsedArgs.Bcr, parsedArgs.Bcg, parsedArgs.Bcb),
 						parsedArgs.Port, parsedArgs.JavaScript, parsedArgs.LogPath, parsedArgs.LogSeverity, parsedArgs.CachePath, new ProxySettings
 						{

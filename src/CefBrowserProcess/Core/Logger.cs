@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CefBrowserProcess
+namespace CefBrowserProcess.Core
 {
 	public static class Logger
 	{

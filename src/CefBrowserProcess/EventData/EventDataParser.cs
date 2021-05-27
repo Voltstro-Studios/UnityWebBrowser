@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
+using CefBrowserProcess.Core;
 using UnityWebBrowser.EventData;
 
 namespace CefBrowserProcess.EventData
