@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityWebBrowser.EventData;
 using ZeroMQ;
@@ -548,11 +549,22 @@ namespace UnityWebBrowser
 
             eventDispatcher.Dispose();
 
-            if (!serverProcess.HasExited)
-                serverProcess.KillTree();
-            serverProcess.Dispose();
+            WaitForServerProcess().ConfigureAwait(false);
 
             LogDebug("Web browser shutdown.");
+        }
+
+        private async Task WaitForServerProcess()
+        {
+            await Task.Delay(5000);
+
+            if (!serverProcess.HasExited)
+            {
+                serverProcess.KillTree();
+                LogWarning("Forced killed web browser process!");
+            }
+            
+            serverProcess.Dispose();
         }
 
         #endregion
