@@ -1,9 +1,9 @@
 {
   "name": "dev.voltstro.unitywebbrowser",
   "displayName": "Unity Web Browser",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "unity": "2020.3",
-  "description": "Adds a functional web browser into Unity",
+  "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "2.0.0"
