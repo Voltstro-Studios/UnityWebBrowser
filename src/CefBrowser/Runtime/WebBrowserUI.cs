@@ -48,7 +48,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButtonEvent(ButtonType.Back);
+            browserClient.SendButton(ButtonType.Back);
         }
 
 	    /// <summary>
@@ -60,7 +60,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButtonEvent(ButtonType.Forward);
+            browserClient.SendButton(ButtonType.Forward);
         }
 
 	    /// <summary>
@@ -77,7 +77,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButtonEvent(ButtonType.NavigateUrl, url);
+            browserClient.SendButton(ButtonType.NavigateUrl, url);
         }
 
 	    /// <summary>
@@ -89,7 +89,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButtonEvent(ButtonType.Refresh);
+            browserClient.SendButton(ButtonType.Refresh);
         }
 
 	    /// <summary>
@@ -106,7 +106,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.LoadHtmlEvent(html);
+            browserClient.LoadHtml(html);
         }
 
 	    /// <summary>
@@ -121,7 +121,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.ExecuteJsEvent(js);
+            browserClient.ExecuteJS(js);
         }
 
         private void Start()
@@ -209,14 +209,14 @@ namespace UnityWebBrowser
                 }
 
                 if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(UnityEngine.Input.inputString))
-                    browserClient.SendKeyboardEvent(keysDown.ToArray(), keysUp.ToArray(),
+                    browserClient.SendKeyboardControlls(keysDown.ToArray(), keysUp.ToArray(),
                         UnityEngine.Input.inputString);
 #endif
                 if (GetMousePosition(out Vector2 pos))
                 {
                     if (lastSuccessfulMousePositionSent != pos)
                     {
-                        browserClient.SendMouseMoveEvent(pos);
+                        browserClient.SendMouseMove(pos);
                         lastSuccessfulMousePositionSent = pos;
                     }
 
@@ -236,7 +236,7 @@ namespace UnityWebBrowser
                     scroll *= browserClient.BrowserTexture.height;
 
                     if (scroll != 0)
-                        browserClient.SendMouseScrollEvent((int) pos.x, (int) pos.y, (int) scroll);
+                        browserClient.SendMouseScroll((int) pos.x, (int) pos.y, (int) scroll);
                 }
 
                 yield return 0;
@@ -254,7 +254,7 @@ namespace UnityWebBrowser
             };
 
             if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClickEvent(pos, eventData.clickCount, clickType, MouseEventType.Down);
+                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Down);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -268,7 +268,7 @@ namespace UnityWebBrowser
             };
 
             if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClickEvent(pos, eventData.clickCount, clickType, MouseEventType.Up);
+                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Up);
         }
 
         private bool GetMousePosition(out Vector2 pos)
