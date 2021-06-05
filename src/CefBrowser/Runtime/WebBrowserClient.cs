@@ -311,8 +311,7 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                Stopwatch sw = Stopwatch.StartNew();
-                eventDispatcher.QueueEvent(new PingEvent(), (frame) => LoadPixels(frame, sw));
+                eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
 
                 byte[] pixelData = Pixels;
 
@@ -324,11 +323,9 @@ namespace UnityWebBrowser
             }
         }
 
-        private void LoadPixels(ZFrame frame, Stopwatch sw)
+        private void LoadPixels(ZFrame frame)
         {
             Pixels = frame.Read();
-            sw.Stop();
-            LogDebug($"Took {sw.ElapsedMilliseconds}ms to update pixels.");
 
             frame.Dispose();
         }
