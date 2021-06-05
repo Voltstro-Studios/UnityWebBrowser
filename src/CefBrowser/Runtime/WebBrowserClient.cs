@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityWebBrowser.EventData;
 using ZeroMQ;
+using MessagePack;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
@@ -122,7 +123,7 @@ namespace UnityWebBrowser
         ///     The time between each frame sent the browser process
         /// </summary>
         [Tooltip("The time between each frame sent the browser process")]
-        public float eventPollingTime = 0.045f;
+        public float eventPollingTime = 0.04f;
 
         /// <summary>
         ///     Enables debug logging for the CEF browser process
@@ -310,7 +311,8 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
+                Stopwatch sw = Stopwatch.StartNew();
+                eventDispatcher.QueueEvent(new PingEvent(), (frame) => LoadPixels(frame, sw));
 
                 byte[] pixelData = Pixels;
 
@@ -322,9 +324,12 @@ namespace UnityWebBrowser
             }
         }
 
-        private void LoadPixels(ZFrame frame)
+        private void LoadPixels(ZFrame frame, Stopwatch sw)
         {
             Pixels = frame.Read();
+            sw.Stop();
+            LogDebug($"Took {sw.ElapsedMilliseconds}ms to update pixels.");
+
             frame.Dispose();
         }
 

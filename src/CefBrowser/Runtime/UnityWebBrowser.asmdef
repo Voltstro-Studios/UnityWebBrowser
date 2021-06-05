@@ -3,7 +3,9 @@
     "rootNamespace": "UnityWebBrowser",
     "references": [
         "Unity.TextMeshPro",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "MessagePack",
+        "MessagePack.Annotations"
     ],
     "includePlatforms": [
         "Editor",
@@ -15,7 +17,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "ZeroMQ.dll",
-        "Newtonsoft.Json.dll"
+        "System.Memory.dll",
+        ""
     ],
     "autoReferenced": true,
     "defineConstraints": [],

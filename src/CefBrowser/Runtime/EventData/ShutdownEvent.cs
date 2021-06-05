@@ -1,10 +1,12 @@
+using MessagePack;
+
 namespace UnityWebBrowser.EventData
 {
 #if !BROWSER_PROCESS
     [UnityEngine.Scripting.Preserve]
 #endif
+    [MessagePackObject]
     public class ShutdownEvent : IEventData
     {
-        public EventType EventType { get; set; } = EventType.Shutdown;
     }
 }

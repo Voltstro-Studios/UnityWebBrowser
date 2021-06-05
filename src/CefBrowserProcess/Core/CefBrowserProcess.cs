@@ -2,6 +2,7 @@ using System;
 using CefBrowserProcess.Browser;
 using CefBrowserProcess.EventData;
 using CefBrowserProcess.Models;
+using MessagePack;
 using UnityWebBrowser.EventData;
 using Xilium.CefGlue;
 using ZeroMQ;
@@ -145,43 +146,44 @@ namespace CefBrowserProcess.Core
 			{
 				//Get the json that was sent to us
 				using ZFrame request = responder.ReceiveFrame();
-				string json = request.ReadString();
+				byte[] rawData = request.Read();
 
-				//Parse the data we get, and process it
-				Logger.Debug(json);
 				try
 				{
-					IEventData data = EventDataParser.ReadData(json);
+					IEventData data = MessagePackSerializer.Deserialize<IEventData>(rawData);
 					if (data == null)
 						continue;
 
-					if (data.EventType == EventType.Shutdown)
-					{
-						Logger.Debug("Got shutdown message...");
-						isRunning = false;
-						break;
+                    switch (data)
+                    {
+						case ShutdownEvent:
+							isRunning = false;
+							continue;
+						case PingEvent x:
+							responder.Send(new ZFrame(cefClient.GetPixels()));
+							continue;
+						case KeyboardEvent x:
+							cefClient.ProcessKeyboardEvent(x);
+							break;
+						case ButtonEvent x:
+							cefClient.ProcessButtonEvent(x);
+							break;
+						case MouseMoveEvent x:
+							cefClient.ProcessMouseMoveEvent(x);
+							break;
+						case MouseClickEvent x:
+							cefClient.ProcessMouseClickEvent(x);
+							break;
+						case MouseScrollEvent x:
+							cefClient.ProcessMouseScrollEvent(x);
+							break;
+						case LoadHtmlEvent x:
+							cefClient.LoadHtml(x.Html);
+							break;
+						case ExecuteJsEvent x:
+							cefClient.ExecuteJs(x.Js);
+							break;
 					}
-
-					if(data.EventType == EventType.Ping)
-					{
-						responder.Send(new ZFrame(cefClient.GetPixels()));
-						continue;
-					}
-
-					if (data.EventType == EventType.KeyboardEvent)
-						cefClient.ProcessKeyboardEvent((KeyboardEvent)data);
-					else if (data.EventType == EventType.ButtonEvent)
-						cefClient.ProcessButtonEvent((ButtonEvent)data);
-					else if (data.EventType == EventType.MouseMoveEvent)
-						cefClient.ProcessMouseMoveEvent((MouseMoveEvent)data);
-					else if (data.EventType == EventType.MouseClickEvent)
-						cefClient.ProcessMouseClickEvent((MouseClickEvent)data);
-					else if(data.EventType == EventType.MouseScrollEvent)
-						cefClient.ProcessMouseScrollEvent((MouseScrollEvent)data);
-					else if(data.EventType == EventType.LoadHtmlEvent)
-						cefClient.LoadHtml((data as LoadHtmlEvent)?.Html);
-					else if(data.EventType == EventType.ExecuteJsEvent)
-						cefClient.ExecuteJs((data as ExecuteJsEvent)?.Js);
 
 					responder.Send(new ZFrame((int) EventType.Ping));
 				}
