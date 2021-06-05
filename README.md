@@ -38,12 +38,18 @@ This project avoids these issues by running CEF in a separate process and using 
 Unity 2020.3.x
 ```
 
-To install it via the package manager you will need to:
+Please read all of this!
 
-1. Open up the package manager via Windows -> Package Manager
-2. Click on the little + sign -> Add package from git URL...
-3. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git` and add it
-4. Unity will now download and install the package
+To install this project we need to setup some things first.
+
+1. Open up project settings, and set 'Api Compatibility Level' to .NET 4.x under Player.
+2. Open up the package manager via Windows -> Package Manager
+3. Add `https://github.com/VoltUnityPackages/UnitySystemBuffers.git` as a git package.
+4. Add `https://github.com/VoltUnityPackages/MessagePack.git` as a git package.
+
+Now we can install the main package. We host a ready to go package on GitLab.
+
+5. Add `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git` as a git package.
 
 ## Contributing
 
@@ -54,7 +60,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ```
 Unity 2020.3.x
 .NET 5 SDK
-Powershell Core
+Powershell Core 
 ```
 
 1. Clone the repo with `git clone --recursive https://github.com/Voltstro-Studios/UnityWebBrowser.git` (Clone with sub-modules!)

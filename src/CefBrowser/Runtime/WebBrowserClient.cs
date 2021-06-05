@@ -311,8 +311,7 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                Stopwatch sw = Stopwatch.StartNew();
-                eventDispatcher.QueueEvent(new PingEvent(), (frame) => LoadPixels(frame, sw));
+                eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
 
                 byte[] pixelData = Pixels;
 
@@ -324,11 +323,9 @@ namespace UnityWebBrowser
             }
         }
 
-        private void LoadPixels(ZFrame frame, Stopwatch sw)
+        private void LoadPixels(ZFrame frame)
         {
             Pixels = frame.Read();
-            sw.Stop();
-            LogDebug($"Took {sw.ElapsedMilliseconds}ms to update pixels.");
 
             frame.Dispose();
         }
@@ -419,7 +416,7 @@ namespace UnityWebBrowser
 
         #endregion
 
-        #region CEF Events
+        #region Browser Controls
 
         /// <summary>
         ///     Sends a keyboard event to the CEF process
@@ -427,7 +424,7 @@ namespace UnityWebBrowser
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
         /// <param name="chars"></param>
-        internal void SendKeyboardEvent(int[] keysDown, int[] keysUp, string chars)
+        public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
             eventDispatcher.QueueEvent(new KeyboardEvent
             {
@@ -441,7 +438,7 @@ namespace UnityWebBrowser
         ///     Sends a mouse event to the CEF process
         /// </summary>
         /// <param name="mousePos"></param>
-        internal void SendMouseMoveEvent(Vector2 mousePos)
+        public void SendMouseMove(Vector2 mousePos)
         {
             eventDispatcher.QueueEvent(new MouseMoveEvent
             {
@@ -457,7 +454,7 @@ namespace UnityWebBrowser
         /// <param name="clickCount"></param>
         /// <param name="clickType"></param>
         /// <param name="eventType"></param>
-        internal void SendMouseClickEvent(Vector2 mousePos, int clickCount, MouseClickType clickType,
+        public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
             eventDispatcher.QueueEvent(new MouseClickEvent
@@ -476,7 +473,7 @@ namespace UnityWebBrowser
         /// <param name="mouseX"></param>
         /// <param name="mouseY"></param>
         /// <param name="mouseScroll"></param>
-        internal void SendMouseScrollEvent(int mouseX, int mouseY, int mouseScroll)
+        public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
             eventDispatcher.QueueEvent(new MouseScrollEvent
             {
@@ -491,7 +488,7 @@ namespace UnityWebBrowser
         /// </summary>
         /// <param name="buttonType"></param>
         /// <param name="url"></param>
-        internal void SendButtonEvent(ButtonType buttonType, string url = null)
+        public void SendButton(ButtonType buttonType, string url = null)
         {
             eventDispatcher.QueueEvent(new ButtonEvent
             {
@@ -504,7 +501,7 @@ namespace UnityWebBrowser
         ///     Makes the cef client load html
         /// </summary>
         /// <param name="html"></param>
-        internal void LoadHtmlEvent(string html)
+        public void LoadHtml(string html)
         {
             eventDispatcher.QueueEvent(new LoadHtmlEvent
             {
@@ -516,7 +513,7 @@ namespace UnityWebBrowser
         ///     Executes JS in the cef client
         /// </summary>
         /// <param name="js"></param>
-        internal void ExecuteJsEvent(string js)
+        public void ExecuteJS(string js)
         {
             eventDispatcher.QueueEvent(new ExecuteJsEvent
             {
