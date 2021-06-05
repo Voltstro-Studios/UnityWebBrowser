@@ -6,7 +6,8 @@
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "2.0.0"
+    "dev.voltstro.unitysystembuffers": "1.0.0",
+    "com.neuecc.messagepack": "2.3.58-alpha"
   },
   "samples": [
     {

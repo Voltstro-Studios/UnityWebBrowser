@@ -1,6 +1,5 @@
 using System;
 using CefBrowserProcess.Browser;
-using CefBrowserProcess.EventData;
 using CefBrowserProcess.Models;
 using MessagePack;
 using UnityWebBrowser.EventData;
