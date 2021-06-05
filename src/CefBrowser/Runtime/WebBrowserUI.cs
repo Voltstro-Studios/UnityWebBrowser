@@ -209,7 +209,7 @@ namespace UnityWebBrowser
                 }
 
                 if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(UnityEngine.Input.inputString))
-                    browserClient.SendKeyboardControlls(keysDown.ToArray(), keysUp.ToArray(),
+                    browserClient.SendKeyboardControls(keysDown.ToArray(), keysUp.ToArray(),
                         UnityEngine.Input.inputString);
 #endif
                 if (GetMousePosition(out Vector2 pos))

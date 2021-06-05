@@ -416,7 +416,7 @@ namespace UnityWebBrowser
 
         #endregion
 
-        #region Browser Controlls
+        #region Browser Controls
 
         /// <summary>
         ///     Sends a keyboard event to the CEF process
@@ -424,7 +424,7 @@ namespace UnityWebBrowser
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
         /// <param name="chars"></param>
-        public void SendKeyboardControlls(int[] keysDown, int[] keysUp, string chars)
+        public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
             eventDispatcher.QueueEvent(new KeyboardEvent
             {
