@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2021-06-06
+### Changed
+- Updated package dependencies
+    - See updated README to see what you also need to install now.
+
+### Fixed
+- Fixed compile error when using new input system.
+
 ## [1.6.0] - 2021-06-05
 ### Changed
 - Move to [MessagePack](https://github.com/neuecc/MessagePack-CSharp) for faster serialization.
