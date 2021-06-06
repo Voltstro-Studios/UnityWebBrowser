@@ -45,7 +45,8 @@ To install this project we need to setup some things first.
 1. Open up project settings, and set 'Api Compatibility Level' to .NET 4.x under Player.
 2. Open up the package manager via Windows -> Package Manager
 3. Add `https://github.com/VoltUnityPackages/UnitySystemBuffers.git` as a git package.
-4. Add `https://github.com/VoltUnityPackages/MessagePack.git` as a git package.
+4. Add `https://github.com/VoltUnityPackages/UnitySystemThreadingTasksExtensions.git` as a git package.
+5. Add `https://github.com/VoltUnityPackages/MessagePack.git` as a git package.
 
 Now we can install the main package. We host a ready to go package on GitLab.
 

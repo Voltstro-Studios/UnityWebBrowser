@@ -6,7 +6,6 @@
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
   "dependencies": {
-    "dev.voltstro.unitysystembuffers": "1.0.0",
     "com.neuecc.messagepack": "2.3.58-alpha"
   },
   "samples": [
