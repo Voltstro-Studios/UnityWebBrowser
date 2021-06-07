@@ -8,6 +8,6 @@ namespace UnityWebBrowser.EventData
     [MessagePackObject]
     public class LoadHtmlEvent : IEventData
     {
-        public string Html { get; set; }
+        [Key(0)] public string Html { get; set; }
     }
 }

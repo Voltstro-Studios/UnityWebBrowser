@@ -130,7 +130,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\CefBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
+    <Compile Include="..\UnityWebBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
   </ItemGroup>
 
   <Import Project="NatvieDefines.targets" />

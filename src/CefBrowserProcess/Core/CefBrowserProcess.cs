@@ -2,6 +2,7 @@ using System;
 using CefBrowserProcess.Browser;
 using CefBrowserProcess.Models;
 using MessagePack;
+using MessagePack.Resolvers;
 using UnityWebBrowser.EventData;
 using Xilium.CefGlue;
 using ZeroMQ;
@@ -126,6 +127,12 @@ namespace CefBrowserProcess.Core
 				Logger.ErrorException(ex, "Something when wrong while creating the CEF client!");
 				throw new Exception();
 			}
+			
+			var options = MessagePackSerializerOptions.Standard.WithResolver(
+				CompositeResolver.Create(
+					GeneratedResolver.Instance,
+					StandardResolver.Instance
+				));
 		}
 
 		/// <summary>
