@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="NativeDefines.props" />
+  <Import Project="../NativeDefines.props" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -32,9 +32,19 @@
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
     <PackageReference Include="MessagePack" Version="2.2.85" />
+    <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.3.58-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <MessagePackGeneratedResolverNamespace>MessagePack</MessagePackGeneratedResolverNamespace>
+    <MessagePackGeneratedResolverName>GeneratedResolver</MessagePackGeneratedResolverName>
+    <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
+  </PropertyGroup>
 
   <!-- We need to copy different files depending on the OS -->
   <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
@@ -133,6 +143,6 @@
     <Compile Include="..\UnityWebBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
   </ItemGroup>
 
-  <Import Project="NatvieDefines.targets" />
+  <Import Project="../NatvieDefines.targets" />
 
 </Project>
