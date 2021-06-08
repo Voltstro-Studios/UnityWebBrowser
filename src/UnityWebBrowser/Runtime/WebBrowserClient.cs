@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using ZeroMQ;
-using MessagePack;
 using UnityWebBrowser.Shared.Events;
 using Debug = UnityEngine.Debug;
 
@@ -293,7 +292,7 @@ namespace UnityWebBrowser
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
 
-            BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, true);
+            BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
             eventDispatcher = new WebBrowserEventDispatcher(new TimeSpan(0, 0, 4), port);
             eventDispatcher.StartDispatchingEvents();
         }
