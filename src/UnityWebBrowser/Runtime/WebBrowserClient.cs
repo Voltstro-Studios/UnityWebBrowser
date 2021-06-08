@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityWebBrowser.EventData;
 using ZeroMQ;
 using MessagePack;
+using UnityWebBrowser.Shared.Events;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser

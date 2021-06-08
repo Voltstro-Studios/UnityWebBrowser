@@ -31,20 +31,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
     <ProjectReference Include="..\ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj" />
-    <PackageReference Include="MessagePack" Version="2.2.85" />
-    <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.3.58-alpha">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <MessagePackGeneratedResolverNamespace>MessagePack</MessagePackGeneratedResolverNamespace>
-    <MessagePackGeneratedResolverName>GeneratedResolver</MessagePackGeneratedResolverName>
-    <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
-  </PropertyGroup>
 
   <!-- We need to copy different files depending on the OS -->
   <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
@@ -137,10 +127,6 @@
     </ContentWithTargetPath>
 
     <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\UnityWebBrowser\Runtime\EventData\*.cs" LinkBase="EventData/" />
   </ItemGroup>
 
   <Import Project="../NatvieDefines.targets" />

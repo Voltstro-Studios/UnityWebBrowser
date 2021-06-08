@@ -1,10 +1,7 @@
 using MessagePack;
 
-namespace UnityWebBrowser.EventData
+namespace UnityWebBrowser.Shared.Events
 {
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
     [MessagePackObject]
     public class ExecuteJsEvent : IEventData
     {

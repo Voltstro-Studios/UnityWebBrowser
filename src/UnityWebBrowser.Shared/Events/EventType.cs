@@ -1,8 +1,5 @@
-namespace UnityWebBrowser.EventData
+namespace UnityWebBrowser.Shared.Events
 {
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
     public enum EventType
     {
         Ping = 1,

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityWebBrowser.EventData;
 using UnityWebBrowser.Input;
+using UnityWebBrowser.Shared.Events;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;

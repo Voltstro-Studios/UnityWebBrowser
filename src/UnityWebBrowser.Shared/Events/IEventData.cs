@@ -1,10 +1,7 @@
 using MessagePack;
 
-namespace UnityWebBrowser.EventData
+namespace UnityWebBrowser.Shared.Events
 {
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
     [MessagePackObject]
     [Union(0, typeof(PingEvent))]
     [Union(1, typeof(ShutdownEvent))]

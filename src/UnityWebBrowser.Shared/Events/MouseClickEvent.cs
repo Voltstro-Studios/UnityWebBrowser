@@ -1,29 +1,20 @@
 using MessagePack;
 
-namespace UnityWebBrowser.EventData
+namespace UnityWebBrowser.Shared.Events
 {
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
     public enum MouseClickType
     {
         Left,
         Middle,
         Right
     }
-
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
+    
     public enum MouseEventType
     {
         Down,
         Up
     }
-
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
+    
     [MessagePackObject]
     public class MouseClickEvent : IEventData
     {

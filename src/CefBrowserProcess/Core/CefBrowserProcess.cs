@@ -1,9 +1,8 @@
 using System;
 using CefBrowserProcess.Browser;
 using CefBrowserProcess.Models;
-using MessagePack;
-using MessagePack.Resolvers;
-using UnityWebBrowser.EventData;
+using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 using ZeroMQ;
 
@@ -128,11 +127,13 @@ namespace CefBrowserProcess.Core
 				throw new Exception();
 			}
 			
+			/*
 			var options = MessagePackSerializerOptions.Standard.WithResolver(
 				CompositeResolver.Create(
 					GeneratedResolver.Instance,
 					StandardResolver.Instance
 				));
+				*/
 		}
 
 		/// <summary>
@@ -156,7 +157,7 @@ namespace CefBrowserProcess.Core
 
 				try
 				{
-					IEventData data = MessagePackSerializer.Deserialize<IEventData>(rawData);
+					IEventData data = EventsSerializer.Deserialize(rawData);
 					if (data == null)
 						continue;
 

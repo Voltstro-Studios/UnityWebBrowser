@@ -18,7 +18,7 @@
     "precompiledReferences": [
         "ZeroMQ.dll",
         "System.Memory.dll",
-        ""
+        "UnityWebBrowser.Shared.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

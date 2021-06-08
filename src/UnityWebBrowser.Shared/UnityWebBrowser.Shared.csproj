@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="../Properties.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="MessagePack" Version="2.3.58-alpha" />
+      <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.3.58-alpha">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <MessagePackGeneratedResolverNamespace>UnityWebBrowser.Shared</MessagePackGeneratedResolverNamespace>
+        <MessagePackGeneratedResolverName>UnityWebBrowserResolver</MessagePackGeneratedResolverName>
+        <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
+    </PropertyGroup>
+
+    <Target Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../UnityWebBrowser/Plugins/$(AssemblyName).dll" />
+    </Target>
+
+</Project>

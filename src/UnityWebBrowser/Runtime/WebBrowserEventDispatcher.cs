@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using MessagePack;
-using UnityWebBrowser.EventData;
+using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Events;
 using ZeroMQ;
 
 namespace UnityWebBrowser
@@ -22,8 +22,6 @@ namespace UnityWebBrowser
         private Thread eventDispatcherThread;
         private bool isRunning;
 
-        private MessagePackSerializerOptions options;
-
         /// <summary>
         ///     Creates a new <see cref="WebBrowserEventDispatcher" /> instance
         /// </summary>
@@ -32,18 +30,7 @@ namespace UnityWebBrowser
         internal WebBrowserEventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
             eventsQueue = new Queue<KeyValuePair<IEventData, Action<ZFrame>>>();
-
-            // Do this once and store it for reuse.
-            var resolver = MessagePack.Resolvers.CompositeResolver.Create(
-                // resolver custom types first
-                MessagePack.Unity.Extension.UnityBlitResolver.Instance,
-                MessagePack.Unity.UnityResolver.Instance,
-
-                // finally use standard resolver
-                MessagePack.Resolvers.StandardResolver.Instance
-            );
-            options = MessagePackSerializerOptions.Standard.WithResolver(resolver);
-
+            
             //Setup ZMQ
             context = new ZContext();
             requester = new ZSocket(context, ZSocketType.REQ)
@@ -148,7 +135,8 @@ namespace UnityWebBrowser
         {
             lock (requesterLock)
             {
-                requester.Send(new ZFrame(MessagePack.MessagePackSerializer.Serialize(eventData, options)), out ZError error);
+                byte[] data = EventsSerializer.Serialize(eventData);
+                requester.Send(new ZFrame(data), out ZError error);
 
                 if (error != null)
                     if (!error.Equals(ZError.None))

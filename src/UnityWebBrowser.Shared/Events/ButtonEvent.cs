@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace UnityWebBrowser.EventData
+namespace UnityWebBrowser.Shared.Events
 {
     public enum ButtonType
     {
@@ -9,10 +9,7 @@ namespace UnityWebBrowser.EventData
         Refresh,
         NavigateUrl
     }
-
-#if !BROWSER_PROCESS
-    [UnityEngine.Scripting.Preserve]
-#endif
+    
     [MessagePackObject]
     public class ButtonEvent : IEventData
     {
