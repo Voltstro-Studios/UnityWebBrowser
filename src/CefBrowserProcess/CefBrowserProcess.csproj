@@ -84,18 +84,6 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\chrome-sandbox" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
-
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\cefsimple" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
-
     <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.so" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
