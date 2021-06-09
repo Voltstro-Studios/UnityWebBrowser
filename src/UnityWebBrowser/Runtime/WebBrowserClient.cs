@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityWebBrowser.BrowserEngine;
 using ZeroMQ;
 using UnityWebBrowser.Shared.Events;
 using Debug = UnityEngine.Debug;
@@ -55,10 +56,13 @@ namespace UnityWebBrowser
 
         private const string LoggingTag = "[Web Browser]";
 
+        [Header("Browser Settings")] 
+        [ActiveBrowserEngine] public string browserEngine;
+        
         /// <summary>
         ///     The initial URl the browser will start at
         /// </summary>
-        [Header("Browser Settings")] [Tooltip("The initial URl the browser will start at")]
+        [Tooltip("The initial URl the browser will start at")]
         public string initialUrl = "https://voltstro.dev";
 
         /// <summary>
