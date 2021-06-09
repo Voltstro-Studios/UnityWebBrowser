@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CefBrowserProcess.Browser;
 using CefBrowserProcess.Models;
 using UnityWebBrowser.Shared;
@@ -75,19 +76,36 @@ namespace CefBrowserProcess.Core
 				//On Linux we need to tell CEF where everything is
 				ResourcesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory),
 				LocalesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory, "locales"),
-				BrowserSubprocessPath = System.IO.Path.Combine(Environment.CurrentDirectory, "cefsimple")
+				BrowserSubprocessPath = Environment.GetCommandLineArgs()[0]
 #endif
 			};
 			
+			// ReSharper disable once RedundantAssignment
+			string[] argv = cefArgs;
+#if LINUX
+			argv = new string[cefArgs.Length + 1];
+			Array.Copy(cefArgs, 0, argv, 1, cefArgs.Length);
+			argv[0] = "-";
+#endif
+
 			//Set up CEF args and the CEF app
-			CefMainArgs cefMainArgs = new CefMainArgs(cefArgs);
+			CefMainArgs cefMainArgs = new CefMainArgs(argv);
 			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp();
-#if WINDOWS
+			
 			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
 			if (exitCode != -1)
-				throw new Exception();
-#endif
+			{
+				Environment.Exit(exitCode);
+				return;
+			}
+			
+			//Backup
+			if (argv.Any(arg => arg.StartsWith("--type=")))
+			{
+				Environment.Exit(-2);
+				return;
+			}
 
 			//Init CEF
 			CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
@@ -126,14 +144,6 @@ namespace CefBrowserProcess.Core
 				Logger.ErrorException(ex, "Something when wrong while creating the CEF client!");
 				throw new Exception();
 			}
-			
-			/*
-			var options = MessagePackSerializerOptions.Standard.WithResolver(
-				CompositeResolver.Create(
-					GeneratedResolver.Instance,
-					StandardResolver.Instance
-				));
-				*/
 		}
 
 		/// <summary>
@@ -166,7 +176,7 @@ namespace CefBrowserProcess.Core
 						case ShutdownEvent:
 							isRunning = false;
 							continue;
-						case PingEvent x:
+						case PingEvent:
 							responder.Send(new ZFrame(cefClient.GetPixels()));
 							continue;
 						case KeyboardEvent x:
