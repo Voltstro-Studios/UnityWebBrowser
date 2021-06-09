@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace UnityWebBrowser.Editor
@@ -41,6 +43,69 @@ namespace UnityWebBrowser.Editor
             }
             
             return true;
+        }
+
+        [PostProcessBuild(1)]
+        public static void CopyFilesOnBuild(BuildTarget target, string pathToBuiltProject)
+        {
+            Debug.Log("Copying browser engine files...");
+
+            if (BrowserEngines.Count == 0)
+            {
+                Debug.LogWarning("No browser engines to copy!");
+                return;
+            }
+            
+            //Get full dir
+            pathToBuiltProject = Path.GetDirectoryName(pathToBuiltProject);
+            
+            //We need to get the built project's plugins folder
+            string buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/");
+            
+            //TODO: Check other targets
+            if (target == BuildTarget.StandaloneWindows64)
+                buildPluginsDir += "x86_64/";
+
+            //Make sure it exists
+            if (!Directory.Exists(buildPluginsDir))
+                Directory.CreateDirectory(buildPluginsDir);
+                
+            //Go trough all installed engines
+            foreach (BrowserEngine engine in BrowserEngines)
+            {
+                //Check if the engine has our build target
+                if (!engine.BuildFiles.ContainsKey(target))
+                    continue;
+                
+                //Get the location where we are copying all the files
+                string buildFilesDir = Path.GetFullPath(engine.BuildFiles[target]);
+                string buildFilesParent = Directory.GetParent(buildFilesDir)?.Name;
+                
+                //Get all files that aren't Unity .meta files
+                IEnumerable<string> files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
+                    .Where(fileType => !fileType.EndsWith(".meta"));
+
+                //Now to copy all the files.
+                //We need to keep the structure of the process
+                foreach (string file in files)
+                {
+                    string parentDirectory = "";
+                    if (Directory.GetParent(file)?.Name != buildFilesParent)
+                    {
+                        parentDirectory = $"{Directory.GetParent(file)?.Name}/";
+
+                        if (!Directory.Exists($"{buildPluginsDir}{parentDirectory}"))
+                            Directory.CreateDirectory($"{buildPluginsDir}{parentDirectory}");
+                    }
+
+                    string destFileName = Path.GetFileName(file);
+                    
+                    //Copy the file
+                    File.Copy(file, $"{buildPluginsDir}{parentDirectory}{destFileName}", true);
+                }
+            }
+            
+            Debug.Log("Done!");
         }
     }
 }
