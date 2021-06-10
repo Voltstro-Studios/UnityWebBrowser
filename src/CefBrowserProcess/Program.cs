@@ -4,7 +4,7 @@ using System.CommandLine.Invocation;
 using System.IO;
 using CefBrowserProcess.Core;
 using CefBrowserProcess.Models;
-using Xilium.CefGlue;
+using UnityWebBrowser.Shared;
 
 namespace CefBrowserProcess
 {
@@ -26,15 +26,18 @@ namespace CefBrowserProcess
 				new Option<string>("-initial-url",
 					() => "https://voltstro.dev",
 					"The initial URL"),
+				
 				new Option<int>("-width",
 					() => 1920,
 					"The width of the window"),
 				new Option<int>("-height",
 					() => 1080,
 					"The height of the window"),
+				
 				new Option<bool>("-javascript",
 					() => true,
 					"Enable or disable javascript"),
+				
 				new Option<byte>("-bcr",
 					() => 255,
 					"Background color (red)"),
@@ -47,35 +50,39 @@ namespace CefBrowserProcess
 				new Option<byte>("-bca",
 					() => 255,
 					"Background color (alpha)"),
+				
 				new Option<FileInfo>("-cache-path", 
 					() => null,
 					"The path to the cache (null for no cache)"),
+				
+				new Option<bool>("-proxy-server", 
+					() => true,
+					"Use a proxy server or direct connect"),
 				new Option<string>("-proxy-username",
 					() => null,
 					"The username to use in proxy auth"),
 				new Option<string>("-proxy-password",
 					() => null, 
 					"The proxy auth password"),
+				
 				new Option<int>("-port",
 					() => 5555,
 					"IPC port"),
-				new Option<bool>("-debug", 
-					() => false,
-					"Use debug logging?"),
+
 				new Option<FileInfo>("-log-path", 
 					() => new FileInfo("cef.log"),
 					"The path to where the CEF log will be"),
-				new Option<CefLogSeverity>("-log-severity", 
-					() => CefLogSeverity.Default,
-					"The path to where the CEF log will be"),
+				new Option<LogSeverity>("-log-severity", 
+					() => LogSeverity.Info,
+					"The path to where the CEF log will be")
 			};
 			rootCommand.Description = "Process for windowless CEF rendering.";
-			//CEF launches the same process multiple times for its sub-process and passes args to them, so we need to ignore unknown tokens
+			//Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
 			rootCommand.TreatUnmatchedTokensAsErrors = false;
 			rootCommand.Handler = CommandHandler.Create<LaunchArguments>(parsedArgs =>
 			{
 				//Is debug log enabled or not
-				Logger.DebugLog = parsedArgs.Debug;
+				Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
 
 				//Create CefBrowserProcess class, which is responsible for basically everything
 				Core.CefBrowserProcess browserProcess = null;

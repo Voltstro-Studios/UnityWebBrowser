@@ -60,6 +60,17 @@ namespace CefBrowserProcess.Core
 			string cachePathArgument = null;
 			if (launchArguments.CachePath != null)
 				cachePathArgument = launchArguments.CachePath.FullName;
+			
+			//Log severity
+			CefLogSeverity logSeverity = launchArguments.LogSeverity switch
+			{
+				LogSeverity.Debug => CefLogSeverity.Debug,
+				LogSeverity.Info => CefLogSeverity.Info,
+				LogSeverity.Warn => CefLogSeverity.Warning,
+				LogSeverity.Error => CefLogSeverity.Error,
+				LogSeverity.Fatal => CefLogSeverity.Fatal,
+				_ => CefLogSeverity.Default
+			};
 
 			//Setup the CEF settings
 			CefSettings cefSettings = new CefSettings
@@ -69,7 +80,7 @@ namespace CefBrowserProcess.Core
 				LogFile = launchArguments.LogPath.FullName,
 				CachePath = cachePathArgument,
 				MultiThreadedMessageLoop = true,
-				LogSeverity = launchArguments.LogSeverity,
+				LogSeverity = logSeverity,
 				Locale = "en-US",
 				ExternalMessagePump = false,
 #if LINUX

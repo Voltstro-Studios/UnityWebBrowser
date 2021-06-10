@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
+using UnityWebBrowser.Shared;
 using ZeroMQ;
 using UnityWebBrowser.Shared.Events;
 using Debug = UnityEngine.Debug;
@@ -17,18 +18,6 @@ namespace UnityWebBrowser
 	[Serializable]
     public class WebBrowserClient : IDisposable
     {
-        public enum CefLogSeverity
-        {
-            Default,
-            Verbose,
-            Debug = Verbose,
-            Info,
-            Warning,
-            Error,
-            Fatal,
-            Disable
-        }
-        
         /// <summary>
         ///     Settings used to auth with the proxy
         /// </summary>
@@ -106,7 +95,8 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Proxy Settings
         /// </summary>
-        [Tooltip("Proxy settings")] public ProxySettings proxySettings;
+        [Tooltip("Proxy settings")] 
+        public ProxySettings proxySettings;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -133,16 +123,10 @@ namespace UnityWebBrowser
         public float eventPollingTime = 0.04f;
 
         /// <summary>
-        ///     Enables debug logging for the CEF browser process
-        /// </summary>
-        [Tooltip("Enables debug logging for the CEF browser process")]
-        public bool debugLog;
-
-        /// <summary>
         ///     The log severity. Only messages of this severity level or higher will be logged
         /// </summary>
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
-        public CefLogSeverity logSeverity;
+        public LogSeverity logSeverity;
 
         private FileInfo cachePath;
         private WebBrowserEventDispatcher eventDispatcher;
@@ -245,8 +229,7 @@ namespace UnityWebBrowser
             LogPath ??= new FileInfo($"{browserEngineMainDir}/{browserEngine}.log");
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
-            argsBuilder.AppendArgument("debug", debugLog);
-            
+
             //IPC port
             argsBuilder.AppendArgument("port", port);
 
@@ -269,7 +252,7 @@ namespace UnityWebBrowser
             
             //Setup proxy
             if(proxySettings.noProxyServer)
-                argsBuilder.AppendCefArgument("no-proxy-server");
+                argsBuilder.AppendArgument("proxy-server", proxySettings.noProxyServer);
             else
             {
                 if(!string.IsNullOrWhiteSpace(proxySettings.username))
