@@ -45,7 +45,7 @@ namespace UnityWebBrowser
 		        x.Key == UnityEditor.BuildTarget.StandaloneWindows || x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
 #elif UNITY_EDITOR_LINUX
 			return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
-		        x.Key == BuildTarget.StandaloneLinux64).Value);
+		        x.Key == UnityEditor.BuildTarget.StandaloneLinux64).Value);
 #endif
 	      
 	        //Player builds (Standalone)
@@ -65,7 +65,7 @@ namespace UnityWebBrowser
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return $"{GetBrowserEnginePath(engine)}{engine}.exe";
 #else
-		    return $"{GetCefProcessPath(engine)}{engine}";
+		    return $"{GetBrowserEnginePath(engine)}{engine}";
 #endif
         }
 
