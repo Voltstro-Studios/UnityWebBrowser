@@ -30,6 +30,16 @@ namespace CefBrowserProcess.Models
         public bool JavaScript { get; set; }
         
         /// <summary>
+        ///     Is Web RTC enabled
+        /// </summary>
+        public bool WebRtc { get; set; }
+        
+        /// <summary>
+        ///     The port to use for remote debugging
+        /// </summary>
+        public int RemoteDebugging { get; set; }
+        
+        /// <summary>
         ///     Background color (red)
         /// </summary>
         public byte Bcr { get; set; }

@@ -83,6 +83,7 @@ namespace CefBrowserProcess.Core
 				LogSeverity = logSeverity,
 				Locale = "en-US",
 				ExternalMessagePump = false,
+				RemoteDebuggingPort = launchArguments.RemoteDebugging,
 #if LINUX
 				//On Linux we need to tell CEF where everything is
 				ResourcesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory),
@@ -101,7 +102,7 @@ namespace CefBrowserProcess.Core
 
 			//Set up CEF args and the CEF app
 			CefMainArgs cefMainArgs = new CefMainArgs(argv);
-			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp();
+			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp(launchArguments);
 			
 			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);

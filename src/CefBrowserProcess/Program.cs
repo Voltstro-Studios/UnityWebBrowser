@@ -38,6 +38,14 @@ namespace CefBrowserProcess
 					() => true,
 					"Enable or disable javascript"),
 				
+				new Option<bool>("-web-rtc",
+					() => false,
+					"Enable or disable web RTC"),
+				
+				new Option<int>("-remote-debugging",
+					() => 0,
+					"Some browser engines may have remote debugging"),
+				
 				new Option<byte>("-bcr",
 					() => 255,
 					"Background color (red)"),

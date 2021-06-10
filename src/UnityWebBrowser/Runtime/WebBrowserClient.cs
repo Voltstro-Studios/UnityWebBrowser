@@ -89,8 +89,8 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Enable or disable WebRTC
         /// </summary>
-        [Tooltip("Enable or disable media streaming")]
-        public bool mediaStream;
+        [Tooltip("Enable or disable WebRTC")]
+        public bool webRtc;
 
         /// <summary>
         ///     Proxy Settings
@@ -242,13 +242,13 @@ namespace UnityWebBrowser
             
             //Add all our arguments that go directly to CEF last
             
-            //Setup media streaming
-            if(mediaStream)
-                argsBuilder.AppendCefArgument("enable-media-stream");
+            //Setup web RTC
+            if(webRtc)
+                argsBuilder.AppendArgument("web-rtc", webRtc);
             
             //Setup remote debugging
             if(remoteDebugging)
-                argsBuilder.AppendCefArgument("remote-debugging-port", remoteDebuggingPort);
+                argsBuilder.AppendArgument("remote-debugging", remoteDebuggingPort);
             
             //Setup proxy
             if(proxySettings.noProxyServer)
