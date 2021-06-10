@@ -2,7 +2,7 @@
 git clone https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git
 
 #Detect if there is a change in the package.json files
-if(Compare-Object -ReferenceObject $(Get-Content UnityWebBrowserSource/src/UnityWebBrowser/package.json) -DifferenceObject $(Get-Content Package/package.json))
+if(Compare-Object -ReferenceObject $(Get-Content UnityWebBrowserSource/src/Packages/UnityWebBrowser/package.json) -DifferenceObject $(Get-Content Package/package.json))
 {
     Write-Host "Changes in package.json, deploying..."
 
@@ -10,7 +10,7 @@ if(Compare-Object -ReferenceObject $(Get-Content UnityWebBrowserSource/src/Unity
     Remove-Item -Recurse Package/* -Exclude .git
 
     #Lots of copying
-    Get-ChildItem -Path UnityWebBrowserSource/src/UnityWebBrowser/ | Copy-Item -Destination Package/ -Recurse -Container -Force -PassThru
+    Get-ChildItem -Path UnityWebBrowserSource/src/Packages/UnityWebBrowser/ | Copy-Item -Destination Package/ -Recurse -Container -Force -PassThru
 
     Get-ChildItem -Path Linux-CefBrowserProcess/ | Copy-Item -Destination Package/Plugins/CefBrowser/linux-x64 -Recurse -Container -Force -PassThru
     Get-ChildItem -Path Windows-CefBrowserProcess/ | Copy-Item -Destination Package/Plugins/CefBrowser/win-x64 -Recurse -Container -Force -PassThru
