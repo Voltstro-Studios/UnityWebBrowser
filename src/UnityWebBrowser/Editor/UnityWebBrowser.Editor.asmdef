@@ -2,7 +2,8 @@
     "name": "UnityWebBrowser.Editor",
     "rootNamespace": "UnityWebBrowser.Editor",
     "references": [
-        "UnityWebBrowser"
+        "UnityWebBrowser",
+        "UnityWebBrowser.Editor.BE"
     ],
     "includePlatforms": [
         "Editor"

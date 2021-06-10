@@ -11,7 +11,7 @@ namespace UnityWebBrowser.Editor
     {
         private static readonly List<BrowserEngine> BrowserEngines = new List<BrowserEngine>();
 
-        internal static List<BrowserEngine> Engines => BrowserEngines;
+        public static List<BrowserEngine> Engines => BrowserEngines;
 
         public static void AddBrowserEngine(BrowserEngine engine)
         {
@@ -22,6 +22,11 @@ namespace UnityWebBrowser.Editor
             }
             
             BrowserEngines.Add(engine);
+        }
+
+        public static BrowserEngine GetBrowser(string engineAppName)
+        {
+            return BrowserEngines.FirstOrDefault(x => x.EngineAppFile == engineAppName);
         }
 
         private static bool CheckIfAppExists(BrowserEngine engine)

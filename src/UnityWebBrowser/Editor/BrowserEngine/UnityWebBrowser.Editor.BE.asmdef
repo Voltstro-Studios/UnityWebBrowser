@@ -1,10 +1,7 @@
 {
-    "name": "UnityWebBrowser.Engine.Cef.Editor",
-    "rootNamespace": "UnityWebBrowser.Engine.Cef.Editor",
-    "references": [
-        "UnityWebBrowser.Editor",
-        "UnityWebBrowser.Editor.BE"
-    ],
+    "name": "UnityWebBrowser.Editor.BE",
+    "rootNamespace": "UnityWebBrowser.Editor.BE",
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
@@ -12,7 +9,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

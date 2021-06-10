@@ -5,7 +5,8 @@
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "MessagePack",
-        "MessagePack.Annotations"
+        "MessagePack.Annotations",
+        "UnityWebBrowser.Editor.BE"
     ],
     "includePlatforms": [
         "Editor",

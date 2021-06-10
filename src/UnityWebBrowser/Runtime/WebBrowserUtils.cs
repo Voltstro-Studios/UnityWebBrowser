@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,15 +34,24 @@ namespace UnityWebBrowser
 	    ///     Gets the folder that the cef process application lives in
 	    /// </summary>
 	    /// <returns></returns>
-	    public static string GetCefProcessPath()
+	    public static string GetBrowserEnginePath(string engine)
         {
-#if UNITY_EDITOR_LINUX
-		    return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/linux-x64/");
-#elif UNITY_EDITOR_WIN
-            return Path.GetFullPath($"Packages/{PackageName}/Plugins/CefBrowser/win-x64/");
+	        //Editor
+#if UNITY_EDITOR
+	        Editor.BrowserEngine browserEngine = Editor.BrowserEngineManager.GetBrowser(engine);
+
+#if UNITY_EDITOR_WIN
+	        return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
+		        x.Key == UnityEditor.BuildTarget.StandaloneWindows || x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
+#elif UNITY_EDITOR_LINUX
+			return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
+		        x.Key == BuildTarget.StandaloneLinux64).Value);
+#endif
+	      
+	        //Player builds (Standalone)
 #elif UNITY_STANDALONE_WIN
 		    return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
-#elif UNITY_STANDALONE_LINUX
+#else
 		    return Path.GetFullPath($"{Application.dataPath}/Plugins/");
 #endif
         }
@@ -50,12 +60,12 @@ namespace UnityWebBrowser
 	    ///     Get a direct path to the cef browser process application
 	    /// </summary>
 	    /// <returns></returns>
-	    public static string GetCefProcessApplication()
+	    public static string GetBrowserEngineProcessPath(string engine)
         {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            return $"{GetCefProcessPath()}/CefBrowserProcess.exe";
+            return $"{GetBrowserEnginePath(engine)}{engine}.exe";
 #else
-		    return $"{GetCefProcessPath()}/CefBrowserProcess";
+		    return $"{GetCefProcessPath(engine)}{engine}";
 #endif
         }
 

@@ -56,7 +56,11 @@ namespace UnityWebBrowser
 
         private const string LoggingTag = "[Web Browser]";
 
+        /// <summary>
+        ///     The active browser engine this instance is using
+        /// </summary>
         [Header("Browser Settings")] 
+        [Tooltip("The active browser engine this instance is using")]
         [ActiveBrowserEngine] public string browserEngine;
         
         /// <summary>
@@ -207,16 +211,16 @@ namespace UnityWebBrowser
         internal void Init()
         {
             //Get the path to the CEF browser process and make sure it exists
-            string cefProcessPath = WebBrowserUtils.GetCefProcessApplication();
-            LogDebug($"Starting CEF browser process from {cefProcessPath}");
+            string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(browserEngine);
+            LogDebug($"Starting browser engine process from {browserEnginePath}");
 
-            if (!File.Exists(cefProcessPath))
+            if (!File.Exists(browserEnginePath))
             {
-                LogError("The CEF browser process doesn't exist!");
-                throw new FileNotFoundException("CEF browser process could not be found!");
+                LogError("The browser engine process doesn't exist!");
+                throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
 
-            string cefMainDirectory = WebBrowserUtils.GetCefMainDirectory();
+            string browserEngineMainDir = WebBrowserUtils.GetCefMainDirectory();
 
             //Start to build our arguments
             WebBrowserArgsBuilder argsBuilder = new WebBrowserArgsBuilder();
@@ -238,7 +242,7 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("bca", backgroundColor.a);
 
             //Logging
-            LogPath ??= new FileInfo($"{cefMainDirectory}/cef.log");
+            LogPath ??= new FileInfo($"{browserEngineMainDir}/{browserEngine}.log");
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
             argsBuilder.AppendArgument("debug", debugLog);
@@ -249,7 +253,7 @@ namespace UnityWebBrowser
             //Cache, if cache is disabled Chromium will go into "incognito" mode
             if (cache)
             {
-                cachePath ??= new FileInfo($"{cefMainDirectory}/CEFCache");
+                cachePath ??= new FileInfo($"{browserEngineMainDir}/CEFCache");
                 argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
             }
             
@@ -281,13 +285,13 @@ namespace UnityWebBrowser
             //Start the server process
             serverProcess = new Process
             {
-                StartInfo = new ProcessStartInfo(cefProcessPath, arguments)
+                StartInfo = new ProcessStartInfo(browserEnginePath, arguments)
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = WebBrowserUtils.GetCefProcessPath()
+                    WorkingDirectory = WebBrowserUtils.GetBrowserEnginePath(browserEngine)
                 },
                 EnableRaisingEvents = true
             };
