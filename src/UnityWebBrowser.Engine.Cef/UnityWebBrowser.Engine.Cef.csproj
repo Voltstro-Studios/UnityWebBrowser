@@ -1,16 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../NativeDefines.props" />
+  <Import Project="../Imports/NativeDefines.props" />
+  <Import Project="../Imports/Properties.props" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
-    <Authors>Voltstro-Studios</Authors>
-    <Company>Voltstro-Studios</Company>
     <Description>External process to handel rendering with CEF</Description>
-    <Copyright>Copyright © 2021 Voltstro-Studios</Copyright>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
     <Version>1.6.1</Version>
     <DefineConstants>BROWSER_PROCESS</DefineConstants>
@@ -117,6 +115,6 @@
     <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
   </ItemGroup>
 
-  <Import Project="../NatvieDefines.targets" />
+  <Import Project="../Imports/NatvieDefines.targets" />
 
 </Project>

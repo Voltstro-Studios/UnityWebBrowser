@@ -15,6 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engines", "Engines", "{EED9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cef", "Cef", "{E02545D4-75BA-47FA-A075-7D43750FA7A7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{4853487C-601D-4444-97D1-A34A80A2BC4F}"
+ProjectSection(SolutionItems) = preProject
+	Imports\NativeDefines.props = Imports\NativeDefines.props
+	Imports\NatvieDefines.targets = Imports\NatvieDefines.targets
+	Imports\Properties.props = Imports\Properties.props
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

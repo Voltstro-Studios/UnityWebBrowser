@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Properties.props" />
+    <Import Project="../Imports/Properties.props" />
     
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
