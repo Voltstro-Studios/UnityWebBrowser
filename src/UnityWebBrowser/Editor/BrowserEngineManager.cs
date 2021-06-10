@@ -82,13 +82,19 @@ namespace UnityWebBrowser.Editor
                 string buildFilesParent = Directory.GetParent(buildFilesDir)?.Name;
                 
                 //Get all files that aren't Unity .meta files
-                IEnumerable<string> files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
-                    .Where(fileType => !fileType.EndsWith(".meta"));
+                string[] files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
+                    .Where(fileType => !fileType.EndsWith(".meta")).ToArray();
+                int size = files.Length;
 
                 //Now to copy all the files.
                 //We need to keep the structure of the process
-                foreach (string file in files)
+                for (int i = 0; i < size; i++)
                 {
+                    string file = files[i];
+                    string destFileName = Path.GetFileName(file);
+                    EditorUtility.DisplayProgressBar("Copying Browser Engine Files", 
+                        $"Copying {destFileName}", (int)(i / size));
+                    
                     string parentDirectory = "";
                     if (Directory.GetParent(file)?.Name != buildFilesParent)
                     {
@@ -98,11 +104,11 @@ namespace UnityWebBrowser.Editor
                             Directory.CreateDirectory($"{buildPluginsDir}{parentDirectory}");
                     }
 
-                    string destFileName = Path.GetFileName(file);
-                    
                     //Copy the file
                     File.Copy(file, $"{buildPluginsDir}{parentDirectory}{destFileName}", true);
                 }
+                
+                EditorUtility.ClearProgressBar();
             }
             
             Debug.Log("Done!");
