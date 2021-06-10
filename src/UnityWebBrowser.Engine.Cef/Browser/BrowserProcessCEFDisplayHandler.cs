@@ -1,8 +1,8 @@
 using System;
-using CefBrowserProcess.Core;
+using UnityWebBrowser.Engine.Cef.Core;
 using Xilium.CefGlue;
 
-namespace CefBrowserProcess.Browser
+namespace UnityWebBrowser.Engine.Cef.Browser
 {
     /// <summary>
     ///     <see cref="CefDisplayHandler"/> implementation

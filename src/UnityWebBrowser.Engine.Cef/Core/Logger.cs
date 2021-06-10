@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CefBrowserProcess.Core
+namespace UnityWebBrowser.Engine.Cef.Core
 {
 	/// <summary>
 	///		Logs stuff to stdout

@@ -2,11 +2,11 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
-using CefBrowserProcess.Core;
-using CefBrowserProcess.Models;
+using UnityWebBrowser.Engine.Cef.Core;
+using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared;
 
-namespace CefBrowserProcess
+namespace UnityWebBrowser.Engine.Cef
 {
 	/// <summary>
 	///		Main class for this program

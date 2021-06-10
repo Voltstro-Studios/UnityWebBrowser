@@ -5,9 +5,7 @@ locales/*
 *.dat
 *.bin
 *.exe
-chrome-sandbox
-cefsimple
-CefBrowserProcess
+UnityWebBrowser.Engine.Cef
 *.txt
 
 !libzmq.dll

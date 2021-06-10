@@ -1,7 +1,7 @@
-using CefBrowserProcess.Models;
+using UnityWebBrowser.Engine.Cef.Models;
 using Xilium.CefGlue;
 
-namespace CefBrowserProcess.Browser
+namespace UnityWebBrowser.Engine.Cef.Browser
 {
     /// <summary>
     ///     <see cref="CefApp"/> for CefBrowserProcess

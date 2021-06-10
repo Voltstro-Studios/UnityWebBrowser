@@ -1,9 +1,9 @@
 ﻿using System;
-using CefBrowserProcess.Models;
+using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 
-namespace CefBrowserProcess.Browser
+namespace UnityWebBrowser.Engine.Cef.Browser
 {
 	/// <summary>
 	///		Offscreen CEF

@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefBrowserProcess", "CefBrowserProcess\CefBrowserProcess.csproj", "{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef", "UnityWebBrowser.Engine.Cef\UnityWebBrowser.Engine.Cef.csproj", "{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroMQ.netcore", "ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj", "{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue", "ThirdParty\CefGlue\CefGlue\CefGlue.csproj", "{703FF300-34B9-48D4-A5D6-E741F48D5F95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Shared", "UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj", "{9A0A89D8-9166-4453-B3AB-8C59F0160EEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engines", "Engines", "{EED92CF1-3876-4F9B-BC3C-531156F5FA37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cef", "Cef", "{E02545D4-75BA-47FA-A075-7D43750FA7A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,5 +43,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6310CAC-0680-41C7-9CA4-5A8E94D46741}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E02545D4-75BA-47FA-A075-7D43750FA7A7} = {EED92CF1-3876-4F9B-BC3C-531156F5FA37}
+		{703FF300-34B9-48D4-A5D6-E741F48D5F95} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
+		{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
 	EndGlobalSection
 EndGlobal

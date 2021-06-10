@@ -1,4 +1,4 @@
-namespace CefBrowserProcess.Models
+namespace UnityWebBrowser.Engine.Cef.Models
 {
     /// <summary>
     ///     Settings for the proxy

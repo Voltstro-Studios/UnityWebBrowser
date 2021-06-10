@@ -1,7 +1,7 @@
 using System;
 using Xilium.CefGlue;
 
-namespace CefBrowserProcess.Browser
+namespace UnityWebBrowser.Engine.Cef.Browser
 {
     /// <summary>
     ///     <see cref="CefLifeSpanHandler"/> implementation

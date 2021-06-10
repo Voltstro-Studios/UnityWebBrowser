@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
-using CefBrowserProcess.Browser;
-using CefBrowserProcess.Models;
+using UnityWebBrowser.Engine.Cef.Browser;
+using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 using ZeroMQ;
 
-namespace CefBrowserProcess.Core
+namespace UnityWebBrowser.Engine.Cef.Core
 {
 	/// <summary>
 	///		Main class responsible for the app

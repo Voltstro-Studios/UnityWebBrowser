@@ -17,7 +17,7 @@ namespace UnityWebBrowser.Engine.Cef.Editor
                 {BuildTarget.StandaloneLinux64, $"Packages/{CefBrowserPackageName}/Plugins/CefBrowser/linux-x64/"}
             };
 
-            BrowserEngineManager.AddBrowserEngine(new BrowserEngine("Cef Browser Engine", "CefBrowserProcess", buildFiles));
+            BrowserEngineManager.AddBrowserEngine(new BrowserEngine("Cef Browser Engine", "UnityWebBrowser.Engine.Cef", buildFiles));
         }
     }
 }
