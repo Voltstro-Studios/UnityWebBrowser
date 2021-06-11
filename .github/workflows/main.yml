@@ -24,17 +24,17 @@ jobs:
       run: '& ./download-cef-windows.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
       
-    - name: Build CefBrowserProcess
+    - name: Build CEF Browser Engine
       shell: pwsh
       run: '& ./publish-cef-engine-windows.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
       
     #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
-      name: Upload Build
+      name: Upload Builds
       with:
         name: Windows-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine/bin/Release/win-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/Release/win-x64/publish/
       
   build-linux:
     name: 'Linux Build'
@@ -52,17 +52,17 @@ jobs:
       run: '& ./download-cef-linux.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
       
-    - name: Build CefBrowserProcess
+    - name: Build CEF Browser Engine
       shell: pwsh
       run: '& ./publish-cef-engine-linux.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
     
     #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
-      name: Upload Build
+      name: Upload Builds
       with:
         name: Linux-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine/bin/Release/linux-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/Release/linux-x64/publish/
       
   #upload-package:
   #  name: 'Upload Package'

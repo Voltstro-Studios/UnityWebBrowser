@@ -10,7 +10,7 @@ jobs:
   # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
   # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
   
-  build-windows:
+build-windows:
     name: 'Windows Build'
     runs-on: windows-latest
 
@@ -23,13 +23,13 @@ jobs:
         
     - name: Download CEF
       shell: pwsh
-      run: '& ./download-cef-binaries-windows-x64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./download-cef-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
-    - name: Build CefBrowserProcess
+    - name: Build CEF Browser Engine
       shell: pwsh
-      run: '& ./publish-browserprocess-win64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./publish-cef-engine-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
   build-linux:
     name: 'Linux Build'
@@ -44,10 +44,10 @@ jobs:
         
     - name: Download CEF
       shell: pwsh
-      run: '& ./download-cef-binaries-linux-x64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./download-cef-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
-    - name: Build CefBrowserProcess
+    - name: Build CEF Browser Engine
       shell: pwsh
-      run: '& ./publish-browserprocess-linux64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./publish-cef-engine-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
