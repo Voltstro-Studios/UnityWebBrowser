@@ -10,30 +10,9 @@ jobs:
   # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
   # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
   
-build-windows:
-  name: 'Windows Build'
-  runs-on: windows-latest
-
-  steps:
-  - uses: actions/checkout@v2
-    with:
-      submodules: 'recursive'
-      lfs: false
-      path: 'UnityWebBrowserSource/'
-      
-  - name: Download CEF
-    shell: pwsh
-    run: '& ./download-cef-windows.ps1'
-    working-directory: UnityWebBrowserSource/src/DevScripts/
-    
-  - name: Build CEF Browser Engine
-    shell: pwsh
-    run: '& ./publish-cef-engine-windows.ps1'
-    working-directory: UnityWebBrowserSource/src/DevScripts/
-      
-  build-linux:
-    name: 'Linux Build'
-    runs-on: ubuntu-20.04
+  build-windows:
+    name: 'Windows Build'
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -44,10 +23,31 @@ build-windows:
         
     - name: Download CEF
       shell: pwsh
-      run: '& ./download-cef-linux.ps1'
+      run: '& ./download-cef-windows.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
       
     - name: Build CEF Browser Engine
       shell: pwsh
-      run: '& ./publish-cef-engine-linux.ps1'
+      run: '& ./publish-cef-engine-windows.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
+        
+    build-linux:
+      name: 'Linux Build'
+      runs-on: ubuntu-20.04
+
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          lfs: false
+          path: 'UnityWebBrowserSource/'
+          
+      - name: Download CEF
+        shell: pwsh
+        run: '& ./download-cef-linux.ps1'
+        working-directory: UnityWebBrowserSource/src/DevScripts/
+        
+      - name: Build CEF Browser Engine
+        shell: pwsh
+        run: '& ./publish-cef-engine-linux.ps1'
+        working-directory: UnityWebBrowserSource/src/DevScripts/
