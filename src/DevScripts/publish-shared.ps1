@@ -1,0 +1,1 @@
+dotnet build ../UnityWebBrowser.Shared/UnityWebBrowser.Shared.csproj -c ReleaseUnity --nologo

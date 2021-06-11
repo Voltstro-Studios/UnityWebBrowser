@@ -12,9 +12,11 @@
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
     <Version>1.6.1</Version>
     <DefineConstants>BROWSER_PROCESS</DefineConstants>
+    <Configurations>Debug;Release;ReleaseUnity</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -24,6 +26,11 @@
        -->
       .allowedextension
     </AllowedReferenceRelatedFileExtensions> 
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
+    <PublishTrimmed>true</PublishTrimmed>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   
   <ItemGroup>

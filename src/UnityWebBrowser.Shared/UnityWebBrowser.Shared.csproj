@@ -7,6 +7,8 @@
         <LangVersion>9</LangVersion>
         <AssemblyTitle>Unity Web Browser Shared</AssemblyTitle>
         <Description>Shared resources for Unity Web Browser engines and Unity</Description>
+        <Configurations>Debug;Release;ReleaseUnity</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     
     <ItemGroup>
@@ -27,7 +29,7 @@
         <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
     </PropertyGroup>
 
-    <Target Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
         <Copy SourceFiles="$(OutputPath)ZeroMQ.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/ZeroMQ.dll" />
         <Copy SourceFiles="../ThirdParty/Libs/zmq/windows64/libzmq.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/win-x64/libzmq.dll" />
