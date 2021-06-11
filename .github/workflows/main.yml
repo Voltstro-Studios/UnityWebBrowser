@@ -21,20 +21,20 @@ jobs:
         
     - name: Download CEF
       shell: pwsh
-      run: '& ./download-cef-binaries-windows-x64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./download-cef-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
     - name: Build CefBrowserProcess
       shell: pwsh
-      run: '& ./publish-browserprocess-win64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./publish-cef-engine-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
     #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
       name: Upload Build
       with:
         name: Windows-CefBrowserProcess
-        path: UnityWebBrowserSource/src/CefBrowserProcess/bin/Release/win-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine/bin/Release/win-x64/publish/
       
   build-linux:
     name: 'Linux Build'
@@ -49,52 +49,52 @@ jobs:
         
     - name: Download CEF
       shell: pwsh
-      run: '& ./download-cef-binaries-linux-x64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./download-cef-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
       
     - name: Build CefBrowserProcess
       shell: pwsh
-      run: '& ./publish-browserprocess-linux64.ps1'
-      working-directory: UnityWebBrowserSource/scripts/
+      run: '& ./publish-cef-engine-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
     
     #Upload the publish build as we need it later in a separate job
     - uses: actions/upload-artifact@v2.2.3
       name: Upload Build
       with:
         name: Linux-CefBrowserProcess
-        path: UnityWebBrowserSource/src/CefBrowserProcess/bin/Release/linux-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine/bin/Release/linux-x64/publish/
       
-  upload-package:
-    name: 'Upload Package'
-    runs-on: ubuntu-20.04
-    needs: [build-windows, build-linux]
+  #upload-package:
+  #  name: 'Upload Package'
+  #  runs-on: ubuntu-20.04
+  #  needs: [build-windows, build-linux]
     
-    steps:
-    - uses: actions/checkout@v2
-      name: 'Checkout Source'
-      with:
-        submodules: 'recursive'
-        lfs: false
-        path: 'UnityWebBrowserSource/'
+  #  steps:
+  #  - uses: actions/checkout@v2
+  #    name: 'Checkout Source'
+  #    with:
+  #      submodules: 'recursive'
+  #      lfs: false
+  #      path: 'UnityWebBrowserSource/'
     
     #SSH key to write to the GitLab repo
-    - uses: shimataro/ssh-key-action@v2
-      name: 'Install SSH Key'
-      with:
-        name: Unity-Package
-        key: ${{ secrets.UNITY_PACKAGE_KEY }}
-        known_hosts: 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf'
-        config: |
-          Host gitlab.com
-            IdentityFile ~/.ssh/Unity-Package
+  #  - uses: shimataro/ssh-key-action@v2
+  #    name: 'Install SSH Key'
+  #    with:
+  #      name: Unity-Package
+  #      key: ${{ secrets.UNITY_PACKAGE_KEY }}
+  #      known_hosts: 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf'
+  #      config: |
+  #        Host gitlab.com
+  #          IdentityFile ~/.ssh/Unity-Package
             
     #Download our artifacts from the previous jobs
-    - uses: actions/download-artifact@v2
-      with:
-        path: .
+  #  - uses: actions/download-artifact@v2
+  #    with:
+  #      path: .
         
     #Our powershell script will take over from here
-    - name: Setup and Release
-      shell: pwsh
-      run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
-      working-directory: .
+  #  - name: Setup and Release
+  #    shell: pwsh
+  #    run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
+  #    working-directory: .
