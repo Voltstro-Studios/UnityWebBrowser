@@ -34,7 +34,7 @@ jobs:
       name: Upload Builds
       with:
         name: Windows-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/Release/win-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/ReleaseUnity/win-x64/publish/
       
   build-linux:
     name: 'Linux Build'
@@ -62,7 +62,7 @@ jobs:
       name: Upload Builds
       with:
         name: Linux-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/Release/linux-x64/publish/
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/ReleaseUnity/linux-x64/publish/
       
   #upload-package:
   #  name: 'Upload Package'
