@@ -11,25 +11,25 @@ jobs:
   # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
   
 build-windows:
-    name: 'Windows Build'
-    runs-on: windows-latest
+  name: 'Windows Build'
+  runs-on: windows-latest
 
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-        lfs: false
-        path: 'UnityWebBrowserSource/'
-        
-    - name: Download CEF
-      shell: pwsh
-      run: '& ./download-cef-windows.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
+  steps:
+  - uses: actions/checkout@v2
+    with:
+      submodules: 'recursive'
+      lfs: false
+      path: 'UnityWebBrowserSource/'
       
-    - name: Build CEF Browser Engine
-      shell: pwsh
-      run: '& ./publish-cef-engine-windows.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
+  - name: Download CEF
+    shell: pwsh
+    run: '& ./download-cef-windows.ps1'
+    working-directory: UnityWebBrowserSource/src/DevScripts/
+    
+  - name: Build CEF Browser Engine
+    shell: pwsh
+    run: '& ./publish-cef-engine-windows.ps1'
+    working-directory: UnityWebBrowserSource/src/DevScripts/
       
   build-linux:
     name: 'Linux Build'
