@@ -7,6 +7,3 @@ locales/*
 *.exe
 UnityWebBrowser.Engine.Cef
 *.txt
-
-!libzmq.dll
-!ZeroMQ.dll

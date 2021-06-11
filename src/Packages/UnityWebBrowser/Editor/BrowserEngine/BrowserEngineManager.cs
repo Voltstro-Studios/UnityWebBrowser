@@ -88,7 +88,7 @@ namespace UnityWebBrowser.Editor
                 
                 //Get all files that aren't Unity .meta files
                 string[] files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
-                    .Where(fileType => !fileType.EndsWith(".meta")).ToArray();
+                    .Where(fileType => !fileType.EndsWith(".meta")).Where(fileType => !fileType.Contains("libzmq")).ToArray();
                 int size = files.Length;
 
                 //Now to copy all the files.

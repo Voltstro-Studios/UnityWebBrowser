@@ -36,7 +36,7 @@
 
   <!-- We need to copy different files depending on the OS -->
   <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\libzmq.dll" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\windows64\libzmq.dll" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -76,7 +76,7 @@
 
   <!-- Files we need on Linux -->
   <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\libzmq.so" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\linux64\libzmq.so" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

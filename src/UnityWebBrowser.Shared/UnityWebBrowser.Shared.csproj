@@ -25,6 +25,8 @@
 
     <Target Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
+        <Copy SourceFiles="../ThirdParty/Libs/zmq/windows64/libzmq.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/win-x64/libzmq.dll" />
+        <Copy SourceFiles="../ThirdParty/Libs/zmq/linux64/libzmq.so" DestinationFiles="../Packages/UnityWebBrowser/Plugins/linux-x64/libzmq.so" />
     </Target>
 
 </Project>
