@@ -42,31 +42,31 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.dll" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dll" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.pak" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.pak" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.bin" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.bin" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
     
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\*.dat" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dat" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows-x64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -82,31 +82,31 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.so" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.so" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.pak" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.pak" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.bin" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.bin" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\*.dat" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.dat" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux-x64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
+    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
