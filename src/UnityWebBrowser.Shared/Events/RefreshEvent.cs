@@ -3,8 +3,7 @@ using MessagePack;
 namespace UnityWebBrowser.Shared.Events
 {
     [MessagePackObject]
-    public class LoadHtmlEvent : EventData
+    public class RefreshEvent : EventData
     {
-        [Key(0)] public string Html { get; set; }
     }
 }

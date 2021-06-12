@@ -145,31 +145,6 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 			}, mouseScrollEvent.MouseScroll);
 		}
 
-		/// <summary>
-		///		Process a <see cref="ButtonEvent"/>
-		/// </summary>
-		/// <param name="buttonEvent"></param>
-		public void ProcessButtonEvent(ButtonEvent buttonEvent)
-		{
-			switch (buttonEvent.ButtonType)
-			{
-				case ButtonType.Back:
-					GoBack();
-					break;
-				case ButtonType.Forward:
-					GoForward();
-					break;
-				case ButtonType.Refresh:
-					Refresh();
-					break;
-				case ButtonType.NavigateUrl:
-					LoadUrl(buttonEvent.UrlToNavigate);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
 		private void KeyEvent(CefKeyEvent keyEvent)
 		{
 			browserHost.SendKeyEvent(keyEvent);
@@ -190,7 +165,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 			browserHost.SendMouseWheelEvent(mouseEvent, 0, scroll);
 		}
 
-		private void LoadUrl(string url)
+		public void LoadUrl(string url)
 		{
 			mainFrame.LoadUrl(url);
 		}
@@ -205,19 +180,19 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 			mainFrame.ExecuteJavaScript(js, "", 0);
 		}
 
-		private void GoBack()
+		public void GoBack()
 		{
 			if(browser.CanGoBack)
 				browser.GoBack();
 		}
 
-		private void GoForward()
+		public void GoForward()
 		{
 			if(browser.CanGoForward)
 				browser.GoForward();
 		}
 
-		private void Refresh()
+		public void Refresh()
 		{
 			browser.Reload();
 		}

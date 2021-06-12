@@ -409,7 +409,7 @@ namespace UnityWebBrowser
         #region Browser Controls
 
         /// <summary>
-        ///     Sends a keyboard event to the CEF process
+        ///     Sends a keyboard event
         /// </summary>
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
@@ -425,7 +425,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Sends a mouse event to the CEF process
+        ///     Sends a mouse event
         /// </summary>
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
@@ -438,7 +438,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Sends a mouse click event to the CEF process
+        ///     Sends a mouse click event
         /// </summary>
         /// <param name="mousePos"></param>
         /// <param name="clickCount"></param>
@@ -474,21 +474,43 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Sends a button event
+        ///     Navigates the browser to a certain URL
         /// </summary>
-        /// <param name="buttonType"></param>
         /// <param name="url"></param>
-        public void SendButton(ButtonType buttonType, string url = null)
+        public void NavigateUrl(string url)
         {
-            eventDispatcher.QueueEvent(new ButtonEvent
+            eventDispatcher.QueueEvent(new NavigateUrlEvent
             {
-                ButtonType = buttonType,
-                UrlToNavigate = url
+                Url = url
             }, HandelEvent);
         }
 
         /// <summary>
-        ///     Makes the cef client load html
+        ///     Tells the browser to go forward
+        /// </summary>
+        public void GoForward()
+        {
+            eventDispatcher.QueueEvent(new GoForwardEvent(), HandelEvent);
+        }
+
+        /// <summary>
+        ///     Tells the browser to go back
+        /// </summary>
+        public void GoBack()
+        {
+            eventDispatcher.QueueEvent(new GoBackEvent(), HandelEvent);
+        }
+
+        /// <summary>
+        ///     Refreshes the browser
+        /// </summary>
+        public void Refresh()
+        {
+            eventDispatcher.QueueEvent(new RefreshEvent(), HandelEvent);
+        }
+
+        /// <summary>
+        ///     Makes the browser load html
         /// </summary>
         /// <param name="html"></param>
         public void LoadHtml(string html)
@@ -500,7 +522,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Executes JS in the cef client
+        ///     Executes JS in the browser
         /// </summary>
         /// <param name="js"></param>
         public void ExecuteJS(string js)

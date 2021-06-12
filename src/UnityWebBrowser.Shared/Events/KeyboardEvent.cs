@@ -3,7 +3,7 @@ using MessagePack;
 namespace UnityWebBrowser.Shared.Events
 {
     [MessagePackObject]
-    public class KeyboardEvent : IEventData
+    public class KeyboardEvent : EventData
     {
         [Key(0)]
         public int[] KeysUp { get; set; }

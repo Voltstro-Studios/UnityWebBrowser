@@ -17,14 +17,14 @@ namespace UnityWebBrowser.Shared
                 StandardResolver.Instance));
         }
         
-        public static byte[] Serialize(IEventData eventData)
+        public static byte[] Serialize(EventData eventData)
         {
             return MessagePackSerializer.Serialize(eventData, Options);
         }
 
-        public static IEventData Deserialize(byte[] data)
+        public static EventData Deserialize(byte[] data)
         {
-            return MessagePackSerializer.Deserialize<IEventData>(data);
+            return MessagePackSerializer.Deserialize<EventData>(data);
         }
     }
 }

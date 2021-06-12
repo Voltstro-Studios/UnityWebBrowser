@@ -16,7 +16,7 @@ namespace UnityWebBrowser.Shared.Events
     }
     
     [MessagePackObject]
-    public class MouseClickEvent : IEventData
+    public class MouseClickEvent : EventData
     {
         [Key(0)]
         public int MouseX { get; set; }

@@ -3,7 +3,7 @@ using MessagePack;
 namespace UnityWebBrowser.Shared.Events
 {
     [MessagePackObject]
-    public class MouseMoveEvent : IEventData
+    public class MouseMoveEvent : EventData
     {
         [Key(0)]
         public int MouseX { get; set; }

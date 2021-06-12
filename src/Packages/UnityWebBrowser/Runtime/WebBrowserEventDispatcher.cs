@@ -13,7 +13,7 @@ namespace UnityWebBrowser
 	internal class WebBrowserEventDispatcher : IDisposable
     {
         private readonly ZContext context;
-        private readonly Queue<KeyValuePair<IEventData, Action<ZFrame>>> eventsQueue;
+        private readonly Queue<KeyValuePair<EventData, Action<ZFrame>>> eventsQueue;
 
         private readonly object eventsQueueLock = new object();
         private readonly ZSocket requester;
@@ -29,7 +29,7 @@ namespace UnityWebBrowser
         /// <param name="port"></param>
         internal WebBrowserEventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
-            eventsQueue = new Queue<KeyValuePair<IEventData, Action<ZFrame>>>();
+            eventsQueue = new Queue<KeyValuePair<EventData, Action<ZFrame>>>();
             
             //Setup ZMQ
             context = new ZContext();
@@ -65,17 +65,17 @@ namespace UnityWebBrowser
         ///     <see cref="Action{T}" /> to be called when the <see cref="ZFrame" /> is received.
         ///     BE-AWARE! This is called on the event dispatcher thread!
         /// </param>
-        internal void QueueEvent(IEventData eventData, Action<ZFrame> onReceive = null)
+        internal void QueueEvent(EventData eventData, Action<ZFrame> onReceive = null)
         {
             lock (eventsQueueLock)
             {
-                eventsQueue.Enqueue(new KeyValuePair<IEventData, Action<ZFrame>>(eventData, onReceive));
+                eventsQueue.Enqueue(new KeyValuePair<EventData, Action<ZFrame>>(eventData, onReceive));
             }
         }
 
-        private KeyValuePair<IEventData, Action<ZFrame>> DeQueueEvent()
+        private KeyValuePair<EventData, Action<ZFrame>> DeQueueEvent()
         {
-            KeyValuePair<IEventData, Action<ZFrame>> data;
+            KeyValuePair<EventData, Action<ZFrame>> data;
 
             lock (eventsQueueLock)
             {
@@ -106,7 +106,7 @@ namespace UnityWebBrowser
                         continue;
 
                     //Dequeue and send the event
-                    KeyValuePair<IEventData, Action<ZFrame>> eventToSend = DeQueueEvent();
+                    KeyValuePair<EventData, Action<ZFrame>> eventToSend = DeQueueEvent();
                     SendEvent(eventToSend.Key);
 
                     //Wait to receive the event
@@ -131,7 +131,7 @@ namespace UnityWebBrowser
             }
         }
 
-        private void SendEvent(IEventData eventData)
+        private void SendEvent(EventData eventData)
         {
             lock (requesterLock)
             {

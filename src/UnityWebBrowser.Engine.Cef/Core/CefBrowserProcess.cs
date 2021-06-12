@@ -179,7 +179,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 				try
 				{
-					IEventData data = EventsSerializer.Deserialize(rawData);
+					EventData data = EventsSerializer.Deserialize(rawData);
 					if (data == null)
 						continue;
 
@@ -194,8 +194,17 @@ namespace UnityWebBrowser.Engine.Cef.Core
 						case KeyboardEvent x:
 							cefClient.ProcessKeyboardEvent(x);
 							break;
-						case ButtonEvent x:
-							cefClient.ProcessButtonEvent(x);
+						case GoForwardEvent:
+							cefClient.GoForward();
+							break;
+						case GoBackEvent:
+							cefClient.GoBack();
+							break;
+						case RefreshEvent:
+							cefClient.Refresh();
+							break;
+						case NavigateUrlEvent x:
+							cefClient.LoadUrl(x.Url);
 							break;
 						case MouseMoveEvent x:
 							cefClient.ProcessMouseMoveEvent(x);

@@ -48,7 +48,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButton(ButtonType.Back);
+            browserClient.GoBack();
         }
 
 	    /// <summary>
@@ -60,7 +60,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButton(ButtonType.Forward);
+            browserClient.GoForward();
         }
 
 	    /// <summary>
@@ -77,7 +77,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButton(ButtonType.NavigateUrl, url);
+            browserClient.NavigateUrl(url);
         }
 
 	    /// <summary>
@@ -89,7 +89,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.SendButton(ButtonType.Refresh);
+            browserClient.Refresh();
         }
 
 	    /// <summary>

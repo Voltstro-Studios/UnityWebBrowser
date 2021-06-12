@@ -3,7 +3,7 @@ using MessagePack;
 namespace UnityWebBrowser.Shared.Events
 {
     [MessagePackObject]
-    public class ShutdownEvent : IEventData
+    public class ShutdownEvent : EventData
     {
     }
 }
