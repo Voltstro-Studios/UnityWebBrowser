@@ -1,9 +1,0 @@
-locales/*
-*.pak
-*.dll
-*.so
-*.dat
-*.bin
-*.exe
-UnityWebBrowser.Engine.Cef
-*.txt

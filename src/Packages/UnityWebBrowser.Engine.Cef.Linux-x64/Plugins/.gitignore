@@ -1,0 +1,5 @@
+**/*.pak
+**/*.so
+**/*.dat
+**/*.bin
+UnityWebBrowser.Engine.Cef
