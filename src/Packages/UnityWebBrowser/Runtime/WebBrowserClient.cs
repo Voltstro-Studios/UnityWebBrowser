@@ -302,15 +302,18 @@ namespace UnityWebBrowser
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
                 eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
-
-                byte[] pixelData = Pixels;
-
-                if (pixelData == null || pixelData.Length == 0)
-                    continue;
-
-                BrowserTexture.LoadRawTextureData(pixelData);
-                BrowserTexture.Apply(false);
             }
+        }
+
+        public void LoadTextureData()
+        {
+            byte[] pixelData = Pixels;
+
+            if (pixelData == null || pixelData.Length == 0)
+                return;
+
+            BrowserTexture.LoadRawTextureData(pixelData);
+            BrowserTexture.Apply(false);
         }
 
         private void LoadPixels(ZFrame frame)

@@ -139,6 +139,11 @@ namespace UnityWebBrowser
 #endif
         }
 
+        private void FixedUpdate()
+        {
+            browserClient.LoadTextureData();
+        }
+
         private void OnDestroy()
         {
             browserClient.Dispose();
