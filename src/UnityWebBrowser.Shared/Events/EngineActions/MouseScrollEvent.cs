@@ -1,9 +1,9 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     [MessagePackObject]
-    public class MouseScrollEvent : EventData
+    public class MouseScrollEvent : EngineActionEvent
     {
         [Key(0)]
         public int MouseX { get; set; }

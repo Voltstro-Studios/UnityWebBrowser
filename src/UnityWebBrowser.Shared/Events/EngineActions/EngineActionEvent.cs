@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     [MessagePackObject]
     [Union(0, typeof(PingEvent))]
@@ -15,7 +15,7 @@ namespace UnityWebBrowser.Shared.Events
     [Union(9, typeof(RefreshEvent))]
     [Union(10, typeof(LoadHtmlEvent))]
     [Union(11, typeof(ExecuteJsEvent))]
-    public abstract class EventData
+    public abstract class EngineActionEvent
     {
     }
 }

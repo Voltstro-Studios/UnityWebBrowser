@@ -1,9 +1,9 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     [MessagePackObject]
-    public class ExecuteJsEvent : EventData
+    public class ExecuteJsEvent : EngineActionEvent
     {
         [Key(0)]
         public string Js { get; set; }

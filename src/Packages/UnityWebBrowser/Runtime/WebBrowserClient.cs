@@ -8,6 +8,8 @@ using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using ZeroMQ;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineEvents;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
@@ -318,7 +320,7 @@ namespace UnityWebBrowser
 
         private void LoadPixels(ZFrame frame)
         {
-            Pixels = frame.Read();
+            Pixels = EventsSerializer.DeserializeEvent<PixelsEvent>(frame.Read()).Pixels;
 
             frame.Dispose();
         }

@@ -1,9 +1,9 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     [MessagePackObject]
-    public class KeyboardEvent : EventData
+    public class KeyboardEvent : EngineActionEvent
     {
         [Key(0)]
         public int[] KeysUp { get; set; }

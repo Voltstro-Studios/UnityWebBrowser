@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     public enum MouseClickType
     {
@@ -16,7 +16,7 @@ namespace UnityWebBrowser.Shared.Events
     }
     
     [MessagePackObject]
-    public class MouseClickEvent : EventData
+    public class MouseClickEvent : EngineActionEvent
     {
         [Key(0)]
         public int MouseX { get; set; }
@@ -32,8 +32,5 @@ namespace UnityWebBrowser.Shared.Events
 
         [Key(4)]
         public MouseEventType MouseEventType { get; set; }
-
-        [Key(5)]
-        public EventType EventType { get; set; } = EventType.MouseClickEvent;
     }
 }

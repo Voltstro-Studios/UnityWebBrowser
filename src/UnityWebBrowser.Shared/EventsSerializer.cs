@@ -1,6 +1,5 @@
 ﻿using MessagePack;
 using MessagePack.Resolvers;
-using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Resolvers;
 
 namespace UnityWebBrowser.Shared
@@ -17,14 +16,14 @@ namespace UnityWebBrowser.Shared
                 StandardResolver.Instance));
         }
         
-        public static byte[] Serialize(EventData eventData)
+        public static byte[] SerializeEvent<T>(T eventData)
         {
             return MessagePackSerializer.Serialize(eventData, Options);
         }
 
-        public static EventData Deserialize(byte[] data)
+        public static T DeserializeEvent<T>(byte[] data)
         {
-            return MessagePackSerializer.Deserialize<EventData>(data);
+            return MessagePackSerializer.Deserialize<T>(data);
         }
     }
 }

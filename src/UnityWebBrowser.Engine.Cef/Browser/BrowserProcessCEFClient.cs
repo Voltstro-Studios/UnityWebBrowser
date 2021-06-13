@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Events.EngineActions;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser
@@ -105,7 +106,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.Shared.Events.MouseMoveEvent"/>
+		///		Process a <see cref="Shared.Events.EngineActions.MouseMoveEvent"/>
 		/// </summary>
 		/// <param name="mouseEvent"></param>
 		public void ProcessMouseMoveEvent(MouseMoveEvent mouseEvent)
@@ -118,7 +119,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.Shared.Events.MouseClickEvent"/>
+		///		Process a <see cref="Shared.Events.EngineActions.MouseClickEvent"/>
 		/// </summary>
 		/// <param name="mouseClickEvent"></param>
 		public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
@@ -133,7 +134,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		}
 
 		/// <summary>
-		///		Process a <see cref="UnityWebBrowser.Shared.Events.MouseScrollEvent"/>
+		///		Process a <see cref="Shared.Events.EngineActions.MouseScrollEvent"/>
 		/// </summary>
 		/// <param name="mouseScrollEvent"></param>
 		public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)

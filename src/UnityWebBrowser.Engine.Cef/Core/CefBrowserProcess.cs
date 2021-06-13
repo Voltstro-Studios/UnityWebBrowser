@@ -4,6 +4,8 @@ using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineEvents;
 using Xilium.CefGlue;
 using ZeroMQ;
 
@@ -179,7 +181,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 				try
 				{
-					EventData data = EventsSerializer.Deserialize(rawData);
+					EngineActionEvent data = EventsSerializer.DeserializeEvent<EngineActionEvent>(rawData);
 					if (data == null)
 						continue;
 
@@ -189,7 +191,10 @@ namespace UnityWebBrowser.Engine.Cef.Core
 							isRunning = false;
 							continue;
 						case PingEvent:
-							responder.Send(new ZFrame(cefClient.GetPixels()));
+							responder.Send(new ZFrame(EventsSerializer.SerializeEvent(new PixelsEvent
+							{
+								Pixels = cefClient.GetPixels()
+							})));
 							continue;
 						case KeyboardEvent x:
 							cefClient.ProcessKeyboardEvent(x);
@@ -223,7 +228,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 							break;
 					}
 
-					responder.Send(new ZFrame((int) EventType.Ping));
+					responder.Send(new ZFrame(EventsSerializer.SerializeEvent(new OkEvent())));
 				}
 				catch (Exception ex)
 				{

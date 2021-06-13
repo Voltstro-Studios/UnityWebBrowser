@@ -1,9 +1,9 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events.EngineActions
 {
     [MessagePackObject]
-    public class NavigateUrlEvent : EventData
+    public class NavigateUrlEvent : EngineActionEvent
     {
         [Key(0)] public string Url { get; set; }
     }
