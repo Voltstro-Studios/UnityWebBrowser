@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "nuget"
-    directory: "src/CefBrowserProcess/"
+    directory: "src/"
     schedule:
       interval: "daily"
