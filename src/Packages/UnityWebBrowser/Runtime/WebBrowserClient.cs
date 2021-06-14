@@ -320,7 +320,9 @@ namespace UnityWebBrowser
 
         private void LoadPixels(ZFrame frame)
         {
-            Pixels = EventsSerializer.DeserializeEvent<PixelsEvent>(frame.Read()).Pixels;
+            EngineEvent engineEvent = EventsSerializer.DeserializeEvent<EngineEvent>(frame.Read());
+            if (engineEvent is PixelsEvent x)
+                Pixels = x.Pixels;
 
             frame.Dispose();
         }

@@ -191,7 +191,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 							isRunning = false;
 							continue;
 						case PingEvent:
-							responder.Send(new ZFrame(EventsSerializer.SerializeEvent(new PixelsEvent
+							responder.Send(new ZFrame(EventsSerializer.SerializeEvent<EngineEvent>(new PixelsEvent
 							{
 								Pixels = cefClient.GetPixels()
 							})));
