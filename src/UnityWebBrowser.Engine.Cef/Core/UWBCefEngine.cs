@@ -9,18 +9,18 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// <summary>
 	///		Main class for the CEF Unity Web Browser Engine
 	/// </summary>
-	public class CefUWBEngine : IDisposable
+	public class UWBCefEngine : IDisposable
 	{
 		private readonly EventReplier<EngineActionEvent, EngineEvent> eventReplier;
 		private readonly CefManager cefManager;
 
 		///  <summary>
-		/// 		Creates a new <see cref="CefUWBEngine"/> instance
+		/// 		Creates a new <see cref="UWBCefEngine"/> instance
 		///  </summary>
 		///  <param name="launchArguments"></param>
 		///  <param name="cefArgs"></param>
 		///  <exception cref="Exception"></exception>
-		public CefUWBEngine(LaunchArguments launchArguments, string[] cefArgs)
+		public UWBCefEngine(LaunchArguments launchArguments, string[] cefArgs)
 		{
 			cefManager = new CefManager(launchArguments, cefArgs);
 			cefManager.Init();
@@ -84,7 +84,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 		#region Destroy
 
-		~CefUWBEngine()
+		~UWBCefEngine()
 		{
 			ReleaseResources();
 		}
