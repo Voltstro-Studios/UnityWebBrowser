@@ -17,4 +17,9 @@
       <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
     </ItemGroup>
 
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="../ThirdParty/Libs/zmq/windows64/libzmq.dll" DestinationFiles="$(OutputPath)libzmq.dll" />
+        <Copy SourceFiles="../ThirdParty/Libs/zmq/linux64/libzmq.so" DestinationFiles="$(OutputPath)libzmq.so" />
+    </Target>
+
 </Project>
