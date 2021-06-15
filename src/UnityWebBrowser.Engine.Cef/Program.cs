@@ -3,7 +3,7 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using UnityWebBrowser.Engine.Cef.Core;
-using UnityWebBrowser.Engine.Cef.Models;
+using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Engine.Cef
@@ -93,14 +93,15 @@ namespace UnityWebBrowser.Engine.Cef
 				Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
 
 				//Create CefBrowserProcess class, which is responsible for basically everything
-				Core.CefBrowserProcess browserProcess = null;
+				CefBrowserProcess browserProcess = null;
 				try
 				{
 					//Create it with our parsed arguments
-					browserProcess = new Core.CefBrowserProcess(parsedArgs, args);
+					browserProcess = new CefBrowserProcess(parsedArgs, args);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					Logger.ErrorException(ex, "An uncaught error occured in the browser process!");
 					browserProcess?.Dispose();
 					Environment.Exit(0);
 					return;

@@ -35,6 +35,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
+    <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
     <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
@@ -119,6 +120,9 @@
     </ContentWithTargetPath>
 
     <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models" />
   </ItemGroup>
 
   <Import Project="../Imports/NatvieDefines.targets" />

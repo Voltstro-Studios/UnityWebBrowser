@@ -1,7 +1,7 @@
 using System.IO;
 using UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Engine.Cef.Models
+namespace UnityWebBrowser.Engine.Shared
 {
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     /// <summary>

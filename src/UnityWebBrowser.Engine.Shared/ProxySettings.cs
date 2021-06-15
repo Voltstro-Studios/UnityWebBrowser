@@ -1,4 +1,4 @@
-namespace UnityWebBrowser.Engine.Cef.Models
+namespace UnityWebBrowser.Engine.Shared
 {
     /// <summary>
     ///     Settings for the proxy

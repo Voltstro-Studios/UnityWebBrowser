@@ -1,5 +1,6 @@
 using System;
 using UnityWebBrowser.Engine.Cef.Core;
+using UnityWebBrowser.Engine.Shared;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser

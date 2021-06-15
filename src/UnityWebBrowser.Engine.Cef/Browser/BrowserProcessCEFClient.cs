@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityWebBrowser.Engine.Cef.Models;
+using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Events.EngineActions;
 using Xilium.CefGlue;
