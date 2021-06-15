@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ZeroMQ;
 
 namespace UnityWebBrowser.Shared
@@ -21,7 +22,7 @@ namespace UnityWebBrowser.Shared
             onEventReceived = eventReceived;
         }
 
-        public void HandleEventsLoop()
+        public Task HandleEventsLoop()
         {
             isRunning = true;
             while (isRunning)
@@ -33,6 +34,8 @@ namespace UnityWebBrowser.Shared
                 byte[] responseRawData = EventsSerializer.SerializeEvent<TResponseEvent>(response);
                 socket.Send(new ZFrame(responseRawData));
             }
+            
+            return Task.CompletedTask;
         }
 
         public void Dispose()

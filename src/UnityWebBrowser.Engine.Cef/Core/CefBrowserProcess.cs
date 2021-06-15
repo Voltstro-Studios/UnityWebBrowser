@@ -207,7 +207,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 		/// </summary>
 		public void HandelEventsLoop()
 		{
-			eventReplier.HandleEventsLoop();
+			eventReplier.HandleEventsLoop().RunSynchronously();
 		}
 
 		#region Destroy
