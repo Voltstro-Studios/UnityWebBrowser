@@ -121,9 +121,6 @@
 
     <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models" />
-  </ItemGroup>
 
   <Import Project="../Imports/NatvieDefines.targets" />
 

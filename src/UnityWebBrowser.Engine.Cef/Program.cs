@@ -93,25 +93,25 @@ namespace UnityWebBrowser.Engine.Cef
 				Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
 
 				//Create CefBrowserProcess class, which is responsible for basically everything
-				CefBrowserProcess browserProcess = null;
+				CefUWBEngine uwbEngine = null;
 				try
 				{
 					//Create it with our parsed arguments
-					browserProcess = new CefBrowserProcess(parsedArgs, args);
+					uwbEngine = new CefUWBEngine(parsedArgs, args);
 				}
 				catch (Exception ex)
 				{
 					Logger.ErrorException(ex, "An uncaught error occured in the browser process!");
-					browserProcess?.Dispose();
+					uwbEngine?.Dispose();
 					Environment.Exit(0);
 					return;
 				}
 				
 				//Start our events loop
-				browserProcess.HandelEventsLoop();
+				uwbEngine.HandelEventsLoop();
 				
 				//The end
-				browserProcess.Dispose();
+				uwbEngine.Dispose();
 			});
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.InvokeAsync(args).Result;

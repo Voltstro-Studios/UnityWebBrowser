@@ -147,51 +147,88 @@ namespace UnityWebBrowser.Engine.Cef.Core
 		    return cefClient.GetPixels();
 	    }
 
+	    /// <summary>
+	    ///		Handle a <see cref="KeyboardEvent"/>
+	    /// </summary>
+	    /// <param name="keyboardEvent"></param>
 	    public void HandelKeyboardEvent(KeyboardEvent keyboardEvent)
 	    {
 		    cefClient.ProcessKeyboardEvent(keyboardEvent);
 	    }
 
+	    /// <summary>
+	    ///		Handel a <see cref="MouseMoveEvent"/>
+	    /// </summary>
+	    /// <param name="mouseMoveEvent"></param>
 	    public void HandelMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
 	    {
 		    cefClient.ProcessMouseMoveEvent(mouseMoveEvent);
 	    }
 
+	    /// <summary>
+	    ///		Handel a <see cref="MouseClickEvent"/>
+	    /// </summary>
+	    /// <param name="mouseClickEvent"></param>
 	    public void HandelMouseClickEvent(MouseClickEvent mouseClickEvent)
 	    {
 		    cefClient.ProcessMouseClickEvent(mouseClickEvent);
 	    }
 
+	    /// <summary>
+	    ///		Handel a <see cref="MouseScrollEvent"/>
+	    /// </summary>
+	    /// <param name="mouseScrollEvent"></param>
 	    public void HandelMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
 	    {
 		    cefClient.ProcessMouseScrollEvent(mouseScrollEvent);
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF go forward
+	    /// </summary>
 	    public void GoForward()
 	    {
 		    cefClient.GoForward();
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF go back
+	    /// </summary>
 	    public void GoBack()
 	    {
 		    cefClient.GoBack();
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF reload the page
+	    /// </summary>
 	    public void Refresh()
 	    {
 		    cefClient.Refresh();
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF load some HTML
+	    /// </summary>
+	    /// <param name="html"></param>
 	    public void LoadHtml(string html)
 	    {
 		    cefClient.LoadHtml(html);
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF load a URL
+	    /// </summary>
+	    /// <param name="url"></param>
 	    public void LoadUrl(string url)
 	    {
 		    cefClient.LoadUrl(url);
 	    }
 
+	    /// <summary>
+	    ///		Makes CEF execute some JS on the current page
+	    /// </summary>
+	    /// <param name="js"></param>
 	    public void ExecuteJs(string js)
 	    {
 		    cefClient.ExecuteJs(js);

@@ -7,23 +7,20 @@ using UnityWebBrowser.Shared.Events.EngineEvents;
 namespace UnityWebBrowser.Engine.Cef.Core
 {
 	/// <summary>
-	///		Main class responsible for the app
-	///		<para>
-	///			This class handles managing CEF and talks back to the client using ZMQ
-	///		</para>
+	///		Main class for the CEF Unity Web Browser Engine
 	/// </summary>
-	public class CefBrowserProcess : IDisposable
+	public class CefUWBEngine : IDisposable
 	{
 		private readonly EventReplier<EngineActionEvent, EngineEvent> eventReplier;
 		private readonly CefManager cefManager;
 
 		///  <summary>
-		/// 		Creates a new <see cref="CefBrowserProcess"/> instance
+		/// 		Creates a new <see cref="CefUWBEngine"/> instance
 		///  </summary>
 		///  <param name="launchArguments"></param>
 		///  <param name="cefArgs"></param>
 		///  <exception cref="Exception"></exception>
-		public CefBrowserProcess(LaunchArguments launchArguments, string[] cefArgs)
+		public CefUWBEngine(LaunchArguments launchArguments, string[] cefArgs)
 		{
 			cefManager = new CefManager(launchArguments, cefArgs);
 			cefManager.Init();
@@ -87,7 +84,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 		#region Destroy
 
-		~CefBrowserProcess()
+		~CefUWBEngine()
 		{
 			ReleaseResources();
 		}
