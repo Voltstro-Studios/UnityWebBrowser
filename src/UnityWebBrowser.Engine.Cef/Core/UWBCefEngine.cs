@@ -48,7 +48,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 				case RefreshEvent:
 					cefManager.Refresh();
 					break;
-				case NavigateUrlEvent x:
+				case LoadUrlEvent x:
 					cefManager.LoadUrl(x.Url);
 					break;
 				case LoadHtmlEvent x:

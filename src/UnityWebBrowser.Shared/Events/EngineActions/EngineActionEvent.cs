@@ -9,7 +9,7 @@ namespace UnityWebBrowser.Shared.Events.EngineActions
     [Union(3, typeof(MouseMoveEvent))]
     [Union(4, typeof(MouseClickEvent))]
     [Union(5, typeof(MouseScrollEvent))]
-    [Union(6, typeof(NavigateUrlEvent))]
+    [Union(6, typeof(LoadUrlEvent))]
     [Union(7, typeof(GoForwardEvent))]
     [Union(8, typeof(GoBackEvent))]
     [Union(9, typeof(RefreshEvent))]

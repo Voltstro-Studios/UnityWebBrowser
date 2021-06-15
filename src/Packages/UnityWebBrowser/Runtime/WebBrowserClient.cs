@@ -486,7 +486,7 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         public void NavigateUrl(string url)
         {
-            eventDispatcher.QueueEvent(new NavigateUrlEvent
+            eventDispatcher.QueueEvent(new LoadUrlEvent
             {
                 Url = url
             }, HandelEvent);
