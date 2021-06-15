@@ -3,7 +3,6 @@ using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Cef.Models;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Events.EngineActions;
 using UnityWebBrowser.Shared.Events.EngineEvents;
 using Xilium.CefGlue;
@@ -19,12 +18,8 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// </summary>
 	public class CefBrowserProcess : IDisposable
 	{
-		private const int EventPassingNumErrorsAllowed = 4;
-
-		private readonly int ipcPort;
+		private readonly EventReplier<EngineActionEvent, EngineEvent> eventReplier;
 		private readonly BrowserProcessCEFClient cefClient;
-
-		private bool isRunning;
 
 		///  <summary>
 		/// 		Creates a new <see cref="CefBrowserProcess"/> instance
@@ -34,8 +29,6 @@ namespace UnityWebBrowser.Engine.Cef.Core
 		///  <exception cref="Exception"></exception>
 		public CefBrowserProcess(LaunchArguments launchArguments, string[] cefArgs)
 		{
-			ipcPort = launchArguments.Port;
-
 			//Setup CEF
 			try
 			{
@@ -158,6 +151,55 @@ namespace UnityWebBrowser.Engine.Cef.Core
 				Logger.ErrorException(ex, "Something when wrong while creating the CEF client!");
 				throw new Exception();
 			}
+
+			eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(launchArguments.Port, OnEventReceived);
+		}
+
+		private EngineEvent OnEventReceived(EngineActionEvent actionEvent)
+		{
+			switch (actionEvent)
+			{
+				case ShutdownEvent:
+					Dispose();
+					break;
+				case PingEvent:
+					return new PixelsEvent
+					{
+						Pixels = cefClient.GetPixels()
+					};
+				case KeyboardEvent x:
+					cefClient.ProcessKeyboardEvent(x);
+					break;
+				case GoForwardEvent:
+					cefClient.GoForward();
+					break;
+				case GoBackEvent:
+					cefClient.GoBack();
+					break;
+				case RefreshEvent:
+					cefClient.Refresh();
+					break;
+				case NavigateUrlEvent x:
+					cefClient.LoadUrl(x.Url);
+					break;
+				case MouseMoveEvent x:
+					cefClient.ProcessMouseMoveEvent(x);
+					break;
+				case MouseClickEvent x:
+					cefClient.ProcessMouseClickEvent(x);
+					break;
+				case MouseScrollEvent x:
+					cefClient.ProcessMouseScrollEvent(x);
+					break;
+				case LoadHtmlEvent x:
+					cefClient.LoadHtml(x.Html);
+					break;
+				case ExecuteJsEvent x:
+					cefClient.ExecuteJs(x.Js);
+					break;
+			}
+
+			return new OkEvent();
 		}
 
 		/// <summary>
@@ -165,82 +207,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 		/// </summary>
 		public void HandelEventsLoop()
 		{
-			//Setup ZMQ
-			using ZContext context = new ZContext();
-			using ZSocket responder = new ZSocket(context, ZSocketType.REP);
-
-			responder.Bind($"tcp://127.0.0.1:{ipcPort}");
-
-			isRunning = true;
-			int eventPassingErrorCount = 0;
-			while (isRunning)
-			{
-				//Get the json that was sent to us
-				using ZFrame request = responder.ReceiveFrame();
-				byte[] rawData = request.Read();
-
-				try
-				{
-					EngineActionEvent data = EventsSerializer.DeserializeEvent<EngineActionEvent>(rawData);
-					if (data == null)
-						continue;
-
-                    switch (data)
-                    {
-						case ShutdownEvent:
-							isRunning = false;
-							continue;
-						case PingEvent:
-							responder.Send(new ZFrame(EventsSerializer.SerializeEvent<EngineEvent>(new PixelsEvent
-							{
-								Pixels = cefClient.GetPixels()
-							})));
-							continue;
-						case KeyboardEvent x:
-							cefClient.ProcessKeyboardEvent(x);
-							break;
-						case GoForwardEvent:
-							cefClient.GoForward();
-							break;
-						case GoBackEvent:
-							cefClient.GoBack();
-							break;
-						case RefreshEvent:
-							cefClient.Refresh();
-							break;
-						case NavigateUrlEvent x:
-							cefClient.LoadUrl(x.Url);
-							break;
-						case MouseMoveEvent x:
-							cefClient.ProcessMouseMoveEvent(x);
-							break;
-						case MouseClickEvent x:
-							cefClient.ProcessMouseClickEvent(x);
-							break;
-						case MouseScrollEvent x:
-							cefClient.ProcessMouseScrollEvent(x);
-							break;
-						case LoadHtmlEvent x:
-							cefClient.LoadHtml(x.Html);
-							break;
-						case ExecuteJsEvent x:
-							cefClient.ExecuteJs(x.Js);
-							break;
-					}
-
-					responder.Send(new ZFrame(EventsSerializer.SerializeEvent(new OkEvent())));
-				}
-				catch (Exception ex)
-				{
-					eventPassingErrorCount++;
-					Logger.ErrorException(ex, $"An error occurred while processing event data! Times left: {EventPassingNumErrorsAllowed - eventPassingErrorCount}");
-
-					if (eventPassingErrorCount < EventPassingNumErrorsAllowed) continue;
-
-					isRunning = false;
-					break;
-				}
-			}
+			eventReplier.HandleEventsLoop();
 		}
 
 		#region Destroy
@@ -258,7 +225,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 		private void ReleaseResources()
 		{
-			isRunning = false;
+			eventReplier.Dispose();
 			cefClient?.Dispose();
 			CefRuntime.Shutdown();
 		}
