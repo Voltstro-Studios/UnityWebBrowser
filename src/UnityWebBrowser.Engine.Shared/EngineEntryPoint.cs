@@ -5,10 +5,23 @@ using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Engine.Shared
 {
+	/// <summary>
+	///		Handles entry stuff for browser engines
+	/// </summary>
     public abstract class EngineEntryPoint
     {
+	    /// <summary>
+	    ///		Called when the arguments are parsed
+	    /// </summary>
+	    /// <param name="launchArguments"></param>
+	    /// <param name="args"></param>
 	    protected abstract void EntryPoint(LaunchArguments launchArguments, string[] args);
 
+	    /// <summary>
+	    ///		Call this in your engine's Program.Main method.
+	    /// </summary>
+	    /// <param name="args"></param>
+	    /// <returns></returns>
         public int Main(string[] args)
         {
             RootCommand rootCommand = new RootCommand
