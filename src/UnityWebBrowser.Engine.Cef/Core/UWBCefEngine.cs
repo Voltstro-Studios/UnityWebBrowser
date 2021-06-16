@@ -9,22 +9,18 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// <summary>
 	///		Main class for the CEF Unity Web Browser Engine
 	/// </summary>
-	public class UWBCefEngine : IDisposable
+	public class UWBCefEngine : EngineEntryPoint, IDisposable
 	{
-		private readonly EventReplier<EngineActionEvent, EngineEvent> eventReplier;
-		private readonly CefManager cefManager;
-
-		///  <summary>
-		/// 		Creates a new <see cref="UWBCefEngine"/> instance
-		///  </summary>
-		///  <param name="launchArguments"></param>
-		///  <param name="cefArgs"></param>
-		///  <exception cref="Exception"></exception>
-		public UWBCefEngine(LaunchArguments launchArguments, string[] cefArgs)
+		private EventReplier<EngineActionEvent, EngineEvent> eventReplier;
+		private CefManager cefManager;
+		
+		protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
 		{
-			cefManager = new CefManager(launchArguments, cefArgs);
+			cefManager = new CefManager(launchArguments, args);
 			cefManager.Init();
+			
 			eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(launchArguments.Port, OnEventReceived);
+			eventReplier.HandleEventsLoop();
 		}
 
 		private EngineEvent OnEventReceived(EngineActionEvent actionEvent)
@@ -72,14 +68,6 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			}
 
 			return new OkEvent();
-		}
-
-		/// <summary>
-		///		Starts a loop that deals with the incoming events
-		/// </summary>
-		public void HandelEventsLoop()
-		{
-			eventReplier.HandleEventsLoop().RunSynchronously();
 		}
 
 		#region Destroy
