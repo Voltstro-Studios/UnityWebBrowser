@@ -2,4 +2,6 @@
 **/*.so
 **/*.dat
 **/*.bin
+**/*.exe
+*.dll
 UnityWebBrowser.Engine.Cef
