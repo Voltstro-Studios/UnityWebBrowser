@@ -1,7 +1,7 @@
 using System;
 using UnityWebBrowser.Engine.Shared;
-using UnityWebBrowser.Shared.Events.EngineActions;
-using UnityWebBrowser.Shared.Events.EngineEvents;
+using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events.EngineActionResponse;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core
@@ -19,7 +19,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefManager.Init();
 		}
 
-		protected override EngineEvent OnEvent(EngineActionEvent actionEvent)
+		protected override EngineActionResponse OnEvent(EngineActionEvent actionEvent)
 		{
 			switch (actionEvent)
 			{
@@ -27,7 +27,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 					Dispose();
 					break;
 				case PingEvent:
-					return new PixelsEvent
+					return new PixelsResponse
 					{
 						Pixels = cefManager.GetPixels()
 					};
@@ -63,7 +63,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 					break;
 			}
 
-			return new OkEvent();
+			return new OkResponse();
 		}
 
 		#region Destroy

@@ -3,8 +3,8 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineActions;
-using UnityWebBrowser.Shared.Events.EngineEvents;
+using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events.EngineActionResponse;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -13,7 +13,7 @@ namespace UnityWebBrowser.Engine.Shared
 	/// </summary>
     public abstract class EngineEntryPoint : IDisposable
 	{
-		private EventReplier<EngineActionEvent, EngineEvent> eventReplier;
+		private EventReplier<EngineActionEvent, EngineActionResponse> eventReplier;
 	    
 	    /// <summary>
 	    ///		Called when the arguments are parsed
@@ -27,7 +27,7 @@ namespace UnityWebBrowser.Engine.Shared
 	    /// </summary>
 	    /// <param name="actionEvent"></param>
 	    /// <returns></returns>
-	    protected abstract EngineEvent OnEvent(EngineActionEvent actionEvent);
+	    protected abstract EngineActionResponse OnEvent(EngineActionEvent actionEvent);
 
 	    /// <summary>
 	    ///		Call this in your engine's Program.Main method.
@@ -116,7 +116,7 @@ namespace UnityWebBrowser.Engine.Shared
 					return;
 				
 				//Setup the events replier
-				eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(parsedArgs.Port, OnEvent);
+				eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(parsedArgs.Port, OnEvent);
 				eventReplier.HandleEventsLoop();
 				eventReplier.Dispose();
 			});

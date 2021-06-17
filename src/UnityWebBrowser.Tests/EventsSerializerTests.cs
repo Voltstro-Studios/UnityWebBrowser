@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineAction;
 
 namespace UnityWebBrowser.Tests
 {

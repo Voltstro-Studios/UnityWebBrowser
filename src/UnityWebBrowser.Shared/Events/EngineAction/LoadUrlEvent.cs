@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace UnityWebBrowser.Shared.Events.EngineActions
+namespace UnityWebBrowser.Shared.Events.EngineAction
 {
     [MessagePackObject]
     public class LoadUrlEvent : EngineActionEvent

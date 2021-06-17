@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineActions;
-using UnityWebBrowser.Shared.Events.EngineEvents;
+using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events.EngineActionResponse;
 using ZeroMQ;
 
 namespace UnityWebBrowser.Tests
@@ -13,7 +13,7 @@ namespace UnityWebBrowser.Tests
         public void BasicEventReplierTest()
         {
             const int port = 5566;
-            using EventReplier<PingEvent, OkEvent> eventReplier = new EventReplier<PingEvent, OkEvent>(port, incomingEvent => new OkEvent());
+            using EventReplier<PingEvent, OkResponse> eventReplier = new EventReplier<PingEvent, OkResponse>(port, incomingEvent => new OkResponse());
             // ReSharper disable once AccessToDisposedClosure
             _ = Task.Run(() => eventReplier.HandleEventsLoop());
 
@@ -30,15 +30,15 @@ namespace UnityWebBrowser.Tests
             Assert.AreEqual(ZError.None, error);
 
             byte[] responseRawData = response.Read();
-            OkEvent responseEvent = EventsSerializer.DeserializeEvent<OkEvent>(responseRawData);
-            Assert.IsNotNull(responseEvent);
+            OkResponse responseResponse = EventsSerializer.DeserializeEvent<OkResponse>(responseRawData);
+            Assert.IsNotNull(responseResponse);
         }
         
         [Test]
         public void BasicUnionEventReplierTest()
         {
             const int port = 6677;
-            using EventReplier<EngineActionEvent, EngineEvent> eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(port, incomingEvent => new OkEvent());
+            using EventReplier<EngineActionEvent, EngineActionResponse> eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(port, incomingEvent => new OkResponse());
             // ReSharper disable once AccessToDisposedClosure
             _ = Task.Run(() => eventReplier.HandleEventsLoop());
 
@@ -55,9 +55,9 @@ namespace UnityWebBrowser.Tests
             Assert.AreEqual(ZError.None, error);
 
             byte[] responseRawData = response.Read();
-            EngineEvent responseEvent = EventsSerializer.DeserializeEvent<EngineEvent>(responseRawData);
-            Assert.IsNotNull(responseEvent);
-            Assert.That(responseEvent.GetType(), Is.EqualTo(typeof(OkEvent)));
+            EngineActionResponse responseActionResponse = EventsSerializer.DeserializeEvent<EngineActionResponse>(responseRawData);
+            Assert.IsNotNull(responseActionResponse);
+            Assert.That(responseActionResponse.GetType(), Is.EqualTo(typeof(OkResponse)));
         }
     }
 }

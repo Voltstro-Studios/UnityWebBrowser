@@ -8,8 +8,8 @@ using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using ZeroMQ;
 using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Events.EngineActions;
-using UnityWebBrowser.Shared.Events.EngineEvents;
+using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events.EngineActionResponse;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
@@ -320,8 +320,8 @@ namespace UnityWebBrowser
 
         private void LoadPixels(ZFrame frame)
         {
-            EngineEvent engineEvent = EventsSerializer.DeserializeEvent<EngineEvent>(frame.Read());
-            if (engineEvent is PixelsEvent x)
+            EngineActionResponse engineEvent = EventsSerializer.DeserializeEvent<EngineActionResponse>(frame.Read());
+            if (engineEvent is PixelsResponse x)
                 Pixels = x.Pixels;
 
             frame.Dispose();

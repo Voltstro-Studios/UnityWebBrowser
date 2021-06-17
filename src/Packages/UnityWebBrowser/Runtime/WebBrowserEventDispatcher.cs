@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineAction;
 using ZeroMQ;
 
 namespace UnityWebBrowser

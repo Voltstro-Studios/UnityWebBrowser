@@ -3,7 +3,7 @@ using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineAction;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core
