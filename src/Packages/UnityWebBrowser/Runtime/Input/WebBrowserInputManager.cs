@@ -203,6 +203,12 @@ namespace UnityWebBrowser.Input
                     return WindowsKey.Alt;
                 case KeyCode.Print:
                     return WindowsKey.Print;
+                case KeyCode.Backslash:
+	                return WindowsKey.OemBackslash;
+                case KeyCode.Slash:
+	                return WindowsKey.Oem2;
+                case KeyCode.Tilde:
+	                return WindowsKey.Oem3;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }

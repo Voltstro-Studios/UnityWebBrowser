@@ -23,7 +23,7 @@ namespace UnityWebBrowser.Shared
 
         public static T DeserializeEvent<T>(byte[] data)
         {
-            return MessagePackSerializer.Deserialize<T>(data);
+            return MessagePackSerializer.Deserialize<T>(data, Options);
         }
     }
 }
