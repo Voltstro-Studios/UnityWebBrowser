@@ -64,6 +64,21 @@ Powershell Core
 
 3. Open `UnityWebBrowser.UnityProject` with Unity.
 
+## Operating System Support
+
+What OS is supported will depend on the web engine you use.
+
+### CEF Engine
+
+|OS           |Supported                  |Notes                                         |
+|-------------|---------------------------|----------------------------------------------|
+|Windows      |✔                         |Works natively                                |
+|Linux        |✔ (Tested on Ubuntu 20.04)|Requires VA-API support                       |
+|MacOS (Intel)|✖                         |Planned                                       |
+|MacOS (M1)   |✖                         |No physical hardware to test or develop on    |
+|Android      |✖                         |Waiting for .NET 6 Release                    |
+|IOS          |✖                         |^ + No physical hardware to test or develop on|
+
 ## Screenshots
 
 <details>
