@@ -1,29 +1,25 @@
 using System;
 using UnityWebBrowser.Engine.Shared;
-using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineActions;
 using UnityWebBrowser.Shared.Events.EngineEvents;
+using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core
 {
 	/// <summary>
 	///		Main class for the CEF Unity Web Browser Engine
 	/// </summary>
-	public class UWBCefEngine : EngineEntryPoint, IDisposable
+	public class UWBCefEngine : EngineEntryPoint
 	{
-		private EventReplier<EngineActionEvent, EngineEvent> eventReplier;
 		private CefManager cefManager;
 		
 		protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
 		{
 			cefManager = new CefManager(launchArguments, args);
 			cefManager.Init();
-			
-			eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(launchArguments.Port, OnEventReceived);
-			eventReplier.HandleEventsLoop();
 		}
 
-		private EngineEvent OnEventReceived(EngineActionEvent actionEvent)
+		protected override EngineEvent OnEvent(EngineActionEvent actionEvent)
 		{
 			switch (actionEvent)
 			{
@@ -72,21 +68,12 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 		#region Destroy
 
-		~UWBCefEngine()
+		public override void Dispose()
 		{
-			ReleaseResources();
-		}
-		
-		public void Dispose()
-		{
-			ReleaseResources();
-			GC.SuppressFinalize(this);
-		}
-
-		private void ReleaseResources()
-		{
-			eventReplier?.Dispose();
+			base.Dispose();
 			cefManager?.Dispose();
+			CefRuntime.Shutdown();
+			GC.SuppressFinalize(this);
 		}
 
 		#endregion

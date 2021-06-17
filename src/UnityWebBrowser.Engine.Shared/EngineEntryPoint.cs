@@ -1,21 +1,33 @@
-﻿using System.CommandLine;
+﻿using System;
+using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Events.EngineActions;
+using UnityWebBrowser.Shared.Events.EngineEvents;
 
 namespace UnityWebBrowser.Engine.Shared
 {
 	/// <summary>
 	///		Handles entry stuff for browser engines
 	/// </summary>
-    public abstract class EngineEntryPoint
-    {
+    public abstract class EngineEntryPoint : IDisposable
+	{
+		private EventReplier<EngineActionEvent, EngineEvent> eventReplier;
+	    
 	    /// <summary>
 	    ///		Called when the arguments are parsed
 	    /// </summary>
 	    /// <param name="launchArguments"></param>
 	    /// <param name="args"></param>
 	    protected abstract void EntryPoint(LaunchArguments launchArguments, string[] args);
+
+	    /// <summary>
+	    ///		Called when an event is received
+	    /// </summary>
+	    /// <param name="actionEvent"></param>
+	    /// <returns></returns>
+	    protected abstract EngineEvent OnEvent(EngineActionEvent actionEvent);
 
 	    /// <summary>
 	    ///		Call this in your engine's Program.Main method.
@@ -95,11 +107,34 @@ namespace UnityWebBrowser.Engine.Shared
 			{
 				//Is debug log enabled or not
 				Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
-
+				
+				//Run the entry point
 				EntryPoint(parsedArgs, args);
+				
+				//We might get disposed here
+				if(isDisposed)
+					return;
+				
+				//Setup the events replier
+				eventReplier = new EventReplier<EngineActionEvent, EngineEvent>(parsedArgs.Port, OnEvent);
+				eventReplier.HandleEventsLoop();
+				eventReplier.Dispose();
 			});
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.Invoke(args);
         }
+
+	    #region Destroy
+
+	    private bool isDisposed;
+
+	    public virtual void Dispose()
+	    {
+		    eventReplier?.Dispose();
+		    isDisposed = true;
+		    GC.SuppressFinalize(this);
+	    }
+
+	    #endregion
     }
 }
