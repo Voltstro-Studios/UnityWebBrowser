@@ -35,6 +35,7 @@ MonoBehaviour:
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
     m_Scopes:
+    - com.cysharp.slnmerge
     - com.neuecc.messagepack
     - com.openupm
     m_IsDefault: 0

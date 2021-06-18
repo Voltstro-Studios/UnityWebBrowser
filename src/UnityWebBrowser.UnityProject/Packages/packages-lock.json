@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.slnmerge": {
+      "version": "1.3.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.neuecc.messagepack": {
       "version": "2.3.58-alpha",
       "depth": 1,
