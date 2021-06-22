@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using ZeroMQ;
 
@@ -18,8 +19,9 @@ namespace UnityWebBrowser.Shared
         private readonly ZSocket requester;
 
         private readonly object requesterLock = new object();
-        private Thread eventDispatcherThread;
-        private bool isRunning;
+
+        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly CancellationToken cancellationToken;
 
         /// <summary>
         ///     Creates a new <see cref="EventDispatcher" /> instance
@@ -29,6 +31,9 @@ namespace UnityWebBrowser.Shared
         public EventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
             eventsQueue = new Queue<KeyValuePair<EngineActionEvent, Action<ZFrame>>>();
+
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
             
             //Setup ZMQ
             context = new ZContext();
@@ -89,45 +94,37 @@ namespace UnityWebBrowser.Shared
         /// </summary>
         public void StartDispatchingEvents()
         {
-            eventDispatcherThread = new Thread(DispatchEventsThread) {Name = "Web Browser Event Dispatcher Thread"};
-            eventDispatcherThread.Start();
+            _ = Task.Run(DispatchEventsThread);
         }
 
-        private void DispatchEventsThread()
+        private Task DispatchEventsThread()
         {
-            try
+            while (!cancellationToken.IsCancellationRequested)
             {
-                isRunning = true;
+                if (EventQueueCount == 0)
+                    continue;
 
-                while (isRunning)
+                //Dequeue and send the event
+                KeyValuePair<EngineActionEvent, Action<ZFrame>> eventToSend = DeQueueEvent();
+                SendEvent(eventToSend.Key);
+
+                //Wait to receive the event
+                try
                 {
-                    if (EventQueueCount == 0)
-                        continue;
-
-                    //Dequeue and send the event
-                    KeyValuePair<EngineActionEvent, Action<ZFrame>> eventToSend = DeQueueEvent();
-                    SendEvent(eventToSend.Key);
-
-                    //Wait to receive the event
-                    try
+                    ZFrame frame;
+                    lock (requesterLock)
                     {
-                        ZFrame frame;
-                        lock (requesterLock)
-                        {
-                            frame = requester.ReceiveFrame();
-                        }
+                        frame = requester.ReceiveFrame();
+                    }
 
-                        eventToSend.Value?.Invoke(frame);
-                    }
-                    catch (ZException)
-                    {
-                    }
+                    eventToSend.Value?.Invoke(frame);
+                }
+                catch (ZException)
+                {
                 }
             }
-            catch (ThreadAbortException)
-            {
-                isRunning = false;
-            }
+            
+            return Task.CompletedTask;
         }
 
         private void SendEvent(EngineActionEvent eventData)
@@ -160,8 +157,7 @@ namespace UnityWebBrowser.Shared
 
         private void ReleaseResources()
         {
-            isRunning = false;
-            eventDispatcherThread.Abort();
+            cancellationTokenSource.Cancel();
             SendEvent(new ShutdownEvent());
 
             lock (requesterLock)
