@@ -97,7 +97,7 @@ namespace UnityWebBrowser.Shared
             _ = Task.Run(DispatchEventsThread);
         }
 
-        private Task DispatchEventsThread()
+        internal Task DispatchEventsThread()
         {
             while (!cancellationToken.IsCancellationRequested)
             {
