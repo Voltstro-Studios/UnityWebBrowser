@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using ZeroMQ;
 
-namespace UnityWebBrowser
+namespace UnityWebBrowser.Shared
 {
 	/// <summary>
 	///     Handles dispatching events to the browser process
 	/// </summary>
-	internal class WebBrowserEventDispatcher : IDisposable
+	public class EventDispatcher : IDisposable
     {
         private readonly ZContext context;
         private readonly Queue<KeyValuePair<EngineActionEvent, Action<ZFrame>>> eventsQueue;
@@ -23,11 +22,11 @@ namespace UnityWebBrowser
         private bool isRunning;
 
         /// <summary>
-        ///     Creates a new <see cref="WebBrowserEventDispatcher" /> instance
+        ///     Creates a new <see cref="EventDispatcher" /> instance
         /// </summary>
         /// <param name="timeOutTime"></param>
         /// <param name="port"></param>
-        internal WebBrowserEventDispatcher(TimeSpan timeOutTime, int port = 5555)
+        public EventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
             eventsQueue = new Queue<KeyValuePair<EngineActionEvent, Action<ZFrame>>>();
             
@@ -65,7 +64,7 @@ namespace UnityWebBrowser
         ///     <see cref="Action{T}" /> to be called when the <see cref="ZFrame" /> is received.
         ///     BE-AWARE! This is called on the event dispatcher thread!
         /// </param>
-        internal void QueueEvent(EngineActionEvent eventData, Action<ZFrame> onReceive = null)
+        public void QueueEvent(EngineActionEvent eventData, Action<ZFrame> onReceive = null)
         {
             lock (eventsQueueLock)
             {
@@ -88,7 +87,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Starts to dispatch events to the browser process
         /// </summary>
-        internal void StartDispatchingEvents()
+        public void StartDispatchingEvents()
         {
             eventDispatcherThread = new Thread(DispatchEventsThread) {Name = "Web Browser Event Dispatcher Thread"};
             eventDispatcherThread.Start();
@@ -148,7 +147,7 @@ namespace UnityWebBrowser
 
         #region Destroy Methods
 
-        ~WebBrowserEventDispatcher()
+        ~EventDispatcher()
         {
             ReleaseResources();
         }

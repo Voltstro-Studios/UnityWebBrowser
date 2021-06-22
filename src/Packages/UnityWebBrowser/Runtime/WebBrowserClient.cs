@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using ZeroMQ;
@@ -11,6 +12,8 @@ using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.EngineActionResponse;
 using Debug = UnityEngine.Debug;
+using EventDispatcher = UnityWebBrowser.Shared.EventDispatcher;
+using MouseMoveEvent = UnityWebBrowser.Shared.Events.EngineAction.MouseMoveEvent;
 
 namespace UnityWebBrowser
 {
@@ -131,7 +134,7 @@ namespace UnityWebBrowser
         public LogSeverity logSeverity;
 
         private FileInfo cachePath;
-        private WebBrowserEventDispatcher eventDispatcher;
+        private EventDispatcher eventDispatcher;
 
         private FileInfo logPath;
 
@@ -286,7 +289,7 @@ namespace UnityWebBrowser
             serverProcess.BeginErrorReadLine();
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
-            eventDispatcher = new WebBrowserEventDispatcher(new TimeSpan(0, 0, 4), port);
+            eventDispatcher = new EventDispatcher(new TimeSpan(0, 0, 4), port);
             eventDispatcher.StartDispatchingEvents();
         }
 
