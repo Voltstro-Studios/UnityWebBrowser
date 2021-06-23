@@ -17,11 +17,7 @@ namespace UnityWebBrowser.Tests
             const int port = 8732;
             
             //Setup test's ZMQ
-            //TODO: We should move this to share it across all tests
-            using ZContext context = new ZContext();
-            using ZSocket socket = new ZSocket(context, ZSocketType.REP);
-            socket.Bind($"tcp://127.0.0.1:{port}", out ZError error);
-            Assert.AreEqual(ZError.None, error);
+            Utils.CreateZmq(ZSocketType.REP, port, true, out ZContext context, out ZSocket socket);
 
             //Create the event dispatcher
             EventDispatcher eventDispatcher = null;
@@ -36,22 +32,29 @@ namespace UnityWebBrowser.Tests
             bool gotResponse = false;
             eventDispatcher.QueueEvent(new PingEvent(), frame =>
             {
+                //We got a response
                 gotResponse = true;
-                EngineActionResponse response = EventsSerializer.DeserializeEvent<EngineActionResponse>(frame.Read());
-                Assert.IsNotNull(response);
-                Assert.That(response.GetType(), Is.EqualTo(typeof(OkResponse)));
+                EngineActionResponse responseEventDispatcher = EventsSerializer.DeserializeEvent<EngineActionResponse>(frame.Read());
+                Assert.IsNotNull(responseEventDispatcher);
+                Assert.That(responseEventDispatcher.GetType(), Is.EqualTo(typeof(OkResponse)));
                 frame.Dispose();
             });
-            
-            using ZFrame request = socket.ReceiveFrame();
-            EngineActionEvent actionEvent = EventsSerializer.DeserializeEvent<EngineActionEvent>(request.Read());
+
+            //Get a event from the dispatcher
+            byte[] requestData = socket.Receive();
+            EngineActionEvent actionEvent = EventsSerializer.DeserializeEvent<EngineActionEvent>(requestData);
             Assert.IsNotNull(actionEvent);
             Assert.That(actionEvent.GetType(), Is.EqualTo(typeof(PingEvent)));
             
-            socket.Send(new ZFrame(EventsSerializer.SerializeEvent<EngineActionResponse>(new OkResponse())));
+            //Respond
+            EngineActionResponse response = new OkResponse();
+            byte[] responseData = EventsSerializer.SerializeEvent<EngineActionResponse>(response);
+            socket.Send(responseData);
             SpinWait.SpinUntil(() => gotResponse);
             
             eventDispatcher.Dispose();
+            socket.Dispose();
+            context.Dispose();
         }
     }
 }

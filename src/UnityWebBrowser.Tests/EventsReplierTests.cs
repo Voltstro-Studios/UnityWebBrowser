@@ -13,51 +13,54 @@ namespace UnityWebBrowser.Tests
         public void BasicEventReplierTest()
         {
             const int port = 5566;
-            using EventReplier<PingEvent, OkResponse> eventReplier = new EventReplier<PingEvent, OkResponse>(port, incomingEvent => new OkResponse());
+            
+            //Create event replier
+            using EventReplier<PingEvent, OkResponse> eventReplier = new(port, _ => new OkResponse());
             // ReSharper disable once AccessToDisposedClosure
             _ = Task.Run(() => eventReplier.HandleEventsLoop());
+            
+            //Setup test's zmq
+            Utils.CreateZmq(ZSocketType.REQ, port, false, out ZContext context, out ZSocket socket);
 
-            using ZContext context = new ZContext();
-            using ZSocket socket = new ZSocket(context, ZSocketType.REQ);
-            socket.Connect($"tcp://127.0.0.1:{port}", out ZError error);
-            Assert.AreEqual(ZError.None, error);
-
+            //Create ping event and serialize it
             byte[] okEventData = EventsSerializer.SerializeEvent(new PingEvent());
-            socket.Send(new ZFrame(okEventData), out error);
-            Assert.AreEqual(ZError.None, error);
+            
+            //Send it
+            socket.Send(okEventData);
 
-            using ZFrame response = socket.ReceiveFrame(out error);
-            Assert.AreEqual(ZError.None, error);
-
-            byte[] responseRawData = response.Read();
+            //Get the response back from the event replier
+            byte[] responseRawData = socket.Receive();
             OkResponse responseResponse = EventsSerializer.DeserializeEvent<OkResponse>(responseRawData);
             Assert.IsNotNull(responseResponse);
+            
+            socket.Dispose();
+            context.Dispose();
         }
         
         [Test]
         public void BasicUnionEventReplierTest()
         {
             const int port = 6677;
-            using EventReplier<EngineActionEvent, EngineActionResponse> eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(port, incomingEvent => new OkResponse());
+            
+            using EventReplier<EngineActionEvent, EngineActionResponse> eventReplier = new(port, _ => new OkResponse());
             // ReSharper disable once AccessToDisposedClosure
             _ = Task.Run(() => eventReplier.HandleEventsLoop());
 
-            using ZContext context = new ZContext();
-            using ZSocket socket = new ZSocket(context, ZSocketType.REQ);
-            socket.Connect($"tcp://127.0.0.1:{port}", out ZError error);
-            Assert.AreEqual(ZError.None, error);
+            //Setup test's zmq
+            Utils.CreateZmq(ZSocketType.REQ, port, false, out ZContext context, out ZSocket socket);
 
+            //Get the response
             byte[] okEventData = EventsSerializer.SerializeEvent<EngineActionEvent>(new PingEvent());
-            socket.Send(new ZFrame(okEventData), out error);
-            Assert.AreEqual(ZError.None, error);
+            socket.Send(okEventData);
 
-            using ZFrame response = socket.ReceiveFrame(out error);
-            Assert.AreEqual(ZError.None, error);
-
-            byte[] responseRawData = response.Read();
+            //Check the type
+            byte[] responseRawData = socket.Receive();
             EngineActionResponse responseActionResponse = EventsSerializer.DeserializeEvent<EngineActionResponse>(responseRawData);
             Assert.IsNotNull(responseActionResponse);
             Assert.That(responseActionResponse.GetType(), Is.EqualTo(typeof(OkResponse)));
+            
+            socket.Dispose();
+            context.Dispose();
         }
     }
 }
