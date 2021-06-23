@@ -20,24 +20,22 @@ namespace UnityWebBrowser.Tests
             Utils.CreateZmq(ZSocketType.REP, port, true, out ZContext context, out ZSocket socket);
 
             //Create the event dispatcher
-            EventDispatcher eventDispatcher = null;
+            EventDispatcher<EngineActionEvent, EngineActionResponse> eventDispatcher = null;
             _ = Task.Run(() =>
             {
-                eventDispatcher = new EventDispatcher(new TimeSpan(0, 0, 0, 4), port);
+                eventDispatcher = new EventDispatcher<EngineActionEvent, EngineActionResponse>(new TimeSpan(0, 0, 0, 4), port);
                 eventDispatcher.DispatchEventsThread().RunSynchronously();
             });
             SpinWait.SpinUntil(() => eventDispatcher != null);
             
             //Send the event
             bool gotResponse = false;
-            eventDispatcher.QueueEvent(new PingEvent(), frame =>
+            eventDispatcher.QueueEvent(new PingEvent(), responseEventDispatcher =>
             {
                 //We got a response
                 gotResponse = true;
-                EngineActionResponse responseEventDispatcher = EventsSerializer.DeserializeEvent<EngineActionResponse>(frame.Read());
                 Assert.IsNotNull(responseEventDispatcher);
                 Assert.That(responseEventDispatcher.GetType(), Is.EqualTo(typeof(OkResponse)));
-                frame.Dispose();
             });
 
             //Get a event from the dispatcher

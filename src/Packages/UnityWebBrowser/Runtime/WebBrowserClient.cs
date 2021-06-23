@@ -4,15 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using ZeroMQ;
-using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.EngineActionResponse;
 using Debug = UnityEngine.Debug;
-using EventDispatcher = UnityWebBrowser.Shared.EventDispatcher;
 using MouseMoveEvent = UnityWebBrowser.Shared.Events.EngineAction.MouseMoveEvent;
 
 namespace UnityWebBrowser
@@ -134,7 +131,7 @@ namespace UnityWebBrowser
         public LogSeverity logSeverity;
 
         private FileInfo cachePath;
-        private EventDispatcher eventDispatcher;
+        private EventDispatcher<EngineActionEvent, EngineActionResponse> eventDispatcher;
 
         private FileInfo logPath;
 
@@ -289,7 +286,7 @@ namespace UnityWebBrowser
             serverProcess.BeginErrorReadLine();
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
-            eventDispatcher = new EventDispatcher(new TimeSpan(0, 0, 4), port);
+            eventDispatcher = new EventDispatcher<EngineActionEvent, EngineActionResponse>(new TimeSpan(0, 0, 4), port);
             eventDispatcher.StartDispatchingEvents();
         }
 
@@ -321,13 +318,10 @@ namespace UnityWebBrowser
             BrowserTexture.Apply(false);
         }
 
-        private void LoadPixels(ZFrame frame)
+        private void LoadPixels(EngineActionResponse actionResponse)
         {
-            EngineActionResponse engineEvent = EventsSerializer.DeserializeEvent<EngineActionResponse>(frame.Read());
-            if (engineEvent is PixelsResponse x)
+            if (actionResponse is PixelsResponse x)
                 Pixels = x.Pixels;
-
-            frame.Dispose();
         }
 
         #region Pixels
@@ -431,7 +425,7 @@ namespace UnityWebBrowser
                 KeysDown = keysDown,
                 KeysUp = keysUp,
                 Chars = chars
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -444,7 +438,7 @@ namespace UnityWebBrowser
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -464,7 +458,7 @@ namespace UnityWebBrowser
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -480,7 +474,7 @@ namespace UnityWebBrowser
                 MouseScroll = mouseScroll,
                 MouseX = mouseX,
                 MouseY = mouseY
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -492,7 +486,7 @@ namespace UnityWebBrowser
             eventDispatcher.QueueEvent(new LoadUrlEvent
             {
                 Url = url
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -500,7 +494,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoForward()
         {
-            eventDispatcher.QueueEvent(new GoForwardEvent(), HandelEvent);
+            eventDispatcher.QueueEvent(new GoForwardEvent());
         }
 
         /// <summary>
@@ -508,7 +502,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoBack()
         {
-            eventDispatcher.QueueEvent(new GoBackEvent(), HandelEvent);
+            eventDispatcher.QueueEvent(new GoBackEvent());
         }
 
         /// <summary>
@@ -516,7 +510,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void Refresh()
         {
-            eventDispatcher.QueueEvent(new RefreshEvent(), HandelEvent);
+            eventDispatcher.QueueEvent(new RefreshEvent());
         }
 
         /// <summary>
@@ -528,7 +522,7 @@ namespace UnityWebBrowser
             eventDispatcher.QueueEvent(new LoadHtmlEvent
             {
                 Html = html
-            }, HandelEvent);
+            });
         }
 
         /// <summary>
@@ -540,12 +534,7 @@ namespace UnityWebBrowser
             eventDispatcher.QueueEvent(new ExecuteJsEvent
             {
                 Js = js
-            }, HandelEvent);
-        }
-
-        private void HandelEvent(ZFrame frame)
-        {
-            frame.Dispose();
+            });
         }
 
         #endregion
@@ -571,6 +560,8 @@ namespace UnityWebBrowser
             if (!IsRunning)
                 return;
 
+            eventDispatcher.CancelQueueThead();
+            eventDispatcher.SendEvent(new ShutdownEvent());
             eventDispatcher.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);

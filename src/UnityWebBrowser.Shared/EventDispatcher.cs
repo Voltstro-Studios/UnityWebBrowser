@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityWebBrowser.Shared.Events.EngineAction;
 using ZeroMQ;
 
 namespace UnityWebBrowser.Shared
@@ -10,10 +9,10 @@ namespace UnityWebBrowser.Shared
 	/// <summary>
 	///     Handles dispatching events to the browser process
 	/// </summary>
-	public class EventDispatcher : IDisposable
+	public class EventDispatcher<TEvent, TResponseEvent> : IDisposable
     {
         private readonly ZContext context;
-        private readonly Queue<KeyValuePair<EngineActionEvent, Action<ZFrame>>> eventsQueue;
+        private readonly Queue<KeyValuePair<TEvent, Action<TResponseEvent>>> eventsQueue;
 
         private readonly object eventsQueueLock = new object();
         private readonly ZSocket requester;
@@ -24,13 +23,13 @@ namespace UnityWebBrowser.Shared
         private readonly CancellationToken cancellationToken;
 
         /// <summary>
-        ///     Creates a new <see cref="EventDispatcher" /> instance
+        ///     Creates a new <see cref="EventDispatcher{TEvent,TResponseEvent}" /> instance
         /// </summary>
         /// <param name="timeOutTime"></param>
         /// <param name="port"></param>
         public EventDispatcher(TimeSpan timeOutTime, int port = 5555)
         {
-            eventsQueue = new Queue<KeyValuePair<EngineActionEvent, Action<ZFrame>>>();
+            eventsQueue = new Queue<KeyValuePair<TEvent, Action<TResponseEvent>>>();
 
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
@@ -69,17 +68,36 @@ namespace UnityWebBrowser.Shared
         ///     <see cref="Action{T}" /> to be called when the <see cref="ZFrame" /> is received.
         ///     BE-AWARE! This is called on the event dispatcher thread!
         /// </param>
-        public void QueueEvent(EngineActionEvent eventData, Action<ZFrame> onReceive = null)
+        public void QueueEvent(TEvent eventData, Action<TResponseEvent> onReceive = null)
         {
             lock (eventsQueueLock)
             {
-                eventsQueue.Enqueue(new KeyValuePair<EngineActionEvent, Action<ZFrame>>(eventData, onReceive));
+                eventsQueue.Enqueue(new KeyValuePair<TEvent, Action<TResponseEvent>>(eventData, onReceive));
             }
         }
 
-        private KeyValuePair<EngineActionEvent, Action<ZFrame>> DeQueueEvent()
+        /// <summary>
+        ///     Sends an <see cref="TEvent"/> directly, this will not handle receiving events back!
+        /// </summary>
+        /// <param name="eventData"></param>
+        public void SendEvent(TEvent eventData)
         {
-            KeyValuePair<EngineActionEvent, Action<ZFrame>> data;
+            lock (requesterLock)
+            {
+                byte[] data = EventsSerializer.SerializeEvent<TEvent>(eventData);
+                requester.Send(new ZFrame(data), out ZError error);
+
+                if (error == null) return;
+                if (!error.Equals(ZError.None))
+                {
+                    //Error
+                }
+            }
+        }
+        
+        private KeyValuePair<TEvent, Action<TResponseEvent>> DeQueueEvent()
+        {
+            KeyValuePair<TEvent, Action<TResponseEvent>> data;
 
             lock (eventsQueueLock)
             {
@@ -105,7 +123,7 @@ namespace UnityWebBrowser.Shared
                     continue;
 
                 //Dequeue and send the event
-                KeyValuePair<EngineActionEvent, Action<ZFrame>> eventToSend = DeQueueEvent();
+                KeyValuePair<TEvent, Action<TResponseEvent>> eventToSend = DeQueueEvent();
                 SendEvent(eventToSend.Key);
 
                 //Wait to receive the event
@@ -117,7 +135,14 @@ namespace UnityWebBrowser.Shared
                         frame = requester.ReceiveFrame();
                     }
 
-                    eventToSend.Value?.Invoke(frame);
+                    //Should we bother to put in the effort in deserializing the event
+                    if (eventToSend.Value != null)
+                    {
+                        TResponseEvent responseEvent = EventsSerializer.DeserializeEvent<TResponseEvent>(frame.Read());
+                        eventToSend.Value.Invoke(responseEvent);
+                    }
+                    
+                    frame.Dispose();
                 }
                 catch (ZException)
                 {
@@ -127,21 +152,6 @@ namespace UnityWebBrowser.Shared
             return Task.CompletedTask;
         }
 
-        private void SendEvent(EngineActionEvent eventData)
-        {
-            lock (requesterLock)
-            {
-                byte[] data = EventsSerializer.SerializeEvent(eventData);
-                requester.Send(new ZFrame(data), out ZError error);
-
-                if (error != null)
-                    if (!error.Equals(ZError.None))
-                    {
-                        //Error
-                    }
-            }
-        }
-
         #region Destroy Methods
 
         ~EventDispatcher()
@@ -149,6 +159,17 @@ namespace UnityWebBrowser.Shared
             ReleaseResources();
         }
 
+        /// <summary>
+        ///     Cancels the thread dispatching events
+        /// </summary>
+        public void CancelQueueThead()
+        {
+            cancellationTokenSource.Cancel();
+        }
+
+        /// <summary>
+        ///     Destroys 
+        /// </summary>
         public void Dispose()
         {
             ReleaseResources();
@@ -157,9 +178,7 @@ namespace UnityWebBrowser.Shared
 
         private void ReleaseResources()
         {
-            cancellationTokenSource.Cancel();
-            SendEvent(new ShutdownEvent());
-
+            CancelQueueThead();
             lock (requesterLock)
             {
                 requester.Dispose();
