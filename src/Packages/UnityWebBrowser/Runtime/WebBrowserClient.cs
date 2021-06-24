@@ -20,31 +20,6 @@ namespace UnityWebBrowser
 	[Serializable]
     public class WebBrowserClient : IDisposable
     {
-        /// <summary>
-        ///     Settings used to auth with the proxy
-        /// </summary>
-        [Serializable]
-        public struct ProxySettings
-        {
-            /// <summary>
-            ///     The proxy username (leave blank for no username)
-            /// </summary>
-            [Tooltip("The proxy username (leave blank for no username)")]
-            public string username;
-            
-            /// <summary>
-            ///     The proxy password (leave blank for no password)
-            /// </summary>
-            [Tooltip("The proxy password (leave blank for no password)")]
-            public string password;
-            
-            /// <summary>
-            ///     Don't use a proxy server, directly connect. (Can leave to faster initialization times)
-            /// </summary>
-            [Tooltip("Don't use a proxy server, directly connect. (Can leave to faster initialization times)")]
-            public bool noProxyServer;
-        }
-
         private const string LoggingTag = "[Web Browser]";
 
         /// <summary>
@@ -253,18 +228,14 @@ namespace UnityWebBrowser
                 argsBuilder.AppendArgument("remote-debugging", remoteDebuggingPort);
             
             //Setup proxy
-            if(proxySettings.noProxyServer)
-                argsBuilder.AppendArgument("proxy-server", proxySettings.noProxyServer);
-            else
-            {
-                if(!string.IsNullOrWhiteSpace(proxySettings.username))
-                    argsBuilder.AppendArgument("proxy-username", proxySettings.username, true);
+            argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);
+            if(!string.IsNullOrWhiteSpace(proxySettings.Username))
+                argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
                 
-                if(!string.IsNullOrWhiteSpace(proxySettings.password))
-                    argsBuilder.AppendArgument("proxy-password", proxySettings.password, true);
-            }
-            
-            //Final built arguments
+            if(!string.IsNullOrWhiteSpace(proxySettings.Password))
+                argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+
+                //Final built arguments
             string arguments = argsBuilder.ToString();
             
             //Start the server process

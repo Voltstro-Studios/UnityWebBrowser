@@ -134,7 +134,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 			//Create cef browser
 			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
-					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword));
+					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
 	    }
 

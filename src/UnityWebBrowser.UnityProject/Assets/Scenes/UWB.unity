@@ -214,8 +214,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.initialUrl
+      value: https://office.com
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.browserEngine
       value: UnityWebBrowser.Engine.Cef
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.proxySettings.Password
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.proxySettings.Username
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.proxySettings.ProxyServer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name

@@ -9,14 +9,19 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     public class BrowserProcessCEFApp : CefApp
     {
         private readonly bool mediaStreamingEnabled;
+        private readonly bool noProxyServer;
         
         public BrowserProcessCEFApp(LaunchArguments launchArguments)
         {
             mediaStreamingEnabled = launchArguments.WebRtc;
+            noProxyServer = !launchArguments.ProxyEnabled;
         }
         
         protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine)
         {
+            if (noProxyServer && !commandLine.HasSwitch("--no-proxy-server"))
+                commandLine.AppendSwitch("--no-proxy-server");
+
             if(mediaStreamingEnabled && !commandLine.HasSwitch("--enable-media-stream"))
                 commandLine.AppendSwitch("--enable-media-stream");
             
