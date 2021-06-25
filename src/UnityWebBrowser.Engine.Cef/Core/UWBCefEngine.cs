@@ -2,6 +2,7 @@ using System;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.EngineActionResponse;
+using UnityWebBrowser.Shared.Events.EngineEvent;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core
@@ -16,6 +17,13 @@ namespace UnityWebBrowser.Engine.Cef.Core
 		protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
 		{
 			cefManager = new CefManager(launchArguments, args);
+			
+			//Setup events
+			cefManager.OnUrlChange += url => SendEvent(new OnUrlChangeEvent
+			{
+				NewUrl = url
+			});
+			
 			cefManager.Init();
 		}
 

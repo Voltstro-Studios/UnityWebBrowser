@@ -22,6 +22,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		private readonly BrowserProcessCEFDisplayHandler displayHandler;
 		private readonly BrowserProcessCEFRequestHandler requestHandler;
 
+		public event Action<string> OnUrlChange; 
+
 		///  <summary>
 		/// 		Creates a new <see cref="BrowserProcessCEFClient"/> instance
 		///  </summary>
@@ -64,6 +66,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
 			return renderHandler.Pixels;
 		}
+
+		#region Engine Events
 
 		/// <summary>
 		///		Process a <see cref="KeyboardEvent"/>
@@ -198,7 +202,18 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		{
 			browser.Reload();
 		}
+		
+		#endregion
 
+		#region CEF Events
+
+		public void UrlChange(string url)
+		{
+			OnUrlChange?.Invoke(url);
+		}
+
+		#endregion
+		
 		protected override CefLoadHandler GetLoadHandler()
 		{
 			return loadHandler;

@@ -129,6 +129,8 @@ namespace UnityWebBrowser
             //Start the browser client
             browserClient.Init();
             StartCoroutine(browserClient.Start());
+            
+            browserClient.OnUrlChanged += urlChangedEvent => Debug.Log($"URl changed to {urlChangedEvent.NewUrl}");
 
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;

@@ -5,6 +5,8 @@ using System.IO;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.EngineActionResponse;
+using UnityWebBrowser.Shared.Events.EngineEvent;
+using UnityWebBrowser.Shared.Events.EngineEventResponse;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -14,6 +16,7 @@ namespace UnityWebBrowser.Engine.Shared
     public abstract class EngineEntryPoint : IDisposable
 	{
 		private EventReplier<EngineActionEvent, EngineActionResponse> eventReplier;
+		private EventDispatcher<EngineEvent, EngineEventResponse> eventDispatcher;
 	    
 	    /// <summary>
 	    ///		Called when the arguments are parsed
@@ -89,8 +92,11 @@ namespace UnityWebBrowser.Engine.Shared
 					() => null, 
 					"The proxy auth password"),
 				
-				new Option<int>("-port",
+				new Option<int>("-in-port",
 					() => 5555,
+					"IPC port"),
+				new Option<int>("-out-port",
+					() => 5556,
 					"IPC port"),
 
 				new Option<FileInfo>("-log-path", 
@@ -114,15 +120,31 @@ namespace UnityWebBrowser.Engine.Shared
 				//We might get disposed here
 				if(isDisposed)
 					return;
-				
+
 				//Setup the events replier
-				eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(parsedArgs.Port, OnEvent);
+				eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(parsedArgs.InPort, OnEvent);
+				
+				//Setup event dispatcher
+				eventDispatcher = new EventDispatcher<EngineEvent, EngineEventResponse>(new TimeSpan(0, 0, 0, 4), parsedArgs.OutPort);
+				eventDispatcher.StartDispatchingEvents();	
+				
 				eventReplier.HandleEventsLoop();
+				
 				eventReplier.Dispose();
+				eventDispatcher.Dispose();
 			});
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.Invoke(args);
         }
+
+	    /// <summary>
+	    ///		Sends a event to Unity
+	    /// </summary>
+	    /// <param name="engineEvent"></param>
+	    protected void SendEvent(EngineEvent engineEvent)
+	    {
+		    eventDispatcher?.QueueEvent(engineEvent);
+	    }
 
 	    #region Destroy
 

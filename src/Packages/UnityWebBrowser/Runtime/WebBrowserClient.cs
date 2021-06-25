@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
-using ZeroMQ;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.EngineActionResponse;
+using UnityWebBrowser.Shared.Events.EngineEvent;
+using UnityWebBrowser.Shared.Events.EngineEventResponse;
 using Debug = UnityEngine.Debug;
 using MouseMoveEvent = UnityWebBrowser.Shared.Events.EngineAction.MouseMoveEvent;
 
@@ -90,9 +92,17 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The port to communicate with the browser process on
         /// </summary>
-        [Header("IPC Settings")] [Tooltip("The port to communicate with the browser process on")]
-        public int port = 5555;
+        [Header("IPC Settings")]
+        [FormerlySerializedAs("port")]
+        [Tooltip("The port to communicate with the browser process on")]
+        public int outPort = 5555;
 
+        /// <summary>
+        ///     The port to communicate with the browser process on
+        /// </summary>
+        [Tooltip("The port to communicate with the browser process on")]
+        public int inPort = 5556;
+        
         /// <summary>
         ///     The time between each frame sent the browser process
         /// </summary>
@@ -106,7 +116,9 @@ namespace UnityWebBrowser
         public LogSeverity logSeverity;
 
         private FileInfo cachePath;
+        
         private EventDispatcher<EngineActionEvent, EngineActionResponse> eventDispatcher;
+        private EventReplier<EngineEvent, EngineEventResponse> eventReplier;
 
         private FileInfo logPath;
 
@@ -207,8 +219,9 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
-            //IPC port
-            argsBuilder.AppendArgument("port", port);
+            //IPC ports
+            argsBuilder.AppendArgument("in-port", outPort);
+            argsBuilder.AppendArgument("out-port", inPort);
 
             //Cache, if cache is disabled Chromium will go into "incognito" mode
             if (cache)
@@ -235,8 +248,12 @@ namespace UnityWebBrowser
             if(!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
 
-                //Final built arguments
+            //Final built arguments
             string arguments = argsBuilder.ToString();
+            
+            //Start our event replier first
+            eventReplier = new EventReplier<EngineEvent, EngineEventResponse>(inPort, OnGetEngineEvent);
+            _ = Task.Run(eventReplier.HandleEventsLoop);
             
             //Start the server process
             serverProcess = new Process
@@ -257,7 +274,7 @@ namespace UnityWebBrowser
             serverProcess.BeginErrorReadLine();
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
-            eventDispatcher = new EventDispatcher<EngineActionEvent, EngineActionResponse>(new TimeSpan(0, 0, 4), port);
+            eventDispatcher = new EventDispatcher<EngineActionEvent, EngineActionResponse>(new TimeSpan(0, 0, 4), outPort);
             eventDispatcher.StartDispatchingEvents();
         }
 
@@ -510,6 +527,24 @@ namespace UnityWebBrowser
 
         #endregion
 
+        #region Engine Events
+
+        public event Action<OnUrlChangeEvent> OnUrlChanged; 
+        
+        private EngineEventResponse OnGetEngineEvent(EngineEvent engineEvent)
+        {
+            switch (engineEvent)
+            {
+                case OnUrlChangeEvent x:
+                    OnUrlChanged?.Invoke(x);
+                    break;
+            }
+
+            return new OkEngineEventResponse();
+        }
+
+        #endregion
+
         #region Destroying
 
         ~WebBrowserClient()
@@ -534,6 +569,8 @@ namespace UnityWebBrowser
             eventDispatcher.CancelQueueThead();
             eventDispatcher.SendEvent(new ShutdownEvent());
             eventDispatcher.Dispose();
+            
+            eventReplier.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);
 

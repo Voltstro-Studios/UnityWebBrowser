@@ -1,3 +1,4 @@
+using System;
 using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Shared;
 using Xilium.CefGlue;
@@ -18,8 +19,11 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnLoadStart(CefBrowser browser, CefFrame frame, CefTransitionType transitionType)
         {
-            if(frame.IsMain)
-                Logger.Debug($"START: {browser?.GetMainFrame().Url}");
+            if (frame.IsMain)
+            {
+                client.UrlChange(browser.GetMainFrame().Url);
+                Logger.Debug($"START: {browser.GetMainFrame().Url}");
+            }
         }
 
         protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)

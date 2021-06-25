@@ -17,6 +17,8 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	    private readonly string[] args;
 	    
 	    private BrowserProcessCEFClient cefClient;
+
+	    public event Action<string> OnUrlChange; 
 	    
 	    /// <summary>
 	    ///		Creates a new <see cref="CefManager"/> instance
@@ -53,7 +55,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			//Set up CEF args and the CEF app
 			CefMainArgs cefMainArgs = new CefMainArgs(argv);
 			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp(launchArguments);
-			
+
 			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
 			if (exitCode != -1)
@@ -136,6 +138,8 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
 					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
+
+		    cefClient.OnUrlChange += OnUrlChange;
 	    }
 
 	    /// <summary>
