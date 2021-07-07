@@ -1,7 +1,8 @@
-using MessagePack;
+using System;
 
 namespace UnityWebBrowser.Shared.Events.EngineAction
 {
+    [Serializable]
     public enum MouseClickType
     {
         Left,
@@ -9,28 +10,20 @@ namespace UnityWebBrowser.Shared.Events.EngineAction
         Right
     }
     
+    [Serializable]
     public enum MouseEventType
     {
         Down,
         Up
     }
     
-    [MessagePackObject]
-    public class MouseClickEvent : EngineActionEvent
+    [Serializable]
+    public class MouseClickEvent
     {
-        [Key(0)]
         public int MouseX { get; set; }
-
-        [Key(1)]
         public int MouseY { get; set; }
-
-        [Key(2)]
         public int MouseClickCount { get; set; }
-
-        [Key(3)]
         public MouseClickType MouseClickType { get; set; }
-
-        [Key(4)]
         public MouseEventType MouseEventType { get; set; }
     }
 }

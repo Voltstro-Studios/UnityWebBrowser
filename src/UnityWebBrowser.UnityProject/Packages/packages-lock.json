@@ -7,13 +7,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.neuecc.messagepack": {
-      "version": "2.3.58-alpha",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
@@ -86,9 +79,7 @@
       "version": "file:../../Packages/UnityWebBrowser",
       "depth": 0,
       "source": "local",
-      "dependencies": {
-        "com.neuecc.messagepack": "2.3.58-alpha"
-      }
+      "dependencies": {}
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef",
@@ -111,47 +102,6 @@
       "depth": 0,
       "source": "local",
       "dependencies": {}
-    },
-    "org.nuget.system.buffers": {
-      "version": "4.5.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.memory": {
-      "version": "4.5.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.buffers": "4.5.1",
-        "org.nuget.system.numerics.vectors": "4.4.0",
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.numerics.vectors": {
-      "version": "4.4.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "4.5.3",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.threading.tasks.extensions": {
-      "version": "4.5.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.imgui": {
       "version": "1.0.0",

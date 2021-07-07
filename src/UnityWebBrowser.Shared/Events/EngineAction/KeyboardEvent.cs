@@ -1,17 +1,12 @@
-using MessagePack;
+using System;
 
 namespace UnityWebBrowser.Shared.Events.EngineAction
 {
-    [MessagePackObject]
-    public class KeyboardEvent : EngineActionEvent
+    [Serializable]
+    public class KeyboardEvent
     {
-        [Key(0)]
         public int[] KeysUp { get; set; }
-
-        [Key(1)]
         public int[] KeysDown { get; set; }
-
-        [Key(2)]
         public string Chars { get; set; }
     }
 }

@@ -2,11 +2,12 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
+using System.Net;
+using System.Threading;
+using ServiceWire;
+using ServiceWire.TcpIp;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
-using UnityWebBrowser.Shared.Events.EngineActionResponse;
-using UnityWebBrowser.Shared.Events.EngineEvent;
-using UnityWebBrowser.Shared.Events.EngineEventResponse;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -15,22 +16,20 @@ namespace UnityWebBrowser.Engine.Shared
 	/// </summary>
     public abstract class EngineEntryPoint : IDisposable
 	{
-		private EventReplier<EngineActionEvent, EngineActionResponse> eventReplier;
-		private EventDispatcher<EngineEvent, EngineEventResponse> eventDispatcher;
-	    
-	    /// <summary>
-	    ///		Called when the arguments are parsed
+		private TcpHost ipcHost;
+		
+		/// <summary>
+	    ///		Called when the arguments are parsed.
+	    ///		<para>Remember to lock if you don't want to immediately exit</para>
 	    /// </summary>
-	    /// <param name="launchArguments"></param>
-	    /// <param name="args"></param>
+	    /// <param name="launchArguments">Arguments as a <see cref="LaunchArguments"/></param>
+	    /// <param name="args">
+	    ///		Raw arguments inputted.
+	    ///		<para>
+	    ///			Should only need this if you start up multiple processes.
+	    ///		</para>
+	    /// </param>
 	    protected abstract void EntryPoint(LaunchArguments launchArguments, string[] args);
-
-	    /// <summary>
-	    ///		Called when an event is received
-	    /// </summary>
-	    /// <param name="actionEvent"></param>
-	    /// <returns></returns>
-	    protected abstract EngineActionResponse OnEvent(EngineActionEvent actionEvent);
 
 	    /// <summary>
 	    ///		Call this in your engine's Program.Main method.
@@ -39,7 +38,8 @@ namespace UnityWebBrowser.Engine.Shared
 	    /// <returns></returns>
         public int Main(string[] args)
         {
-            RootCommand rootCommand = new RootCommand
+
+	        RootCommand rootCommand = new RootCommand
 			{
 				//We got a lot of arguments
 				new Option<string>("-initial-url",
@@ -116,47 +116,44 @@ namespace UnityWebBrowser.Engine.Shared
 				
 				//Run the entry point
 				EntryPoint(parsedArgs, args);
-				
-				//We might get disposed here
-				if(isDisposed)
-					return;
 
-				//Setup the events replier
-				eventReplier = new EventReplier<EngineActionEvent, EngineActionResponse>(parsedArgs.InPort, OnEvent);
-				
-				//Setup event dispatcher
-				eventDispatcher = new EventDispatcher<EngineEvent, EngineEventResponse>(new TimeSpan(0, 0, 0, 4), parsedArgs.OutPort);
-				eventDispatcher.StartDispatchingEvents();	
-				
-				eventReplier.HandleEventsLoop();
-				
-				eventReplier.Dispose();
-				eventDispatcher.Dispose();
+				Console.ReadKey();
 			});
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.Invoke(args);
         }
 
-	    /// <summary>
-	    ///		Sends a event to Unity
-	    /// </summary>
-	    /// <param name="engineEvent"></param>
-	    protected void SendEvent(EngineEvent engineEvent)
+	    protected void SetupIpc(IEngine engine, LaunchArguments arguments)
 	    {
-		    eventDispatcher?.QueueEvent(engineEvent);
+		    try
+		    {
+			    ServiceWire.Logger logger = new ServiceWire.Logger(logLevel: LogLevel.Debug);
+			    Stats stats = new Stats();
+
+			    IPEndPoint ip = new IPEndPoint(IPAddress.Any, 5555);
+
+			    ipcHost = new TcpHost(ip, logger, stats);
+
+			    ipcHost.AddService(engine);
+			    ipcHost.Open();
+			    Logger.Debug("IPC Setup done.");
+		    }
+		    catch (Exception ex)
+		    {
+			    Logger.ErrorException(ex, "Error setting up IPC!");
+		    }
 	    }
-
-	    #region Destroy
-
-	    private bool isDisposed;
 
 	    public virtual void Dispose()
 	    {
-		    eventReplier?.Dispose();
-		    isDisposed = true;
+		    ReleaseResources();
 		    GC.SuppressFinalize(this);
 	    }
 
-	    #endregion
-    }
+	    private void ReleaseResources()
+	    {
+		    ipcHost?.Close();
+		    ipcHost?.Dispose();
+	    }
+	}
 }

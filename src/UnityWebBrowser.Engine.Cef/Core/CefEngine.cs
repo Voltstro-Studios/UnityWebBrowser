@@ -11,24 +11,22 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// <summary>
 	///		Manager for CEF
 	/// </summary>
-    internal class CefManager : IDisposable
+    internal class CefEngine : IEngine, IDisposable
     {
 	    private readonly LaunchArguments launchArguments;
 	    private readonly string[] args;
 	    
 	    private BrowserProcessCEFClient cefClient;
 
-	    public event Action<string> OnUrlChange; 
-	    
 	    /// <summary>
-	    ///		Creates a new <see cref="CefManager"/> instance
+	    ///		Creates a new <see cref="CefEngine"/> instance
 	    /// </summary>
 	    /// <param name="arguments"></param>
 	    /// <param name="rawArguments"></param>
 	    /// <exception cref="DllNotFoundException"></exception>
 	    /// <exception cref="CefVersionMismatchException"></exception>
 	    /// <exception cref="Exception"></exception>
-	    public CefManager(LaunchArguments arguments, string[] rawArguments)
+	    public CefEngine(LaunchArguments arguments, string[] rawArguments)
         {
             //Setup CEF
             CefRuntime.Load();
@@ -94,9 +92,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 				NoSandbox = true,
 				LogFile = launchArguments.LogPath.FullName,
 				CachePath = cachePathArgument,
-				
-				//TODO: On MacOS multi-threaded message loop isn't supported
-				MultiThreadedMessageLoop = true,
+				MultiThreadedMessageLoop = false,
 				LogSeverity = logSeverity,
 				Locale = "en-US",
 				ExternalMessagePump = false,
@@ -138,109 +134,84 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
 					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
-
-		    cefClient.OnUrlChange += OnUrlChange;
 	    }
 
-	    /// <summary>
-	    ///		Gets the browser's pixels
-	    /// </summary>
-	    /// <returns></returns>
 	    public byte[] GetPixels()
 	    {
 		    return cefClient.GetPixels();
 	    }
 
-	    /// <summary>
-	    ///		Handle a <see cref="KeyboardEvent"/>
-	    /// </summary>
-	    /// <param name="keyboardEvent"></param>
-	    public void HandelKeyboardEvent(KeyboardEvent keyboardEvent)
+	    public void Shutdown()
+	    {
+		    //We can only quit the message loop on the UI (main) thread
+		    if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
+		    {
+			    PostTask(CefThreadId.UI, Shutdown);
+			    return;
+		    }
+		    
+		    Logger.Debug("Quitting message loop...");
+		    CefRuntime.QuitMessageLoop();
+	    }
+
+	    public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
 	    {
 		    cefClient.ProcessKeyboardEvent(keyboardEvent);
 	    }
-
-	    /// <summary>
-	    ///		Handel a <see cref="MouseMoveEvent"/>
-	    /// </summary>
-	    /// <param name="mouseMoveEvent"></param>
-	    public void HandelMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
+	    
+	    public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
 	    {
 		    cefClient.ProcessMouseMoveEvent(mouseMoveEvent);
 	    }
-
-	    /// <summary>
-	    ///		Handel a <see cref="MouseClickEvent"/>
-	    /// </summary>
-	    /// <param name="mouseClickEvent"></param>
-	    public void HandelMouseClickEvent(MouseClickEvent mouseClickEvent)
+	    
+	    public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
 	    {
 		    cefClient.ProcessMouseClickEvent(mouseClickEvent);
 	    }
-
-	    /// <summary>
-	    ///		Handel a <see cref="MouseScrollEvent"/>
-	    /// </summary>
-	    /// <param name="mouseScrollEvent"></param>
-	    public void HandelMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
+	    
+	    public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
 	    {
 		    cefClient.ProcessMouseScrollEvent(mouseScrollEvent);
 	    }
-
-	    /// <summary>
-	    ///		Makes CEF go forward
-	    /// </summary>
+	    
 	    public void GoForward()
 	    {
 		    cefClient.GoForward();
 	    }
 
-	    /// <summary>
-	    ///		Makes CEF go back
-	    /// </summary>
 	    public void GoBack()
 	    {
 		    cefClient.GoBack();
 	    }
 
-	    /// <summary>
-	    ///		Makes CEF reload the page
-	    /// </summary>
 	    public void Refresh()
 	    {
 		    cefClient.Refresh();
 	    }
 
-	    /// <summary>
-	    ///		Makes CEF load some HTML
-	    /// </summary>
-	    /// <param name="html"></param>
-	    public void LoadHtml(string html)
-	    {
-		    cefClient.LoadHtml(html);
-	    }
-
-	    /// <summary>
-	    ///		Makes CEF load a URL
-	    /// </summary>
-	    /// <param name="url"></param>
 	    public void LoadUrl(string url)
 	    {
 		    cefClient.LoadUrl(url);
 	    }
 
-	    /// <summary>
-	    ///		Makes CEF execute some JS on the current page
-	    /// </summary>
-	    /// <param name="js"></param>
+	    public void LoadHtml(string html)
+	    {
+		    cefClient.LoadHtml(html);
+	    }
+
 	    public void ExecuteJs(string js)
 	    {
 		    cefClient.ExecuteJs(js);
 	    }
 
+	    private static void PostTask(CefThreadId threadId, Action action)
+	    {
+		    CefRuntime.PostTask(threadId, new CefActionTask(action));
+	    }
+
 	    #region Destroy
 
-	    ~CefManager()
+	    ~CefEngine()
 	    {
 		    ReleaseResources();
 	    }

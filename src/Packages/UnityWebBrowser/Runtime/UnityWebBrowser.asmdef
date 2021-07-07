@@ -4,8 +4,6 @@
     "references": [
         "Unity.TextMeshPro",
         "Unity.InputSystem",
-        "MessagePack",
-        "MessagePack.Annotations",
         "UnityWebBrowser.Editor.BE"
     ],
     "includePlatforms": [
@@ -17,9 +15,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "ZeroMQ.dll",
-        "System.Memory.dll",
-        "UnityWebBrowser.Shared.dll"
+        "UnityWebBrowser.Shared.dll",
+        "ServiceWire.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

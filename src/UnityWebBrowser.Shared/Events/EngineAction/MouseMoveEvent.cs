@@ -1,14 +1,11 @@
-using MessagePack;
+using System;
 
 namespace UnityWebBrowser.Shared.Events.EngineAction
 {
-    [MessagePackObject]
-    public class MouseMoveEvent : EngineActionEvent
+    [Serializable]
+    public class MouseMoveEvent
     {
-        [Key(0)]
         public int MouseX { get; set; }
-
-        [Key(1)]
         public int MouseY { get; set; }
     }
 }

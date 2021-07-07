@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using ServiceWire.TcpIp;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
-using UnityWebBrowser.Shared.Events.EngineActionResponse;
-using UnityWebBrowser.Shared.Events.EngineEvent;
-using UnityWebBrowser.Shared.Events.EngineEventResponse;
 using Debug = UnityEngine.Debug;
 using MouseMoveEvent = UnityWebBrowser.Shared.Events.EngineAction.MouseMoveEvent;
 
@@ -116,13 +116,12 @@ namespace UnityWebBrowser
         public LogSeverity logSeverity;
 
         private FileInfo cachePath;
-        
-        private EventDispatcher<EngineActionEvent, EngineActionResponse> eventDispatcher;
-        private EventReplier<EngineEvent, EngineEventResponse> eventReplier;
 
         private FileInfo logPath;
 
         private Process serverProcess;
+
+        private TcpClient<IEngine> ipcClient;
 
         /// <summary>
         ///     Texture that the browser will paint to
@@ -250,11 +249,7 @@ namespace UnityWebBrowser
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
-            
-            //Start our event replier first
-            eventReplier = new EventReplier<EngineEvent, EngineEventResponse>(inPort, OnGetEngineEvent);
-            _ = Task.Run(eventReplier.HandleEventsLoop);
-            
+
             //Start the server process
             serverProcess = new Process
             {
@@ -274,8 +269,11 @@ namespace UnityWebBrowser
             serverProcess.BeginErrorReadLine();
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
-            eventDispatcher = new EventDispatcher<EngineActionEvent, EngineActionResponse>(new TimeSpan(0, 0, 4), outPort);
-            eventDispatcher.StartDispatchingEvents();
+
+            Thread.Sleep(1000);
+            
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), outPort);
+            ipcClient = new TcpClient<IEngine>(ip);
         }
 
         /// <summary>
@@ -291,7 +289,8 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                eventDispatcher.QueueEvent(new PingEvent(), LoadPixels);
+                byte[] data = ipcClient.Proxy.GetPixels();
+                Pixels = data;
             }
         }
 
@@ -304,12 +303,6 @@ namespace UnityWebBrowser
 
             BrowserTexture.LoadRawTextureData(pixelData);
             BrowserTexture.Apply(false);
-        }
-
-        private void LoadPixels(EngineActionResponse actionResponse)
-        {
-            if (actionResponse is PixelsResponse x)
-                Pixels = x.Pixels;
         }
 
         #region Pixels
@@ -408,12 +401,12 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
-            eventDispatcher.QueueEvent(new KeyboardEvent
+            /*eventDispatcher.QueueEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
                 KeysUp = keysUp,
                 Chars = chars
-            });
+            });*/
         }
 
         /// <summary>
@@ -422,11 +415,11 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
         {
-            eventDispatcher.QueueEvent(new MouseMoveEvent
+            /*eventDispatcher.QueueEvent(new MouseMoveEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y
-            });
+            });*/
         }
 
         /// <summary>
@@ -439,14 +432,14 @@ namespace UnityWebBrowser
         public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            eventDispatcher.QueueEvent(new MouseClickEvent
+            /*eventDispatcher.QueueEvent(new MouseClickEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y,
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
-            });
+            });*/
         }
 
         /// <summary>
@@ -457,12 +450,12 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
-            eventDispatcher.QueueEvent(new MouseScrollEvent
+            /*eventDispatcher.QueueEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
                 MouseX = mouseX,
                 MouseY = mouseY
-            });
+            });*/
         }
 
         /// <summary>
@@ -471,10 +464,10 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         public void NavigateUrl(string url)
         {
-            eventDispatcher.QueueEvent(new LoadUrlEvent
+            /*eventDispatcher.QueueEvent(new LoadUrlEvent
             {
                 Url = url
-            });
+            });*/
         }
 
         /// <summary>
@@ -482,7 +475,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoForward()
         {
-            eventDispatcher.QueueEvent(new GoForwardEvent());
+            //eventDispatcher.QueueEvent(new GoForwardEvent());
         }
 
         /// <summary>
@@ -490,7 +483,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoBack()
         {
-            eventDispatcher.QueueEvent(new GoBackEvent());
+            //eventDispatcher.QueueEvent(new GoBackEvent());
         }
 
         /// <summary>
@@ -498,7 +491,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void Refresh()
         {
-            eventDispatcher.QueueEvent(new RefreshEvent());
+            //eventDispatcher.QueueEvent(new RefreshEvent());
         }
 
         /// <summary>
@@ -507,10 +500,10 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         public void LoadHtml(string html)
         {
-            eventDispatcher.QueueEvent(new LoadHtmlEvent
+            /*eventDispatcher.QueueEvent(new LoadHtmlEvent
             {
                 Html = html
-            });
+            });*/
         }
 
         /// <summary>
@@ -519,28 +512,10 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         public void ExecuteJS(string js)
         {
-            eventDispatcher.QueueEvent(new ExecuteJsEvent
+            /*eventDispatcher.QueueEvent(new ExecuteJsEvent
             {
                 Js = js
-            });
-        }
-
-        #endregion
-
-        #region Engine Events
-
-        public event Action<OnUrlChangeEvent> OnUrlChanged; 
-        
-        private EngineEventResponse OnGetEngineEvent(EngineEvent engineEvent)
-        {
-            switch (engineEvent)
-            {
-                case OnUrlChangeEvent x:
-                    OnUrlChanged?.Invoke(x);
-                    break;
-            }
-
-            return new OkEngineEventResponse();
+            });*/
         }
 
         #endregion
@@ -565,12 +540,8 @@ namespace UnityWebBrowser
         {
             if (!IsRunning)
                 return;
-
-            eventDispatcher.CancelQueueThead();
-            eventDispatcher.SendEvent(new ShutdownEvent());
-            eventDispatcher.Dispose();
             
-            eventReplier.Dispose();
+            ipcClient.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);
 

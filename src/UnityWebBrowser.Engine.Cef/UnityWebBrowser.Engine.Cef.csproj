@@ -29,7 +29,6 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
-    <PublishTrimmed>true</PublishTrimmed>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   
@@ -41,12 +40,6 @@
 
   <!-- We need to copy different files depending on the OS -->
   <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\windows64\libzmq.dll" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
-
     <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dll" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
@@ -81,12 +74,6 @@
 
   <!-- Files we need on Linux -->
   <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\zmq\linux64\libzmq.so" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
-
     <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.so" Link="Libs/%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>%(Filename)%(Extension)</TargetPath>
