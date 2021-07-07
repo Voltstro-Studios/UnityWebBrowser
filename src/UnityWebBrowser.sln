@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef", "UnityWebBrowser.Engine.Cef\UnityWebBrowser.Engine.Cef.csproj", "{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroMQ.netcore", "ThirdParty\ClrZmq4\ZeroMQ.netcore.csproj", "{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue", "ThirdParty\CefGlue\CefGlue\CefGlue.csproj", "{703FF300-34B9-48D4-A5D6-E741F48D5F95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Shared", "UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj", "{9A0A89D8-9166-4453-B3AB-8C59F0160EEB}"
@@ -39,12 +37,6 @@ Global
 		{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}.ReleaseUnity|Any CPU.ActiveCfg = ReleaseUnity|Any CPU
 		{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}.ReleaseUnity|Any CPU.Build.0 = ReleaseUnity|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.ReleaseUnity|Any CPU.ActiveCfg = Release|Any CPU
-		{F7C69D32-89FD-492E-A6F7-9BC2C908A9B7}.ReleaseUnity|Any CPU.Build.0 = Release|Any CPU
 		{703FF300-34B9-48D4-A5D6-E741F48D5F95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{703FF300-34B9-48D4-A5D6-E741F48D5F95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{703FF300-34B9-48D4-A5D6-E741F48D5F95}.Release|Any CPU.ActiveCfg = Release|Any CPU
