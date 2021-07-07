@@ -289,14 +289,13 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                byte[] data = ipcClient.Proxy.GetPixels();
-                Pixels = data;
+                pixels = ipcClient.Proxy.GetPixels();
             }
         }
 
         public void LoadTextureData()
         {
-            byte[] pixelData = Pixels;
+            byte[] pixelData = pixels;
 
             if (pixelData == null || pixelData.Length == 0)
                 return;
@@ -306,31 +305,8 @@ namespace UnityWebBrowser
         }
 
         #region Pixels
-
-        private object pixelsLock = new object();
+        
         private byte[] pixels;
-
-        /// <summary>
-        ///     Raw pixel data of the browser.
-        ///     <para>Try to use <see cref="BrowserTexture" /> for displaying a texture instead of this!</para>
-        /// </summary>
-        public byte[] Pixels
-        {
-            get
-            {
-                lock (pixelsLock)
-                {
-                    return pixels;
-                }
-            }
-            private set
-            {
-                lock (pixelsLock)
-                {
-                    pixels = value;
-                }
-            }
-        }
 
         #endregion
 
