@@ -272,7 +272,7 @@ namespace UnityWebBrowser
 
             Thread.Sleep(2000);
             
-            IPEndPoint ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), outPort);
+            IPEndPoint ip = new IPEndPoint(IPAddress.Loopback, outPort);
             ipcClient = new TcpClient<IEngine>(ip);
         }
 

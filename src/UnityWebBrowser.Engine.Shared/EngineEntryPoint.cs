@@ -3,11 +3,8 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Net;
-using System.Threading;
-using ServiceWire;
 using ServiceWire.TcpIp;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineAction;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -127,13 +124,8 @@ namespace UnityWebBrowser.Engine.Shared
 	    {
 		    try
 		    {
-			    ServiceWire.Logger logger = new ServiceWire.Logger(logLevel: LogLevel.Debug);
-			    Stats stats = new Stats();
-
-			    IPEndPoint ip = new IPEndPoint(IPAddress.Any, 5555);
-
-			    ipcHost = new TcpHost(ip, logger, stats);
-
+			    IPEndPoint ip = new(IPAddress.Loopback, arguments.InPort);
+			    ipcHost = new TcpHost(ip);
 			    ipcHost.AddService(engine);
 			    ipcHost.Open();
 			    Logger.Debug("IPC Setup done.");
