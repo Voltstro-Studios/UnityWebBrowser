@@ -31,12 +31,10 @@ Getting an web engine to work in Unity is a pain, it usually ends up just crashi
 
 ```
 Unity 2020.3.x
-MessagePack-CSharp
 ```
 
 **(NOTE)**: Currently the work-in-progress 2.x version of this project doesn't have a ready-to-go UPM package. The [1.x version](https://github.com/Voltstro-Studios/UnityWebBrowser/tree/1.6.3) does however!
 
-1. You will need to install [MessagePack](https://github.com/neuecc/MessagePack-CSharp#installation) first, and its dependencies.
 
 ## Git
 
@@ -100,11 +98,6 @@ What OS is supported will depend on the web engine you use.
 This project is licensed under the LGPL-3.0 License - see the [LICENSE](https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE) file for details.
 
 # Credits
-
-## Base
-
-- [ZeroMQ](https://zeromq.org/) - Underlying IPC messaging library.
-- [MessagePack](https://github.com/neuecc/MessagePack-CSharp) - Fast serialization
 
 ## CEF Engine
 
