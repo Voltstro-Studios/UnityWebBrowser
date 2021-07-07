@@ -77,7 +77,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.NavigateUrl(url);
+            browserClient.LoadUrl(url);
         }
 
 	    /// <summary>
@@ -121,7 +121,7 @@ namespace UnityWebBrowser
             if (!browserClient.IsRunning)
                 throw new WebBrowserNotReadyException("The web browser is not ready right now!");
 
-            browserClient.ExecuteJS(js);
+            browserClient.ExecuteJs(js);
         }
 
         private void Start()

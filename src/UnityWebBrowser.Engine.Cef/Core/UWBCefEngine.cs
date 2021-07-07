@@ -24,6 +24,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			//If the message loop quits
 			Logger.Debug("Message loop quit.");
 			Dispose();
+			Environment.Exit(0);
 		}
 
 		#region Destroy

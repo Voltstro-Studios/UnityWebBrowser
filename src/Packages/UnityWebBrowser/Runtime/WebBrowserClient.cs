@@ -270,7 +270,7 @@ namespace UnityWebBrowser
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             
             IPEndPoint ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), outPort);
             ipcClient = new TcpClient<IEngine>(ip);
@@ -401,12 +401,12 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
-            /*eventDispatcher.QueueEvent(new KeyboardEvent
+            ipcClient.Proxy.SendKeyboardEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
                 KeysUp = keysUp,
                 Chars = chars
-            });*/
+            });
         }
 
         /// <summary>
@@ -415,11 +415,11 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
         {
-            /*eventDispatcher.QueueEvent(new MouseMoveEvent
+            ipcClient.Proxy.SendMouseMoveEvent(new MouseMoveEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y
-            });*/
+            });
         }
 
         /// <summary>
@@ -432,14 +432,14 @@ namespace UnityWebBrowser
         public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            /*eventDispatcher.QueueEvent(new MouseClickEvent
+            ipcClient.Proxy.SendMouseClickEvent(new MouseClickEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y,
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
-            });*/
+            });
         }
 
         /// <summary>
@@ -450,24 +450,21 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
-            /*eventDispatcher.QueueEvent(new MouseScrollEvent
+            ipcClient.Proxy.SendMouseScrollEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
                 MouseX = mouseX,
                 MouseY = mouseY
-            });*/
+            });
         }
 
         /// <summary>
-        ///     Navigates the browser to a certain URL
+        ///     Tells the browser to load a URL
         /// </summary>
         /// <param name="url"></param>
-        public void NavigateUrl(string url)
+        public void LoadUrl(string url)
         {
-            /*eventDispatcher.QueueEvent(new LoadUrlEvent
-            {
-                Url = url
-            });*/
+            ipcClient.Proxy.LoadUrl(url);
         }
 
         /// <summary>
@@ -475,7 +472,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoForward()
         {
-            //eventDispatcher.QueueEvent(new GoForwardEvent());
+            ipcClient.Proxy.GoForward();
         }
 
         /// <summary>
@@ -483,7 +480,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoBack()
         {
-            //eventDispatcher.QueueEvent(new GoBackEvent());
+            ipcClient.Proxy.GoBack();
         }
 
         /// <summary>
@@ -491,7 +488,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void Refresh()
         {
-            //eventDispatcher.QueueEvent(new RefreshEvent());
+            ipcClient.Proxy.Refresh();
         }
 
         /// <summary>
@@ -500,22 +497,16 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         public void LoadHtml(string html)
         {
-            /*eventDispatcher.QueueEvent(new LoadHtmlEvent
-            {
-                Html = html
-            });*/
+            ipcClient.Proxy.LoadHtml(html);
         }
 
         /// <summary>
         ///     Executes JS in the browser
         /// </summary>
         /// <param name="js"></param>
-        public void ExecuteJS(string js)
+        public void ExecuteJs(string js)
         {
-            /*eventDispatcher.QueueEvent(new ExecuteJsEvent
-            {
-                Js = js
-            });*/
+            ipcClient.Proxy.ExecuteJs(js);
         }
 
         #endregion
@@ -541,6 +532,7 @@ namespace UnityWebBrowser
             if (!IsRunning)
                 return;
             
+            ipcClient.Proxy.Shutdown();
             ipcClient.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);
