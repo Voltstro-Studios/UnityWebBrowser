@@ -16,6 +16,10 @@
         <MessagePackGeneratedResolverName>UnityWebBrowserResolver</MessagePackGeneratedResolverName>
         <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
     </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="ServiceWire" Version="5.3.4" />
+    </ItemGroup>
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />

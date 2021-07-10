@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using ServiceWire;
 using ServiceWire.TcpIp;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -121,7 +122,7 @@ namespace UnityWebBrowser
 
         private Process serverProcess;
 
-        private TcpClient<IEngine> ipcClient;
+        private EngineProxy engineIpc;
 
         /// <summary>
         ///     Texture that the browser will paint to
@@ -273,7 +274,7 @@ namespace UnityWebBrowser
             Thread.Sleep(2000);
             
             IPEndPoint ip = new IPEndPoint(IPAddress.Loopback, outPort);
-            ipcClient = new TcpClient<IEngine>(ip);
+            engineIpc = new EngineProxy(ip, new DefaultSerializer());
         }
 
         /// <summary>
@@ -289,7 +290,7 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                pixels = ipcClient.Proxy.GetPixels();
+                pixels = engineIpc.GetPixels();
             }
         }
 
@@ -377,7 +378,7 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
-            ipcClient.Proxy.SendKeyboardEvent(new KeyboardEvent
+            engineIpc.SendKeyboardEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
                 KeysUp = keysUp,
@@ -391,7 +392,7 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
         {
-            ipcClient.Proxy.SendMouseMoveEvent(new MouseMoveEvent
+            engineIpc.SendMouseMoveEvent(new MouseMoveEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y
@@ -408,7 +409,7 @@ namespace UnityWebBrowser
         public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            ipcClient.Proxy.SendMouseClickEvent(new MouseClickEvent
+            engineIpc.SendMouseClickEvent(new MouseClickEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y,
@@ -426,7 +427,7 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
-            ipcClient.Proxy.SendMouseScrollEvent(new MouseScrollEvent
+            engineIpc.SendMouseScrollEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
                 MouseX = mouseX,
@@ -440,7 +441,7 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         public void LoadUrl(string url)
         {
-            ipcClient.Proxy.LoadUrl(url);
+            engineIpc.LoadUrl(url);
         }
 
         /// <summary>
@@ -448,7 +449,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoForward()
         {
-            ipcClient.Proxy.GoForward();
+            engineIpc.GoForward();
         }
 
         /// <summary>
@@ -456,7 +457,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoBack()
         {
-            ipcClient.Proxy.GoBack();
+            engineIpc.GoBack();
         }
 
         /// <summary>
@@ -464,7 +465,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void Refresh()
         {
-            ipcClient.Proxy.Refresh();
+            engineIpc.Refresh();
         }
 
         /// <summary>
@@ -473,7 +474,7 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         public void LoadHtml(string html)
         {
-            ipcClient.Proxy.LoadHtml(html);
+            engineIpc.LoadHtml(html);
         }
 
         /// <summary>
@@ -482,7 +483,7 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         public void ExecuteJs(string js)
         {
-            ipcClient.Proxy.ExecuteJs(js);
+            engineIpc.ExecuteJs(js);
         }
 
         #endregion
@@ -508,8 +509,8 @@ namespace UnityWebBrowser
             if (!IsRunning)
                 return;
             
-            ipcClient.Proxy.Shutdown();
-            ipcClient.Dispose();
+            engineIpc.Shutdown();
+            engineIpc.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);
 
