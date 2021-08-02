@@ -29,7 +29,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
-    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   
   <ItemGroup>

@@ -16,7 +16,7 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "UnityWebBrowser.Shared.dll",
-        "ServiceWire.dll"
+        "VoltRpc.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

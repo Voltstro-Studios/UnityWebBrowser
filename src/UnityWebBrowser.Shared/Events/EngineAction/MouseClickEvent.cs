@@ -1,23 +1,18 @@
-using System;
-
 namespace UnityWebBrowser.Shared.Events.EngineAction
 {
-    [Serializable]
-    public enum MouseClickType
+    public enum MouseClickType : byte
     {
         Left,
         Middle,
         Right
     }
-    
-    [Serializable]
-    public enum MouseEventType
+
+    public enum MouseEventType : byte
     {
         Down,
         Up
     }
     
-    [Serializable]
     public class MouseClickEvent
     {
         public int MouseX { get; set; }

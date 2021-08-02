@@ -3,8 +3,10 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Net;
-using ServiceWire.TcpIp;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Events.ReadWriters;
+using VoltRpc.Communication;
+using VoltRpc.Communication.TCP;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -13,7 +15,7 @@ namespace UnityWebBrowser.Engine.Shared
 	/// </summary>
     public abstract class EngineEntryPoint : IDisposable
 	{
-		private TcpHost ipcHost;
+		private Host ipcHost;
 		
 		/// <summary>
 	    ///		Called when the arguments are parsed.
@@ -125,9 +127,10 @@ namespace UnityWebBrowser.Engine.Shared
 		    try
 		    {
 			    IPEndPoint ip = new(IPAddress.Loopback, arguments.InPort);
-			    ipcHost = new TcpHost(ip);
-			    ipcHost.AddService(engine);
-			    ipcHost.Open();
+			    ipcHost = new TCPHost(ip);
+				ReadWriterUtils.AddTypeReadWriters(ipcHost.ReaderWriterManager);
+			    ipcHost.AddService<IEngine>(engine);
+                ipcHost.StartListening();
 			    Logger.Debug("IPC Setup done.");
 		    }
 		    catch (Exception ex)
@@ -144,8 +147,7 @@ namespace UnityWebBrowser.Engine.Shared
 
 	    private void ReleaseResources()
 	    {
-		    ipcHost?.Close();
-		    ipcHost?.Dispose();
+            ipcHost?.Dispose();
 	    }
 	}
 }

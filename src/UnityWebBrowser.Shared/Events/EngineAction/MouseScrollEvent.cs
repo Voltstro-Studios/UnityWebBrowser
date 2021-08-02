@@ -1,8 +1,5 @@
-using System;
-
 namespace UnityWebBrowser.Shared.Events.EngineAction
 {
-    [Serializable]
     public class MouseScrollEvent
     {
         public int MouseX { get; set; }

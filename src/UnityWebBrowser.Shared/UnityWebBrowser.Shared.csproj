@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <Import Project="../Imports/Properties.props" />
     
@@ -11,14 +11,9 @@
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     
-    <PropertyGroup>
-        <MessagePackGeneratedResolverNamespace>UnityWebBrowser.Shared</MessagePackGeneratedResolverNamespace>
-        <MessagePackGeneratedResolverName>UnityWebBrowserResolver</MessagePackGeneratedResolverName>
-        <MessagePackGeneratedUsesMapMode>false</MessagePackGeneratedUsesMapMode>
-    </PropertyGroup>
-    
     <ItemGroup>
-      <PackageReference Include="ServiceWire" Version="5.3.4" />
+      <PackageReference Include="VoltRpc" Version="1.0.0" />
+      <PackageReference Include="VoltRpc.Proxy.Generator" Version="1.0.0" />
     </ItemGroup>
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
