@@ -19,7 +19,7 @@ using Debug = UnityEngine.Debug;
 namespace UnityWebBrowser
 {
 	/// <summary>
-	///     Handles managing the process and worker thread
+	///     Handles managing the browser engine process
 	/// </summary>
 	[Serializable]
     public class WebBrowserClient : IDisposable
@@ -104,6 +104,12 @@ namespace UnityWebBrowser
         /// </summary>
         [Tooltip("The port to communicate with the browser process on")]
         public int inPort = 5556;
+
+        /// <summary>
+        ///     Timeout time for connection (in milliseconds)
+        /// </summary>
+        [Tooltip("Timeout time for connection (in milliseconds)")]
+        public int connectionTimeout = 100000;
         
         /// <summary>
         ///     The time between each frame sent the browser process
@@ -225,15 +231,13 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("in-port", outPort);
             argsBuilder.AppendArgument("out-port", inPort);
 
-            //Cache, if cache is disabled Chromium will go into "incognito" mode
+            //If we have a cache, set the cache path
             if (cache)
             {
-                cachePath ??= new FileInfo($"{browserEngineMainDir}/CEFCache");
+                cachePath ??= new FileInfo($"{browserEngineMainDir}/BrowserCache");
                 argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
             }
-            
-            //Add all our arguments that go directly to CEF last
-            
+
             //Setup web RTC
             if(webRtc)
                 argsBuilder.AppendArgument("web-rtc", webRtc);
@@ -276,7 +280,7 @@ namespace UnityWebBrowser
             Thread.Sleep(2000);
             
             IPEndPoint ip = new IPEndPoint(IPAddress.Loopback, outPort);
-            client = new TCPClient(ip);
+            client = new TCPClient(ip, connectionTimeout);
             ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
             client.AddService<IEngine>();
             client.Connect();
@@ -289,7 +293,7 @@ namespace UnityWebBrowser
         /// <returns></returns>
         internal IEnumerator Start()
         {
-            LogDebug("Starting communications between CEF process and Unity...");
+            LogDebug("Starting communications between engine process and Unity...");
             IsRunning = true;
 
             while (IsRunning)
