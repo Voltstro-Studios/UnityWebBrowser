@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -10,10 +9,6 @@ using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
-using UnityWebBrowser.Shared.Events.ReadWriters;
-using VoltRpc.Communication;
-using VoltRpc.Communication.TCP;
-using VoltRpc.Proxy.Generated;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
@@ -129,8 +124,7 @@ namespace UnityWebBrowser
 
         private Process serverProcess;
 
-        private Client client;
-        private IEngine engineProxy;
+        private WebBrowserCommunicationsManager communicationsManager;
 
         /// <summary>
         ///     Texture that the browser will paint to
@@ -257,6 +251,8 @@ namespace UnityWebBrowser
             //Final built arguments
             string arguments = argsBuilder.ToString();
 
+            communicationsManager = new WebBrowserCommunicationsManager(connectionTimeout, outPort);
+
             //Start the server process
             serverProcess = new Process
             {
@@ -270,7 +266,7 @@ namespace UnityWebBrowser
                 },
                 EnableRaisingEvents = true
             };
-            serverProcess.OutputDataReceived += HandleCefProcessLog;
+            serverProcess.OutputDataReceived += HandleEngineProcessLog;
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
@@ -278,13 +274,7 @@ namespace UnityWebBrowser
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
 
             Thread.Sleep(2000);
-            
-            IPEndPoint ip = new IPEndPoint(IPAddress.Loopback, outPort);
-            client = new TCPClient(ip, connectionTimeout);
-            ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
-            client.AddService<IEngine>();
-            client.Connect();
-            engineProxy = new EngineProxy(client);
+            communicationsManager.Connect();
         }
 
         /// <summary>
@@ -300,10 +290,13 @@ namespace UnityWebBrowser
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
-                pixels = engineProxy.GetPixels();
+                pixels = communicationsManager.GetPixels();
             }
         }
 
+        /// <summary>
+        ///     Loads the pixel data into the <see cref="BrowserTexture"/>
+        /// </summary>
         public void LoadTextureData()
         {
             byte[] pixelData = pixels;
@@ -360,9 +353,10 @@ namespace UnityWebBrowser
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private void HandleCefProcessLog(object sender, DataReceivedEventArgs e)
+        private void HandleEngineProcessLog(object sender, DataReceivedEventArgs e)
         {
-            if (serverProcess.HasExited) return;
+            if (serverProcess.HasExited) 
+                return;
 
             if (e.Data.StartsWith("DEBUG "))
                 LogDebug(e.Data.Replace("DEBUG ", ""));
@@ -388,7 +382,7 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
-            engineProxy.SendKeyboardEvent(new KeyboardEvent
+            communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
                 KeysUp = keysUp,
@@ -402,7 +396,7 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
         {
-            engineProxy.SendMouseMoveEvent(new MouseMoveEvent
+            communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y
@@ -419,7 +413,7 @@ namespace UnityWebBrowser
         public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            engineProxy.SendMouseClickEvent(new MouseClickEvent
+            communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
                 MouseX = (int) mousePos.x,
                 MouseY = (int) mousePos.y,
@@ -437,7 +431,7 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
-            engineProxy.SendMouseScrollEvent(new MouseScrollEvent
+            communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
                 MouseX = mouseX,
@@ -451,7 +445,7 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         public void LoadUrl(string url)
         {
-            engineProxy.LoadUrl(url);
+            communicationsManager.LoadUrl(url);
         }
 
         /// <summary>
@@ -459,7 +453,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoForward()
         {
-            engineProxy.GoForward();
+            communicationsManager.GoForward();
         }
 
         /// <summary>
@@ -467,7 +461,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void GoBack()
         {
-            engineProxy.GoBack();
+            communicationsManager.GoBack();
         }
 
         /// <summary>
@@ -475,7 +469,7 @@ namespace UnityWebBrowser
         /// </summary>
         public void Refresh()
         {
-            engineProxy.Refresh();
+            communicationsManager.Refresh();
         }
 
         /// <summary>
@@ -484,7 +478,7 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         public void LoadHtml(string html)
         {
-            engineProxy.LoadHtml(html);
+            communicationsManager.LoadHtml(html);
         }
 
         /// <summary>
@@ -493,7 +487,7 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         public void ExecuteJs(string js)
         {
-            engineProxy.ExecuteJs(js);
+            communicationsManager.ExecuteJs(js);
         }
 
         #endregion
@@ -519,8 +513,7 @@ namespace UnityWebBrowser
             if (!IsRunning)
                 return;
             
-            engineProxy.Shutdown();
-            client.Dispose();
+            communicationsManager.Dispose();
 
             WaitForServerProcess().ConfigureAwait(false);
 
