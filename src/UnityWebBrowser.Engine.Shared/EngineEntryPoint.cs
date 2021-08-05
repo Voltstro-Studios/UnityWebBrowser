@@ -15,7 +15,10 @@ namespace UnityWebBrowser.Engine.Shared
 	/// </summary>
     public abstract class EngineEntryPoint : IDisposable
 	{
+		private const string ActiveEngineFileName = "EngineActive";
+		
 		private Host ipcHost;
+		private FileStream activeFileStream; 
 		
 		/// <summary>
 	    ///		Called when the arguments are parsed.
@@ -100,10 +103,14 @@ namespace UnityWebBrowser.Engine.Shared
 
 				new Option<FileInfo>("-log-path", 
 					() => new FileInfo("cef.log"),
-					"The path to where the CEF log will be"),
+					"The path to where the log will be"),
 				new Option<LogSeverity>("-log-severity", 
 					() => LogSeverity.Info,
-					"The path to where the CEF log will be")
+					"The severity of the logs"),
+				
+				new Option<string>("-active-engine-file-path", 
+					() => string.Empty,
+					"Path were the active file will be")
 			};
 			rootCommand.Description = "Process for windowless CEF rendering.";
 			//Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
@@ -139,6 +146,14 @@ namespace UnityWebBrowser.Engine.Shared
 		    }
 	    }
 
+	    protected void Ready(LaunchArguments arguments)
+	    {
+		    string path = Path.GetFullPath($"{arguments.ActiveEngineFilePath}/{ActiveEngineFileName}");
+
+		    activeFileStream = File.Create(path, 12, FileOptions.DeleteOnClose);
+		    File.SetAttributes(path, FileAttributes.Hidden);
+	    }
+
 	    public virtual void Dispose()
 	    {
 		    ReleaseResources();
@@ -147,6 +162,11 @@ namespace UnityWebBrowser.Engine.Shared
 
 	    private void ReleaseResources()
 	    {
+		    if (activeFileStream != null)
+		    {
+			    activeFileStream.Close();
+			    activeFileStream.Dispose();
+		    }
             ipcHost?.Dispose();
 	    }
 	}

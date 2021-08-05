@@ -34,27 +34,6 @@ namespace UnityWebBrowser
             
             arguments.Add(builtArg);
         }
-        
-        /// <summary>
-        ///     Adds an argument to be used by CEF itself
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="parameters"></param>
-        /// <param name="quotes"></param>
-        public void AppendCefArgument(string arg, object parameters = null, bool quotes = false)
-        {
-            string builtArg = $"-{arg}";
-            if (parameters == null || string.IsNullOrEmpty(parameters.ToString())) 
-                return;
-            
-            //We got spaces
-            if (quotes)
-                builtArg += $"=\"{parameters}\"";
-            else
-                builtArg += $"={parameters}";
-            
-            arguments.Add(builtArg);
-        }
 
         /// <summary>
         ///     Gets the joined arguments <see cref="string"/>

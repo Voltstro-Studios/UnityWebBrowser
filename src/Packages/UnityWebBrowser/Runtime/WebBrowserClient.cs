@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,6 +19,7 @@ namespace UnityWebBrowser
     public class WebBrowserClient : IDisposable
     {
         private const string LoggingTag = "[Web Browser]";
+        private const string ActiveEngineFileName = "EngineActive";
 
         /// <summary>
         ///     The active browser engine this instance is using
@@ -105,6 +105,12 @@ namespace UnityWebBrowser
         /// </summary>
         [Tooltip("Timeout time for connection (in milliseconds)")]
         public int connectionTimeout = 100000;
+
+        /// <summary>
+        ///     Timeout time for waiting for the engine to start (in milliseconds)
+        /// </summary>
+        [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
+        public int engineStartupTimeout = 100000;
         
         /// <summary>
         ///     The time between each frame sent the browser process
@@ -195,7 +201,7 @@ namespace UnityWebBrowser
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
 
-            string browserEngineMainDir = WebBrowserUtils.GetCefMainDirectory();
+            string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
 
             //Start to build our arguments
             WebBrowserArgsBuilder argsBuilder = new WebBrowserArgsBuilder();
@@ -247,6 +253,9 @@ namespace UnityWebBrowser
                 
             if(!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+            
+            //Our engine active file
+            argsBuilder.AppendArgument("active-engine-file-path", browserEngineMainDir, true);
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
@@ -271,9 +280,21 @@ namespace UnityWebBrowser
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
 
-            BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
+            try
+            {
+                WebBrowserUtils.WaitForActiveEngineFile(
+                    Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}"), engineStartupTimeout);
+            }
+            catch (TimeoutException)
+            {
+                LogError("The engine failed to startup in time!");
+                if(!serverProcess.HasExited)
+                    serverProcess.KillTree();
+                throw;
+            }
 
-            Thread.Sleep(2000);
+            BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
+            
             communicationsManager.Connect();
         }
 

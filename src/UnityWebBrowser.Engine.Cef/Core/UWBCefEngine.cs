@@ -17,6 +17,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefEngine.Init();
 			
 			SetupIpc(cefEngine, launchArguments);
+			Ready(launchArguments);
 			
 			//Calling run message loop will cause the main thread to lock (what we want)
 			CefRuntime.RunMessageLoop();

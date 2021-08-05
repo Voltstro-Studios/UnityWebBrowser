@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,10 +20,10 @@ namespace UnityWebBrowser
 #endif
 
 	    /// <summary>
-	    ///     Gets the main directory where logs and cache is stored
+	    ///     Gets the main directory where logs and cache may be stored
 	    /// </summary>
 	    /// <returns></returns>
-	    public static string GetCefMainDirectory()
+	    public static string GetBrowserEngineMainDirectory()
         {
 #if UNITY_EDITOR
             return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
@@ -106,5 +108,28 @@ namespace UnityWebBrowser
 
             return true;
         }
+
+	    /// <summary>
+	    ///		Waits until the file exists
+	    /// </summary>
+	    /// <param name="path"></param>
+	    /// <param name="timeOutTIme"></param>
+	    /// <exception cref="TimeoutException"></exception>
+	    internal static void WaitForActiveEngineFile(string path, int timeOutTIme)
+	    {
+		    float timeUntilCancel = Time.time + timeOutTIme;
+
+		    //Wait until the file exists
+		    while (!File.Exists(path))
+		    {
+			    //If we hit the timeout time, then fail it
+			    if (Time.time >= timeUntilCancel)
+			    {
+				    throw new TimeoutException("The engine did not start within the specified startup time!");
+			    }
+
+			    Thread.Sleep(100);
+		    }
+	    }
     }
 }
