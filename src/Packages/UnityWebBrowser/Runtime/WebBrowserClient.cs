@@ -294,8 +294,16 @@ namespace UnityWebBrowser
             }
 
             BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
-            
-            communicationsManager.Connect();
+
+            try
+            {
+                communicationsManager.Connect();
+            }
+            catch (Exception)
+            {
+                LogError("An error occured while connecting!");
+                throw;
+            }
         }
 
         /// <summary>
