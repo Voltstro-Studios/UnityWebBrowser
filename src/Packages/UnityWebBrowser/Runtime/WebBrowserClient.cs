@@ -301,6 +301,7 @@ namespace UnityWebBrowser
             }
             catch (Exception)
             {
+                serverProcess.KillTree();
                 LogError("An error occured while connecting!");
                 throw;
             }
