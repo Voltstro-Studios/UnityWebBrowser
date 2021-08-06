@@ -3,10 +3,12 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.ReadWriters;
 using VoltRpc.Communication;
 using VoltRpc.Communication.TCP;
+using VoltRpc.Proxy.Generated;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -16,8 +18,15 @@ namespace UnityWebBrowser.Engine.Shared
     public abstract class EngineEntryPoint : IDisposable
 	{
 		private const string ActiveEngineFileName = "EngineActive";
+
+		/// <summary>
+		///		Fire events on the client end
+		/// </summary>
+		protected IClient clientEvents;
 		
 		private Host ipcHost;
+		protected Client ipcClient;
+		
 		private FileStream activeFileStream; 
 		
 		/// <summary>
@@ -121,9 +130,15 @@ namespace UnityWebBrowser.Engine.Shared
 				Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
 				
 				//Run the entry point
-				EntryPoint(parsedArgs, args);
-
-				Console.ReadKey();
+				try
+				{
+					EntryPoint(parsedArgs, args);
+				}
+				catch (Exception ex)
+				{
+					Logger.ErrorException(ex, "Uncaught exception occured in the entry point!");
+					Environment.Exit(-1);
+				}
 			});
 			//Invoke the command line parser and start the handler (the stuff above)
 			return rootCommand.Invoke(args);
@@ -133,12 +148,32 @@ namespace UnityWebBrowser.Engine.Shared
 	    {
 		    try
 		    {
-			    IPEndPoint ip = new(IPAddress.Loopback, arguments.InPort);
-			    ipcHost = new TCPHost(ip);
+			    IPEndPoint hostIp = new(IPAddress.Loopback, arguments.InPort);
+			    ipcHost = new TCPHost(hostIp);
 				ReadWriterUtils.AddTypeReadWriters(ipcHost.ReaderWriterManager);
 			    ipcHost.AddService<IEngine>(engine);
                 ipcHost.StartListening();
-			    Logger.Debug("IPC Setup done.");
+                
+                IPEndPoint clientIp = new(IPAddress.Loopback, arguments.OutPort);
+                ipcClient = new TCPClient(clientIp);
+                ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
+                ipcClient.AddService<IClient>();
+                Task.Run(() =>
+                {
+	                try
+	                {
+		                ipcClient.Connect();
+	                }
+	                catch (ConnectionFailed)
+	                {
+		                Logger.Error("The engine failed to connect back to the Unity client! Client events will not fire!");
+		                ipcClient.Dispose();
+		                ipcClient = null;
+	                }
+                });
+                clientEvents = new ClientProxy(ipcClient);
+
+	            Logger.Debug("IPC Setup done.");
 		    }
 		    catch (Exception ex)
 		    {

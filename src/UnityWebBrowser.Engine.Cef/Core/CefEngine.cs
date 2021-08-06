@@ -134,7 +134,10 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
 					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
+		    cefClient.OnUrlChange += url => OnUrlChanged?.Invoke(url);
 	    }
+
+	    public event Action<string> OnUrlChanged; 
 
 	    public byte[] GetPixels()
 	    {

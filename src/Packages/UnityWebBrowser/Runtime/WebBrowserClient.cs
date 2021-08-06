@@ -260,7 +260,9 @@ namespace UnityWebBrowser
             //Final built arguments
             string arguments = argsBuilder.ToString();
 
-            communicationsManager = new WebBrowserCommunicationsManager(connectionTimeout, outPort);
+            communicationsManager = new WebBrowserCommunicationsManager(connectionTimeout, outPort, inPort);
+            communicationsManager.Listen();
+            communicationsManager.OnUrlChanged += url => OnUrlChanged?.Invoke(url);
 
             //Start the server process
             serverProcess = new Process
@@ -399,6 +401,12 @@ namespace UnityWebBrowser
             else
                 LogDebug(e.Data);
         }
+
+        #endregion
+
+        #region Browser Event
+
+        public event Action<string> OnUrlChanged; 
 
         #endregion
 

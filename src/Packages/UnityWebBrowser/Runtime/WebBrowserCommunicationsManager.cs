@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
+using UnityEngine;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.ReadWriters;
@@ -9,18 +11,34 @@ using VoltRpc.Proxy.Generated;
 
 namespace UnityWebBrowser
 {
-    internal class WebBrowserCommunicationsManager : IEngine, IDisposable
+    internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
         private readonly IEngine engineProxy;
         private readonly Client client;
+
+        private readonly Host host;
+
+        private readonly SynchronizationContext unityThread;
         
-        public WebBrowserCommunicationsManager(int connectionTimeout, int outPort)
+        public WebBrowserCommunicationsManager(int connectionTimeout, int outPort, int inPort)
         {
-            IPEndPoint ip = new IPEndPoint(IPAddress.Loopback, outPort);
-            client = new TCPClient(ip, connectionTimeout);
+            unityThread = SynchronizationContext.Current;
+            
+            IPEndPoint hostIp = new IPEndPoint(IPAddress.Loopback, inPort);
+            host = new TCPHost(hostIp);
+            ReadWriterUtils.AddTypeReadWriters(host.ReaderWriterManager);
+            host.AddService<IClient>(this);
+
+            IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);
+            client = new TCPClient(clientIp, connectionTimeout);
             ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
             client.AddService<IEngine>();
             engineProxy = new EngineProxy(client);
+        }
+
+        public void Listen()
+        {
+            host.StartListening();
         }
 
         public void Connect()
@@ -57,6 +75,25 @@ namespace UnityWebBrowser
         {
             Shutdown();
             client.Dispose();
+            host.Dispose();
+        }
+
+        public event Action<string> OnUrlChanged; 
+
+        public void UrlChange(string url)
+        {
+            unityThread.Post(state =>
+            {
+                try
+                {
+                    OnUrlChanged?.Invoke(url);
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Log to our logger
+                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                }
+            }, null);
         }
     }
 }
