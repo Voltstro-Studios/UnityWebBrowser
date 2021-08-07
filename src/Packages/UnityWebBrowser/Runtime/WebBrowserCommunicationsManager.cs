@@ -26,7 +26,7 @@ namespace UnityWebBrowser
             
             IPEndPoint hostIp = new IPEndPoint(IPAddress.Loopback, inPort);
             host = new TCPHost(hostIp);
-            ReadWriterUtils.AddTypeReadWriters(host.ReaderWriterManager);
+            ReadWriterUtils.AddTypeReadWriters(host.TypeReaderWriterManager);
             host.AddService<IClient>(this);
 
             IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);

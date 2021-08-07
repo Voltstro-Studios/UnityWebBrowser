@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
+using VoltRpc.Communication;
 using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
@@ -550,8 +551,16 @@ namespace UnityWebBrowser
         {
             if (!IsRunning)
                 return;
-            
-            communicationsManager.Dispose();
+
+            try
+            {
+                communicationsManager.Dispose();
+            }
+            catch (NotConnectedException) //Force kill if we are not connected
+            {
+                serverProcess.KillTree();
+                return;
+            }
 
             WaitForServerProcess().ConfigureAwait(false);
 

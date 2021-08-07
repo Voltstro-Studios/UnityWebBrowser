@@ -150,7 +150,7 @@ namespace UnityWebBrowser.Engine.Shared
 		    {
 			    IPEndPoint hostIp = new(IPAddress.Loopback, arguments.InPort);
 			    ipcHost = new TCPHost(hostIp);
-				ReadWriterUtils.AddTypeReadWriters(ipcHost.ReaderWriterManager);
+				ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
 			    ipcHost.AddService<IEngine>(engine);
                 ipcHost.StartListening();
                 

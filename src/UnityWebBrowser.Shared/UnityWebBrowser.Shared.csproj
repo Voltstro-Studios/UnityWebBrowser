@@ -13,7 +13,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-		<PackageReference Include="VoltRpc" Version="1.0.0" />
+		<PackageReference Include="VoltRpc" Version="1.1.1" />
 	    <PackageReference Include="VoltRpc.Proxy.Generator" Version="1.0.0" />
     </ItemGroup>
 
