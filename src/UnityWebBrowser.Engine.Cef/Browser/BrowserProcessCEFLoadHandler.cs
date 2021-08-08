@@ -21,15 +21,21 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         {
             if (frame.IsMain)
             {
-                client.UrlChange(browser.GetMainFrame().Url);
-                Logger.Debug($"START: {browser.GetMainFrame().Url}");
+                string url = browser.GetMainFrame().Url;
+                client.UrlChange(url);
+                client.LoadStart(url);
+                Logger.Debug($"START: {url}");
             }
         }
 
         protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
         {
-            if(frame.IsMain)
-                Logger.Debug($"END: {browser.GetMainFrame().Url}, {httpStatusCode}");
+            if (frame.IsMain)
+            {
+                string url = browser.GetMainFrame().Url;
+                client.LoadFinish(url);
+                Logger.Debug($"END: {url}, {httpStatusCode}");
+            }
         }
 
         protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode, string errorText, string failedUrl)

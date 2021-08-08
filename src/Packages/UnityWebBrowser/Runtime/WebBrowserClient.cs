@@ -261,9 +261,12 @@ namespace UnityWebBrowser
             //Final built arguments
             string arguments = argsBuilder.ToString();
 
+            //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(connectionTimeout, outPort, inPort);
             communicationsManager.Listen();
             communicationsManager.OnUrlChanged += url => OnUrlChanged?.Invoke(url);
+            communicationsManager.OnLoadStart += url => OnLoadStart?.Invoke(url);
+            communicationsManager.OnLoadFinish += url => OnLoadFinish?.Invoke(url);
 
             //Start the server process
             serverProcess = new Process
@@ -310,6 +313,10 @@ namespace UnityWebBrowser
             }
         }
 
+        #region Main Loop
+
+        private byte[] pixels;
+        
         /// <summary>
         ///     Starts updating the <see cref="BrowserTexture" /> data
         /// </summary>
@@ -340,11 +347,7 @@ namespace UnityWebBrowser
             BrowserTexture.LoadRawTextureData(pixelData);
             BrowserTexture.Apply(false);
         }
-
-        #region Pixels
         
-        private byte[] pixels;
-
         #endregion
 
         #region Logging
@@ -405,9 +408,22 @@ namespace UnityWebBrowser
 
         #endregion
 
-        #region Browser Event
+        #region Browser Events
 
-        public event Action<string> OnUrlChanged; 
+        /// <summary>
+        ///     Invoked when the url changes
+        /// </summary>
+        public event Action<string> OnUrlChanged;
+
+        /// <summary>
+        ///     Invoked when the page starts to load
+        /// </summary>
+        public event Action<string> OnLoadStart;
+
+        /// <summary>
+        ///     Invoked when the page finishes loading
+        /// </summary>
+        public event Action<string> OnLoadFinish; 
 
         #endregion
 

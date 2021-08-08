@@ -19,11 +19,21 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			SetupIpc(cefEngine, launchArguments);
 			Ready(launchArguments);
 
+			//Setup our events
 			cefEngine.OnUrlChanged += url =>
 			{
-				//TODO: We sure make the proxy handle IsConnected
-				if(ipcClient is {IsConnected: true})
+				if(IsConnected)
 					clientEvents?.UrlChange(url);
+			};
+			cefEngine.OnLoadStart += url =>
+			{
+				if (IsConnected)
+					clientEvents?.LoadStart(url);
+			};
+			cefEngine.OnLoadFinish += url =>
+			{
+				if (IsConnected)
+					clientEvents?.LoadFinish(url);
 			};
 			
 			//Calling run message loop will cause the main thread to lock (what we want)

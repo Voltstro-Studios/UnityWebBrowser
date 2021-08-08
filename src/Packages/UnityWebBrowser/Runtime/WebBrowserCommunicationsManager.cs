@@ -78,7 +78,9 @@ namespace UnityWebBrowser
             host.Dispose();
         }
 
-        public event Action<string> OnUrlChanged; 
+        public event Action<string> OnUrlChanged;
+        public event Action<string> OnLoadStart;
+        public event Action<string> OnLoadFinish; 
 
         public void UrlChange(string url)
         {
@@ -87,6 +89,38 @@ namespace UnityWebBrowser
                 try
                 {
                     OnUrlChanged?.Invoke(url);
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Log to our logger
+                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                }
+            }, null);
+        }
+
+        public void LoadStart(string url)
+        {
+            unityThread.Post(d =>
+            {
+                try
+                {
+                    OnLoadStart?.Invoke(url);
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Log to our logger
+                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                }
+            }, null);
+        }
+
+        public void LoadFinish(string url)
+        {
+            unityThread.Post(d =>
+            {
+                try
+                {
+                    OnLoadFinish?.Invoke(url);
                 }
                 catch (Exception ex)
                 {

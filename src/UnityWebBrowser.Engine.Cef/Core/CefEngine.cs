@@ -134,10 +134,18 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
 					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
+		    
+		    //Setup cef events
 		    cefClient.OnUrlChange += url => OnUrlChanged?.Invoke(url);
+		    cefClient.OnLoadStart += url => OnLoadStart?.Invoke(url);
+		    cefClient.OnLoadFinish += url => OnLoadFinish?.Invoke(url);
 	    }
 
-	    public event Action<string> OnUrlChanged; 
+	    public event Action<string> OnUrlChanged;
+	    public event Action<string> OnLoadStart;
+	    public event Action<string> OnLoadFinish; 
+
+	    #region Engine Actions
 
 	    public byte[] GetPixels()
 	    {
@@ -206,6 +214,8 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	    {
 		    cefClient.ExecuteJs(js);
 	    }
+	    
+	    #endregion
 
 	    private static void PostTask(CefThreadId threadId, Action action)
 	    {

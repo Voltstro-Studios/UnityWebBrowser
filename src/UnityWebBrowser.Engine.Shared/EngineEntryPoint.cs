@@ -25,9 +25,11 @@ namespace UnityWebBrowser.Engine.Shared
 		protected IClient clientEvents;
 		
 		private Host ipcHost;
-		protected Client ipcClient;
+		private Client ipcClient;
 		
-		private FileStream activeFileStream; 
+		private FileStream activeFileStream;
+
+		protected bool IsConnected => ipcClient.IsConnected;
 		
 		/// <summary>
 	    ///		Called when the arguments are parsed.
@@ -49,7 +51,6 @@ namespace UnityWebBrowser.Engine.Shared
 	    /// <returns></returns>
         public int Main(string[] args)
         {
-
 	        RootCommand rootCommand = new RootCommand
 			{
 				//We got a lot of arguments

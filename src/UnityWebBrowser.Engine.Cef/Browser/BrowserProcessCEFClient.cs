@@ -22,7 +22,9 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		private readonly BrowserProcessCEFDisplayHandler displayHandler;
 		private readonly BrowserProcessCEFRequestHandler requestHandler;
 
-		public event Action<string> OnUrlChange; 
+		public event Action<string> OnUrlChange;
+		public event Action<string> OnLoadStart;
+		public event Action<string> OnLoadFinish; 
 
 		///  <summary>
 		/// 		Creates a new <see cref="BrowserProcessCEFClient"/> instance
@@ -210,6 +212,16 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 		public void UrlChange(string url)
 		{
 			OnUrlChange?.Invoke(url);
+		}
+
+		public void LoadStart(string url)
+		{
+			OnLoadStart?.Invoke(url);
+		}
+
+		public void LoadFinish(string url)
+		{
+			OnLoadFinish?.Invoke(url);
 		}
 
 		#endregion
