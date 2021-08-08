@@ -86,9 +86,9 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser": "2.0.0",
-        "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "90.6.7",
-        "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "90.6.7"
+        "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "92.0.21",
+        "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "92.0.21",
+        "dev.voltstro.unitywebbrowser": "2.0.0"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": {

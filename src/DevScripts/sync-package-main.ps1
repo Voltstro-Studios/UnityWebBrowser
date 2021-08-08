@@ -1,0 +1,1 @@
+Copy-Item -Path "../../LICENSE.md" -Destination "../Packages/UnityWebBrowser/LICENSE.md" -Force -PassThru
