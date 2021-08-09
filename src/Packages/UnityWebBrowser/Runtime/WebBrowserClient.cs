@@ -435,7 +435,7 @@ namespace UnityWebBrowser
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
         /// <param name="chars"></param>
-        public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
+        internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
             communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
@@ -449,7 +449,7 @@ namespace UnityWebBrowser
         ///     Sends a mouse event
         /// </summary>
         /// <param name="mousePos"></param>
-        public void SendMouseMove(Vector2 mousePos)
+        internal void SendMouseMove(Vector2 mousePos)
         {
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
@@ -465,7 +465,7 @@ namespace UnityWebBrowser
         /// <param name="clickCount"></param>
         /// <param name="clickType"></param>
         /// <param name="eventType"></param>
-        public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
+        internal void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
@@ -484,7 +484,7 @@ namespace UnityWebBrowser
         /// <param name="mouseX"></param>
         /// <param name="mouseY"></param>
         /// <param name="mouseScroll"></param>
-        public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
+        internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
@@ -498,7 +498,7 @@ namespace UnityWebBrowser
         ///     Tells the browser to load a URL
         /// </summary>
         /// <param name="url"></param>
-        public void LoadUrl(string url)
+        internal void LoadUrl(string url)
         {
             communicationsManager.LoadUrl(url);
         }
@@ -506,7 +506,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Tells the browser to go forward
         /// </summary>
-        public void GoForward()
+        internal void GoForward()
         {
             communicationsManager.GoForward();
         }
@@ -514,7 +514,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Tells the browser to go back
         /// </summary>
-        public void GoBack()
+        internal void GoBack()
         {
             communicationsManager.GoBack();
         }
@@ -522,7 +522,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Refreshes the browser
         /// </summary>
-        public void Refresh()
+        internal void Refresh()
         {
             communicationsManager.Refresh();
         }
@@ -531,7 +531,7 @@ namespace UnityWebBrowser
         ///     Makes the browser load html
         /// </summary>
         /// <param name="html"></param>
-        public void LoadHtml(string html)
+        internal void LoadHtml(string html)
         {
             communicationsManager.LoadHtml(html);
         }
@@ -540,7 +540,7 @@ namespace UnityWebBrowser
         ///     Executes JS in the browser
         /// </summary>
         /// <param name="js"></param>
-        public void ExecuteJs(string js)
+        internal void ExecuteJs(string js)
         {
             communicationsManager.ExecuteJs(js);
         }
