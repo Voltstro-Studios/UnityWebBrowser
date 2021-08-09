@@ -179,7 +179,7 @@ namespace UnityWebBrowser
 					}
 					catch (Exception)
 					{
-						browserClient.LogWarning($"Unsupported key conversion attempted! Key: {key}");
+						browserClient.Logger.Warn($"Unsupported key conversion attempted! Key: {key}");
 					}
 				}
 

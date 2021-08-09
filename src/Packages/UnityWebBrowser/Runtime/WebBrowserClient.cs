@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
+using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using VoltRpc.Communication;
-using Debug = UnityEngine.Debug;
 
 namespace UnityWebBrowser
 {
@@ -19,7 +19,6 @@ namespace UnityWebBrowser
 	[Serializable]
     public class WebBrowserClient : IDisposable
     {
-        private const string LoggingTag = "[Web Browser]";
         private const string ActiveEngineFileName = "EngineActive";
 
         /// <summary>
@@ -125,10 +124,6 @@ namespace UnityWebBrowser
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
         public LogSeverity logSeverity;
 
-        private FileInfo cachePath;
-
-        private FileInfo logPath;
-
         private Process serverProcess;
 
         private WebBrowserCommunicationsManager communicationsManager;
@@ -139,15 +134,14 @@ namespace UnityWebBrowser
         public Texture2D BrowserTexture { get; private set; }
 
         /// <summary>
-        ///     <see cref="ILogger" /> that we log to
-        /// </summary>
-        internal ILogger Logger { get; private set; } = Debug.unityLogger;
-
-        /// <summary>
         ///     Is the Unity client connected to the browser engine
         /// </summary>
         public bool IsConnected => communicationsManager is { IsConnected: true };
-
+        
+        #region Log Path
+        
+        private FileInfo logPath;
+        
         /// <summary>
         ///     The path that CEF will log to
         /// </summary>
@@ -164,6 +158,12 @@ namespace UnityWebBrowser
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
+
+        #endregion
+
+        #region Cache Path
+
+        private FileInfo cachePath;
 
         /// <summary>
         ///     The path to the cache
@@ -186,6 +186,25 @@ namespace UnityWebBrowser
             }
         }
 
+
+        #endregion
+        
+        #region Logger
+
+        private IWebBrowserLogger logger = new DefaultUnityWebBrowserLogger();
+        
+        /// <summary>
+        ///     Gets the <see cref="IWebBrowserLogger"/> to use for logging
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        public IWebBrowserLogger Logger
+        {
+            get => logger;
+            set => logger = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        #endregion
+
         /// <summary>
         ///     Inits the browser client
         /// </summary>
@@ -194,11 +213,11 @@ namespace UnityWebBrowser
         {
             //Get the path to the CEF browser process and make sure it exists
             string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(browserEngine);
-            LogDebug($"Starting browser engine process from {browserEnginePath}");
+            logger.Debug($"Starting browser engine process from {browserEnginePath}");
 
             if (!File.Exists(browserEnginePath))
             {
-                LogError("The browser engine process doesn't exist!");
+                Logger.Error("The browser engine process doesn't exist!");
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
 
@@ -293,7 +312,7 @@ namespace UnityWebBrowser
             }
             catch (TimeoutException)
             {
-                LogError("The engine failed to startup in time!");
+                logger.Error("The engine failed to startup in time!");
                 if(!serverProcess.HasExited)
                     serverProcess.KillTree();
                 throw;
@@ -308,7 +327,7 @@ namespace UnityWebBrowser
             catch (Exception)
             {
                 serverProcess.KillTree();
-                LogError("An error occured while connecting!");
+                logger.Error("An error occured while connecting!");
                 throw;
             }
         }
@@ -323,7 +342,7 @@ namespace UnityWebBrowser
         /// <returns></returns>
         internal IEnumerator Start()
         {
-            LogDebug("Starting communications between engine process and Unity...");
+            logger.Debug("Starting browser render loop...");
 
             while (IsConnected)
             {
@@ -351,58 +370,21 @@ namespace UnityWebBrowser
 
         #region Logging
 
-        /// <summary>
-        ///     Logs a debug message
-        /// </summary>
-        /// <param name="message"></param>
-        internal void LogDebug(object message)
-        {
-            Logger.Log(LogType.Log, LoggingTag, message);
-        }
-
-        /// <summary>
-        ///     Logs a warning
-        /// </summary>
-        /// <param name="message"></param>
-        internal void LogWarning(object message)
-        {
-            Logger.LogWarning(LoggingTag, message);
-        }
-
-        /// <summary>
-        ///     Logs a error
-        /// </summary>
-        /// <param name="message"></param>
-        internal void LogError(object message)
-        {
-            Logger.LogError(LoggingTag, message);
-        }
-
-        /// <summary>
-        ///     Replaces the logger the web browser will use
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public void ReplaceLogger(ILogger logger)
-        {
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
         private void HandleEngineProcessLog(object sender, DataReceivedEventArgs e)
         {
             if (serverProcess.HasExited) 
                 return;
 
             if (e.Data.StartsWith("DEBUG "))
-                LogDebug(e.Data.Replace("DEBUG ", ""));
+                logger.Debug(e.Data.Replace("DEBUG ", ""));
             else if (e.Data.StartsWith("INFO "))
-                LogDebug(e.Data.Replace("INFO ", ""));
+                logger.Debug(e.Data.Replace("INFO ", ""));
             else if (e.Data.StartsWith("WARN "))
-                LogWarning(e.Data.Replace("WARN ", ""));
+                logger.Warn(e.Data.Replace("WARN ", ""));
             else if (e.Data.StartsWith("ERROR "))
-                LogError(e.Data.Replace("ERROR ", ""));
+                logger.Error(e.Data.Replace("ERROR ", ""));
             else
-                LogDebug(e.Data);
+                Logger.Debug(e.Data);
         }
 
         #endregion
@@ -609,7 +591,7 @@ namespace UnityWebBrowser
 
             WaitForServerProcess().ConfigureAwait(false);
 
-            LogDebug("Web browser shutdown.");
+            Logger.Debug("Web browser shutdown.");
         }
 
         private async Task WaitForServerProcess()
@@ -619,7 +601,7 @@ namespace UnityWebBrowser
             if (!serverProcess.HasExited)
             {
                 serverProcess.KillTree();
-                LogWarning("Forced killed web browser process!");
+                Logger.Warn("Forced killed web browser process!");
             }
             
             serverProcess.Dispose();
