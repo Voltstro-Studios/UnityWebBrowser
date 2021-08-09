@@ -9,7 +9,6 @@ using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
-using VoltRpc.Communication;
 
 namespace UnityWebBrowser
 {
@@ -419,7 +418,7 @@ namespace UnityWebBrowser
         internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
@@ -436,7 +435,7 @@ namespace UnityWebBrowser
         internal void SendMouseMove(Vector2 mousePos)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
@@ -456,7 +455,7 @@ namespace UnityWebBrowser
             MouseEventType eventType)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
@@ -477,7 +476,7 @@ namespace UnityWebBrowser
         internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
@@ -494,7 +493,7 @@ namespace UnityWebBrowser
         internal void LoadUrl(string url)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.LoadUrl(url);
         }
@@ -505,7 +504,7 @@ namespace UnityWebBrowser
         internal void GoForward()
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.GoForward();
         }
@@ -516,7 +515,7 @@ namespace UnityWebBrowser
         internal void GoBack()
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.GoBack();
         }
@@ -527,7 +526,7 @@ namespace UnityWebBrowser
         internal void Refresh()
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.Refresh();
         }
@@ -539,7 +538,7 @@ namespace UnityWebBrowser
         internal void LoadHtml(string html)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.LoadHtml(html);
         }
@@ -551,7 +550,7 @@ namespace UnityWebBrowser
         internal void ExecuteJs(string js)
         {
             if (!IsConnected)
-                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
             communicationsManager.ExecuteJs(js);
         }
@@ -583,7 +582,7 @@ namespace UnityWebBrowser
             {
                 communicationsManager.Dispose();
             }
-            catch (NotConnectedException) //Force kill if we are not connected
+            catch (VoltRpc.Communication.NotConnectedException) //Force kill if we are not connected
             {
                 serverProcess.KillTree();
                 return;
