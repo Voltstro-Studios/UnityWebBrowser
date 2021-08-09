@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityWebBrowser.Input;
-using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Events.EngineAction;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -42,11 +41,11 @@ namespace UnityWebBrowser
 	    /// <summary>
 	    ///     Makes the browser go back a page
 	    /// </summary>
-	    /// <exception cref="WebBrowserNotReadyException"></exception>
+	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
 	    public void GoBack()
         {
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.GoBack();
         }
@@ -54,11 +53,11 @@ namespace UnityWebBrowser
 	    /// <summary>
 	    ///     Make the browser go forward a page
 	    /// </summary>
-	    /// <exception cref="WebBrowserNotReadyException"></exception>
+	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
 	    public void GoForward()
         {
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.GoForward();
         }
@@ -68,14 +67,14 @@ namespace UnityWebBrowser
 	    /// </summary>
 	    /// <param name="url"></param>
 	    /// <exception cref="ArgumentNullException"></exception>
-	    /// <exception cref="WebBrowserNotReadyException"></exception>
+	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
 	    public void NavigateUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
 
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.LoadUrl(url);
         }
@@ -83,11 +82,11 @@ namespace UnityWebBrowser
 	    /// <summary>
 	    ///     Refreshes the browser
 	    /// </summary>
-	    /// <exception cref="WebBrowserNotReadyException"></exception>
+	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
 	    public void Refresh()
         {
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.Refresh();
         }
@@ -97,14 +96,14 @@ namespace UnityWebBrowser
 	    /// </summary>
 	    /// <param name="html"></param>
 	    /// <exception cref="ArgumentNullException"></exception>
-	    /// <exception cref="WebBrowserNotReadyException"></exception>
+	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
 	    public void LoadHtml(string html)
         {
             if (string.IsNullOrWhiteSpace(html))
                 throw new ArgumentNullException(nameof(html));
 
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.LoadHtml(html);
         }
@@ -118,8 +117,8 @@ namespace UnityWebBrowser
             if (string.IsNullOrWhiteSpace(js))
                 throw new ArgumentNullException(nameof(js));
 
-            if (!browserClient.IsRunning)
-                throw new WebBrowserNotReadyException("The web browser is not ready right now!");
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.ExecuteJs(js);
         }

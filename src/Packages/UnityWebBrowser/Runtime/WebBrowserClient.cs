@@ -144,22 +144,22 @@ namespace UnityWebBrowser
         internal ILogger Logger { get; private set; } = Debug.unityLogger;
 
         /// <summary>
-        ///     Is the web browser client running?
+        ///     Is the Unity client connected to the browser engine
         /// </summary>
-        public bool IsRunning { get; private set; }
+        public bool IsConnected => communicationsManager is { IsConnected: true };
 
         /// <summary>
         ///     The path that CEF will log to
         /// </summary>
-        /// <exception cref="WebBrowserRunningException"></exception>
+        /// <exception cref="WebBrowserIsConnectedException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public FileInfo LogPath
         {
             get => logPath;
             set
             {
-                if (IsRunning)
-                    throw new WebBrowserRunningException();
+                if (IsConnected)
+                    throw new WebBrowserIsConnectedException("You cannot change the log path once the browser engine is connected");
 
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
             }
@@ -168,7 +168,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The path to the cache
         /// </summary>
-        /// <exception cref="WebBrowserRunningException"></exception>
+        /// <exception cref="WebBrowserIsConnectedException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public FileInfo CachePath
@@ -176,8 +176,8 @@ namespace UnityWebBrowser
             get => cachePath;
             set
             {
-                if (IsRunning)
-                    throw new WebBrowserRunningException();
+                if (IsConnected)
+                    throw new WebBrowserIsConnectedException("You cannot change the cache path once the browser engine is connected");
 
                 if (!cache)
                     throw new ArgumentException("The cache is disabled!");
@@ -324,9 +324,8 @@ namespace UnityWebBrowser
         internal IEnumerator Start()
         {
             LogDebug("Starting communications between engine process and Unity...");
-            IsRunning = true;
 
-            while (IsRunning)
+            while (IsConnected)
             {
                 yield return new WaitForSecondsRealtime(eventPollingTime);
 
@@ -437,6 +436,9 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
@@ -451,6 +453,9 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         internal void SendMouseMove(Vector2 mousePos)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
                 MouseX = (int) mousePos.x,
@@ -468,6 +473,9 @@ namespace UnityWebBrowser
         internal void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
                 MouseX = (int) mousePos.x,
@@ -486,6 +494,9 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
@@ -500,6 +511,9 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         internal void LoadUrl(string url)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.LoadUrl(url);
         }
 
@@ -508,6 +522,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoForward()
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.GoForward();
         }
 
@@ -516,6 +533,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoBack()
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.GoBack();
         }
 
@@ -524,6 +544,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void Refresh()
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.Refresh();
         }
 
@@ -533,6 +556,9 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         internal void LoadHtml(string html)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.LoadHtml(html);
         }
 
@@ -542,6 +568,9 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         internal void ExecuteJs(string js)
         {
+            if (!IsConnected)
+                throw new NotConnectedException("The Unity client is not connected to the browser engine!");
+            
             communicationsManager.ExecuteJs(js);
         }
 
@@ -565,7 +594,7 @@ namespace UnityWebBrowser
 
         private void ReleaseResources()
         {
-            if (!IsRunning)
+            if (!IsConnected)
                 return;
 
             try

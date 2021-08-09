@@ -19,6 +19,8 @@ namespace UnityWebBrowser
         private readonly Host host;
 
         private readonly SynchronizationContext unityThread;
+
+        public bool IsConnected => client.IsConnected;
         
         public WebBrowserCommunicationsManager(int connectionTimeout, int outPort, int inPort)
         {
