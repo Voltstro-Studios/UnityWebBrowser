@@ -190,7 +190,10 @@ namespace UnityWebBrowser
         
         #region Logger
 
-        private IWebBrowserLogger logger = new DefaultUnityWebBrowserLogger();
+        /// <summary>
+        ///     Internal usage of <see cref="IWebBrowserLogger"/>
+        /// </summary>
+        internal IWebBrowserLogger logger = new DefaultUnityWebBrowserLogger();
         
         /// <summary>
         ///     Gets the <see cref="IWebBrowserLogger"/> to use for logging
@@ -299,7 +302,7 @@ namespace UnityWebBrowser
                 },
                 EnableRaisingEvents = true
             };
-            serverProcess.OutputDataReceived += HandleEngineProcessLog;
+            serverProcess.OutputDataReceived += new ProcessLogHandler(this).HandleProcessLog;
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
@@ -365,27 +368,6 @@ namespace UnityWebBrowser
             BrowserTexture.Apply(false);
         }
         
-        #endregion
-
-        #region Logging
-
-        private void HandleEngineProcessLog(object sender, DataReceivedEventArgs e)
-        {
-            if (serverProcess.HasExited) 
-                return;
-
-            if (e.Data.StartsWith("DEBUG "))
-                logger.Debug(e.Data.Replace("DEBUG ", ""));
-            else if (e.Data.StartsWith("INFO "))
-                logger.Debug(e.Data.Replace("INFO ", ""));
-            else if (e.Data.StartsWith("WARN "))
-                logger.Warn(e.Data.Replace("WARN ", ""));
-            else if (e.Data.StartsWith("ERROR "))
-                logger.Error(e.Data.Replace("ERROR ", ""));
-            else
-                Logger.Debug(e.Data);
-        }
-
         #endregion
 
         #region Browser Events

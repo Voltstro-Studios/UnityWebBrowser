@@ -213,9 +213,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7454210983313359673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 110.3999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210983610425330, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 66.1001
+      objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.browserEngine
       value: UnityWebBrowser.Engine.Cef
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.remoteDebugging
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730585, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_SizeDelta.y
