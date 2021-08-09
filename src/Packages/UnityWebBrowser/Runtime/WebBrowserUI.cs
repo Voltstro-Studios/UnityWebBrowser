@@ -178,8 +178,8 @@ namespace UnityWebBrowser
 							keysUp.Add((int) key.keyCode.UnityKeyToWindowKey());
 					}
 					catch (Exception)
-					{
-						browserClient.Logger.Warn($"Unsupported key conversion attempted! Key: {key}");
+                    {
+                        browserClient.logger.Warn($"Unsupported key conversion attempted! Key: {key}");
 					}
 				}
 

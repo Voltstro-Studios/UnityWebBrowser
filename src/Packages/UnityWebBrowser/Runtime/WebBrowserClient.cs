@@ -219,7 +219,7 @@ namespace UnityWebBrowser
 
             if (!File.Exists(browserEnginePath))
             {
-                Logger.Error("The browser engine process doesn't exist!");
+                logger.Error("The browser engine process doesn't exist!");
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
 
@@ -572,7 +572,7 @@ namespace UnityWebBrowser
 
             WaitForServerProcess().ConfigureAwait(false);
 
-            Logger.Debug("Web browser shutdown.");
+            logger.Debug("Web browser shutdown.");
         }
 
         private async Task WaitForServerProcess()
@@ -582,7 +582,7 @@ namespace UnityWebBrowser
             if (!serverProcess.HasExited)
             {
                 serverProcess.KillTree();
-                Logger.Warn("Forced killed web browser process!");
+                logger.Warn("Forced killed web browser process!");
             }
             
             serverProcess.Dispose();
