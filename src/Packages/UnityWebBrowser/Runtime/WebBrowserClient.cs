@@ -86,24 +86,10 @@ namespace UnityWebBrowser
         public int remoteDebuggingPort = 9022;
 
         /// <summary>
-        ///     The port to communicate with the browser process on
+        ///     Settings related to IPC
         /// </summary>
-        [Header("IPC Settings")]
-        [FormerlySerializedAs("port")]
-        [Tooltip("The port to communicate with the browser process on")]
-        public int outPort = 5555;
-
-        /// <summary>
-        ///     The port to communicate with the browser process on
-        /// </summary>
-        [Tooltip("The port to communicate with the browser process on")]
-        public int inPort = 5556;
-
-        /// <summary>
-        ///     Timeout time for connection (in milliseconds)
-        /// </summary>
-        [Tooltip("Timeout time for connection (in milliseconds)")]
-        public int connectionTimeout = 100000;
+        [Header("IPC Settings")] 
+        public WebBrowserIpcSettings ipcSettings = new WebBrowserIpcSettings();
 
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
@@ -249,9 +235,18 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
-            //IPC ports
-            argsBuilder.AppendArgument("in-port", outPort);
-            argsBuilder.AppendArgument("out-port", inPort);
+            //IPC settings
+            argsBuilder.AppendArgument("pipes", ipcSettings.preferPipes);
+            if (ipcSettings.preferPipes)
+            {
+                argsBuilder.AppendArgument("in-location", ipcSettings.outPipeName, true);
+                argsBuilder.AppendArgument("out-location", ipcSettings.inPipeName, true);
+            }
+            else
+            {
+                argsBuilder.AppendArgument("in-location", ipcSettings.outPort);
+                argsBuilder.AppendArgument("out-location", ipcSettings.inPort);
+            }
 
             //If we have a cache, set the cache path
             if (cache)
@@ -283,7 +278,7 @@ namespace UnityWebBrowser
             string arguments = argsBuilder.ToString();
 
             //Setup communication manager
-            communicationsManager = new WebBrowserCommunicationsManager(connectionTimeout, outPort, inPort);
+            communicationsManager = new WebBrowserCommunicationsManager(ipcSettings, logger);
             communicationsManager.Listen();
             communicationsManager.OnUrlChanged += url => OnUrlChanged?.Invoke(url);
             communicationsManager.OnLoadStart += url => OnLoadStart?.Invoke(url);

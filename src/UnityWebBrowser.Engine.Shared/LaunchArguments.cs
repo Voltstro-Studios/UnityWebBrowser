@@ -80,14 +80,19 @@ namespace UnityWebBrowser.Engine.Shared
         public string ProxyPassword { get; set; }
         
         /// <summary>
-        ///     In port for IPC
+        ///     Pipes or not
         /// </summary>
-        public int InPort { get; set; }
+        public bool Pipes { get; set; }
         
         /// <summary>
-        ///     Out port for IPC
+        ///     In location (Either the pipe name or port)
         /// </summary>
-        public int OutPort { get; set; }
+        public string InLocation { get; set; }
+
+        /// <summary>
+        ///     Out location (Either the pipe name or port)
+        /// </summary>
+        public string OutLocation { get; set; }
 
         /// <summary>
         ///     The path you should log browser events to

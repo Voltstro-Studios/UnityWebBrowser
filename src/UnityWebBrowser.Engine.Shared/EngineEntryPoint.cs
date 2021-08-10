@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.ReadWriters;
 using VoltRpc.Communication;
+using VoltRpc.Communication.Pipes;
 using VoltRpc.Communication.TCP;
 using VoltRpc.Proxy.Generated;
 
@@ -104,12 +105,15 @@ namespace UnityWebBrowser.Engine.Shared
 					() => null, 
 					"The proxy auth password"),
 				
-				new Option<int>("-in-port",
-					() => 5555,
-					"IPC port"),
-				new Option<int>("-out-port",
-					() => 5556,
-					"IPC port"),
+				new Option<bool>("-pipes",
+					() => true,
+					"Use pipes or not"),
+				new Option<string>("-in-location",
+					() => "UnityWebBrowserIn",
+					"In location"),
+				new Option<string>("-out-location",
+					() => "UnityWebBrowserOut",
+					"Out location"),
 
 				new Option<FileInfo>("-log-path", 
 					() => new FileInfo("cef.log"),
@@ -149,14 +153,50 @@ namespace UnityWebBrowser.Engine.Shared
 	    {
 		    try
 		    {
-			    IPEndPoint hostIp = new(IPAddress.Loopback, arguments.InPort);
-			    ipcHost = new TCPHost(hostIp);
-				ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
+			    if (arguments.Pipes)
+			    {
+				    Logger.Debug($"Using pipes host on pipe: '{arguments.InLocation}'");
+				    ipcHost = new PipesHost(arguments.InLocation);
+				    
+				    Logger.Debug($"Using pipes client on pipe: '{arguments.OutLocation}'");
+				    ipcClient = new PipesClient(arguments.OutLocation);
+			    }
+			    else
+			    {
+				    Logger.Debug($"Using pipes host on pipe: '{arguments.InLocation}'");
+				    if (!int.TryParse(arguments.InLocation, out int inPort))
+				    {
+					    Logger.Error("The provided in port is not an int!");
+					    
+					    Dispose();
+					    return;
+				    }
+
+				    Logger.Debug($"Using TCP host port: {inPort}");
+				    IPEndPoint hostIp = new IPEndPoint(IPAddress.Loopback, inPort);
+				    ipcHost = new TCPHost(hostIp);
+				    
+				    if (!int.TryParse(arguments.OutLocation, out int outPort))
+				    {
+					    Logger.Error("The provided out port is not an int!");
+					    
+					    Dispose();
+					    return;
+				    }
+				    
+				    Logger.Debug($"Using TCP client on pipe: '{outPort}'");
+				    IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);
+				    ipcClient = new TCPClient(clientIp);
+			    }
+
+			    //IPEndPoint hostIp = new(IPAddress.Loopback, arguments.InPort);
+			    //ipcHost = new TCPHost(hostIp);
+			    ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
 			    ipcHost.AddService<IEngine>(engine);
                 ipcHost.StartListening();
                 
-                IPEndPoint clientIp = new(IPAddress.Loopback, arguments.OutPort);
-                ipcClient = new TCPClient(clientIp);
+                //IPEndPoint clientIp = new(IPAddress.Loopback, arguments.OutPort);
+                //ipcClient = new TCPClient(clientIp);
                 ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
                 ipcClient.AddService<IClient>();
                 Task.Run(() =>

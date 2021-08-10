@@ -16,7 +16,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "UnityWebBrowser.Shared.dll",
-        "VoltRpc.dll"
+        "VoltRpc.dll",
+        "VoltRpc.Communication.Pipes.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

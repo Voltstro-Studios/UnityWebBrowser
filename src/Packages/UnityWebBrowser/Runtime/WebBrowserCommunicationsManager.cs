@@ -2,10 +2,12 @@
 using System.Net;
 using System.Threading;
 using UnityEngine;
+using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
 using UnityWebBrowser.Shared.Events.ReadWriters;
 using VoltRpc.Communication;
+using VoltRpc.Communication.Pipes;
 using VoltRpc.Communication.TCP;
 using VoltRpc.Proxy.Generated;
 
@@ -15,37 +17,47 @@ namespace UnityWebBrowser
     {
         private readonly IEngine engineProxy;
         private readonly Client client;
-
         private readonly Host host;
 
         private readonly SynchronizationContext unityThread;
+        private readonly IWebBrowserLogger logger;
 
         public bool IsConnected => client.IsConnected;
         
-        public WebBrowserCommunicationsManager(int connectionTimeout, int outPort, int inPort)
+        public WebBrowserCommunicationsManager(WebBrowserIpcSettings ipcSettings, IWebBrowserLogger logger)
         {
             unityThread = SynchronizationContext.Current;
+            this.logger = logger;
             
-            IPEndPoint hostIp = new IPEndPoint(IPAddress.Loopback, inPort);
-            host = new TCPHost(hostIp);
+            if (ipcSettings.preferPipes)
+            {
+                logger.Debug("Using pipes configuration...");
+                
+                host = new PipesHost(ipcSettings.inPipeName);
+                client = new PipesClient(ipcSettings.outPipeName, ipcSettings.connectionTimeout, Client.DefaultBufferSize);
+            }
+            else
+            {
+                host = new TCPHost(new IPEndPoint(IPAddress.Loopback, ipcSettings.inPort));
+                client = new TCPClient(new IPEndPoint(IPAddress.Loopback, ipcSettings.outPort));
+            }
+            
             ReadWriterUtils.AddTypeReadWriters(host.TypeReaderWriterManager);
             host.AddService<IClient>(this);
-
-            IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);
-            client = new TCPClient(clientIp, connectionTimeout);
+            
             ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
             client.AddService<IEngine>();
             engineProxy = new EngineProxy(client);
         }
 
-        public void Listen()
-        {
-            host.StartListening();
-        }
-
         public void Connect()
         {
             client.Connect();
+        }
+
+        public void Listen()
+        {
+            host.StartListening();
         }
 
         public byte[] GetPixels() => engineProxy.GetPixels();
