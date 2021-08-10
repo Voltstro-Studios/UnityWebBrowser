@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;

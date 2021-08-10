@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
-using UnityEngine;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events.EngineAction;
@@ -31,13 +30,15 @@ namespace UnityWebBrowser
             
             if (ipcSettings.preferPipes)
             {
-                logger.Debug("Using pipes configuration...");
+                logger.Debug("Using pipes communication...");
                 
                 host = new PipesHost(ipcSettings.inPipeName);
                 client = new PipesClient(ipcSettings.outPipeName, ipcSettings.connectionTimeout, Client.DefaultBufferSize);
             }
             else
             {
+                logger.Debug("Using TCP communication...");
+                
                 host = new TCPHost(new IPEndPoint(IPAddress.Loopback, ipcSettings.inPort));
                 client = new TCPClient(new IPEndPoint(IPAddress.Loopback, ipcSettings.outPort));
             }
@@ -106,8 +107,7 @@ namespace UnityWebBrowser
                 }
                 catch (Exception ex)
                 {
-                    //TODO: Log to our logger
-                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                    logger.Error($"An error occured in OnUrlChanged! {ex}");
                 }
             }, null);
         }
@@ -122,8 +122,7 @@ namespace UnityWebBrowser
                 }
                 catch (Exception ex)
                 {
-                    //TODO: Log to our logger
-                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                    logger.Error($"An error occured in OnLoadStart! {ex}");
                 }
             }, null);
         }
@@ -138,8 +137,7 @@ namespace UnityWebBrowser
                 }
                 catch (Exception ex)
                 {
-                    //TODO: Log to our logger
-                    Debug.LogError($"An error occured in OnUrlChanged! {ex}");
+                    logger.Error($"An error occured in OnLoadFinish! {ex}");
                 }
             }, null);
         }
