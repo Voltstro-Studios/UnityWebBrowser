@@ -39,8 +39,8 @@ namespace UnityWebBrowser
             {
                 logger.Debug("Using TCP communication...");
                 
-                host = new TCPHost(new IPEndPoint(IPAddress.Loopback, ipcSettings.inPort));
-                client = new TCPClient(new IPEndPoint(IPAddress.Loopback, ipcSettings.outPort));
+                host = new TCPHost(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.inPort));
+                client = new TCPClient(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.outPort));
             }
             
             ReadWriterUtils.AddTypeReadWriters(host.TypeReaderWriterManager);

@@ -82,7 +82,8 @@ namespace UnityWebBrowser
         ///     The port to use for remote debugging
         /// </summary>
         [Tooltip("The port to use for remote debugging")]
-        public int remoteDebuggingPort = 9022;
+        [Range(1024, 65353)]
+        public uint remoteDebuggingPort = 9022;
 
         /// <summary>
         ///     Settings related to IPC
@@ -97,9 +98,10 @@ namespace UnityWebBrowser
         public int engineStartupTimeout = 100000;
         
         /// <summary>
-        ///     The time between each frame sent the browser process
+        ///     How often to update the <see cref="BrowserTexture"/>
         /// </summary>
-        [Tooltip("The time between each frame sent the browser process")]
+        [Tooltip("How often to update the Browser Texture")]
+        [Min(0)]
         public float eventPollingTime = 0.04f;
 
         /// <summary>

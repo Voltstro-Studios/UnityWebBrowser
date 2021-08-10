@@ -31,13 +31,15 @@ namespace UnityWebBrowser
         ///     Whats the port for outwards communication
         /// </summary>
         [Tooltip("Whats the port for outwards communication")]
-        public int outPort = 5555;
+        [Range(1024, 65353)]
+        public uint outPort = 5555;
         
         /// <summary>
         ///     Whats the port for inwards communication
         /// </summary>
         [Tooltip("Whats the port for inwards communication")]
-        public int inPort = 5555;
+        [Range(1024, 65353)]
+        public uint inPort = 5556;
         
         /// <summary>
         ///     Timeout time for connection (in milliseconds)

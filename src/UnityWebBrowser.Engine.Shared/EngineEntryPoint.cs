@@ -184,7 +184,7 @@ namespace UnityWebBrowser.Engine.Shared
 					    return;
 				    }
 				    
-				    Logger.Debug($"Using TCP client on pipe: '{outPort}'");
+				    Logger.Debug($"Using TCP client port: {outPort}");
 				    IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);
 				    ipcClient = new TCPClient(clientIp);
 			    }
