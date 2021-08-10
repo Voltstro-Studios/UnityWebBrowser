@@ -25,8 +25,18 @@ namespace UnityWebBrowser
             if (webBrowserUi == null)
                 throw new NullReferenceException("Web browser UI is null!");
 
-            webBrowserUi.browserClient.OnUrlChanged += url => inputField.text = url;
+            webBrowserUi.browserClient.OnUrlChanged += OnUrlChanged;
             inputField.text = webBrowserUi.browserClient.initialUrl;
+        }
+
+        private void OnUrlChanged(string url)
+        {
+            inputField.text = url;
+        }
+
+        private void OnDestroy()
+        {
+            webBrowserUi.browserClient.OnUrlChanged -= OnUrlChanged;
         }
 
         /// <summary>

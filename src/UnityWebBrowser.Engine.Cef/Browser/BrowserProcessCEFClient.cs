@@ -43,7 +43,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 				browserHost = cefBrowser.GetHost();
 				mainFrame = cefBrowser.GetMainFrame();
 			};
-			displayHandler = new BrowserProcessCEFDisplayHandler();
+			displayHandler = new BrowserProcessCEFDisplayHandler(this);
 			requestHandler = new BrowserProcessCEFRequestHandler(proxySettings);
 		}
 

@@ -1,5 +1,4 @@
-using System;
-using UnityWebBrowser.Engine.Cef.Core;
+using System.Linq;
 using UnityWebBrowser.Engine.Shared;
 using Xilium.CefGlue;
 
@@ -11,6 +10,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     public class BrowserProcessCEFLoadHandler : CefLoadHandler
     {
         private readonly BrowserProcessCEFClient client;
+        private string[] ignoredLoadUrls = new[] { "about:blank" };
 
         internal BrowserProcessCEFLoadHandler(BrowserProcessCEFClient client)
         {
@@ -19,22 +19,29 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnLoadStart(CefBrowser browser, CefFrame frame, CefTransitionType transitionType)
         {
+            string url = frame.Url;
+            if(ignoredLoadUrls.Contains(url))
+                return;
+            
+            Logger.Debug($"Loading: {url}");
+            
             if (frame.IsMain)
             {
-                string url = browser.GetMainFrame().Url;
-                client.UrlChange(url);
                 client.LoadStart(url);
-                Logger.Debug($"START: {url}");
             }
         }
 
         protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
         {
+            string url = frame.Url;
+            if(ignoredLoadUrls.Contains(url))
+                return;
+            
+            Logger.Debug($"Loaded: {url}");
+            
             if (frame.IsMain)
             {
-                string url = browser.GetMainFrame().Url;
                 client.LoadFinish(url);
-                Logger.Debug($"END: {url}, {httpStatusCode}");
             }
         }
 
@@ -46,6 +53,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
                 or CefErrorCode.BLOCKED_BY_CSP)
                 return;
 				
+            //TODO: We should move this to an internal scheme page thingy
             string html = 
                 $@"<style>
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
@@ -58,6 +66,12 @@ font-family: 'Ubuntu', sans-serif;
             client.LoadHtml(html);
 
             Logger.Error($"An error occurred while trying to load '{failedUrl}'! Error: {errorText} (Code: {errorCode})");
+        }
+
+        protected override void OnLoadingStateChange(CefBrowser browser, bool isLoading, bool canGoBack, bool canGoForward)
+        {
+            //TODO: Implement events for this
+            base.OnLoadingStateChange(browser, isLoading, canGoBack, canGoForward);
         }
     }
 }
