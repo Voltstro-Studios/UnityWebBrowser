@@ -12,7 +12,7 @@ namespace UnityWebBrowser.Shared.Events
         Down,
         Up
     }
-    
+
     public class MouseClickEvent
     {
         public int MouseX { get; set; }

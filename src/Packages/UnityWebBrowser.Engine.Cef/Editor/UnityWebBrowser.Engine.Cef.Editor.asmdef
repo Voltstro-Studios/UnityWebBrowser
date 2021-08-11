@@ -1,19 +1,19 @@
 {
-    "name": "UnityWebBrowser.Engine.Cef.Editor",
-    "rootNamespace": "UnityWebBrowser.Engine.Cef.Editor",
-    "references": [
-        "UnityWebBrowser.Editor",
-        "UnityWebBrowser.Editor.BE"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "UnityWebBrowser.Engine.Cef.Editor",
+  "rootNamespace": "UnityWebBrowser.Engine.Cef.Editor",
+  "references": [
+    "UnityWebBrowser.Editor",
+    "UnityWebBrowser.Editor.BE"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

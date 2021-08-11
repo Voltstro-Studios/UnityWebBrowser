@@ -10,12 +10,12 @@ namespace UnityWebBrowser.Logging
         {
             logger = client.logger;
         }
-        
+
         public void HandleProcessLog(object sender, DataReceivedEventArgs e)
         {
-            if(e.Data == null)
+            if (e.Data == null)
                 return;
-            
+
             if (e.Data.StartsWith("DEBUG "))
                 logger.Debug(e.Data.Replace("DEBUG ", ""));
             else if (e.Data.StartsWith("INFO "))

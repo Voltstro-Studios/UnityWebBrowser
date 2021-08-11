@@ -5,17 +5,17 @@ using Xilium.CefGlue;
 namespace UnityWebBrowser.Engine.Cef.Browser
 {
     /// <summary>
-    ///     <see cref="CefDisplayHandler"/> implementation
+    ///     <see cref="CefDisplayHandler" /> implementation
     /// </summary>
     public class UwbCefDisplayHandler : CefDisplayHandler
     {
         private readonly UwbCefClient client;
-        
+
         public UwbCefDisplayHandler(UwbCefClient client)
         {
             this.client = client;
         }
-        
+
         protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
         {
             Logger.Debug($"URL Change: {url}");
@@ -28,7 +28,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             base.OnFullscreenModeChange(browser, fullscreen);
         }
 
-        protected override bool OnCursorChange(CefBrowser browser, IntPtr cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo)
+        protected override bool OnCursorChange(CefBrowser browser, IntPtr cursorHandle, CefCursorType type,
+            CefCursorInfo customCursorInfo)
         {
             //TODO: Possibly implement events for this
             return base.OnCursorChange(browser, cursorHandle, type, customCursorInfo);
@@ -52,7 +53,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             base.OnLoadingProgressChange(browser, progress);
         }
 
-        protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
+        protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message,
+            string source, int line)
         {
             switch (level)
             {

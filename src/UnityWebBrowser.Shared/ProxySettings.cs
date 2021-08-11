@@ -8,13 +8,6 @@ namespace UnityWebBrowser.Shared
     [Serializable]
     public struct ProxySettings
     {
-        public ProxySettings(string username, string password, bool proxyServer)
-        {
-            Username = username;
-            Password = password;
-            ProxyServer = proxyServer;
-        }
-
         /// <summary>
         ///     The username to use for auth with the proxy
         /// </summary>
@@ -29,5 +22,12 @@ namespace UnityWebBrowser.Shared
         ///     Enable or disable the proxy server
         /// </summary>
         public bool ProxyServer;
+
+        public ProxySettings(string username, string password, bool proxyServer)
+        {
+            Username = username;
+            Password = password;
+            ProxyServer = proxyServer;
+        }
     }
 }

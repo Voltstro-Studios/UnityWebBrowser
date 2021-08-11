@@ -8,7 +8,7 @@ namespace UnityWebBrowser
     internal class WebBrowserArgsBuilder
     {
         private readonly List<string> arguments;
-        
+
         internal WebBrowserArgsBuilder()
         {
             arguments = new List<string>();
@@ -23,15 +23,15 @@ namespace UnityWebBrowser
         public void AppendArgument(string arg, object parameters = null, bool quotes = false)
         {
             string builtArg = $"-{arg}";
-            if(parameters == null || string.IsNullOrEmpty(parameters.ToString())) 
+            if (parameters == null || string.IsNullOrEmpty(parameters.ToString()))
                 return;
-            
+
             //We got spaces
             if (quotes)
                 builtArg += $" \"{parameters}\"";
             else
                 builtArg += $" {parameters}";
-            
+
             arguments.Add(builtArg);
         }
 

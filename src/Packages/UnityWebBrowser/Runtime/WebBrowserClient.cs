@@ -11,10 +11,10 @@ using UnityWebBrowser.Shared.Events;
 
 namespace UnityWebBrowser
 {
-	/// <summary>
-	///     Handles managing the browser engine process
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    ///     Handles managing the browser engine process
+    /// </summary>
+    [Serializable]
     public class WebBrowserClient : IDisposable
     {
         private const string ActiveEngineFileName = "EngineActive";
@@ -22,10 +22,9 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The active browser engine this instance is using
         /// </summary>
-        [Header("Browser Settings")] 
-        [Tooltip("The active browser engine this instance is using")]
-        [ActiveBrowserEngine] public string browserEngine;
-        
+        [Header("Browser Settings")] [Tooltip("The active browser engine this instance is using")] [ActiveBrowserEngine]
+        public string browserEngine;
+
         /// <summary>
         ///     The initial URl the browser will start at
         /// </summary>
@@ -63,14 +62,12 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Enable or disable WebRTC
         /// </summary>
-        [Tooltip("Enable or disable WebRTC")]
-        public bool webRtc;
+        [Tooltip("Enable or disable WebRTC")] public bool webRtc;
 
         /// <summary>
         ///     Proxy Settings
         /// </summary>
-        [Tooltip("Proxy settings")] 
-        public ProxySettings proxySettings;
+        [Tooltip("Proxy settings")] public ProxySettings proxySettings;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -81,27 +78,24 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The port to use for remote debugging
         /// </summary>
-        [Tooltip("The port to use for remote debugging")]
-        [Range(1024, 65353)]
+        [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
 
         /// <summary>
         ///     Settings related to IPC
         /// </summary>
-        [Header("IPC Settings")] 
-        public WebBrowserIpcSettings ipcSettings = new WebBrowserIpcSettings();
+        [Header("IPC Settings")] public WebBrowserIpcSettings ipcSettings = new WebBrowserIpcSettings();
 
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
         /// </summary>
         [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
         public int engineStartupTimeout = 100000;
-        
+
         /// <summary>
         ///     How often to update the <see cref="BrowserTexture"/>
         /// </summary>
-        [Tooltip("How often to update the Browser Texture")]
-        [Min(0)]
+        [Tooltip("How often to update the Browser Texture")] [Min(0)]
         public float eventPollingTime = 0.04f;
 
         /// <summary>
@@ -123,11 +117,11 @@ namespace UnityWebBrowser
         ///     Is the Unity client connected to the browser engine
         /// </summary>
         public bool IsConnected => communicationsManager is { IsConnected: true };
-        
+
         #region Log Path
-        
+
         private FileInfo logPath;
-        
+
         /// <summary>
         ///     The path that CEF will log to
         /// </summary>
@@ -139,7 +133,8 @@ namespace UnityWebBrowser
             set
             {
                 if (IsConnected)
-                    throw new WebBrowserIsConnectedException("You cannot change the log path once the browser engine is connected");
+                    throw new WebBrowserIsConnectedException(
+                        "You cannot change the log path once the browser engine is connected");
 
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
             }
@@ -163,7 +158,8 @@ namespace UnityWebBrowser
             set
             {
                 if (IsConnected)
-                    throw new WebBrowserIsConnectedException("You cannot change the cache path once the browser engine is connected");
+                    throw new WebBrowserIsConnectedException(
+                        "You cannot change the cache path once the browser engine is connected");
 
                 if (!cache)
                     throw new ArgumentException("The cache is disabled!");
@@ -172,16 +168,15 @@ namespace UnityWebBrowser
             }
         }
 
-
         #endregion
-        
+
         #region Logger
 
         /// <summary>
         ///     Internal usage of <see cref="IWebBrowserLogger"/>
         /// </summary>
         internal IWebBrowserLogger logger = new DefaultUnityWebBrowserLogger();
-        
+
         /// <summary>
         ///     Gets the <see cref="IWebBrowserLogger"/> to use for logging
         /// </summary>
@@ -214,17 +209,17 @@ namespace UnityWebBrowser
 
             //Start to build our arguments
             WebBrowserArgsBuilder argsBuilder = new WebBrowserArgsBuilder();
-            
+
             //Initial URL
             argsBuilder.AppendArgument("initial-url", initialUrl, true);
-            
+
             //Width & Height
             argsBuilder.AppendArgument("width", width);
             argsBuilder.AppendArgument("height", height);
-            
+
             //Javascript
             argsBuilder.AppendArgument("javascript", javascript);
-            
+
             //Background color
             argsBuilder.AppendArgument("bcr", backgroundColor.r);
             argsBuilder.AppendArgument("bcg", backgroundColor.g);
@@ -257,21 +252,21 @@ namespace UnityWebBrowser
             }
 
             //Setup web RTC
-            if(webRtc)
+            if (webRtc)
                 argsBuilder.AppendArgument("web-rtc", webRtc);
-            
+
             //Setup remote debugging
-            if(remoteDebugging)
+            if (remoteDebugging)
                 argsBuilder.AppendArgument("remote-debugging", remoteDebuggingPort);
-            
+
             //Setup proxy
             argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);
-            if(!string.IsNullOrWhiteSpace(proxySettings.Username))
+            if (!string.IsNullOrWhiteSpace(proxySettings.Username))
                 argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
-                
-            if(!string.IsNullOrWhiteSpace(proxySettings.Password))
+
+            if (!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
-            
+
             //Our engine active file
             argsBuilder.AppendArgument("active-engine-file-path", browserEngineMainDir, true);
 
@@ -311,12 +306,12 @@ namespace UnityWebBrowser
             catch (TimeoutException)
             {
                 logger.Error("The engine failed to startup in time!");
-                if(!serverProcess.HasExited)
+                if (!serverProcess.HasExited)
                     serverProcess.KillTree();
                 throw;
             }
 
-            BrowserTexture = new Texture2D((int) width, (int) height, TextureFormat.BGRA32, false, false);
+            BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, false);
 
             try
             {
@@ -333,7 +328,7 @@ namespace UnityWebBrowser
         #region Main Loop
 
         private byte[] pixels;
-        
+
         /// <summary>
         ///     Starts updating the <see cref="BrowserTexture" /> data
         /// </summary>
@@ -363,7 +358,7 @@ namespace UnityWebBrowser
             BrowserTexture.LoadRawTextureData(pixelData);
             BrowserTexture.Apply(false);
         }
-        
+
         #endregion
 
         #region Browser Events
@@ -381,7 +376,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Invoked when the page finishes loading
         /// </summary>
-        public event Action<string> OnLoadFinish; 
+        public event Action<string> OnLoadFinish;
 
         #endregion
 
@@ -397,7 +392,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
                 KeysDown = keysDown,
@@ -414,11 +409,11 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
-                MouseX = (int) mousePos.x,
-                MouseY = (int) mousePos.y
+                MouseX = (int)mousePos.x,
+                MouseY = (int)mousePos.y
             });
         }
 
@@ -434,11 +429,11 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
-                MouseX = (int) mousePos.x,
-                MouseY = (int) mousePos.y,
+                MouseX = (int)mousePos.x,
+                MouseY = (int)mousePos.y,
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
@@ -455,7 +450,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
                 MouseScroll = mouseScroll,
@@ -472,7 +467,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.LoadUrl(url);
         }
 
@@ -483,7 +478,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.GoForward();
         }
 
@@ -494,7 +489,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.GoBack();
         }
 
@@ -505,7 +500,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.Refresh();
         }
 
@@ -517,7 +512,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.LoadHtml(html);
         }
 
@@ -529,7 +524,7 @@ namespace UnityWebBrowser
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
+
             communicationsManager.ExecuteJs(js);
         }
 
@@ -580,7 +575,7 @@ namespace UnityWebBrowser
                 serverProcess.KillTree();
                 logger.Warn("Forced killed web browser process!");
             }
-            
+
             serverProcess.Dispose();
         }
 

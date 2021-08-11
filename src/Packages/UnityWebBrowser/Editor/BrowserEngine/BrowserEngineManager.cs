@@ -9,9 +9,7 @@ namespace UnityWebBrowser.Editor
 {
     public static class BrowserEngineManager
     {
-        private static readonly List<BrowserEngine> BrowserEngines = new List<BrowserEngine>();
-
-        public static List<BrowserEngine> Engines => BrowserEngines;
+        public static List<BrowserEngine> Engines { get; } = new List<BrowserEngine>();
 
         public static void AddBrowserEngine(BrowserEngine engine)
         {
@@ -20,18 +18,18 @@ namespace UnityWebBrowser.Editor
                 Debug.LogError($"{engine.EngineName} is setup incorrectly!");
                 return;
             }
-            
-            BrowserEngines.Add(engine);
+
+            Engines.Add(engine);
         }
 
         public static BrowserEngine GetBrowser(string engineAppName)
         {
-            return BrowserEngines.FirstOrDefault(x => x.EngineAppFile == engineAppName);
+            return Engines.FirstOrDefault(x => x.EngineAppFile == engineAppName);
         }
 
         private static bool CheckIfAppExists(BrowserEngine engine)
         {
-            foreach (KeyValuePair<BuildTarget,string> files in engine.BuildFiles)
+            foreach (KeyValuePair<BuildTarget, string> files in engine.BuildFiles)
             {
                 string path = Path.GetFullPath(files.Value);
                 string engineFile;
@@ -46,7 +44,7 @@ namespace UnityWebBrowser.Editor
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -55,18 +53,18 @@ namespace UnityWebBrowser.Editor
         {
             Debug.Log("Copying browser engine files...");
 
-            if (BrowserEngines.Count == 0)
+            if (Engines.Count == 0)
             {
                 Debug.LogWarning("No browser engines to copy!");
                 return;
             }
-            
+
             //Get full dir
             pathToBuiltProject = Path.GetDirectoryName(pathToBuiltProject);
-            
+
             //We need to get the built project's plugins folder
             string buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/");
-            
+
             //TODO: Check other targets
             if (target == BuildTarget.StandaloneWindows64)
                 buildPluginsDir += "x86_64/";
@@ -74,21 +72,22 @@ namespace UnityWebBrowser.Editor
             //Make sure it exists
             if (!Directory.Exists(buildPluginsDir))
                 Directory.CreateDirectory(buildPluginsDir);
-                
+
             //Go trough all installed engines
-            foreach (BrowserEngine engine in BrowserEngines)
+            foreach (BrowserEngine engine in Engines)
             {
                 //Check if the engine has our build target
                 if (!engine.BuildFiles.ContainsKey(target))
                     continue;
-                
+
                 //Get the location where we are copying all the files
                 string buildFilesDir = Path.GetFullPath(engine.BuildFiles[target]);
                 string buildFilesParent = Directory.GetParent(buildFilesDir)?.Name;
-                
+
                 //Get all files that aren't Unity .meta files
                 string[] files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
-                    .Where(fileType => !fileType.EndsWith(".meta")).Where(fileType => !fileType.Contains("libzmq")).ToArray();
+                    .Where(fileType => !fileType.EndsWith(".meta")).Where(fileType => !fileType.Contains("libzmq"))
+                    .ToArray();
                 int size = files.Length;
 
                 //Now to copy all the files.
@@ -97,9 +96,9 @@ namespace UnityWebBrowser.Editor
                 {
                     string file = files[i];
                     string destFileName = Path.GetFileName(file);
-                    EditorUtility.DisplayProgressBar("Copying Browser Engine Files", 
-                        $"Copying {destFileName}", (int)(i / size));
-                    
+                    EditorUtility.DisplayProgressBar("Copying Browser Engine Files",
+                        $"Copying {destFileName}", i / size);
+
                     string parentDirectory = "";
                     if (Directory.GetParent(file)?.Name != buildFilesParent)
                     {
@@ -112,10 +111,10 @@ namespace UnityWebBrowser.Editor
                     //Copy the file
                     File.Copy(file, $"{buildPluginsDir}{parentDirectory}{destFileName}", true);
                 }
-                
+
                 EditorUtility.ClearProgressBar();
             }
-            
+
             Debug.Log("Done!");
         }
     }

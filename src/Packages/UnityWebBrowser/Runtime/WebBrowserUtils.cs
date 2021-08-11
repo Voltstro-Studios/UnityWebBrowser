@@ -7,23 +7,23 @@ using UnityEngine.UI;
 
 namespace UnityWebBrowser
 {
-	/// <summary>
-	///     Provides Utils to be used by the web browser
-	/// </summary>
-	public static class WebBrowserUtils
+    /// <summary>
+    ///     Provides Utils to be used by the web browser
+    /// </summary>
+    public static class WebBrowserUtils
     {
 #if UNITY_EDITOR
-	    /// <summary>
-	    ///     The name of the package that the web browser is contained in
-	    /// </summary>
-	    public const string PackageName = "dev.voltstro.unitywebbrowser";
+        /// <summary>
+        ///     The name of the package that the web browser is contained in
+        /// </summary>
+        public const string PackageName = "dev.voltstro.unitywebbrowser";
 #endif
 
-	    /// <summary>
-	    ///     Gets the main directory where logs and cache may be stored
-	    /// </summary>
-	    /// <returns></returns>
-	    public static string GetBrowserEngineMainDirectory()
+        /// <summary>
+        ///     Gets the main directory where logs and cache may be stored
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBrowserEngineMainDirectory()
         {
 #if UNITY_EDITOR
             return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
@@ -32,25 +32,26 @@ namespace UnityWebBrowser
 #endif
         }
 
-	    /// <summary>
-	    ///     Gets the folder that the cef process application lives in
-	    /// </summary>
-	    /// <returns></returns>
-	    public static string GetBrowserEnginePath(string engine)
+        /// <summary>
+        ///     Gets the folder that the cef process application lives in
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBrowserEnginePath(string engine)
         {
-	        //Editor
+            //Editor
 #if UNITY_EDITOR
-	        Editor.BrowserEngine browserEngine = Editor.BrowserEngineManager.GetBrowser(engine);
+            Editor.BrowserEngine browserEngine = Editor.BrowserEngineManager.GetBrowser(engine);
 
 #if UNITY_EDITOR_WIN
-	        return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
-		        x.Key == UnityEditor.BuildTarget.StandaloneWindows || x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
+            return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
+                x.Key == UnityEditor.BuildTarget.StandaloneWindows ||
+                x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
 #elif UNITY_EDITOR_LINUX
 			return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
 		        x.Key == UnityEditor.BuildTarget.StandaloneLinux64).Value);
 #endif
-	      
-	        //Player builds (Standalone)
+
+            //Player builds (Standalone)
 #elif UNITY_STANDALONE_WIN
 		    return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
 #else
@@ -58,11 +59,11 @@ namespace UnityWebBrowser
 #endif
         }
 
-	    /// <summary>
-	    ///     Get a direct path to the cef browser process application
-	    /// </summary>
-	    /// <returns></returns>
-	    public static string GetBrowserEngineProcessPath(string engine)
+        /// <summary>
+        ///     Get a direct path to the cef browser process application
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBrowserEngineProcessPath(string engine)
         {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return $"{GetBrowserEnginePath(engine)}{engine}.exe";
@@ -71,19 +72,19 @@ namespace UnityWebBrowser
 #endif
         }
 
-	    /// <summary>
-	    ///     Gets the local position delta (0 -> 1) from a screen position on a <see cref="RawImage" />
-	    ///     from a top-left origin point
-	    ///     <para>
-	    ///         To calculate the pixel position,
-	    ///         do <see cref="Vector2.x" /> * [Desired height] and <see cref="Vector2.y" /> * [Desired Width]
-	    ///     </para>
-	    /// </summary>
-	    /// <param name="image"><see cref="RawImage" /> that you want to calculate the local position on</param>
-	    /// <param name="screenPosition">The screen position</param>
-	    /// <param name="position">The local delta position</param>
-	    /// <returns></returns>
-	    public static bool GetScreenPointToLocalPositionDeltaOnImage(RawImage image, Vector2 screenPosition,
+        /// <summary>
+        ///     Gets the local position delta (0 -> 1) from a screen position on a <see cref="RawImage" />
+        ///     from a top-left origin point
+        ///     <para>
+        ///         To calculate the pixel position,
+        ///         do <see cref="Vector2.x" /> * [Desired height] and <see cref="Vector2.y" /> * [Desired Width]
+        ///     </para>
+        /// </summary>
+        /// <param name="image"><see cref="RawImage" /> that you want to calculate the local position on</param>
+        /// <param name="screenPosition">The screen position</param>
+        /// <param name="position">The local delta position</param>
+        /// <returns></returns>
+        public static bool GetScreenPointToLocalPositionDeltaOnImage(RawImage image, Vector2 screenPosition,
             out Vector2 position)
         {
             //This was a pain in the ass to figure out how to do, I never want anything to do with mouses and UI elements ever again.
@@ -109,27 +110,25 @@ namespace UnityWebBrowser
             return true;
         }
 
-	    /// <summary>
-	    ///		Waits until the file exists
-	    /// </summary>
-	    /// <param name="path"></param>
-	    /// <param name="timeOutTIme"></param>
-	    /// <exception cref="TimeoutException"></exception>
-	    internal static void WaitForActiveEngineFile(string path, int timeOutTIme)
-	    {
-		    float timeUntilCancel = Time.time + timeOutTIme;
+        /// <summary>
+        ///		Waits until the file exists
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="timeOutTIme"></param>
+        /// <exception cref="TimeoutException"></exception>
+        internal static void WaitForActiveEngineFile(string path, int timeOutTIme)
+        {
+            float timeUntilCancel = Time.time + timeOutTIme;
 
-		    //Wait until the file exists
-		    while (!File.Exists(path))
-		    {
-			    //If we hit the timeout time, then fail it
-			    if (Time.time >= timeUntilCancel)
-			    {
-				    throw new TimeoutException("The engine did not start within the specified startup time!");
-			    }
+            //Wait until the file exists
+            while (!File.Exists(path))
+            {
+                //If we hit the timeout time, then fail it
+                if (Time.time >= timeUntilCancel)
+                    throw new TimeoutException("The engine did not start within the specified startup time!");
 
-			    Thread.Sleep(100);
-		    }
-	    }
+                Thread.Sleep(100);
+            }
+        }
     }
 }

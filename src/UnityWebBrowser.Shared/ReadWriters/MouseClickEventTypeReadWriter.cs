@@ -8,7 +8,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
     {
         public void Write(BufferedWriter writer, object obj)
         {
-            MouseClickEvent mouseClickEvent = (MouseClickEvent) obj;
+            MouseClickEvent mouseClickEvent = (MouseClickEvent)obj;
             writer.WriteInt(mouseClickEvent.MouseX);
             writer.WriteInt(mouseClickEvent.MouseY);
             writer.WriteInt(mouseClickEvent.MouseClickCount);
@@ -23,8 +23,8 @@ namespace UnityWebBrowser.Shared.ReadWriters
                 MouseX = reader.ReadInt(),
                 MouseY = reader.ReadInt(),
                 MouseClickCount = reader.ReadInt(),
-                MouseClickType = (MouseClickType) reader.ReadByte(),
-                MouseEventType = (MouseEventType) reader.ReadByte()
+                MouseClickType = (MouseClickType)reader.ReadByte(),
+                MouseEventType = (MouseEventType)reader.ReadByte()
             };
         }
     }

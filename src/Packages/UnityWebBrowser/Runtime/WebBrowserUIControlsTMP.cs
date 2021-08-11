@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace UnityWebBrowser
 {
-	/// <summary>
-	///     Allows for UI controls with the input
-	/// </summary>
-	[AddComponentMenu("Browser/Web Browser UI Controls (TMP)")]
+    /// <summary>
+    ///     Allows for UI controls with the input
+    /// </summary>
+    [AddComponentMenu("Browser/Web Browser UI Controls (TMP)")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(WebBrowserUI))]
     public class WebBrowserUIControlsTMP : MonoBehaviour

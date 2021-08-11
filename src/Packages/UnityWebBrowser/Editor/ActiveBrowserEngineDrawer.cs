@@ -16,7 +16,7 @@ namespace UnityWebBrowser.Editor
                 Debug.LogError($"{nameof(ActiveBrowserEngineAttribute)} can only be applied to strings!");
                 return;
             }
-            
+
             //Make sure there is a browser engine installed
             List<BrowserEngine> engines = BrowserEngineManager.Engines;
             if (engines.Count == 0)
@@ -24,19 +24,14 @@ namespace UnityWebBrowser.Editor
                 EditorGUI.HelpBox(position, "No browser engines installed!", MessageType.Error);
                 return;
             }
-            
+
             if (string.IsNullOrWhiteSpace(property.stringValue))
-            {
                 //Set to what ever 0 is
                 property.stringValue = engines[0].EngineAppFile;
-            }
 
             //Get all engine names
             string[] engineNames = new string[engines.Count];
-            for (int i = 0; i < engines.Count; i++)
-            {
-                engineNames[i] = engines[i].EngineName;
-            }
+            for (int i = 0; i < engines.Count; i++) engineNames[i] = engines[i].EngineName;
 
             //Get current engine
             int index = engines.FindIndex(x => x.EngineAppFile == property.stringValue);
@@ -44,10 +39,10 @@ namespace UnityWebBrowser.Editor
             //Index is negative, reset it back
             if (index < 0)
                 index = 0;
-            
+
             //Dropdown
             index = EditorGUI.Popup(position, "Browser Engine", index, engineNames);
-            
+
             //Set the property's value
             property.stringValue = engines[index].EngineAppFile;
         }

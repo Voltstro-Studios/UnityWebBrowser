@@ -8,7 +8,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
     {
         public void Write(BufferedWriter writer, object obj)
         {
-            MouseScrollEvent mouseScroll = (MouseScrollEvent) obj;
+            MouseScrollEvent mouseScroll = (MouseScrollEvent)obj;
             writer.WriteInt(mouseScroll.MouseX);
             writer.WriteInt(mouseScroll.MouseY);
             writer.WriteInt(mouseScroll.MouseScroll);

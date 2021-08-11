@@ -9,9 +9,9 @@ namespace UnityWebBrowser.Logging
     public sealed class DefaultUnityWebBrowserLogger : IWebBrowserLogger
     {
         private const string LoggingTag = "[Web Browser]";
-        
+
         private readonly ILogger logger;
-        
+
         public DefaultUnityWebBrowserLogger()
         {
             logger = UnityEngine.Debug.unityLogger;
@@ -21,7 +21,7 @@ namespace UnityWebBrowser.Logging
         {
             logger = unityLogger ?? throw new ArgumentNullException(nameof(unityLogger));
         }
-        
+
         public void Debug(object message)
         {
             logger.Log(LogType.Log, LoggingTag, message);

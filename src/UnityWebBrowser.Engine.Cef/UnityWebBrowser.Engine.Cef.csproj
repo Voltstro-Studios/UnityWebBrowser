@@ -1,112 +1,112 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../Imports/NativeDefines.props" />
-  <Import Project="../Imports/Properties.props" />
+    <Import Project="../Imports/NativeDefines.props"/>
+    <Import Project="../Imports/Properties.props"/>
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
-    <Description>External process to handel rendering with CEF</Description>
-    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-    <Version>1.6.1</Version>
-    <DefineConstants>BROWSER_PROCESS</DefineConstants>
-    <Configurations>Debug;Release;ReleaseUnity</Configurations>
-    <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
+        <Description>External process to handel rendering with CEF</Description>
+        <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+        <Version>1.6.1</Version>
+        <DefineConstants>BROWSER_PROCESS</DefineConstants>
+        <Configurations>Debug;Release;ReleaseUnity</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <AllowedReferenceRelatedFileExtensions>
-      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
-           Only *.allowedextension files will be included, which doesn't exist in my case.
-       -->
-      .allowedextension
-    </AllowedReferenceRelatedFileExtensions> 
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
-	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
-    <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
-    <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
-  </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
+        <Optimize>true</Optimize>
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <AllowedReferenceRelatedFileExtensions>
+            <!-- Prevent default XML and PDB files copied to output in RELEASE. 
+                 Only *.allowedextension files will be included, which doesn't exist in my case.
+             -->
+            .allowedextension
+        </AllowedReferenceRelatedFileExtensions>
+    </PropertyGroup>
 
-  <!-- We need to copy different files depending on the OS -->
-  <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dll" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+    <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    </PropertyGroup>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.pak" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+    <ItemGroup>
+        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
+        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj"/>
+        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj"/>
+    </ItemGroup>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.bin" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
-    
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dat" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+    <!-- We need to copy different files depending on the OS -->
+    <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dll" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.pak" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-  </ItemGroup>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.bin" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-  <!-- Files we need on Linux -->
-  <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.so" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.dat" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.pak" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.bin" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+    </ItemGroup>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.dat" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+    <!-- Files we need on Linux -->
+    <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.so" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-    <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </ContentWithTargetPath>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.pak" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-    <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
-  </ItemGroup>
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.bin" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
 
-  <Import Project="../Imports/NatvieDefines.targets" />
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.dat" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll"/>
+    </ItemGroup>
+
+    <Import Project="../Imports/NatvieDefines.targets"/>
 
 </Project>

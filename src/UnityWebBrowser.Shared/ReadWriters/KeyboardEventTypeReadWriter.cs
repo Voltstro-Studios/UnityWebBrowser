@@ -8,7 +8,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
     {
         public void Write(BufferedWriter writer, object obj)
         {
-            KeyboardEvent keyboardEvent = (KeyboardEvent) obj;
+            KeyboardEvent keyboardEvent = (KeyboardEvent)obj;
             writer.WriteString(keyboardEvent.Chars);
             WriteKeys(writer, keyboardEvent.KeysDown);
             WriteKeys(writer, keyboardEvent.KeysUp);
@@ -28,19 +28,13 @@ namespace UnityWebBrowser.Shared.ReadWriters
         {
             writer.WriteInt(keys.Length);
 
-            foreach (int key in keys)
-            {
-                writer.WriteInt(key);
-            }
+            foreach (int key in keys) writer.WriteInt(key);
         }
 
         private int[] ReadKeys(BufferedReader reader)
         {
             int[] keys = new int[reader.ReadInt()];
-            for (int i = 0; i < keys.Length; i++)
-            {
-                keys[i] = reader.ReadInt();
-            }
+            for (int i = 0; i < keys.Length; i++) keys[i] = reader.ReadInt();
 
             return keys;
         }

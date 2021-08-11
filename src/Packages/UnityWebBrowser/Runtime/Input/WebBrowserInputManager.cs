@@ -7,17 +7,17 @@ using UnityEngine.InputSystem;
 
 namespace UnityWebBrowser.Input
 {
-	/// <summary>
-	///     Helper class for inputs
-	/// </summary>
-	public static class WebBrowserInputHelper
+    /// <summary>
+    ///     Helper class for inputs
+    /// </summary>
+    public static class WebBrowserInputHelper
     {
-	    /// <summary>
-	    ///     Converts a <see cref="KeyCode" /> to <see cref="WindowsKey" />
-	    /// </summary>
-	    /// <param name="key"></param>
-	    /// <returns></returns>
-	    public static WindowsKey UnityKeyCodeToWindowKey(this KeyCode key)
+        /// <summary>
+        ///     Converts a <see cref="KeyCode" /> to <see cref="WindowsKey" />
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static WindowsKey UnityKeyCodeToWindowKey(this KeyCode key)
         {
             switch (key)
             {
@@ -204,199 +204,199 @@ namespace UnityWebBrowser.Input
                 case KeyCode.Print:
                     return WindowsKey.Print;
                 case KeyCode.Backslash:
-	                return WindowsKey.OemBackslash;
+                    return WindowsKey.OemBackslash;
                 case KeyCode.Slash:
-	                return WindowsKey.Oem2;
+                    return WindowsKey.Oem2;
                 case KeyCode.Tilde:
-	                return WindowsKey.Oem3;
+                    return WindowsKey.Oem3;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(key), key, null);
             }
         }
 
 #if ENABLE_INPUT_SYSTEM
-		/// <summary>
-		///		Converts a <see cref="Key"/> to <see cref="WindowsKey"/>
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-	    public static WindowsKey UnityKeyToWindowKey(this Key key)
-	    {
-		    switch (key)
-		    {
-			    case Key.None:
-				    return WindowsKey.None;
-			    case Key.Space:
-				    return WindowsKey.Space;
-			    case Key.Enter:
-				    return WindowsKey.Enter;
-			    case Key.Tab:
-				    return WindowsKey.Tab;
-			    case Key.Quote:
-				    return WindowsKey.OemQuotes;
-			    case Key.Semicolon:
-				    return WindowsKey.OemSemicolon;
-			    case Key.Comma:
-				    return WindowsKey.Oemcomma;
-			    case Key.Period:
-				    return WindowsKey.OemPeriod;
-			    case Key.LeftBracket:
-				    return WindowsKey.OemOpenBrackets;
-			    case Key.RightBracket:
-				    return WindowsKey.OemCloseBrackets;
-			    case Key.Minus:
-				    return WindowsKey.OemMinus;
-			    case Key.A:
-				    return WindowsKey.A;
-			    case Key.B:
-				    return WindowsKey.B;
-			    case Key.C:
-				    return WindowsKey.C;
-			    case Key.D:
-				    return WindowsKey.D;
-			    case Key.E:
-				    return WindowsKey.E;
-			    case Key.F:
-				    return WindowsKey.F;
-			    case Key.G:
-				    return WindowsKey.G;
-			    case Key.H:
-				    return WindowsKey.H;
-			    case Key.I:
-				    return WindowsKey.I;
-			    case Key.J:
-				    return WindowsKey.J;
-			    case Key.K:
-				    return WindowsKey.K;
-			    case Key.L:
-				    return WindowsKey.L;
-			    case Key.M:
-				    return WindowsKey.M;
-			    case Key.N:
-				    return WindowsKey.N;
-			    case Key.O:
-				    return WindowsKey.O;
-			    case Key.P:
-				    return WindowsKey.P;
-			    case Key.Q:
-				    return WindowsKey.Q;
-			    case Key.R:
-				    return WindowsKey.R;
-			    case Key.S:
-				    return WindowsKey.S;
-			    case Key.T:
-				    return WindowsKey.T;
-			    case Key.U:
-				    return WindowsKey.U;
-			    case Key.V:
-				    return WindowsKey.V;
-			    case Key.W:
-				    return WindowsKey.W;
-			    case Key.X:
-				    return WindowsKey.X;
-			    case Key.Y:
-				    return WindowsKey.Y;
-			    case Key.Z:
-				    return WindowsKey.Z;
-			    case Key.LeftShift:
-				    return WindowsKey.LShiftKey;
-			    case Key.RightShift:
-				    return WindowsKey.RShiftKey;
-				case Key.RightAlt:
-			    case Key.LeftAlt:
-				    return WindowsKey.Alt;
-			    case Key.LeftCtrl:
-				    return WindowsKey.LControlKey;
-			    case Key.RightCtrl:
-				    return WindowsKey.RControlKey;
-			    case Key.Escape:
-				    return WindowsKey.Escape;
-			    case Key.LeftArrow:
-				    return WindowsKey.Left;
-			    case Key.RightArrow:
-				    return WindowsKey.Right;
-			    case Key.UpArrow:
-				    return WindowsKey.Up;
-			    case Key.DownArrow:
-				    return WindowsKey.Down;
-			    case Key.Backspace:
-				    return WindowsKey.Back;
-			    case Key.PageDown:
-				    return WindowsKey.PageDown;
-			    case Key.PageUp:
-				    return WindowsKey.PageUp;
-			    case Key.Home:
-				    return WindowsKey.Home;
-			    case Key.End:
-				    return WindowsKey.End;
-			    case Key.Insert:
-				    return WindowsKey.Insert;
-			    case Key.Delete:
-				    return WindowsKey.Delete;
-			    case Key.PrintScreen:
-				    return WindowsKey.PrintScreen;
-			    case Key.Pause:
-				    return WindowsKey.Pause;
-			    case Key.NumpadEnter:
-				    return WindowsKey.Enter;
-			    case Key.NumpadDivide:
-				    return WindowsKey.Divide;
-			    case Key.NumpadMultiply:
-				    return WindowsKey.Multiply;
-			    case Key.NumpadPlus:
-				    return WindowsKey.Play;
-			    case Key.NumpadMinus:
-				    return WindowsKey.OemMinus;
-			    case Key.NumpadPeriod:
-				    return WindowsKey.OemPeriod;
-			    case Key.Numpad0:
-				    return WindowsKey.NumPad0;
-			    case Key.Numpad1:
-				    return WindowsKey.NumPad1;
-			    case Key.Numpad2:
-				    return WindowsKey.NumPad2;
-			    case Key.Numpad3:
-				    return WindowsKey.NumPad3;
-			    case Key.Numpad4:
-				    return WindowsKey.NumPad4;
-			    case Key.Numpad5:
-				    return WindowsKey.NumPad5;
-			    case Key.Numpad6:
-				    return WindowsKey.NumPad6;
-			    case Key.Numpad7:
-				    return WindowsKey.NumPad7;
-			    case Key.Numpad8:
-				    return WindowsKey.NumPad8;
-			    case Key.Numpad9:
-				    return WindowsKey.NumPad9;
-			    case Key.F1:
-				    return WindowsKey.F1;
-			    case Key.F2:
-				    return WindowsKey.F2;
-			    case Key.F3:
-				    return WindowsKey.F3;
-			    case Key.F4:
-				    return WindowsKey.F4;
-			    case Key.F5:
-				    return WindowsKey.F5;
-			    case Key.F6:
-				    return WindowsKey.F6;
-			    case Key.F7:
-				    return WindowsKey.F7;
-			    case Key.F8:
-				    return WindowsKey.F8;
-			    case Key.F9:
-				    return WindowsKey.F9;
-			    case Key.F10:
-				    return WindowsKey.F10;
-			    case Key.F11:
-				    return WindowsKey.F11;
-			    case Key.F12:
-				    return WindowsKey.F12;
-			    default:
-				    throw new ArgumentOutOfRangeException(nameof(key), key, null);
-		    }
-	    }
+        /// <summary>
+        ///		Converts a <see cref="Key"/> to <see cref="WindowsKey"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static WindowsKey UnityKeyToWindowKey(this Key key)
+        {
+            switch (key)
+            {
+                case Key.None:
+                    return WindowsKey.None;
+                case Key.Space:
+                    return WindowsKey.Space;
+                case Key.Enter:
+                    return WindowsKey.Enter;
+                case Key.Tab:
+                    return WindowsKey.Tab;
+                case Key.Quote:
+                    return WindowsKey.OemQuotes;
+                case Key.Semicolon:
+                    return WindowsKey.OemSemicolon;
+                case Key.Comma:
+                    return WindowsKey.Oemcomma;
+                case Key.Period:
+                    return WindowsKey.OemPeriod;
+                case Key.LeftBracket:
+                    return WindowsKey.OemOpenBrackets;
+                case Key.RightBracket:
+                    return WindowsKey.OemCloseBrackets;
+                case Key.Minus:
+                    return WindowsKey.OemMinus;
+                case Key.A:
+                    return WindowsKey.A;
+                case Key.B:
+                    return WindowsKey.B;
+                case Key.C:
+                    return WindowsKey.C;
+                case Key.D:
+                    return WindowsKey.D;
+                case Key.E:
+                    return WindowsKey.E;
+                case Key.F:
+                    return WindowsKey.F;
+                case Key.G:
+                    return WindowsKey.G;
+                case Key.H:
+                    return WindowsKey.H;
+                case Key.I:
+                    return WindowsKey.I;
+                case Key.J:
+                    return WindowsKey.J;
+                case Key.K:
+                    return WindowsKey.K;
+                case Key.L:
+                    return WindowsKey.L;
+                case Key.M:
+                    return WindowsKey.M;
+                case Key.N:
+                    return WindowsKey.N;
+                case Key.O:
+                    return WindowsKey.O;
+                case Key.P:
+                    return WindowsKey.P;
+                case Key.Q:
+                    return WindowsKey.Q;
+                case Key.R:
+                    return WindowsKey.R;
+                case Key.S:
+                    return WindowsKey.S;
+                case Key.T:
+                    return WindowsKey.T;
+                case Key.U:
+                    return WindowsKey.U;
+                case Key.V:
+                    return WindowsKey.V;
+                case Key.W:
+                    return WindowsKey.W;
+                case Key.X:
+                    return WindowsKey.X;
+                case Key.Y:
+                    return WindowsKey.Y;
+                case Key.Z:
+                    return WindowsKey.Z;
+                case Key.LeftShift:
+                    return WindowsKey.LShiftKey;
+                case Key.RightShift:
+                    return WindowsKey.RShiftKey;
+                case Key.RightAlt:
+                case Key.LeftAlt:
+                    return WindowsKey.Alt;
+                case Key.LeftCtrl:
+                    return WindowsKey.LControlKey;
+                case Key.RightCtrl:
+                    return WindowsKey.RControlKey;
+                case Key.Escape:
+                    return WindowsKey.Escape;
+                case Key.LeftArrow:
+                    return WindowsKey.Left;
+                case Key.RightArrow:
+                    return WindowsKey.Right;
+                case Key.UpArrow:
+                    return WindowsKey.Up;
+                case Key.DownArrow:
+                    return WindowsKey.Down;
+                case Key.Backspace:
+                    return WindowsKey.Back;
+                case Key.PageDown:
+                    return WindowsKey.PageDown;
+                case Key.PageUp:
+                    return WindowsKey.PageUp;
+                case Key.Home:
+                    return WindowsKey.Home;
+                case Key.End:
+                    return WindowsKey.End;
+                case Key.Insert:
+                    return WindowsKey.Insert;
+                case Key.Delete:
+                    return WindowsKey.Delete;
+                case Key.PrintScreen:
+                    return WindowsKey.PrintScreen;
+                case Key.Pause:
+                    return WindowsKey.Pause;
+                case Key.NumpadEnter:
+                    return WindowsKey.Enter;
+                case Key.NumpadDivide:
+                    return WindowsKey.Divide;
+                case Key.NumpadMultiply:
+                    return WindowsKey.Multiply;
+                case Key.NumpadPlus:
+                    return WindowsKey.Play;
+                case Key.NumpadMinus:
+                    return WindowsKey.OemMinus;
+                case Key.NumpadPeriod:
+                    return WindowsKey.OemPeriod;
+                case Key.Numpad0:
+                    return WindowsKey.NumPad0;
+                case Key.Numpad1:
+                    return WindowsKey.NumPad1;
+                case Key.Numpad2:
+                    return WindowsKey.NumPad2;
+                case Key.Numpad3:
+                    return WindowsKey.NumPad3;
+                case Key.Numpad4:
+                    return WindowsKey.NumPad4;
+                case Key.Numpad5:
+                    return WindowsKey.NumPad5;
+                case Key.Numpad6:
+                    return WindowsKey.NumPad6;
+                case Key.Numpad7:
+                    return WindowsKey.NumPad7;
+                case Key.Numpad8:
+                    return WindowsKey.NumPad8;
+                case Key.Numpad9:
+                    return WindowsKey.NumPad9;
+                case Key.F1:
+                    return WindowsKey.F1;
+                case Key.F2:
+                    return WindowsKey.F2;
+                case Key.F3:
+                    return WindowsKey.F3;
+                case Key.F4:
+                    return WindowsKey.F4;
+                case Key.F5:
+                    return WindowsKey.F5;
+                case Key.F6:
+                    return WindowsKey.F6;
+                case Key.F7:
+                    return WindowsKey.F7;
+                case Key.F8:
+                    return WindowsKey.F8;
+                case Key.F9:
+                    return WindowsKey.F9;
+                case Key.F10:
+                    return WindowsKey.F10;
+                case Key.F11:
+                    return WindowsKey.F11;
+                case Key.F12:
+                    return WindowsKey.F12;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(key), key, null);
+            }
+        }
 
 #endif
     }

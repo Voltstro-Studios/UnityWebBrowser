@@ -19,10 +19,10 @@ namespace UnityWebBrowser
     public sealed class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
         IPointerUpHandler
     {
-	    /// <summary>
-	    ///     The <see cref="WebBrowserClient" />, what handles the communication between the CEF process and Unity
-	    /// </summary>
-	    [Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
+        /// <summary>
+        ///     The <see cref="WebBrowserClient" />, what handles the communication between the CEF process and Unity
+        /// </summary>
+        [Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
         public WebBrowserClient browserClient = new WebBrowserClient();
 
         private RawImage image;
@@ -30,7 +30,7 @@ namespace UnityWebBrowser
         private Vector2 lastSuccessfulMousePositionSent;
 
 #if ENABLE_INPUT_SYSTEM
-		private string currentInputBuffer;
+        private string currentInputBuffer;
 #else
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
 		#error Unity Web Browser on linux does not support old input system!
@@ -38,11 +38,11 @@ namespace UnityWebBrowser
         private static readonly KeyCode[] Keymap = (KeyCode[]) Enum.GetValues(typeof(KeyCode));
 #endif
 
-	    /// <summary>
-	    ///     Makes the browser go back a page
-	    /// </summary>
-	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-	    public void GoBack()
+        /// <summary>
+        ///     Makes the browser go back a page
+        /// </summary>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void GoBack()
         {
             if (!browserClient.IsConnected)
                 throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
@@ -50,11 +50,11 @@ namespace UnityWebBrowser
             browserClient.GoBack();
         }
 
-	    /// <summary>
-	    ///     Make the browser go forward a page
-	    /// </summary>
-	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-	    public void GoForward()
+        /// <summary>
+        ///     Make the browser go forward a page
+        /// </summary>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void GoForward()
         {
             if (!browserClient.IsConnected)
                 throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
@@ -62,13 +62,13 @@ namespace UnityWebBrowser
             browserClient.GoForward();
         }
 
-	    /// <summary>
-	    ///     Makes the browser go to a url
-	    /// </summary>
-	    /// <param name="url"></param>
-	    /// <exception cref="ArgumentNullException"></exception>
-	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-	    public void NavigateUrl(string url)
+        /// <summary>
+        ///     Makes the browser go to a url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void NavigateUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
@@ -79,11 +79,11 @@ namespace UnityWebBrowser
             browserClient.LoadUrl(url);
         }
 
-	    /// <summary>
-	    ///     Refreshes the browser
-	    /// </summary>
-	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-	    public void Refresh()
+        /// <summary>
+        ///     Refreshes the browser
+        /// </summary>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void Refresh()
         {
             if (!browserClient.IsConnected)
                 throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
@@ -91,13 +91,13 @@ namespace UnityWebBrowser
             browserClient.Refresh();
         }
 
-	    /// <summary>
-	    ///     Loads HTML code
-	    /// </summary>
-	    /// <param name="html"></param>
-	    /// <exception cref="ArgumentNullException"></exception>
-	    /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-	    public void LoadHtml(string html)
+        /// <summary>
+        ///     Loads HTML code
+        /// </summary>
+        /// <param name="html"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void LoadHtml(string html)
         {
             if (string.IsNullOrWhiteSpace(html))
                 throw new ArgumentNullException(nameof(html));
@@ -108,11 +108,11 @@ namespace UnityWebBrowser
             browserClient.LoadHtml(html);
         }
 
-	    /// <summary>
-	    ///     Executes JS
-	    /// </summary>
-	    /// <param name="js"></param>
-	    public void ExecuteJs(string js)
+        /// <summary>
+        ///     Executes JS
+        /// </summary>
+        /// <param name="js"></param>
+        public void ExecuteJs(string js)
         {
             if (string.IsNullOrWhiteSpace(js))
                 throw new ArgumentNullException(nameof(js));
@@ -128,13 +128,13 @@ namespace UnityWebBrowser
             //Start the browser client
             browserClient.Init();
             StartCoroutine(browserClient.Start());
-            
+
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
             image.uvRect = new Rect(0f, 0f, 1f, -1f);
 
 #if ENABLE_INPUT_SYSTEM
-			Keyboard.current.onTextInput += c => currentInputBuffer += c;
+            Keyboard.current.onTextInput += c => currentInputBuffer += c;
 #endif
         }
 
@@ -160,7 +160,7 @@ namespace UnityWebBrowser
                     browserClient.ipcSettings.inPipeName = "UnityWebBrowserIn";
                     Debug.LogError("The in pipe name cannot be null or white space!");
                 }
-                
+
                 if (string.IsNullOrWhiteSpace(browserClient.ipcSettings.outPipeName))
                 {
                     browserClient.ipcSettings.outPipeName = "UnityWebBrowserOut";
@@ -183,7 +183,8 @@ namespace UnityWebBrowser
                     Debug.LogError("The in and out IPC ports cannot be the same!");
                 }
 
-                if (browserClient.remoteDebugging && browserClient.remoteDebuggingPort == browserClient.ipcSettings.inPort ||
+                if (browserClient.remoteDebugging &&
+                    browserClient.remoteDebuggingPort == browserClient.ipcSettings.inPort ||
                     browserClient.remoteDebuggingPort == browserClient.ipcSettings.outPort)
                 {
                     browserClient.remoteDebuggingPort = 9022;
@@ -193,7 +194,7 @@ namespace UnityWebBrowser
                 }
             }
         }
-                
+
 #endif
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -214,29 +215,27 @@ namespace UnityWebBrowser
                 List<int> keysUp = new List<int>();
 
 #if ENABLE_INPUT_SYSTEM
-				//We need to find all keys that were pressed and released
-				foreach (KeyControl key in Keyboard.current.allKeys)
-				{
-					try
-					{
-						if (key.wasPressedThisFrame)
-							keysDown.Add((int) key.keyCode.UnityKeyToWindowKey());
+                //We need to find all keys that were pressed and released
+                foreach (KeyControl key in Keyboard.current.allKeys)
+                    try
+                    {
+                        if (key.wasPressedThisFrame)
+                            keysDown.Add((int)key.keyCode.UnityKeyToWindowKey());
 
-						if (key.wasReleasedThisFrame)
-							keysUp.Add((int) key.keyCode.UnityKeyToWindowKey());
-					}
-					catch (Exception)
+                        if (key.wasReleasedThisFrame)
+                            keysUp.Add((int)key.keyCode.UnityKeyToWindowKey());
+                    }
+                    catch (Exception)
                     {
                         browserClient.logger.Warn($"Unsupported key conversion attempted! Key: {key}");
-					}
-				}
+                    }
 
-				//Send our input if any key is down or up
-				if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(currentInputBuffer))
-				{
-					browserClient.SendKeyboardControls(keysDown.ToArray(), keysUp.ToArray(), currentInputBuffer);
-					currentInputBuffer = "";
-				}
+                //Send our input if any key is down or up
+                if (keysDown.Count != 0 || keysUp.Count != 0 || !string.IsNullOrEmpty(currentInputBuffer))
+                {
+                    browserClient.SendKeyboardControls(keysDown.ToArray(), keysUp.ToArray(), currentInputBuffer);
+                    currentInputBuffer = "";
+                }
 #else
                 //We need to find all keys that were pressed and released
                 foreach (KeyCode key in Keymap)
@@ -274,21 +273,21 @@ namespace UnityWebBrowser
 
                     //Mouse scroll
 #if ENABLE_INPUT_SYSTEM
-					//Mouse scroll wheel in the new input system is fucked, its value is either 120 or -120,
-					//no in-between or -1.0 to 1.0 like the old input system. Why Unity.
-					//And nobody knows anything about it because I guess no one uses the scroll wheel like this
-					float scroll = Mouse.current.scroll.y.ReadValue();
-					if (scroll > 0)
-						scroll = 0.2f;
-					if (scroll < 0)
-						scroll = -0.2f;
+                    //Mouse scroll wheel in the new input system is fucked, its value is either 120 or -120,
+                    //no in-between or -1.0 to 1.0 like the old input system. Why Unity.
+                    //And nobody knows anything about it because I guess no one uses the scroll wheel like this
+                    float scroll = Mouse.current.scroll.y.ReadValue();
+                    if (scroll > 0)
+                        scroll = 0.2f;
+                    if (scroll < 0)
+                        scroll = -0.2f;
 #else
                     float scroll = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
 #endif
                     scroll *= browserClient.BrowserTexture.height;
 
                     if (scroll != 0)
-                        browserClient.SendMouseScroll((int) pos.x, (int) pos.y, (int) scroll);
+                        browserClient.SendMouseScroll((int)pos.x, (int)pos.y, (int)scroll);
                 }
 
                 yield return 0;
@@ -326,7 +325,7 @@ namespace UnityWebBrowser
         private bool GetMousePosition(out Vector2 pos)
         {
 #if ENABLE_INPUT_SYSTEM
-			Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector2 mousePos = Mouse.current.position.ReadValue();
 #else
             Vector2 mousePos = UnityEngine.Input.mousePosition;
 #endif

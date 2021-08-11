@@ -22,30 +22,31 @@ namespace UnityWebBrowser
         private readonly IWebBrowserLogger logger;
 
         public bool IsConnected => client.IsConnected;
-        
+
         public WebBrowserCommunicationsManager(WebBrowserIpcSettings ipcSettings, IWebBrowserLogger logger)
         {
             unityThread = SynchronizationContext.Current;
             this.logger = logger;
-            
+
             if (ipcSettings.preferPipes)
             {
                 logger.Debug("Using pipes communication...");
-                
+
                 host = new PipesHost(ipcSettings.inPipeName);
-                client = new PipesClient(ipcSettings.outPipeName, ipcSettings.connectionTimeout, Client.DefaultBufferSize);
+                client = new PipesClient(ipcSettings.outPipeName, ipcSettings.connectionTimeout,
+                    Client.DefaultBufferSize);
             }
             else
             {
                 logger.Debug("Using TCP communication...");
-                
+
                 host = new TCPHost(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.inPort));
                 client = new TCPClient(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.outPort));
             }
-            
+
             ReadWriterUtils.AddTypeReadWriters(host.TypeReaderWriterManager);
             host.AddService<IClient>(this);
-            
+
             ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
             client.AddService<IEngine>();
             engineProxy = new EngineProxy(client);
@@ -61,30 +62,65 @@ namespace UnityWebBrowser
             host.StartListening();
         }
 
-        public byte[] GetPixels() => engineProxy.GetPixels();
+        public byte[] GetPixels()
+        {
+            return engineProxy.GetPixels();
+        }
 
-        public void Shutdown() => engineProxy.Shutdown();
+        public void Shutdown()
+        {
+            engineProxy.Shutdown();
+        }
 
-        public void SendKeyboardEvent(KeyboardEvent keyboardEvent) => engineProxy.SendKeyboardEvent(keyboardEvent);
+        public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
+        {
+            engineProxy.SendKeyboardEvent(keyboardEvent);
+        }
 
-        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent) => engineProxy.SendMouseMoveEvent(mouseMoveEvent);
+        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
+        {
+            engineProxy.SendMouseMoveEvent(mouseMoveEvent);
+        }
 
-        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent) => engineProxy.SendMouseClickEvent(mouseClickEvent);
+        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
+        {
+            engineProxy.SendMouseClickEvent(mouseClickEvent);
+        }
 
-        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent) =>
+        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
+        {
             engineProxy.SendMouseScrollEvent(mouseScrollEvent);
+        }
 
-        public void GoForward() => engineProxy.GoForward();
+        public void GoForward()
+        {
+            engineProxy.GoForward();
+        }
 
-        public void GoBack() => engineProxy.GoBack();
+        public void GoBack()
+        {
+            engineProxy.GoBack();
+        }
 
-        public void Refresh() => engineProxy.Refresh();
+        public void Refresh()
+        {
+            engineProxy.Refresh();
+        }
 
-        public void LoadUrl(string url) => engineProxy.LoadUrl(url);
+        public void LoadUrl(string url)
+        {
+            engineProxy.LoadUrl(url);
+        }
 
-        public void LoadHtml(string html) => engineProxy.LoadHtml(html);
+        public void LoadHtml(string html)
+        {
+            engineProxy.LoadHtml(html);
+        }
 
-        public void ExecuteJs(string js) => engineProxy.ExecuteJs(js);
+        public void ExecuteJs(string js)
+        {
+            engineProxy.ExecuteJs(js);
+        }
 
         public void Dispose()
         {
@@ -95,7 +131,7 @@ namespace UnityWebBrowser
 
         public event Action<string> OnUrlChanged;
         public event Action<string> OnLoadStart;
-        public event Action<string> OnLoadFinish; 
+        public event Action<string> OnLoadFinish;
 
         public void UrlChange(string url)
         {

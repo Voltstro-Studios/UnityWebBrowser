@@ -1,16 +1,16 @@
 {
-    "name": "UnityWebBrowser.Editor.BE",
-    "rootNamespace": "UnityWebBrowser.Editor.BE",
-    "references": [],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": false,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "UnityWebBrowser.Editor.BE",
+  "rootNamespace": "UnityWebBrowser.Editor.BE",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

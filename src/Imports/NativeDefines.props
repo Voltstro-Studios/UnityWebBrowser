@@ -1,6 +1,6 @@
 <Project>
     <!-- https://gist.github.com/Voltstro/c5e8db35a6aadf812cabb96c6bb1387d -->
-    
+
     <PropertyGroup>
         <IsWindowsPC Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindowsPC>
         <IsOSXPC Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSXPC>
