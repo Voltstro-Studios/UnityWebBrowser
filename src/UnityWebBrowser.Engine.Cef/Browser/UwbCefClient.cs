@@ -16,6 +16,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         private readonly UwbCefLoadHandler loadHandler;
         private readonly UwbCefRenderHandler renderHandler;
         private readonly UwbCefRequestHandler requestHandler;
+        private readonly UwbCefContextMenuHandler contextMenuHandler;
+        
         private CefBrowser browser;
         private CefBrowserHost browserHost;
         private CefFrame mainFrame;
@@ -39,6 +41,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             };
             displayHandler = new UwbCefDisplayHandler(this);
             requestHandler = new UwbCefRequestHandler(proxySettings);
+            contextMenuHandler = new UwbCefContextMenuHandler();
         }
 
         /// <summary>
@@ -90,6 +93,11 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         protected override CefRequestHandler GetRequestHandler()
         {
             return requestHandler;
+        }
+
+        protected override CefContextMenuHandler GetContextMenuHandler()
+        {
+            return contextMenuHandler;
         }
 
         #region Engine Events
