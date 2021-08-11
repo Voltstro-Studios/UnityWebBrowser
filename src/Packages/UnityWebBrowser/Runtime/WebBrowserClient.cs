@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
@@ -91,12 +92,6 @@ namespace UnityWebBrowser
         /// </summary>
         [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
         public int engineStartupTimeout = 100000;
-
-        /// <summary>
-        ///     How often to update the <see cref="BrowserTexture"/>
-        /// </summary>
-        [Tooltip("How often to update the Browser Texture")] [Min(0)]
-        public float eventPollingTime = 0.04f;
 
         /// <summary>
         ///     The log severity. Only messages of this severity level or higher will be logged
@@ -329,17 +324,11 @@ namespace UnityWebBrowser
 
         private byte[] pixels;
 
-        /// <summary>
-        ///     Starts updating the <see cref="BrowserTexture" /> data
-        /// </summary>
-        /// <returns></returns>
-        internal IEnumerator Start()
+        internal async Task RenderLoop(CancellationToken cancellationToken)
         {
-            logger.Debug("Starting browser render loop...");
-
-            while (IsConnected)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                yield return new WaitForSecondsRealtime(eventPollingTime);
+                await Task.Delay(25, cancellationToken);
 
                 pixels = communicationsManager.GetPixels();
             }

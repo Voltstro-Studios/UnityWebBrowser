@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,6 +30,8 @@ namespace UnityWebBrowser
         private RawImage image;
         private Coroutine pointerKeyboardHandler;
         private Vector2 lastSuccessfulMousePositionSent;
+
+        private CancellationTokenSource cancellationToken;
 
 #if ENABLE_INPUT_SYSTEM
         private string currentInputBuffer;
@@ -127,7 +131,9 @@ namespace UnityWebBrowser
         {
             //Start the browser client
             browserClient.Init();
-            StartCoroutine(browserClient.Start());
+            cancellationToken = new CancellationTokenSource();
+            //StartCoroutine(browserClient.Start());
+            _ = Task.Run(() => browserClient.RenderLoop(cancellationToken.Token));
 
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
@@ -145,6 +151,7 @@ namespace UnityWebBrowser
 
         private void OnDestroy()
         {
+            cancellationToken.Cancel();
             browserClient.Dispose();
         }
 

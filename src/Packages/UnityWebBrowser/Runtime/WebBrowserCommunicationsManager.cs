@@ -19,12 +19,14 @@ namespace UnityWebBrowser
         private readonly Host host;
 
         private readonly SynchronizationContext unityThread;
+        private readonly object threadLock;
         private readonly IWebBrowserLogger logger;
 
         public bool IsConnected => client.IsConnected;
 
         public WebBrowserCommunicationsManager(WebBrowserIpcSettings ipcSettings, IWebBrowserLogger logger)
         {
+            threadLock = new object();
             unityThread = SynchronizationContext.Current;
             this.logger = logger;
 
@@ -54,79 +56,124 @@ namespace UnityWebBrowser
 
         public void Connect()
         {
-            client.Connect();
+            lock (threadLock)
+            {
+                client.Connect();
+            }
         }
 
         public void Listen()
         {
-            host.StartListening();
+            lock (threadLock)
+            {
+                host.StartListening();
+            }
         }
 
         public byte[] GetPixels()
         {
-            return engineProxy.GetPixels();
+            lock (threadLock)
+            {
+                return engineProxy.GetPixels();
+            }
         }
 
         public void Shutdown()
         {
-            engineProxy.Shutdown();
+            lock (threadLock)
+            {
+                engineProxy.Shutdown();
+            }
         }
 
         public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
         {
-            engineProxy.SendKeyboardEvent(keyboardEvent);
+            lock (threadLock)
+            {
+                engineProxy.SendKeyboardEvent(keyboardEvent);
+            }
         }
 
         public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
         {
-            engineProxy.SendMouseMoveEvent(mouseMoveEvent);
+            lock (threadLock)
+            {
+                engineProxy.SendMouseMoveEvent(mouseMoveEvent);
+            }
         }
 
         public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
         {
-            engineProxy.SendMouseClickEvent(mouseClickEvent);
+            lock (threadLock)
+            {
+                engineProxy.SendMouseClickEvent(mouseClickEvent);
+            }
         }
 
         public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
         {
-            engineProxy.SendMouseScrollEvent(mouseScrollEvent);
+            lock (threadLock)
+            {
+                engineProxy.SendMouseScrollEvent(mouseScrollEvent);
+            }
         }
 
         public void GoForward()
         {
-            engineProxy.GoForward();
+            lock (threadLock)
+            {
+                engineProxy.GoForward();
+            }
         }
 
         public void GoBack()
         {
-            engineProxy.GoBack();
+            lock (threadLock)
+            {
+                engineProxy.GoBack();
+            }
         }
 
         public void Refresh()
         {
-            engineProxy.Refresh();
+            lock (threadLock)
+            {
+                engineProxy.Refresh();
+            }
         }
 
         public void LoadUrl(string url)
         {
-            engineProxy.LoadUrl(url);
+            lock (threadLock)
+            {
+                engineProxy.LoadUrl(url);
+            }
         }
 
         public void LoadHtml(string html)
         {
-            engineProxy.LoadHtml(html);
+            lock (threadLock)
+            {
+                engineProxy.LoadHtml(html);
+            }
         }
 
         public void ExecuteJs(string js)
         {
-            engineProxy.ExecuteJs(js);
+            lock (threadLock)
+            {
+                engineProxy.ExecuteJs(js);
+            }
         }
 
         public void Dispose()
         {
-            Shutdown();
-            client.Dispose();
-            host.Dispose();
+            lock (threadLock)
+            {
+                Shutdown();
+                client.Dispose();
+                host.Dispose();
+            }
         }
 
         public event Action<string> OnUrlChanged;
