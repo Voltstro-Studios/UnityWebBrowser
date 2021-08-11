@@ -14,8 +14,8 @@ namespace UnityWebBrowser.Engine.Cef
 		/// <returns></returns>
 		public static int Main(string[] args)
 		{
-			UWBCefEngine cefEngine = new UWBCefEngine();
-			return cefEngine.Main(args);
+			UwbCefEngineEntry cefEngineEntry = new();
+			return cefEngineEntry.Main(args);
 		}
 	}
 }

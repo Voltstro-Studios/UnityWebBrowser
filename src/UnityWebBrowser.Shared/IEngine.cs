@@ -1,4 +1,4 @@
-﻿using UnityWebBrowser.Shared.Events.EngineAction;
+﻿using UnityWebBrowser.Shared.Events;
 using VoltRpc.Proxy;
 
 namespace UnityWebBrowser.Shared

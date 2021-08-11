@@ -1,4 +1,4 @@
-namespace UnityWebBrowser.Shared.Events.EngineAction
+namespace UnityWebBrowser.Shared.Events
 {
     public enum MouseClickType : byte
     {

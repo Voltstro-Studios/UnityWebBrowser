@@ -8,7 +8,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 	/// <summary>
 	///		<see cref="CefRenderHandler"/> implementation
 	/// </summary>
-	public class BrowserProcessCEFRenderHandler : CefRenderHandler
+	public class UwbCefRenderHandler : CefRenderHandler
 	{
 		private readonly CefSize cefSize;
 
@@ -27,7 +27,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 	        }
         }
 
-        public BrowserProcessCEFRenderHandler(CefSize size)
+        public UwbCefRenderHandler(CefSize size)
         {
 	        cefSize = size;
 	        pixels = new byte[size.Width * size.Height * 4];

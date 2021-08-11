@@ -1,8 +1,6 @@
 ﻿using System;
-using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Events.EngineAction;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser
@@ -10,45 +8,45 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 	/// <summary>
 	///		Offscreen CEF
 	/// </summary>
-	public class BrowserProcessCEFClient : CefClient, IDisposable
+	public class UwbCefClient : CefClient, IDisposable
 	{
 		private CefBrowser browser;
 		private CefBrowserHost browserHost;
 		private CefFrame mainFrame;
 		
-		private readonly BrowserProcessCEFLoadHandler loadHandler;
-		private readonly BrowserProcessCEFRenderHandler renderHandler;
-		private readonly BrowserProcessCEFLifespanHandler lifespanHandler;
-		private readonly BrowserProcessCEFDisplayHandler displayHandler;
-		private readonly BrowserProcessCEFRequestHandler requestHandler;
+		private readonly UwbCefLoadHandler loadHandler;
+		private readonly UwbCefRenderHandler renderHandler;
+		private readonly UwbCefLifespanHandler lifespanHandler;
+		private readonly UwbCefDisplayHandler displayHandler;
+		private readonly UwbCefRequestHandler requestHandler;
 
 		public event Action<string> OnUrlChange;
 		public event Action<string> OnLoadStart;
 		public event Action<string> OnLoadFinish; 
 
 		///  <summary>
-		/// 		Creates a new <see cref="BrowserProcessCEFClient"/> instance
+		/// 		Creates a new <see cref="UwbCefClient"/> instance
 		///  </summary>
 		///  <param name="size">The size of the window</param>
 		///  <param name="proxySettings"></param>
-		public BrowserProcessCEFClient(CefSize size, ProxySettings proxySettings)
+		public UwbCefClient(CefSize size, ProxySettings proxySettings)
 		{
 			//Setup our handlers
-			loadHandler = new BrowserProcessCEFLoadHandler(this);
-			renderHandler = new BrowserProcessCEFRenderHandler(size);
-			lifespanHandler = new BrowserProcessCEFLifespanHandler();
+			loadHandler = new UwbCefLoadHandler(this);
+			renderHandler = new UwbCefRenderHandler(size);
+			lifespanHandler = new UwbCefLifespanHandler();
 			lifespanHandler.AfterCreated += cefBrowser =>
 			{
 				browser = cefBrowser;
 				browserHost = cefBrowser.GetHost();
 				mainFrame = cefBrowser.GetMainFrame();
 			};
-			displayHandler = new BrowserProcessCEFDisplayHandler(this);
-			requestHandler = new BrowserProcessCEFRequestHandler(proxySettings);
+			displayHandler = new UwbCefDisplayHandler(this);
+			requestHandler = new UwbCefRequestHandler(proxySettings);
 		}
 
 		/// <summary>
-		///		Destroys the <see cref="BrowserProcessCEFClient"/> instance
+		///		Destroys the <see cref="UwbCefClient"/> instance
 		/// </summary>
 		public void Dispose()
 		{

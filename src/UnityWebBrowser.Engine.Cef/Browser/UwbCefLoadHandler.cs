@@ -7,12 +7,12 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// <summary>
     ///     <see cref="CefLoadHandler"/> implementation
     /// </summary>
-    public class BrowserProcessCEFLoadHandler : CefLoadHandler
+    public class UwbCefLoadHandler : CefLoadHandler
     {
-        private readonly BrowserProcessCEFClient client;
-        private string[] ignoredLoadUrls = new[] { "about:blank" };
+        private readonly UwbCefClient client;
+        private readonly string[] ignoredLoadUrls = { "about:blank" };
 
-        internal BrowserProcessCEFLoadHandler(BrowserProcessCEFClient client)
+        internal UwbCefLoadHandler(UwbCefClient client)
         {
             this.client = client;
         }

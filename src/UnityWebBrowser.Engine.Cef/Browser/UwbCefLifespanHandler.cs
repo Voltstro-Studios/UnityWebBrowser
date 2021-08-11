@@ -6,7 +6,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// <summary>
     ///     <see cref="CefLifeSpanHandler"/> implementation
     /// </summary>
-    public class BrowserProcessCEFLifespanHandler : CefLifeSpanHandler
+    public class UwbCefLifespanHandler : CefLifeSpanHandler
     {
         public event Action<CefBrowser> AfterCreated; 
 

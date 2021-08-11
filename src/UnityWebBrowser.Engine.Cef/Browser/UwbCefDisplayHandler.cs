@@ -7,11 +7,11 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// <summary>
     ///     <see cref="CefDisplayHandler"/> implementation
     /// </summary>
-    public class BrowserProcessCEFDisplayHandler : CefDisplayHandler
+    public class UwbCefDisplayHandler : CefDisplayHandler
     {
-        private readonly BrowserProcessCEFClient client;
+        private readonly UwbCefClient client;
         
-        public BrowserProcessCEFDisplayHandler(BrowserProcessCEFClient client)
+        public UwbCefDisplayHandler(UwbCefClient client)
         {
             this.client = client;
         }

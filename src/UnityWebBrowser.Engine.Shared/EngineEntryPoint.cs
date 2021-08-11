@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.ReadWriters;
+using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
 using VoltRpc.Communication.Pipes;
 using VoltRpc.Communication.TCP;
@@ -21,17 +21,20 @@ namespace UnityWebBrowser.Engine.Shared
 		private const string ActiveEngineFileName = "EngineActive";
 
 		/// <summary>
-		///		Fire events on the client end
+		///		Allows the engine to fire events on the Unity client side
 		/// </summary>
 		protected IClient clientEvents;
+		
+		/// <summary>
+		///		Is the <see cref="clientEvents"/> side of the connection connected
+		/// </summary>
+		protected bool IsConnected => ipcClient.IsConnected;
 		
 		private Host ipcHost;
 		private Client ipcClient;
 		
 		private FileStream activeFileStream;
 
-		protected bool IsConnected => ipcClient.IsConnected;
-		
 		/// <summary>
 	    ///		Called when the arguments are parsed.
 	    ///		<para>Remember to lock if you don't want to immediately exit</para>
@@ -149,6 +152,11 @@ namespace UnityWebBrowser.Engine.Shared
 			return rootCommand.Invoke(args);
         }
 
+	    /// <summary>
+	    ///		Call when you are ready to setup the IPC
+	    /// </summary>
+	    /// <param name="engine"></param>
+	    /// <param name="arguments"></param>
 	    protected void SetupIpc(IEngine engine, LaunchArguments arguments)
 	    {
 		    try
@@ -173,7 +181,7 @@ namespace UnityWebBrowser.Engine.Shared
 				    }
 
 				    Logger.Debug($"Using TCP host port: {inPort}");
-				    IPEndPoint hostIp = new IPEndPoint(IPAddress.Loopback, inPort);
+				    IPEndPoint hostIp = new(IPAddress.Loopback, inPort);
 				    ipcHost = new TCPHost(hostIp);
 				    
 				    if (!int.TryParse(arguments.OutLocation, out int outPort))
@@ -185,7 +193,7 @@ namespace UnityWebBrowser.Engine.Shared
 				    }
 				    
 				    Logger.Debug($"Using TCP client port: {outPort}");
-				    IPEndPoint clientIp = new IPEndPoint(IPAddress.Loopback, outPort);
+				    IPEndPoint clientIp = new(IPAddress.Loopback, outPort);
 				    ipcClient = new TCPClient(clientIp);
 			    }
 
@@ -222,6 +230,10 @@ namespace UnityWebBrowser.Engine.Shared
 		    }
 	    }
 
+	    /// <summary>
+	    ///		Call when you are ready
+	    /// </summary>
+	    /// <param name="arguments"></param>
 	    protected void Ready(LaunchArguments arguments)
 	    {
 		    string path = Path.GetFullPath($"{arguments.ActiveEngineFilePath}/{ActiveEngineFileName}");
@@ -230,20 +242,35 @@ namespace UnityWebBrowser.Engine.Shared
 		    File.SetAttributes(path, FileAttributes.Hidden);
 	    }
 
-	    public virtual void Dispose()
+	    #region Destroy
+
+	    ~EngineEntryPoint()
+	    {
+		    ReleaseResources();
+	    }
+	    
+	    /// <summary>
+	    ///		Destroys this <see cref="EngineEntryPoint"/> instance
+	    /// </summary>
+	    public void Dispose()
 	    {
 		    ReleaseResources();
 		    GC.SuppressFinalize(this);
 	    }
 
-	    private void ReleaseResources()
+	    /// <summary>
+	    ///		Called when <see cref="Dispose"/> is invoked
+	    /// </summary>
+	    protected virtual void ReleaseResources()
 	    {
 		    if (activeFileStream != null)
 		    {
 			    activeFileStream.Close();
 			    activeFileStream.Dispose();
 		    }
-            ipcHost?.Dispose();
+		    ipcHost?.Dispose();
 	    }
+
+	    #endregion
 	}
 }

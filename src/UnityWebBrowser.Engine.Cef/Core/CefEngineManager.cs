@@ -3,7 +3,7 @@ using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core
@@ -11,22 +11,22 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// <summary>
 	///		Manager for CEF
 	/// </summary>
-    internal class CefEngine : IEngine, IDisposable
+    internal class CefEngineManager : IEngine, IDisposable
     {
 	    private readonly LaunchArguments launchArguments;
 	    private readonly string[] args;
 	    
-	    private BrowserProcessCEFClient cefClient;
+	    private UwbCefClient cefClient;
 
 	    /// <summary>
-	    ///		Creates a new <see cref="CefEngine"/> instance
+	    ///		Creates a new <see cref="CefEngineManager"/> instance
 	    /// </summary>
 	    /// <param name="arguments"></param>
 	    /// <param name="rawArguments"></param>
 	    /// <exception cref="DllNotFoundException"></exception>
 	    /// <exception cref="CefVersionMismatchException"></exception>
 	    /// <exception cref="Exception"></exception>
-	    public CefEngine(LaunchArguments arguments, string[] rawArguments)
+	    public CefEngineManager(LaunchArguments arguments, string[] rawArguments)
         {
             //Setup CEF
             CefRuntime.Load();
@@ -52,7 +52,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 			//Set up CEF args and the CEF app
 			CefMainArgs cefMainArgs = new CefMainArgs(argv);
-			BrowserProcessCEFApp cefApp = new BrowserProcessCEFApp(launchArguments);
+			UwbCefApp cefApp = new UwbCefApp(launchArguments);
 
 			//Run our sub-processes
 			int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
@@ -131,7 +131,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 			Logger.Info("Starting CEF client...");
 
 			//Create cef browser
-			cefClient = new BrowserProcessCEFClient(new CefSize(launchArguments.Width, launchArguments.Height), 
+			cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height), 
 					new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled));
 		    CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
 		    
@@ -224,7 +224,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 	    #region Destroy
 
-	    ~CefEngine()
+	    ~CefEngineManager()
 	    {
 		    ReleaseResources();
 	    }

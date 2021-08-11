@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityWebBrowser.Input;
-using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;

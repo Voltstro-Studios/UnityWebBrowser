@@ -5,32 +5,32 @@ using Xilium.CefGlue;
 namespace UnityWebBrowser.Engine.Cef.Core
 {
 	/// <summary>
-	///		Main class for the CEF Unity Web Browser Engine
+	///		<see cref="EngineEntryPoint"/> for the Cef engine
 	/// </summary>
-	public class UWBCefEngine : EngineEntryPoint
+	public class UwbCefEngineEntry : EngineEntryPoint
 	{
-		private CefEngine cefEngine;
+		private CefEngineManager cefEngineManager;
 		
 		protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
 		{
-			cefEngine = new CefEngine(launchArguments, args);
-			cefEngine.Init();
+			cefEngineManager = new CefEngineManager(launchArguments, args);
+			cefEngineManager.Init();
 			
-			SetupIpc(cefEngine, launchArguments);
+			SetupIpc(cefEngineManager, launchArguments);
 			Ready(launchArguments);
 
 			//Setup our events
-			cefEngine.OnUrlChanged += url =>
+			cefEngineManager.OnUrlChanged += url =>
 			{
 				if(IsConnected)
 					clientEvents?.UrlChange(url);
 			};
-			cefEngine.OnLoadStart += url =>
+			cefEngineManager.OnLoadStart += url =>
 			{
 				if (IsConnected)
 					clientEvents?.LoadStart(url);
 			};
-			cefEngine.OnLoadFinish += url =>
+			cefEngineManager.OnLoadFinish += url =>
 			{
 				if (IsConnected)
 					clientEvents?.LoadFinish(url);
@@ -47,21 +47,10 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
 		#region Destroy
 
-		~UWBCefEngine()
+		protected override void ReleaseResources()
 		{
-			ReleaseResources();
-		}
-
-		public override void Dispose()
-		{
-			base.Dispose();
-			ReleaseResources();
-			GC.SuppressFinalize(this);
-		}
-
-		private void ReleaseResources()
-		{
-			cefEngine?.Dispose();
+			cefEngineManager?.Dispose();
+			base.ReleaseResources();
 		}
 
 		#endregion

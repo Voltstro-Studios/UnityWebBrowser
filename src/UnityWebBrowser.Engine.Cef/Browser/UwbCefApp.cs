@@ -6,12 +6,12 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// <summary>
     ///     <see cref="CefApp"/> for CefBrowserProcess
     /// </summary>
-    public class BrowserProcessCEFApp : CefApp
+    public class UwbCefApp : CefApp
     {
         private readonly bool mediaStreamingEnabled;
         private readonly bool noProxyServer;
         
-        public BrowserProcessCEFApp(LaunchArguments launchArguments)
+        public UwbCefApp(LaunchArguments launchArguments)
         {
             mediaStreamingEnabled = launchArguments.WebRtc;
             noProxyServer = !launchArguments.ProxyEnabled;

@@ -7,11 +7,11 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// <summary>
     ///     <see cref="CefRenderHandler"/> implementation
     /// </summary>
-    public class BrowserProcessCEFRequestHandler : CefRequestHandler
+    public class UwbCefRequestHandler : CefRequestHandler
     {
         private readonly ProxySettings proxySettings;
         
-        public BrowserProcessCEFRequestHandler(ProxySettings proxySettings)
+        public UwbCefRequestHandler(ProxySettings proxySettings)
         {
             this.proxySettings = proxySettings;
         }

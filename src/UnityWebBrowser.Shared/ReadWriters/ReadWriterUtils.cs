@@ -1,7 +1,7 @@
-﻿using UnityWebBrowser.Shared.Events.EngineAction;
+﻿using UnityWebBrowser.Shared.Events;
 using VoltRpc.Types;
 
-namespace UnityWebBrowser.Shared.Events.ReadWriters
+namespace UnityWebBrowser.Shared.ReadWriters
 {
     public static class ReadWriterUtils
     {

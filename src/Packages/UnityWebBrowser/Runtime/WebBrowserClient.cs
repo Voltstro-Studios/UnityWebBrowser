@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events.EngineAction;
+using UnityWebBrowser.Shared.Events;
 
 namespace UnityWebBrowser
 {
