@@ -25,7 +25,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
             Logger.Debug($"Loading: {url}");
 
-            if (frame.IsMain) client.LoadStart(url);
+            if (frame.IsMain) client.OnLoadStart(url);
         }
 
         protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
@@ -36,7 +36,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
             Logger.Debug($"Loaded: {url}");
 
-            if (frame.IsMain) client.LoadFinish(url);
+            if (frame.IsMain) client.OnLoadFinish(url);
         }
 
         protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode,

@@ -14,27 +14,27 @@ namespace UnityWebBrowser.Engine.Cef.Core
         protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
         {
             cefEngineManager = new CefEngineManager(launchArguments, args);
-            cefEngineManager.Init();
-
-            SetupIpc(cefEngineManager, launchArguments);
-            Ready(launchArguments);
-
             //Setup our events
-            cefEngineManager.OnUrlChanged += url =>
+            cefEngineManager.OnUrlChanged = url =>
             {
                 if (IsConnected)
                     clientEvents?.UrlChange(url);
             };
-            cefEngineManager.OnLoadStart += url =>
+            cefEngineManager.OnLoadStart = url =>
             {
                 if (IsConnected)
                     clientEvents?.LoadStart(url);
             };
-            cefEngineManager.OnLoadFinish += url =>
+            cefEngineManager.OnLoadFinish = url =>
             {
                 if (IsConnected)
                     clientEvents?.LoadFinish(url);
             };
+            
+            cefEngineManager.Init();
+
+            SetupIpc(cefEngineManager, launchArguments);
+            Ready(launchArguments);
 
             //Calling run message loop will cause the main thread to lock (what we want)
             CefRuntime.RunMessageLoop();

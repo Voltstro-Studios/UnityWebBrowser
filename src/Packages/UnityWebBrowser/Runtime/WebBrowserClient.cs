@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared.Events;
 
 namespace UnityWebBrowser
@@ -355,17 +356,17 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Invoked when the url changes
         /// </summary>
-        public event Action<string> OnUrlChanged;
+        public event OnUrlChangeDelegate OnUrlChanged;
 
         /// <summary>
         ///     Invoked when the page starts to load
         /// </summary>
-        public event Action<string> OnLoadStart;
+        public event OnLoadStartDelegate OnLoadStart;
 
         /// <summary>
         ///     Invoked when the page finishes loading
         /// </summary>
-        public event Action<string> OnLoadFinish;
+        public event OnLoadFinishDelegate OnLoadFinish;
 
         #endregion
 

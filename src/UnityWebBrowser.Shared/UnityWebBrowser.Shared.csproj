@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/Properties.props"/>
+    <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,15 +13,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="VoltRpc" Version="1.1.1"/>
-        <PackageReference Include="VoltRpc.Communication.Pipes" Version="1.1.0"/>
-        <PackageReference Include="VoltRpc.Proxy.Generator" Version="1.0.0"/>
+        <PackageReference Include="VoltRpc" Version="1.1.1" />
+        <PackageReference Include="VoltRpc.Communication.Pipes" Version="1.1.0" />
+        <PackageReference Include="VoltRpc.Proxy.Generator" Version="1.0.0" />
     </ItemGroup>
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll"/>
-        <Copy SourceFiles="$(OutputPath)VoltRpc.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.dll"/>
-        <Copy SourceFiles="$(OutputPath)VoltRpc.Communication.Pipes.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.Communication.Pipes.dll"/>
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
+        <Copy SourceFiles="$(OutputPath)VoltRpc.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.dll" />
+        <Copy SourceFiles="$(OutputPath)VoltRpc.Communication.Pipes.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.Communication.Pipes.dll" />
     </Target>
 
 </Project>

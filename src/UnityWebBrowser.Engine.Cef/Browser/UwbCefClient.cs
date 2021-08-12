@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
@@ -22,12 +23,20 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         private CefBrowserHost browserHost;
         private CefFrame mainFrame;
 
+        public readonly OnUrlChangeDelegate OnUrlChange;
+        public readonly OnLoadStartDelegate OnLoadStart;
+        public readonly OnLoadFinishDelegate OnLoadFinish;
+
         /// <summary>
         ///     Creates a new <see cref="UwbCefClient" /> instance
         /// </summary>
         /// <param name="size">The size of the window</param>
         /// <param name="proxySettings"></param>
-        public UwbCefClient(CefSize size, ProxySettings proxySettings)
+        /// <param name="onUrlChange"></param>
+        /// <param name="onLoadStart"></param>
+        /// <param name="onLoadFinish"></param>
+        public UwbCefClient(CefSize size, ProxySettings proxySettings, 
+            OnUrlChangeDelegate onUrlChange, OnLoadStartDelegate onLoadStart, OnLoadFinishDelegate onLoadFinish)
         {
             //Setup our handlers
             loadHandler = new UwbCefLoadHandler(this);
@@ -42,6 +51,10 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             displayHandler = new UwbCefDisplayHandler(this);
             requestHandler = new UwbCefRequestHandler(proxySettings);
             contextMenuHandler = new UwbCefContextMenuHandler();
+
+            this.OnUrlChange = onUrlChange;
+            this.OnLoadStart = onLoadStart;
+            this.OnLoadFinish = onLoadFinish;
         }
 
         /// <summary>
@@ -53,10 +66,6 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             browserHost?.Dispose();
             GC.SuppressFinalize(this);
         }
-
-        public event Action<string> OnUrlChange;
-        public event Action<string> OnLoadStart;
-        public event Action<string> OnLoadFinish;
 
         /// <summary>
         ///     Gets the pixel data of the CEF window
@@ -138,7 +147,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         }
 
         /// <summary>
-        ///     Process a <see cref="Shared.Events.EngineActions.MouseMoveEvent" />
+        ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseMoveEvent" />
         /// </summary>
         /// <param name="mouseEvent"></param>
         public void ProcessMouseMoveEvent(MouseMoveEvent mouseEvent)
@@ -151,7 +160,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         }
 
         /// <summary>
-        ///     Process a <see cref="Shared.Events.EngineActions.MouseClickEvent" />
+        ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseClickEvent" />
         /// </summary>
         /// <param name="mouseClickEvent"></param>
         public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
@@ -166,7 +175,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         }
 
         /// <summary>
-        ///     Process a <see cref="Shared.Events.EngineActions.MouseScrollEvent" />
+        ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseScrollEvent" />
         /// </summary>
         /// <param name="mouseScrollEvent"></param>
         public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
@@ -228,25 +237,6 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         public void Refresh()
         {
             browser.Reload();
-        }
-
-        #endregion
-
-        #region CEF Events
-
-        public void UrlChange(string url)
-        {
-            OnUrlChange?.Invoke(url);
-        }
-
-        public void LoadStart(string url)
-        {
-            OnLoadStart?.Invoke(url);
-        }
-
-        public void LoadFinish(string url)
-        {
-            OnLoadFinish?.Invoke(url);
         }
 
         #endregion

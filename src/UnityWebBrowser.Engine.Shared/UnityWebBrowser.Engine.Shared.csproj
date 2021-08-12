@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/Properties.props"/>
+    <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj"/>
+        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
 
-        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1"/>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
     </ItemGroup>
 
 </Project>

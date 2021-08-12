@@ -19,7 +19,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
         {
             Logger.Debug($"URL Change: {url}");
-            client.UrlChange(url);
+            client.OnUrlChange(url);
         }
 
         protected override void OnFullscreenModeChange(CefBrowser browser, bool fullscreen)
