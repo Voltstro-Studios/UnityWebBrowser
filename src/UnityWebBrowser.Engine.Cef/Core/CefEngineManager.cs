@@ -135,7 +135,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
             cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
                 new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
                     launchArguments.ProxyEnabled),
-                OnUrlChanged, OnLoadStart, OnLoadFinish);
+                OnUrlChanged, OnLoadStart, OnLoadFinish, OnTitleChange);
             CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
         }
 
@@ -149,6 +149,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
         public OnUrlChangeDelegate OnUrlChanged;
         public OnLoadStartDelegate OnLoadStart;
         public OnLoadFinishDelegate OnLoadFinish;
+        public OnTitleChange OnTitleChange;
 
         #endregion
 

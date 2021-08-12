@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
@@ -176,9 +177,10 @@ namespace UnityWebBrowser
             }
         }
 
-        public event Action<string> OnUrlChanged;
-        public event Action<string> OnLoadStart;
-        public event Action<string> OnLoadFinish;
+        public OnUrlChangeDelegate OnUrlChanged;
+        public OnLoadStartDelegate OnLoadStart;
+        public OnLoadFinishDelegate OnLoadFinish;
+        public OnTitleChange OnTitleChange;
 
         public void UrlChange(string url)
         {
@@ -217,6 +219,21 @@ namespace UnityWebBrowser
                 try
                 {
                     OnLoadFinish?.Invoke(url);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"An error occured in OnLoadFinish! {ex}");
+                }
+            }, null);
+        }
+
+        public void TitleChange(string title)
+        {
+            unityThread.Post(d =>
+            {
+                try
+                {
+                    OnTitleChange?.Invoke(title);
                 }
                 catch (Exception ex)
                 {

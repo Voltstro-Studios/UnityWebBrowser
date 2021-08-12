@@ -272,9 +272,10 @@ namespace UnityWebBrowser
             //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(ipcSettings, logger);
             communicationsManager.Listen();
-            communicationsManager.OnUrlChanged += url => OnUrlChanged?.Invoke(url);
-            communicationsManager.OnLoadStart += url => OnLoadStart?.Invoke(url);
-            communicationsManager.OnLoadFinish += url => OnLoadFinish?.Invoke(url);
+            communicationsManager.OnUrlChanged = url => OnUrlChanged?.Invoke(url);
+            communicationsManager.OnLoadStart = url => OnLoadStart?.Invoke(url);
+            communicationsManager.OnLoadFinish = url => OnLoadFinish?.Invoke(url);
+            communicationsManager.OnTitleChange = title => OnTitleChange?.Invoke(title);
 
             //Start the server process
             serverProcess = new Process
@@ -367,6 +368,11 @@ namespace UnityWebBrowser
         ///     Invoked when the page finishes loading
         /// </summary>
         public event OnLoadFinishDelegate OnLoadFinish;
+
+        /// <summary>
+        ///     Invoked when the title changes
+        /// </summary>
+        public event OnTitleChange OnTitleChange;
 
         #endregion
 

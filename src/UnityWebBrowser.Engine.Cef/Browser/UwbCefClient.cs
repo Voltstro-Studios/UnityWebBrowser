@@ -26,6 +26,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         public readonly OnUrlChangeDelegate OnUrlChange;
         public readonly OnLoadStartDelegate OnLoadStart;
         public readonly OnLoadFinishDelegate OnLoadFinish;
+        public readonly OnTitleChange OnTitleChange;
 
         /// <summary>
         ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -36,7 +37,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         /// <param name="onLoadStart"></param>
         /// <param name="onLoadFinish"></param>
         public UwbCefClient(CefSize size, ProxySettings proxySettings, 
-            OnUrlChangeDelegate onUrlChange, OnLoadStartDelegate onLoadStart, OnLoadFinishDelegate onLoadFinish)
+            OnUrlChangeDelegate onUrlChange, OnLoadStartDelegate onLoadStart, OnLoadFinishDelegate onLoadFinish,
+            OnTitleChange onTitleChange)
         {
             //Setup our handlers
             loadHandler = new UwbCefLoadHandler(this);
@@ -52,9 +54,10 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             requestHandler = new UwbCefRequestHandler(proxySettings);
             contextMenuHandler = new UwbCefContextMenuHandler();
 
-            this.OnUrlChange = onUrlChange;
-            this.OnLoadStart = onLoadStart;
-            this.OnLoadFinish = onLoadFinish;
+            OnUrlChange = onUrlChange;
+            OnLoadStart = onLoadStart;
+            OnLoadFinish = onLoadFinish;
+            OnTitleChange = onTitleChange;
         }
 
         /// <summary>

@@ -37,8 +37,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnTitleChange(CefBrowser browser, string title)
         {
-            //TODO: Implement events for this
-            base.OnTitleChange(browser, title);
+            client.OnTitleChange(title);
         }
 
         protected override void OnFaviconUrlChange(CefBrowser browser, string[] iconUrls)

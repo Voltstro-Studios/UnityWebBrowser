@@ -30,6 +30,11 @@ namespace UnityWebBrowser.Engine.Cef.Core
                 if (IsConnected)
                     clientEvents?.LoadFinish(url);
             };
+            cefEngineManager.OnTitleChange = title =>
+            {
+                if (IsConnected)
+                    clientEvents?.TitleChange(title);
+            };
             
             cefEngineManager.Init();
 
