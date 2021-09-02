@@ -71,7 +71,7 @@ namespace UnityWebBrowser
             }
         }
 
-        public byte[] GetPixels()
+        public PixelsEvent GetPixels()
         {
             lock (threadLock)
             {

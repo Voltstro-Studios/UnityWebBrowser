@@ -6,7 +6,7 @@ namespace UnityWebBrowser.Shared
     [GenerateProxy(GeneratedName = "EngineProxy")]
     public interface IEngine
     {
-        public byte[] GetPixels();
+        public PixelsEvent GetPixels();
 
         public void Shutdown();
 

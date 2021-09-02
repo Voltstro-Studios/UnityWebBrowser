@@ -155,9 +155,12 @@ namespace UnityWebBrowser.Engine.Cef.Core
 
         #region Engine Actions
 
-        public byte[] GetPixels()
+        public PixelsEvent GetPixels()
         {
-            return cefClient.GetPixels();
+            return new PixelsEvent
+            {
+                PixelData = cefClient.GetPixels()
+            };
         }
 
         public void Shutdown()

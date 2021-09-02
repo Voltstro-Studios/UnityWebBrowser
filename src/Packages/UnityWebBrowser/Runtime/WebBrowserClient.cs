@@ -332,7 +332,7 @@ namespace UnityWebBrowser
             {
                 await Task.Delay(25, cancellationToken);
 
-                pixels = communicationsManager.GetPixels();
+                pixels = communicationsManager.GetPixels().PixelData;
             }
         }
 
