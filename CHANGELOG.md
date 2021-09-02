@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for multiple browser engines
 - Progress bar when copying browser engine files
 - Framework for support of multiple browser engines
+- Added events for OnUrlChange, OnLoadStart, etc
+- Added some Profile Markers
 
 ### Changed
 - Updated CEF to 90.6.7
 - CefBrowserProcess was renamed to UnityWebBrowser.Engine.Cef
 - Underlying IPC communication layer was replaced with [VoltRpc](https://github.com/Voltstro-Studios/VoltRpc)
+    - This improves the performance of UWB
 
 ### Fixed
 - Linux version of the CEF browser engine doesn't require `cefsimple` anymore
