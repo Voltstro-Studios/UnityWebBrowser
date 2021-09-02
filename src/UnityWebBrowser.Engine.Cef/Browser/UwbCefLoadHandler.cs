@@ -25,7 +25,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
             Logger.Debug($"Loading: {url}");
 
-            if (frame.IsMain) client.OnLoadStart(url);
+            if (frame.IsMain) client.client.LoadStart(url);
         }
 
         protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
@@ -36,7 +36,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
             Logger.Debug($"Loaded: {url}");
 
-            if (frame.IsMain) client.OnLoadFinish(url);
+            if (frame.IsMain) client.client.LoadFinish(url);
         }
 
         protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode,
@@ -62,13 +62,6 @@ font-family: 'Ubuntu', sans-serif;
 
             Logger.Error(
                 $"An error occurred while trying to load '{failedUrl}'! Error: {errorText} (Code: {errorCode})");
-        }
-
-        protected override void OnLoadingStateChange(CefBrowser browser, bool isLoading, bool canGoBack,
-            bool canGoForward)
-        {
-            //TODO: Implement events for this
-            base.OnLoadingStateChange(browser, isLoading, canGoBack, canGoForward);
         }
     }
 }

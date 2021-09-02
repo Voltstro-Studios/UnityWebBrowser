@@ -1,5 +1,6 @@
 using System;
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Shared;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser
@@ -9,17 +10,17 @@ namespace UnityWebBrowser.Engine.Cef.Browser
     /// </summary>
     public class UwbCefDisplayHandler : CefDisplayHandler
     {
-        private readonly UwbCefClient client;
+        private readonly IClient client;
 
         public UwbCefDisplayHandler(UwbCefClient client)
         {
-            this.client = client;
+            this.client = client.client;
         }
 
         protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
         {
             Logger.Debug($"URL Change: {url}");
-            client.OnUrlChange(url);
+            client.UrlChange(url);
         }
 
         protected override void OnFullscreenModeChange(CefBrowser browser, bool fullscreen)
@@ -37,7 +38,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnTitleChange(CefBrowser browser, string title)
         {
-            client.OnTitleChange(title);
+            client.TitleChange(title);
         }
 
         protected override void OnFaviconUrlChange(CefBrowser browser, string[] iconUrls)

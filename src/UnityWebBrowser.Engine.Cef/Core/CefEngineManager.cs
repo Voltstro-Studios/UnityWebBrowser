@@ -3,7 +3,6 @@ using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 
@@ -40,7 +39,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
         ///     Starts CEF
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public void Init()
+        public void Init(IClient clientActions)
         {
             // ReSharper disable once RedundantAssignment
             string[] argv = args;
@@ -134,8 +133,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
             //Create cef browser
             cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
                 new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
-                    launchArguments.ProxyEnabled),
-                OnUrlChanged, OnLoadStart, OnLoadFinish, OnTitleChange);
+                    launchArguments.ProxyEnabled), clientActions);
             CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
         }
 
@@ -143,15 +141,6 @@ namespace UnityWebBrowser.Engine.Cef.Core
         {
             CefRuntime.PostTask(threadId, new CefActionTask(action));
         }
-
-        #region Client Events
-
-        public OnUrlChangeDelegate OnUrlChanged;
-        public OnLoadStartDelegate OnLoadStart;
-        public OnLoadFinishDelegate OnLoadFinish;
-        public OnTitleChange OnTitleChange;
-
-        #endregion
 
         #region Engine Actions
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
@@ -23,23 +22,15 @@ namespace UnityWebBrowser.Engine.Cef.Browser
         private CefBrowserHost browserHost;
         private CefFrame mainFrame;
 
-        public readonly OnUrlChangeDelegate OnUrlChange;
-        public readonly OnLoadStartDelegate OnLoadStart;
-        public readonly OnLoadFinishDelegate OnLoadFinish;
-        public readonly OnTitleChange OnTitleChange;
+        public readonly IClient client;
 
         /// <summary>
         ///     Creates a new <see cref="UwbCefClient" /> instance
         /// </summary>
-        /// <param name="size">The size of the window</param>
-        /// <param name="proxySettings"></param>
-        /// <param name="onUrlChange"></param>
-        /// <param name="onLoadStart"></param>
-        /// <param name="onLoadFinish"></param>
-        public UwbCefClient(CefSize size, ProxySettings proxySettings, 
-            OnUrlChangeDelegate onUrlChange, OnLoadStartDelegate onLoadStart, OnLoadFinishDelegate onLoadFinish,
-            OnTitleChange onTitleChange)
+        public UwbCefClient(CefSize size, ProxySettings proxySettings, IClient clientActions)
         {
+            client = clientActions;
+            
             //Setup our handlers
             loadHandler = new UwbCefLoadHandler(this);
             renderHandler = new UwbCefRenderHandler(size);
@@ -53,11 +44,6 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             displayHandler = new UwbCefDisplayHandler(this);
             requestHandler = new UwbCefRequestHandler(proxySettings);
             contextMenuHandler = new UwbCefContextMenuHandler();
-
-            OnUrlChange = onUrlChange;
-            OnLoadStart = onLoadStart;
-            OnLoadFinish = onLoadFinish;
-            OnTitleChange = onTitleChange;
         }
 
         /// <summary>

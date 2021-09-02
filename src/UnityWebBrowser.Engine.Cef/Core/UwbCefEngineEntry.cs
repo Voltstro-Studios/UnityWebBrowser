@@ -14,29 +14,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
         protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
         {
             cefEngineManager = new CefEngineManager(launchArguments, args);
-            //Setup our events
-            cefEngineManager.OnUrlChanged = url =>
-            {
-                if (IsConnected)
-                    clientEvents?.UrlChange(url);
-            };
-            cefEngineManager.OnLoadStart = url =>
-            {
-                if (IsConnected)
-                    clientEvents?.LoadStart(url);
-            };
-            cefEngineManager.OnLoadFinish = url =>
-            {
-                if (IsConnected)
-                    clientEvents?.LoadFinish(url);
-            };
-            cefEngineManager.OnTitleChange = title =>
-            {
-                if (IsConnected)
-                    clientEvents?.TitleChange(title);
-            };
-            
-            cefEngineManager.Init();
+            cefEngineManager.Init(ClientActions);
 
             SetupIpc(cefEngineManager, launchArguments);
             Ready(launchArguments);

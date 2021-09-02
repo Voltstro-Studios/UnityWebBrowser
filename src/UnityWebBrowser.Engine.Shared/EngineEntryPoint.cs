@@ -9,7 +9,6 @@ using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
 using VoltRpc.Communication.Pipes;
 using VoltRpc.Communication.TCP;
-using VoltRpc.Proxy.Generated;
 
 namespace UnityWebBrowser.Engine.Shared
 {
@@ -25,14 +24,13 @@ namespace UnityWebBrowser.Engine.Shared
         /// <summary>
         ///     Allows the engine to fire events on the Unity client side
         /// </summary>
-        protected IClient clientEvents;
+        protected ClientActions ClientActions { get; private set; }
 
         private Client ipcClient;
-
         private Host ipcHost;
 
         /// <summary>
-        ///     Is the <see cref="clientEvents" /> side of the connection connected
+        ///     Is the <see cref="Client" /> side of the connection connected
         /// </summary>
         protected bool IsConnected => ipcClient.IsConnected;
 
@@ -137,6 +135,7 @@ namespace UnityWebBrowser.Engine.Shared
             {
                 //Is debug log enabled or not
                 Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
+                ClientActions = new ClientActions();
 
                 //Run the entry point
                 try
@@ -222,7 +221,7 @@ namespace UnityWebBrowser.Engine.Shared
                         ipcClient = null;
                     }
                 });
-                clientEvents = new ClientProxy(ipcClient);
+                ClientActions.SetIpcClient(ipcClient);
 
                 Logger.Debug("IPC Setup done.");
             }
