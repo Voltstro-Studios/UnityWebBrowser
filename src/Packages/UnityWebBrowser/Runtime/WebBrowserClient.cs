@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
+using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared.Events;
 
 namespace UnityWebBrowser

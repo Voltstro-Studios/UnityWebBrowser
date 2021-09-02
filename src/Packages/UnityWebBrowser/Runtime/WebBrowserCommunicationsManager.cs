@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Delegates;
 using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;

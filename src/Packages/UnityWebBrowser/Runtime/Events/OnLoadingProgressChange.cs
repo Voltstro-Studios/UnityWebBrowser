@@ -1,4 +1,4 @@
-﻿namespace UnityWebBrowser.Shared.Delegates
+﻿namespace UnityWebBrowser.Events
 {
     public delegate void OnLoadingProgressChange(double progress);
 }
