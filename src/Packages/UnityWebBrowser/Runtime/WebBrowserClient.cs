@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Events;
@@ -19,6 +20,9 @@ namespace UnityWebBrowser
     public class WebBrowserClient : IDisposable
     {
         private const string ActiveEngineFileName = "EngineActive";
+
+        private static ProfilerMarker browserPixelDataMarker = new ProfilerMarker("UWB.LoadPixelData");
+        private static ProfilerMarker browserLoadTextureMarker = new ProfilerMarker("UWB.LoadTextureData");
 
         /// <summary>
         ///     The active browser engine this instance is using
@@ -325,13 +329,15 @@ namespace UnityWebBrowser
 
         private byte[] pixels;
 
-        internal async Task RenderLoop(CancellationToken cancellationToken)
+        internal async Task PixelDataLoop(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(25, cancellationToken);
 
+                browserPixelDataMarker.Begin();
                 pixels = communicationsManager.GetPixels().PixelData;
+                browserPixelDataMarker.End();
             }
         }
 
@@ -340,13 +346,16 @@ namespace UnityWebBrowser
         /// </summary>
         public void LoadTextureData()
         {
-            byte[] pixelData = pixels;
+            using (browserLoadTextureMarker.Auto())
+            {
+                byte[] pixelData = pixels;
 
-            if (pixelData == null || pixelData.Length == 0)
-                return;
+                if (pixelData == null || pixelData.Length == 0)
+                    return;
 
-            BrowserTexture.LoadRawTextureData(pixelData);
-            BrowserTexture.Apply(false);
+                BrowserTexture.LoadRawTextureData(pixelData);
+                BrowserTexture.Apply(false);
+            }
         }
 
         #endregion

@@ -133,7 +133,7 @@ namespace UnityWebBrowser
             browserClient.Init();
             cancellationToken = new CancellationTokenSource();
             //StartCoroutine(browserClient.Start());
-            _ = Task.Run(() => browserClient.RenderLoop(cancellationToken.Token));
+            _ = Task.Run(() => browserClient.PixelDataLoop(cancellationToken.Token));
 
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;

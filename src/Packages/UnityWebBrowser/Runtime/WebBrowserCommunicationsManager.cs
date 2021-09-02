@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using Unity.Profiling;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
@@ -15,6 +16,8 @@ namespace UnityWebBrowser
 {
     internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
+        private static ProfilerMarker sendEventMarker = new ProfilerMarker("UWB.SendEvent");
+        
         private readonly IEngine engineProxy;
         private readonly Client client;
         private readonly Host host;
@@ -57,114 +60,128 @@ namespace UnityWebBrowser
 
         public void Connect()
         {
-            lock (threadLock)
-            {
-                client.Connect();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    client.Connect();
+                }
         }
 
         public void Listen()
         {
-            lock (threadLock)
-            {
-                host.StartListening();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    host.StartListening();
+                }
         }
 
         public PixelsEvent GetPixels()
         {
-            lock (threadLock)
-            {
-                return engineProxy.GetPixels();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    return engineProxy.GetPixels();
+                }
         }
 
         public void Shutdown()
         {
-            lock (threadLock)
-            {
-                engineProxy.Shutdown();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.Shutdown();
+                }
         }
 
         public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
         {
-            lock (threadLock)
-            {
-                engineProxy.SendKeyboardEvent(keyboardEvent);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.SendKeyboardEvent(keyboardEvent);
+                }
         }
 
         public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
         {
-            lock (threadLock)
-            {
-                engineProxy.SendMouseMoveEvent(mouseMoveEvent);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.SendMouseMoveEvent(mouseMoveEvent);
+                }
         }
 
         public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
         {
-            lock (threadLock)
-            {
-                engineProxy.SendMouseClickEvent(mouseClickEvent);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.SendMouseClickEvent(mouseClickEvent);
+                }
         }
 
         public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
         {
-            lock (threadLock)
-            {
-                engineProxy.SendMouseScrollEvent(mouseScrollEvent);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.SendMouseScrollEvent(mouseScrollEvent);
+                }
         }
 
         public void GoForward()
         {
-            lock (threadLock)
-            {
-                engineProxy.GoForward();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.GoForward();
+                }
         }
 
         public void GoBack()
         {
-            lock (threadLock)
-            {
-                engineProxy.GoBack();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.GoBack();
+                }
         }
 
         public void Refresh()
         {
-            lock (threadLock)
-            {
-                engineProxy.Refresh();
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.Refresh();
+                }
         }
 
         public void LoadUrl(string url)
         {
-            lock (threadLock)
-            {
-                engineProxy.LoadUrl(url);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.LoadUrl(url);
+                }
         }
 
         public void LoadHtml(string html)
         {
-            lock (threadLock)
-            {
-                engineProxy.LoadHtml(html);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.LoadHtml(html);
+                }
         }
 
         public void ExecuteJs(string js)
         {
-            lock (threadLock)
-            {
-                engineProxy.ExecuteJs(js);
-            }
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.ExecuteJs(js);
+                }
         }
 
         public void Dispose()
