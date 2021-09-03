@@ -14,5 +14,7 @@ namespace UnityWebBrowser.Shared
         public void TitleChange(string title);
 
         public void ProgressChange(double progress);
+
+        public void Fullscreen(bool fullScreen);
     }
 }

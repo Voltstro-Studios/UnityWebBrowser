@@ -50,5 +50,11 @@ namespace UnityWebBrowser.Engine.Shared
             if(client is { IsConnected: true })
                 clientActions?.ProgressChange(progress);
         }
+
+        public void Fullscreen(bool fullScreen)
+        {
+            if(client is { IsConnected: true })
+                clientActions?.Fullscreen(fullScreen);
+        }
     }
 }

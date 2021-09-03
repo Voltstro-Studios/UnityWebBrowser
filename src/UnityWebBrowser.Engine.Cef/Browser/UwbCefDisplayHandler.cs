@@ -25,8 +25,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnFullscreenModeChange(CefBrowser browser, bool fullscreen)
         {
-            //TODO: Implement events for this
-            base.OnFullscreenModeChange(browser, fullscreen);
+            client.Fullscreen(fullscreen);
         }
 
         protected override bool OnCursorChange(CefBrowser browser, IntPtr cursorHandle, CefCursorType type,

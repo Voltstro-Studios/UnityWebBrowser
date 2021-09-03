@@ -280,5 +280,20 @@ namespace UnityWebBrowser
                 }
             }, null);
         }
+
+        public void Fullscreen(bool fullScreen)
+        {
+            unityThread.Post(d =>
+            {
+                try
+                {
+                    client.InvokeFullscreen(fullScreen);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"An error occured in OnFullscreen! {ex}");
+                }
+            }, null);
+        }
     }
 }

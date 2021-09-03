@@ -404,6 +404,13 @@ namespace UnityWebBrowser
 
         internal void InvokeLoadProgressChange(double progress) => OnLoadProgressChange?.Invoke(progress);
 
+        /// <summary>
+        ///     Invoked when the browser goes in or out of fullscreen
+        /// </summary>
+        public event OnFullscreenChange OnFullscreen;
+
+        internal void InvokeFullscreen(bool fullscreen) => OnFullscreen?.Invoke(fullscreen);
+
         #endregion
 
         #region Browser Controls

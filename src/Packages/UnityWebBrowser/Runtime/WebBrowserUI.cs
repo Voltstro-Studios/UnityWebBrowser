@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityWebBrowser.Input;
 using UnityWebBrowser.Shared.Events;
-using Resolution = UnityWebBrowser.Shared.Resolution;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -28,9 +28,18 @@ namespace UnityWebBrowser
         [Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
         public WebBrowserClient browserClient = new WebBrowserClient();
 
+        public bool supportFullscreen = true;
+
+        public GameObject[] hideOnFullscreen;
+
         private RawImage image;
         private Coroutine pointerKeyboardHandler;
         private Vector2 lastSuccessfulMousePositionSent;
+
+        private Vector2 lastImageSize;
+        private Vector2 lastAnchorMin;
+        private Vector2 lastAnchorMax;
+        private Vector2 lastImagePosition;
 
         private CancellationTokenSource cancellationToken;
 
@@ -139,10 +148,46 @@ namespace UnityWebBrowser
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
             image.uvRect = new Rect(0f, 0f, 1f, -1f);
+            
+            browserClient.OnFullscreen += OnFullscreen;
 
 #if ENABLE_INPUT_SYSTEM
             Keyboard.current.onTextInput += c => currentInputBuffer += c;
 #endif
+        }
+
+        private void OnFullscreen(bool fullscreen)
+        {
+            if (supportFullscreen)
+            {
+                if (fullscreen)
+                {
+                    foreach (GameObject obj in hideOnFullscreen)
+                        obj.SetActive(false);
+
+                    RectTransform imageRectTransform = image.rectTransform;
+                    lastImageSize = imageRectTransform.sizeDelta;
+                    lastAnchorMax = imageRectTransform.anchorMax;
+                    lastAnchorMin = imageRectTransform.anchorMin;
+                    lastImagePosition = imageRectTransform.anchoredPosition;
+                    
+                    imageRectTransform.anchoredPosition = Vector2.zero;
+                    imageRectTransform.anchorMin = Vector2.zero;
+                    imageRectTransform.anchorMax = Vector2.one;
+                    imageRectTransform.sizeDelta = Vector2.zero;
+                }
+                else
+                {
+                    foreach (GameObject obj in hideOnFullscreen)
+                        obj.SetActive(true);
+                    
+                    RectTransform imageRectTransform = image.rectTransform;
+                    imageRectTransform.anchoredPosition = lastImagePosition;
+                    imageRectTransform.anchorMin = lastAnchorMin;
+                    imageRectTransform.anchorMax = lastAnchorMax;
+                    imageRectTransform.sizeDelta = lastImageSize;
+                }
+            }
         }
 
         private void FixedUpdate()

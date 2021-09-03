@@ -221,9 +221,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 66.1001
       objectReference: {fileID: 0}
+    - target: {fileID: 7454210983829796803, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.browserEngine
       value: UnityWebBrowser.Engine.Cef
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: hideOnFullscreen.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.remoteDebugging
@@ -237,6 +245,10 @@ PrefabInstance:
       propertyPath: browserClient.resolution.Width
       value: 1920
       objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: hideOnFullscreen.Array.data[0]
+      value: 
+      objectReference: {fileID: 1010880605}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.resolution.Height
       value: 1080
@@ -383,6 +395,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+--- !u!1 &1010880605 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7454210983829796803, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+  m_PrefabInstance: {fileID: 906994671}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1460405560
 GameObject:
   m_ObjectHideFlags: 0
