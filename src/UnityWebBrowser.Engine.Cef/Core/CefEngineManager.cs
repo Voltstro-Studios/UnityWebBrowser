@@ -215,6 +215,11 @@ namespace UnityWebBrowser.Engine.Cef.Core
             cefClient.ExecuteJs(js);
         }
 
+        public void Resize(Resolution resolution)
+        {
+            cefClient.Resize(resolution);
+        }
+
         #endregion
 
         #region Destroy

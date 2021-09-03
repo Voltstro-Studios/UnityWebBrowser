@@ -12,6 +12,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
             readerWriterManager.AddType<MouseMoveEvent>(new MouseMoveEventTypeReadWriter());
             readerWriterManager.AddType<MouseScrollEvent>(new MouseScrollEventTypeReadWriter());
             readerWriterManager.AddType<PixelsEvent>(new PixelsEventTypeReadWriter());
+            readerWriterManager.AddType<Resolution>(new ResolutionTypeReadWriter());
         }
     }
 }

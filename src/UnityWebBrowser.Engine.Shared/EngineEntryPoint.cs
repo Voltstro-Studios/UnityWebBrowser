@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -145,6 +146,9 @@ namespace UnityWebBrowser.Engine.Shared
                 catch (Exception ex)
                 {
                     Logger.ErrorException(ex, "Uncaught exception occured in the entry point!");
+#if DEBUG
+                    Debugger.Break();
+#endif
                     Environment.Exit(-1);
                 }
             });

@@ -187,6 +187,15 @@ namespace UnityWebBrowser
                 }
         }
 
+        public void Resize(Resolution resolution)
+        {
+            using (sendEventMarker.Auto())
+                lock (threadLock)
+                {
+                    engineProxy.Resize(resolution);
+                }
+        }
+
         public void Dispose()
         {
             lock (threadLock)

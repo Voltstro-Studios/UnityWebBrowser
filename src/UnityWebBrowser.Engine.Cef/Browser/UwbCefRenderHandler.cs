@@ -10,16 +10,15 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 	/// </summary>
 	public class UwbCefRenderHandler : CefRenderHandler
     {
-        private readonly CefSize cefSize;
-        private readonly byte[] pixels;
+        private CefSize cefSize;
+        private byte[] pixels;
 
         private readonly object pixelsLock;
 
         public UwbCefRenderHandler(CefSize size)
         {
-            cefSize = size;
-            pixels = new byte[size.Width * size.Height * 4];
             pixelsLock = new object();
+            Resize(size);
         }
 
         public byte[] Pixels
@@ -32,6 +31,15 @@ namespace UnityWebBrowser.Engine.Cef.Browser
                     Array.Copy(pixels, pixelsCopyBuffer, pixels.Length);
                     return pixelsCopyBuffer;
                 }
+            }
+        }
+
+        public void Resize(CefSize size)
+        {
+            lock (pixelsLock)
+            {
+                pixels = new byte[size.Width * size.Height * 4];
+                cefSize = size;
             }
         }
 

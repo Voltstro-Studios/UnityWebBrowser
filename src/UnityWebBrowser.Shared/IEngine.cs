@@ -21,5 +21,7 @@ namespace UnityWebBrowser.Shared
         public void LoadUrl(string url);
         public void LoadHtml(string html);
         public void ExecuteJs(string js);
+
+        public void Resize(Resolution resolution);
     }
 }

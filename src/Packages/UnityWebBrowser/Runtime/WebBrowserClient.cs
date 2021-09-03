@@ -10,6 +10,7 @@ using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
+using Resolution = UnityWebBrowser.Shared.Resolution;
 
 namespace UnityWebBrowser
 {
@@ -542,6 +543,17 @@ namespace UnityWebBrowser
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
             communicationsManager.ExecuteJs(js);
+        }
+
+        internal void Resize(Resolution resolution)
+        {
+            if (!IsConnected)
+                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+
+            width = resolution.Width;
+            height = resolution.Height;
+            BrowserTexture.Resize((int)resolution.Width, (int)resolution.Height);
+            communicationsManager.Resize(resolution);
         }
 
         #endregion

@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityWebBrowser.Input;
 using UnityWebBrowser.Shared.Events;
+using Resolution = UnityWebBrowser.Shared.Resolution;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -125,6 +126,19 @@ namespace UnityWebBrowser
                 throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
 
             browserClient.ExecuteJs(js);
+        }
+
+        /// <summary>
+        ///     Resize the browser texture
+        /// </summary>
+        /// <param name="resolution"></param>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void Resize(Resolution resolution)
+        {
+            if (!browserClient.IsConnected)
+                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
+            
+            browserClient.Resize(resolution);
         }
 
         private void Start()

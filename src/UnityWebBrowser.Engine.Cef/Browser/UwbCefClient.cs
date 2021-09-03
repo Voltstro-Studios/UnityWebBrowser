@@ -228,6 +228,12 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             browser.Reload();
         }
 
+        public void Resize(Resolution resolution)
+        {
+            renderHandler.Resize(new CefSize((int)resolution.Width, (int)resolution.Height));
+            browserHost.WasResized();
+        }
+
         #endregion
     }
 }
