@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading;
 using Unity.Profiling;
-using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
@@ -19,43 +18,47 @@ namespace UnityWebBrowser
         private static ProfilerMarker sendEventMarker = new ProfilerMarker("UWB.SendEvent");
         
         private readonly IEngine engineProxy;
-        private readonly Client client;
-        private readonly Host host;
+        private readonly Client ipcClient;
+        private readonly Host ipcHost;
 
         private readonly SynchronizationContext unityThread;
         private readonly object threadLock;
+        
         private readonly IWebBrowserLogger logger;
+        private readonly WebBrowserClient client;
 
-        public bool IsConnected => client.IsConnected;
+        public bool IsConnected => ipcClient.IsConnected;
 
-        public WebBrowserCommunicationsManager(WebBrowserIpcSettings ipcSettings, IWebBrowserLogger logger)
+        public WebBrowserCommunicationsManager(WebBrowserClient browserClient)
         {
             threadLock = new object();
             unityThread = SynchronizationContext.Current;
-            this.logger = logger;
+            
+            logger = browserClient.logger;
+            client = browserClient;
 
-            if (ipcSettings.preferPipes)
+            if (browserClient.ipcSettings.preferPipes)
             {
                 logger.Debug("Using pipes communication...");
 
-                host = new PipesHost(ipcSettings.inPipeName);
-                client = new PipesClient(ipcSettings.outPipeName, ipcSettings.connectionTimeout,
+                ipcHost = new PipesHost(browserClient.ipcSettings.inPipeName);
+                ipcClient = new PipesClient(browserClient.ipcSettings.outPipeName, browserClient.ipcSettings.connectionTimeout,
                     Client.DefaultBufferSize);
             }
             else
             {
                 logger.Debug("Using TCP communication...");
 
-                host = new TCPHost(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.inPort));
-                client = new TCPClient(new IPEndPoint(IPAddress.Loopback, (int)ipcSettings.outPort));
+                ipcHost = new TCPHost(new IPEndPoint(IPAddress.Loopback, (int)browserClient.ipcSettings.inPort));
+                ipcClient = new TCPClient(new IPEndPoint(IPAddress.Loopback, (int)browserClient.ipcSettings.outPort));
             }
 
-            ReadWriterUtils.AddTypeReadWriters(host.TypeReaderWriterManager);
-            host.AddService<IClient>(this);
+            ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
+            ipcHost.AddService<IClient>(this);
 
-            ReadWriterUtils.AddTypeReadWriters(client.TypeReaderWriterManager);
-            client.AddService<IEngine>();
-            engineProxy = new EngineProxy(client);
+            ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
+            ipcClient.AddService<IEngine>();
+            engineProxy = new EngineProxy(ipcClient);
         }
 
         public void Connect()
@@ -63,7 +66,7 @@ namespace UnityWebBrowser
             using (sendEventMarker.Auto())
                 lock (threadLock)
                 {
-                    client.Connect();
+                    ipcClient.Connect();
                 }
         }
 
@@ -72,7 +75,7 @@ namespace UnityWebBrowser
             using (sendEventMarker.Auto())
                 lock (threadLock)
                 {
-                    host.StartListening();
+                    ipcHost.StartListening();
                 }
         }
 
@@ -189,15 +192,10 @@ namespace UnityWebBrowser
             lock (threadLock)
             {
                 Shutdown();
-                client.Dispose();
-                host.Dispose();
+                ipcClient.Dispose();
+                ipcHost.Dispose();
             }
         }
-
-        public OnUrlChangeDelegate OnUrlChanged;
-        public OnLoadStartDelegate OnLoadStart;
-        public OnLoadFinishDelegate OnLoadFinish;
-        public OnTitleChange OnTitleChange;
 
         public void UrlChange(string url)
         {
@@ -205,7 +203,7 @@ namespace UnityWebBrowser
             {
                 try
                 {
-                    OnUrlChanged?.Invoke(url);
+                    client.InvokeUrlChanged(url);
                 }
                 catch (Exception ex)
                 {
@@ -220,7 +218,7 @@ namespace UnityWebBrowser
             {
                 try
                 {
-                    OnLoadStart?.Invoke(url);
+                    client.InvokeLoadStart(url);
                 }
                 catch (Exception ex)
                 {
@@ -235,7 +233,7 @@ namespace UnityWebBrowser
             {
                 try
                 {
-                    OnLoadFinish?.Invoke(url);
+                    client.InvokeLoadFinish(url);
                 }
                 catch (Exception ex)
                 {
@@ -250,7 +248,7 @@ namespace UnityWebBrowser
             {
                 try
                 {
-                    OnTitleChange?.Invoke(title);
+                    client.InvokeTitleChange(title);
                 }
                 catch (Exception ex)
                 {
