@@ -53,9 +53,9 @@ jobs:
     # Only the Linux job will build the Unity project (This is due to licensing)
     - name: Unity Cache
       uses: actions/cache@v2.1.6
-        with:
-          path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
-          key: Library-Cache
+      with:
+        path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
+        key: Library-Cache
 
     - name: Unity Build
       uses: game-ci/unity-builder@v2.0-alpha-12
