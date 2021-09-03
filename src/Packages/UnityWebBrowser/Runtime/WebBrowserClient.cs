@@ -386,6 +386,14 @@ namespace UnityWebBrowser
 
         internal void InvokeTitleChange(string title) => OnTitleChange?.Invoke(title);
 
+        /// <summary>
+        ///     Invoked when the loading progress changes
+        ///     <para>Progress goes from 0 to 1</para>
+        /// </summary>
+        public event OnLoadingProgressChange OnLoadProgressChange;
+
+        internal void InvokeLoadProgressChange(double progress) => OnLoadProgressChange?.Invoke(progress);
+
         #endregion
 
         #region Browser Controls

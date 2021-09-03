@@ -49,8 +49,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnLoadingProgressChange(CefBrowser browser, double progress)
         {
-            //TODO: Implement events for this
-            base.OnLoadingProgressChange(browser, progress);
+            client.ProgressChange(progress);
         }
 
         protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message,

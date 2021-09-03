@@ -12,5 +12,7 @@ namespace UnityWebBrowser.Shared
         public void LoadFinish(string url);
 
         public void TitleChange(string title);
+
+        public void ProgressChange(double progress);
     }
 }

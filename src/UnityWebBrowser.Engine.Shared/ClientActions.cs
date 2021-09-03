@@ -44,5 +44,11 @@ namespace UnityWebBrowser.Engine.Shared
             if(client is { IsConnected: true })
                 clientActions?.TitleChange(title);
         }
+
+        public void ProgressChange(double progress)
+        {
+            if(client is { IsConnected: true })
+                clientActions?.ProgressChange(progress);
+        }
     }
 }

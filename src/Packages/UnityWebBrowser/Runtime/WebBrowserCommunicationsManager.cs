@@ -252,7 +252,22 @@ namespace UnityWebBrowser
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"An error occured in OnLoadFinish! {ex}");
+                    logger.Error($"An error occured in OnTitleChange! {ex}");
+                }
+            }, null);
+        }
+
+        public void ProgressChange(double progress)
+        {
+            unityThread.Post(d =>
+            {
+                try
+                {
+                    client.InvokeLoadProgressChange(progress);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"An error occured in OnLoadProgressChange! {ex}");
                 }
             }, null);
         }
