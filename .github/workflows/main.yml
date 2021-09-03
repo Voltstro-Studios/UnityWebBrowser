@@ -3,6 +3,8 @@ name: Build
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
@@ -68,4 +70,5 @@ jobs:
         targetPlatform: StandaloneWindows64
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
         versioning: Tag
+        androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
     
