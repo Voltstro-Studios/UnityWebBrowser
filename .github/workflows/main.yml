@@ -19,22 +19,15 @@ jobs:
         lfs: false
         path: 'UnityWebBrowserSource/'
         
-    - name: Download CEF
+    - name: Setup Environment
       shell: pwsh
-      run: '& ./download-cef-windows.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
+      run: '& ./setup-all.ps1'
+      working-directory: UnityWebBrowserSource/src/
       
-    - name: Build CEF Browser Engine
+    - name: Build Base Projects
       shell: pwsh
-      run: '& ./publish-cef-engine-windows.ps1'
+      run: '& ./publish-all.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
-      
-    #Upload the publish build as we need it later in a separate job
-    - uses: actions/upload-artifact@v2.2.3
-      name: Upload Builds
-      with:
-        name: Windows-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/ReleaseUnity/win-x64/publish/
       
   build-linux:
     name: 'Linux Build'
@@ -47,54 +40,31 @@ jobs:
         lfs: false
         path: 'UnityWebBrowserSource/'
         
-    - name: Download CEF
+    - name: Setup Environment
       shell: pwsh
-      run: '& ./download-cef-linux.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
+      run: '& ./setup-all.ps1'
+      working-directory: UnityWebBrowserSource/src/
       
-    - name: Build CEF Browser Engine
+    - name: Build Base Projects
       shell: pwsh
-      run: '& ./publish-cef-engine-linux.ps1'
+      run: '& ./publish-all.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
+
+    # Only the Linux job will build the Unity project (This is due to licensing)
+    - name: Unity Cache
+      uses: actions/cache@v2.1.6
+        with:
+          path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
+          key: Library-Cache
+
+    - name: Unity Build
+      uses: game-ci/unity-builder@v2.0-alpha-12
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/'
+          targetPlatform: StandaloneWindows64
+          buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
     
-    #Upload the publish build as we need it later in a separate job
-    - uses: actions/upload-artifact@v2.2.3
-      name: Upload Builds
-      with:
-        name: Linux-CefBrowserProcess
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Engine.Cef/bin/ReleaseUnity/linux-x64/publish/
-      
-  #upload-package:
-  #  name: 'Upload Package'
-  #  runs-on: ubuntu-20.04
-  #  needs: [build-windows, build-linux]
-    
-  #  steps:
-  #  - uses: actions/checkout@v2
-  #    name: 'Checkout Source'
-  #    with:
-  #      submodules: 'recursive'
-  #      lfs: false
-  #      path: 'UnityWebBrowserSource/'
-    
-    #SSH key to write to the GitLab repo
-  #  - uses: shimataro/ssh-key-action@v2
-  #    name: 'Install SSH Key'
-  #    with:
-  #      name: Unity-Package
-  #      key: ${{ secrets.UNITY_PACKAGE_KEY }}
-  #      known_hosts: 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf'
-  #      config: |
-  #        Host gitlab.com
-  #          IdentityFile ~/.ssh/Unity-Package
-            
-    #Download our artifacts from the previous jobs
-  #  - uses: actions/download-artifact@v2
-  #    with:
-  #      path: .
-        
-    #Our powershell script will take over from here
-  #  - name: Setup and Release
-  #    shell: pwsh
-  #    run: '& ./UnityWebBrowserSource/.github/workflows/upload-build.ps1'
-  #    working-directory: .
