@@ -1,3 +1,5 @@
+<img align="right" width="15%" src="media/icon.svg">
+
 # Unity Web Browser
 
 [![License](https://img.shields.io/github/license/Voltstro-Studios/UnityWebBrowser.svg)](/LICENSE)
