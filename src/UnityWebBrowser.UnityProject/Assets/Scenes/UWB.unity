@@ -226,6 +226,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.logSeverity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.browserEngine
       value: UnityWebBrowser.Engine.Cef
       objectReference: {fileID: 0}
@@ -235,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.remoteDebugging
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.eventPollingTime
@@ -275,6 +279,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.ipcSettings.preferPipes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.proxySettings.ProxyServer
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
