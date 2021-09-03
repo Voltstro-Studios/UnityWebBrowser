@@ -67,4 +67,5 @@ jobs:
         projectPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/'
         targetPlatform: StandaloneWindows64
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
+        versioning: Tag
     
