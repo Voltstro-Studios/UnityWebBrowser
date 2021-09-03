@@ -1,5 +1,8 @@
-﻿namespace UnityWebBrowser.Shared
+﻿using System;
+
+namespace UnityWebBrowser.Shared
 {
+    [Serializable]
     public struct Resolution
     {
         public Resolution(uint width, uint height)
@@ -7,15 +10,9 @@
             Width = width;
             Height = height;
         }
-        
-        public Resolution(int width, int height)
-        {
-            Width = (uint)width;
-            Height = (uint)height;
-        }
-        
-        public uint Width { get; }
-        
-        public uint Height { get; }
+
+        public uint Width;
+
+        public uint Height;
     }
 }

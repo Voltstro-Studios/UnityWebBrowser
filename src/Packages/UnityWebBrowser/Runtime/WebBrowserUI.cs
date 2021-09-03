@@ -128,19 +128,6 @@ namespace UnityWebBrowser
             browserClient.ExecuteJs(js);
         }
 
-        /// <summary>
-        ///     Resize the browser texture
-        /// </summary>
-        /// <param name="resolution"></param>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-        public void Resize(Resolution resolution)
-        {
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-            
-            browserClient.Resize(resolution);
-        }
-
         private void Start()
         {
             //Start the browser client
@@ -353,8 +340,8 @@ namespace UnityWebBrowser
 
             if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, mousePos, out pos))
             {
-                pos.x *= browserClient.width;
-                pos.y *= browserClient.height;
+                pos.x *= browserClient.Resolution.Width;
+                pos.y *= browserClient.Resolution.Height;
 
                 return true;
             }

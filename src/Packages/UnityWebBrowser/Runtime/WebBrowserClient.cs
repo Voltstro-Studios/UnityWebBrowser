@@ -37,15 +37,24 @@ namespace UnityWebBrowser
         [Tooltip("The initial URl the browser will start at")]
         public string initialUrl = "https://voltstro.dev";
 
-        /// <summary>
-        ///     The width of the browser
-        /// </summary>
-        [Tooltip("The width of the browser")] public uint width = 1920;
+        #region Resoltuion
+
+        [SerializeField] private Resolution resolution = new Resolution(1920, 1080);
 
         /// <summary>
-        ///     The height of the browser
+        ///     The resolution of the browser
         /// </summary>
-        [Tooltip("The height of the browser")] public uint height = 1080;
+        public Resolution Resolution
+        {
+            get => resolution;
+            set
+            {
+                resolution = value;
+                Resize(value);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         ///     The background <see cref="Color32" /> of the webpage
@@ -214,8 +223,8 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("initial-url", initialUrl, true);
 
             //Width & Height
-            argsBuilder.AppendArgument("width", width);
-            argsBuilder.AppendArgument("height", height);
+            argsBuilder.AppendArgument("width", resolution.Width);
+            argsBuilder.AppendArgument("height", resolution.Height);
 
             //Javascript
             argsBuilder.AppendArgument("javascript", javascript);
@@ -308,7 +317,7 @@ namespace UnityWebBrowser
                 throw;
             }
 
-            BrowserTexture = new Texture2D((int)width, (int)height, TextureFormat.BGRA32, false, false);
+            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false, false);
 
             try
             {
@@ -545,15 +554,13 @@ namespace UnityWebBrowser
             communicationsManager.ExecuteJs(js);
         }
 
-        internal void Resize(Resolution resolution)
+        internal void Resize(Resolution newResolution)
         {
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-
-            width = resolution.Width;
-            height = resolution.Height;
-            BrowserTexture.Resize((int)resolution.Width, (int)resolution.Height);
-            communicationsManager.Resize(resolution);
+            
+            BrowserTexture.Resize((int)newResolution.Width, (int)newResolution.Height);
+            communicationsManager.Resize(newResolution);
         }
 
         #endregion
