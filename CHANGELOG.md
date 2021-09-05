@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added some Profile Markers
 
 ### Changed
-- Updated CEF to 90.6.7
+- Updated CEF to 93.1.11
 - CefBrowserProcess was renamed to UnityWebBrowser.Engine.Cef
 - Underlying IPC communication layer was replaced with [VoltRpc](https://github.com/Voltstro-Studios/VoltRpc)
     - This improves the performance of UWB
