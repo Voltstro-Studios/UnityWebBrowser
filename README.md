@@ -4,7 +4,6 @@
 
 [![License](https://img.shields.io/github/license/Voltstro-Studios/UnityWebBrowser.svg)](/LICENSE)
 [![Build](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml/badge.svg)](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml)
-[![Unity Package](https://img.shields.io/badge/Unity-Package-blue.svg)](https://gitlab.com/Voltstro-Studios/WebBrowser/Package)
 [![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev) 
 [![YouTube](https://img.shields.io/badge/Youtube-Voltstro-red.svg?logo=youtube)](https://www.youtube.com/Voltstro)
 
@@ -14,12 +13,13 @@ Currently, 2.x is in development, for 1.x document, see the [1.6.3 release](http
 
 # Features
 
-- Displays the web via using a web engine.
-- Multi-engine capable
-- Controls and inputs
+- Displays the web in your project via using a web browser engine.
+- Full keyboard and mouse input
+- API to interface with the web browser engine.
 - Install as an Unity package
 - Doesn't crash the entire editor on reload
 - 100% free and open-source
+- Multi-Platform Support
 
 # Getting Started
 
@@ -37,15 +37,6 @@ Unity 2020.3.x
 
 **(NOTE)**: Currently the work-in-progress 2.x version of this project doesn't have a ready-to-go UPM package. The [1.x version](https://github.com/Voltstro-Studios/UnityWebBrowser/tree/1.6.3) does however!
 
-
-## Git
-
-As always, you will always be able to install via git, we will have this ready once 2.0 is done!
-
-## OpenUPM
-
-We plan on releasing on [OpenUPM](https://openupm.com/) once 2.0 is done. This should make the install process relatively hassle free.
-
 ## Contributing
 
 Please READ ALL OF THIS if you want to contribute or work on the project.
@@ -53,7 +44,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2020.3.12f1
+Unity 2020.3.17f1
 .NET 5 SDK
 Powershell Core 
 ```
@@ -97,7 +88,7 @@ What OS is supported will depend on the web engine you use.
 
 # License
 
-This project is licensed under the LGPL-3.0 License - see the [LICENSE](https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE) file for details.
 
 # Credits
 
