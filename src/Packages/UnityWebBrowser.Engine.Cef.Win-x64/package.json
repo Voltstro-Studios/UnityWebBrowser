@@ -1,8 +1,8 @@
 {
-  "displayName": "Unity Web Browser CEF Engine (Windows x64)",
-  "description": "CEF Engine for Unity Web Browser (Windows x64)",
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64",
   "unity": "2020.3",
   "author": "Voltstro",
-  "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64",
-  "version": "92.0.21"
+  "version": "93.1.11",
+  "description": "CEF Engine for Unity Web Browser (Windows x64)",
+  "displayName": "Unity Web Browser CEF Engine (Windows x64)"
 }

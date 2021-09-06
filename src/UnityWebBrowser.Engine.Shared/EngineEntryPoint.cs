@@ -110,16 +110,16 @@ namespace UnityWebBrowser.Engine.Shared
 
                 new Option<bool>("-pipes",
                     () => true,
-                    "Use pipes or not"),
+                    "Use pipes or TCP"),
                 new Option<string>("-in-location",
                     () => "UnityWebBrowserIn",
-                    "In location"),
+                    "In location for IPC (Pipes location or TCP port in TCP mode)"),
                 new Option<string>("-out-location",
                     () => "UnityWebBrowserOut",
-                    "Out location"),
+                    "Out location for IPC (Pipes location or TCP port in TCP mode)"),
 
                 new Option<FileInfo>("-log-path",
-                    () => new FileInfo("cef.log"),
+                    () => new FileInfo("engine.log"),
                     "The path to where the log will be"),
                 new Option<LogSeverity>("-log-severity",
                     () => LogSeverity.Info,
@@ -129,7 +129,7 @@ namespace UnityWebBrowser.Engine.Shared
                     () => string.Empty,
                     "Path were the active file will be")
             };
-            rootCommand.Description = "Process for windowless CEF rendering.";
+            rootCommand.Description = "Headless browser engine renderer. Communication is done over IPC.";
             //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
             rootCommand.TreatUnmatchedTokensAsErrors = false;
             rootCommand.Handler = CommandHandler.Create<LaunchArguments>(parsedArgs =>
@@ -165,6 +165,7 @@ namespace UnityWebBrowser.Engine.Shared
         {
             try
             {
+                //Setup IPC, if we are pipes then we use the PipesHost/PipesClient, otherwise TCP
                 if (arguments.Pipes)
                 {
                     Logger.Debug($"Using pipes host on pipe: '{arguments.InLocation}'");
@@ -200,19 +201,16 @@ namespace UnityWebBrowser.Engine.Shared
                     IPEndPoint clientIp = new(IPAddress.Loopback, outPort);
                     ipcClient = new TCPClient(clientIp);
                 }
-
-                //IPEndPoint hostIp = new(IPAddress.Loopback, arguments.InPort);
-                //ipcHost = new TCPHost(hostIp);
+                
                 ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
                 ipcHost.AddService(engine);
                 ipcHost.StartListening();
-
-                //IPEndPoint clientIp = new(IPAddress.Loopback, arguments.OutPort);
-                //ipcClient = new TCPClient(clientIp);
+                
                 ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
                 ipcClient.AddService<IClient>();
                 Task.Run(() =>
                 {
+                    //Connect the server (us) back to Unity
                     try
                     {
                         ipcClient.Connect();
