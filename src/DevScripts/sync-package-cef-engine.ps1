@@ -21,16 +21,16 @@ foreach($Content in $CefGlueVersionfileContent)
 $EngineCefJsonPath = "../Packages/UnityWebBrowser.Engine.Cef/package.json"
 $EngineCefJson = Get-Content $EngineCefJsonPath | ConvertFrom-Json -AsHashtable
 $EngineCefJson["version"] = $CefVersion
-$EngineCefJson["dependencies"]["dev.voltstro.unitywebbrowser.engine.cef.linux.x64"] = $CefVersion
-$EngineCefJson["dependencies"]["dev.voltstro.unitywebbrowser.engine.cef.win.x64"] = $CefVersion
 $EngineCefJson | ConvertTo-Json | Out-File -FilePath $EngineCefJsonPath
 
 $EngineCefLinuxJsonPath = "../Packages/UnityWebBrowser.Engine.Cef.Linux-x64/package.json"
 $EngineCefLinuxJson = Get-Content $EngineCefLinuxJsonPath | ConvertFrom-Json -AsHashtable
 $EngineCefLinuxJson["version"] = $CefVersion
+$EngineCefLinuxJson["dependencies"]["dev.voltstro.unitywebbrowser.engine.cef"] = $CefVersion
 $EngineCefLinuxJson | ConvertTo-Json | Out-File -FilePath $EngineCefLinuxJsonPath
 
 $EngineCefWinJsonPath = "../Packages/UnityWebBrowser.Engine.Cef.Win-x64/package.json"
 $EngineCefWinJson = Get-Content $EngineCefWinJsonPath | ConvertFrom-Json -AsHashtable
 $EngineCefWinJson["version"] = $CefVersion
+$EngineCefWinJson["dependencies"]["dev.voltstro.unitywebbrowser.engine.cef"] = $CefVersion
 $EngineCefWinJson | ConvertTo-Json | Out-File -FilePath $EngineCefWinJsonPath

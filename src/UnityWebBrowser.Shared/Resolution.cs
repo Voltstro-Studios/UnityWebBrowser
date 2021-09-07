@@ -2,6 +2,9 @@
 
 namespace UnityWebBrowser.Shared
 {
+    /// <summary>
+    ///     Screen resolution
+    /// </summary>
     [Serializable]
     public struct Resolution
     {
@@ -11,8 +14,14 @@ namespace UnityWebBrowser.Shared
             Height = height;
         }
 
+        /// <summary>
+        ///     Width of the screen
+        /// </summary>
         public uint Width;
 
+        /// <summary>
+        ///     Height of the screen
+        /// </summary>
         public uint Height;
     }
 }

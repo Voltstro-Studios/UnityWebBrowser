@@ -86,8 +86,6 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "92.0.21",
-        "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "92.0.21",
         "dev.voltstro.unitywebbrowser": "2.0.0"
       }
     },
@@ -95,13 +93,17 @@
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef.Linux-x64",
       "depth": 0,
       "source": "local",
-      "dependencies": {}
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+      }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",
       "depth": 0,
       "source": "local",
-      "dependencies": {}
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+      }
     },
     "com.unity.modules.imgui": {
       "version": "1.0.0",
