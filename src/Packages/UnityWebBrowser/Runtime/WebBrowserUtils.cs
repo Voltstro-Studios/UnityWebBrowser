@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -110,13 +111,15 @@ namespace UnityWebBrowser
             return true;
         }
 
-        /// <summary>
-        ///		Waits until the file exists
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="timeOutTIme"></param>
-        /// <exception cref="TimeoutException"></exception>
-        internal static void WaitForActiveEngineFile(string path, int timeOutTIme)
+        ///  <summary>
+        /// 		Waits until the file exists
+        ///  </summary>
+        ///  <param name="path"></param>
+        ///  <param name="timeOutTIme"></param>
+        ///  <param name="onSuccess"></param>
+        ///  <param name="onFail"></param>
+        ///  <exception cref="TimeoutException"></exception>
+        internal static Task WaitForActiveEngineFile(string path, int timeOutTIme, Action onSuccess, Action onFail)
         {
             float timeUntilCancel = Time.time + timeOutTIme;
 
@@ -125,10 +128,16 @@ namespace UnityWebBrowser
             {
                 //If we hit the timeout time, then fail it
                 if (Time.time >= timeUntilCancel)
-                    throw new TimeoutException("The engine did not start within the specified startup time!");
+                {
+                    onFail.Invoke();
+                    return Task.CompletedTask;
+                }
 
                 Thread.Sleep(100);
             }
+            
+            onSuccess.Invoke();
+            return Task.CompletedTask;
         }
     }
 }

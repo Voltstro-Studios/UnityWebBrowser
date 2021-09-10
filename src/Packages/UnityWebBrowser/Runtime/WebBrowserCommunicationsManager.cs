@@ -63,11 +63,7 @@ namespace UnityWebBrowser
 
         public void Connect()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    ipcClient.Connect();
-                }
+            ipcClient.Connect();
         }
 
         public void Listen()
@@ -200,7 +196,6 @@ namespace UnityWebBrowser
         {
             lock (threadLock)
             {
-                Shutdown();
                 ipcClient.Dispose();
                 ipcHost.Dispose();
             }

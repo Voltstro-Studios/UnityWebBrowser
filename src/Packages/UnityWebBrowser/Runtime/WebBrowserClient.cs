@@ -10,6 +10,7 @@ using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
+using Object = UnityEngine.Object;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 
 namespace UnityWebBrowser
@@ -126,6 +127,31 @@ namespace UnityWebBrowser
         ///     Is the Unity client connected to the browser engine
         /// </summary>
         public bool IsConnected => communicationsManager is { IsConnected: true };
+
+        private object isReadyLock;
+        
+        private bool isReady;
+        
+        /// <summary>
+        ///     Is UWB ready?
+        /// </summary>
+        public bool IsReady 
+        {
+            get
+            {
+                lock (isReadyLock)
+                {
+                    return isReady;
+                }
+            }
+            private set
+            {
+                lock (isReadyLock)
+                {
+                    isReady = value;
+                }
+            }
+        }
 
         #region Log Path
 
@@ -303,32 +329,32 @@ namespace UnityWebBrowser
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
-
-            try
-            {
-                WebBrowserUtils.WaitForActiveEngineFile(
-                    Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}"), engineStartupTimeout);
-            }
-            catch (TimeoutException)
-            {
-                logger.Error("The engine failed to startup in time!");
-                if (!serverProcess.HasExited)
-                    serverProcess.KillTree();
-                throw;
-            }
-
+            
             BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false, false);
+            isReadyLock = new object();
 
-            try
-            {
-                communicationsManager.Connect();
-            }
-            catch (Exception)
-            {
-                serverProcess.KillTree();
-                logger.Error("An error occured while connecting!");
-                throw;
-            }
+            WebBrowserUtils.WaitForActiveEngineFile(
+                Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}"), engineStartupTimeout, () =>
+                {
+                    try
+                    {
+                        logger.Debug("UWB startup success, connecting...");
+                        communicationsManager.Connect();
+                        IsReady = true;
+                    }
+                    catch (Exception)
+                    {
+                        logger.Error("An error occured while connecting!");
+                        Dispose();
+                        throw;
+                    }
+                }, () =>
+                {
+                    logger.Error("The web browser engine failed to startup in time!");
+                    Dispose();
+
+                    throw new TimeoutException("The web browser engine failed to startup in time!");
+                }).ConfigureAwait(false);
         }
 
         #region Main Loop
@@ -423,6 +449,9 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -440,6 +469,9 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         internal void SendMouseMove(Vector2 mousePos)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -460,6 +492,9 @@ namespace UnityWebBrowser
         internal void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -481,6 +516,9 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -498,6 +536,9 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         internal void LoadUrl(string url)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -509,6 +550,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoForward()
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -520,6 +564,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoBack()
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -531,6 +578,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void Refresh()
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -543,6 +593,9 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         internal void LoadHtml(string html)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -555,6 +608,9 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         internal void ExecuteJs(string js)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -563,6 +619,9 @@ namespace UnityWebBrowser
 
         internal void Resize(Resolution newResolution)
         {
+            if(!IsReady)
+                return;
+            
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
@@ -574,10 +633,12 @@ namespace UnityWebBrowser
 
         #region Destroying
 
+#if !UNITY_EDITOR
         ~WebBrowserClient()
         {
             ReleaseResources();
         }
+#endif
 
         /// <summary>
         ///     Destroys this <see cref="WebBrowserClient" /> instance
@@ -590,22 +651,28 @@ namespace UnityWebBrowser
 
         private void ReleaseResources()
         {
-            if (!IsConnected)
-                return;
+            logger.Debug("UWB shutdown...");
+            
+            Object.Destroy(BrowserTexture);
+            
+            if(IsConnected)
+                communicationsManager.Shutdown();
+            
+            communicationsManager.Dispose();
 
-            try
-            {
-                communicationsManager.Dispose();
-            }
-            catch (VoltRpc.Communication.NotConnectedException) //Force kill if we are not connected
+            if (!IsReady && !IsConnected)
             {
                 serverProcess.KillTree();
+                serverProcess.Dispose();
                 return;
             }
-
+            
+            IsReady = false;
+            
+            if(serverProcess.HasExited)
+                return;
+            
             WaitForServerProcess().ConfigureAwait(false);
-
-            logger.Debug("Web browser shutdown.");
         }
 
         private async Task WaitForServerProcess()
