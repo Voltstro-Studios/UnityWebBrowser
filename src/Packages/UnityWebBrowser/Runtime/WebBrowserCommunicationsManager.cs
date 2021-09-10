@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Unity.Profiling;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
@@ -68,11 +69,7 @@ namespace UnityWebBrowser
 
         public void Listen()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    ipcHost.StartListening();
-                }
+            ipcHost.StartListening();
         }
 
         public PixelsEvent GetPixels()
@@ -86,110 +83,65 @@ namespace UnityWebBrowser
 
         public void Shutdown()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.Shutdown();
-                }
+            lock (threadLock)
+            {
+                engineProxy.Shutdown();
+            }
         }
 
         public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.SendKeyboardEvent(keyboardEvent);
-                }
+            ExecuteTask(() => engineProxy.SendKeyboardEvent(keyboardEvent));
         }
 
         public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.SendMouseMoveEvent(mouseMoveEvent);
-                }
+            ExecuteTask(() => engineProxy.SendMouseMoveEvent(mouseMoveEvent));
         }
 
         public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.SendMouseClickEvent(mouseClickEvent);
-                }
+            ExecuteTask(() => engineProxy.SendMouseClickEvent(mouseClickEvent));
         }
 
         public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.SendMouseScrollEvent(mouseScrollEvent);
-                }
+            ExecuteTask(() => engineProxy.SendMouseScrollEvent(mouseScrollEvent));
         }
 
         public void GoForward()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.GoForward();
-                }
+            ExecuteTask(() => engineProxy.GoForward());
         }
 
         public void GoBack()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.GoBack();
-                }
+            ExecuteTask(() => engineProxy.GoBack());
         }
 
         public void Refresh()
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.Refresh();
-                }
+            ExecuteTask(() => engineProxy.Refresh());
         }
 
         public void LoadUrl(string url)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.LoadUrl(url);
-                }
+            ExecuteTask(() => engineProxy.LoadUrl(url));
         }
 
         public void LoadHtml(string html)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.LoadHtml(html);
-                }
+            ExecuteTask(() => engineProxy.LoadHtml(html));
         }
 
         public void ExecuteJs(string js)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.ExecuteJs(js);
-                }
+            ExecuteTask(() => engineProxy.ExecuteJs(js));
         }
 
         public void Resize(Resolution resolution)
         {
-            using (sendEventMarker.Auto())
-                lock (threadLock)
-                {
-                    engineProxy.Resize(resolution);
-                }
+            ExecuteTask(() => engineProxy.Resize(resolution));
         }
 
         public void Dispose()
@@ -289,6 +241,16 @@ namespace UnityWebBrowser
                     logger.Error($"An error occured in OnFullscreen! {ex}");
                 }
             }, null);
+        }
+
+        private void ExecuteTask(Action action)
+        {
+            _ = Task.Run(() =>
+            {
+                using (sendEventMarker.Auto())
+                    lock (threadLock)
+                        action.Invoke();
+            });
         }
     }
 }
