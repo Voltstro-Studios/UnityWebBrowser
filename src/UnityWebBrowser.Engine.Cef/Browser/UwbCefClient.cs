@@ -198,7 +198,8 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         public void LoadUrl(string url)
         {
-            mainFrame.LoadUrl(url);
+            browser.GetMainFrame().LoadUrl(url);
+            //mainFrame.LoadUrl(url);
         }
 
         public void LoadHtml(string html)
