@@ -35,12 +35,13 @@ Getting an web engine to work in Unity is a pain, it usually ends up just crashi
 Unity 2020.3.x
 ```
 
-1. Open up the package manager via Windows -> Package Manager
-2. Click on the little + sign -> Add package from git URL...
-3. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x` and add it
-4. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base` and add it
-5. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64` and add it
-6. Unity will now download and install the package
+1. Setup [UnityNuGet](https://github.com/xoofx/UnityNuGet#unitynuget-)
+2. Open up the package manager via Windows -> Package Manager
+3. Click on the little + sign -> Add package from git URL...
+4. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x` and add it
+5. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base` and add it
+6. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64` and add it
+7. Unity will now download and install the package
 
 ## Contributing
 
@@ -49,7 +50,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2020.3.17f1
+Unity 2020.3.19f1
 .NET 5 SDK
 Powershell Core 
 ```

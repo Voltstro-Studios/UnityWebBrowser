@@ -20,8 +20,6 @@
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
-        <Copy SourceFiles="$(OutputPath)VoltRpc.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.dll" />
-        <Copy SourceFiles="$(OutputPath)VoltRpc.Communication.Pipes.dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/VoltRpc.Communication.Pipes.dll" />
     </Target>
 
 </Project>

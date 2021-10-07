@@ -5,6 +5,10 @@
   "unity": "2020.3",
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
+  "dependencies": {
+    "org.nuget.voltrpc": "1.1.1",
+    "org.nuget.voltrpc.communication.pipes": "1.1.0"
+  },
   "samples": [
     {
       "displayName": "Basic",
