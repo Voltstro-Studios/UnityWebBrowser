@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-preview.2] - Unreleased
+
+### Changed
+- Updated CEF to 94.4.9
+- Use VoltRpc from [UnityNuGet](https://github.com/xoofx/UnityNuGet)
+- Events are executed as a task
+- Improved Startup & Shutdown
+
+### Fixed
+- Potential fix for URLs not loading sometimes
+
 ## [2.0.0-preview.1] - 2021-09-09
 ### Added
 - Support for multiple browser engines
