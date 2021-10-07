@@ -10,7 +10,7 @@
         <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
         <Description>External process to handel rendering with CEF</Description>
         <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-        <Version>93.1.11</Version>
+        <Version>94.4.9</Version>
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
         <Configurations>Debug;Release;ReleaseUnity</Configurations>
         <Platforms>AnyCPU</Platforms>

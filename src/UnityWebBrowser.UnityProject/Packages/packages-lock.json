@@ -99,7 +99,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "94.4.9"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
@@ -107,7 +107,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "94.4.9"
       }
     },
     "org.nuget.voltrpc": {
