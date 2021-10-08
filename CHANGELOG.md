@@ -22,19 +22,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Framework for support of multiple browser engines
 - Added events for OnUrlChange, OnLoadStart, etc
 - Added some Profile Markers
+- Added support for IPC to use Pipes instead of TCP.
+    - NOTE: `System.IO.Pipes` has a bad implementation in Unity's custom mono. Some platforms and configurations can result in named pipes to not work.
 
 ### Changed
 - Updated CEF to 93.1.11
 - CefBrowserProcess was renamed to UnityWebBrowser.Engine.Cef
 - Underlying IPC communication layer was replaced with [VoltRpc](https://github.com/Voltstro-Studios/VoltRpc)
     - This improves the performance of UWB
+- Huge massive internal changes
+- Most names of 'Cef Browser' were changed to `UWB` or `UnityWebBrowser`
+- `Width` and `Height` properties were merged into a custom `UnityWebBrowser.Shared.Resolution` struct
+- Settings related to IPC was merged into a `UnityWebBrowser.WebBrowserIpcSettings` class
 
 ### Fixed
 - Linux version of the CEF browser engine doesn't require `cefsimple` anymore
 - Linux version of the CEF browser will now used trimmed binaries (From 1.1GB to 160MB)
 
 ## [1.6.3] - 2021-06-08
-## Changed
+### Changed
 - Texture in WebBrowserClient will no longer be linear.
 
 ## [1.6.2] - 2021-06-08
