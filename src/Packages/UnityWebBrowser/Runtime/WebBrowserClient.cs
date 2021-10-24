@@ -298,7 +298,7 @@ namespace UnityWebBrowser
             //If we have a cache, set the cache path
             if (cache)
             {
-                cachePath ??= new FileInfo($"{browserEngineMainDir}/BrowserCache");
+                cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
                 argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
             }
 

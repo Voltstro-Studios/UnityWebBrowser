@@ -63,11 +63,7 @@ namespace UnityWebBrowser.Editor
             pathToBuiltProject = Path.GetDirectoryName(pathToBuiltProject);
 
             //We need to get the built project's plugins folder
-            string buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/Plugins/");
-
-            //TODO: Check other targets
-            if (target == BuildTarget.StandaloneWindows64)
-                buildPluginsDir += "x86_64/";
+            string buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/UWB/");
 
             //Make sure it exists
             if (!Directory.Exists(buildPluginsDir))
@@ -86,7 +82,7 @@ namespace UnityWebBrowser.Editor
 
                 //Get all files that aren't Unity .meta files
                 string[] files = Directory.EnumerateFiles(buildFilesDir, "*.*", SearchOption.AllDirectories)
-                    .Where(fileType => !fileType.EndsWith(".meta")).Where(fileType => !fileType.Contains("libzmq"))
+                    .Where(fileType => !fileType.EndsWith(".meta"))
                     .ToArray();
                 int size = files.Length;
 

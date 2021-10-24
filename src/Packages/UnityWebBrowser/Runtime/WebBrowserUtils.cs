@@ -46,10 +46,8 @@ namespace UnityWebBrowser
 #endif
 
             //Player builds (Standalone)
-#elif UNITY_STANDALONE_WIN
-		    return Path.GetFullPath($"{Application.dataPath}/Plugins/x86_64/");
-#else
-		    return Path.GetFullPath($"{Application.dataPath}/Plugins/");
+#elif UNITY_STANDALONE
+		    return Path.GetFullPath($"{Application.dataPath}/UWB/");
 #endif
         }
 
