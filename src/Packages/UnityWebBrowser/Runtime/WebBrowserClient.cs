@@ -230,15 +230,21 @@ namespace UnityWebBrowser
         /// <exception cref="FileNotFoundException"></exception>
         internal void Init()
         {
-            //Get the path to the CEF browser process and make sure it exists
+            //Get the path to the UWB process we are using and make sure it exists
             string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(browserEngine);
-            logger.Debug($"Starting browser engine process from {browserEnginePath}");
+            logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
 
             if (!File.Exists(browserEnginePath))
             {
                 logger.Error("The browser engine process doesn't exist!");
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
+
+            isReadyLock = new object();
+            
+            //Setup texture
+            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false, false);
+            WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
 
             string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
 
@@ -329,9 +335,6 @@ namespace UnityWebBrowser
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
-            
-            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false, false);
-            isReadyLock = new object();
 
             WebBrowserUtils.WaitForActiveEngineFile(
                 Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}"), engineStartupTimeout, () =>

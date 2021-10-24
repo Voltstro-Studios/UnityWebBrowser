@@ -139,5 +139,23 @@ namespace UnityWebBrowser
             onSuccess.Invoke();
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        ///     Sets every single pixel in a <see cref="Texture2D"/> to one <see cref="Color32"/>
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="color"></param>
+        internal static void SetAllTextureColorToOne(Texture2D texture, Color32 color)
+        {
+            if (texture == null)
+                throw new ArgumentNullException(nameof(texture), "Texture cannot be null!");
+            
+            Color32[] colors = new Color32[texture.width * texture.height];
+            for (int i = 0; i < colors.Length; i++)
+                colors[i] = color;
+
+            texture.SetPixels32(colors);
+            texture.Apply();
+        }
     }
 }
