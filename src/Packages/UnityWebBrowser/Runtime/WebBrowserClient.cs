@@ -16,7 +16,17 @@ using Resolution = UnityWebBrowser.Shared.Resolution;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     Handles managing the browser engine process
+    ///     The main object responsible for UWB.
+    ///     <para>
+    ///         This class handles:
+    ///         <list type="bullet">
+    ///              <item>UWB process setup</item>
+    ///              <item>Texture setup and rendering</item>
+    ///              <item>Wrapper for invoking methods on the UWB process</item>
+    ///              <item>Shutdown</item>
+    ///          </list>
+    ///          If you need to do something with UWB, its probably here.
+    ///     </para>
     /// </summary>
     [Serializable]
     public class WebBrowserClient : IDisposable

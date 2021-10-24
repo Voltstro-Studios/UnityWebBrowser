@@ -7,13 +7,18 @@ using UnityEngine;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     Allows for UI controls with the input
+    ///    Included UI controller for UWB (For TMP).
+    ///     <para>Handles the URL input field.</para>
     /// </summary>
-    [AddComponentMenu("Browser/Web Browser UI Controls (TMP)")]
+    [AddComponentMenu("UWB/Web Browser UI Controls (TMP)")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(WebBrowserUI))]
     public class WebBrowserUIControlsTMP : MonoBehaviour
     {
+        /// <summary>
+        ///     The <see cref="TMP_InputField"/> for the URL
+        /// </summary>
+        [Tooltip("The input field for the URL")]
         public TMP_InputField inputField;
 
         private WebBrowserUI webBrowserUi;

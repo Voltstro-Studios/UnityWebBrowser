@@ -5,13 +5,18 @@ using UnityEngine.UI;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     Allows for UI controls with the input
+    ///     Included UI controller for UWB.
+    ///     <para>Handles the URL input field.</para>
     /// </summary>
-    [AddComponentMenu("Browser/Web Browser UI Controls")]
+    [AddComponentMenu("UWB/Web Browser UI Controls")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(WebBrowserUI))]
     public class WebBrowserUIControls : MonoBehaviour
     {
+        /// <summary>
+        ///     The <see cref="InputField"/> for the URL
+        /// </summary>
+        [Tooltip("The input field for the URL")]
         public InputField inputField;
 
         private WebBrowserUI webBrowserUi;

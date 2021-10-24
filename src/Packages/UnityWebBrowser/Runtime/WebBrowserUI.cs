@@ -16,7 +16,13 @@ using UnityEngine.InputSystem.Controls;
 
 namespace UnityWebBrowser
 {
-    [AddComponentMenu("Browser/Web Browser UI")]
+    /// <summary>
+    ///     This class handles the UI side of UWB. It is also the <see cref="MonoBehaviour"/> holder for the <see cref="WebBrowserClient"/>,
+    ///     which is where all the actual magic happens.
+    ///     <para><see cref="WebBrowserUI"/> will also automatically handle setting up the <see cref="RawImage"/> for you.</para>
+    ///     <para>If you need to invoke events on UWB process, you can do it from here.</para>
+    /// </summary>
+    [AddComponentMenu("UWB/Web Browser UI")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(RawImage))]
     public sealed class WebBrowserUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
@@ -28,8 +34,17 @@ namespace UnityWebBrowser
         [Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
         public WebBrowserClient browserClient = new WebBrowserClient();
 
+        /// <summary>
+        ///     Support automatically handling fullscreen events.
+        ///     <para>If enabled, it will make the <see cref="image"/> the full size of the window when the browser gets a fullscreen event.</para>
+        /// </summary>
+        [Tooltip("Support automatically handling fullscreen events.\nIf enabled, it will make the image the full size of the window when the browser gets a fullscreen event.")]
         public bool supportFullscreen = true;
 
+        /// <summary>
+        ///     What objects to hide when the browser wants to be in fullscreen mode
+        /// </summary>
+        [Tooltip("What objects to hide when the browser wants to be in fullscreen mode")]
         public GameObject[] hideOnFullscreen;
 
         private RawImage image;
@@ -142,21 +157,27 @@ namespace UnityWebBrowser
             //Start the browser client
             browserClient.Init();
             cancellationToken = new CancellationTokenSource();
-            //StartCoroutine(browserClient.Start());
+            
+            //Run the pixel loop
             _ = Task.Run(() => browserClient.PixelDataLoop(cancellationToken.Token));
 
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
             image.uvRect = new Rect(0f, 0f, 1f, -1f);
             
-            browserClient.OnFullscreen += OnFullscreen;
+            browserClient.OnFullscreen += ToggleFullscreen;
 
 #if ENABLE_INPUT_SYSTEM
             Keyboard.current.onTextInput += c => currentInputBuffer += c;
 #endif
         }
 
-        private void OnFullscreen(bool fullscreen)
+        /// <summary>
+        ///     Toggles fullscreen.
+        ///     <para>Requires <see cref="supportFullscreen"/> to be enabled.</para>
+        /// </summary>
+        /// <param name="fullscreen">Go into fullscreen or not.</param>
+        public void ToggleFullscreen(bool fullscreen)
         {
             if (supportFullscreen)
             {
@@ -192,6 +213,7 @@ namespace UnityWebBrowser
 
         private void FixedUpdate()
         {
+            //We load the pixel data into the texture at a fixed rate
             browserClient.LoadTextureData();
         }
 

@@ -13,13 +13,6 @@ namespace UnityWebBrowser
     /// </summary>
     public static class WebBrowserUtils
     {
-#if UNITY_EDITOR
-        /// <summary>
-        ///     The name of the package that the web browser is contained in
-        /// </summary>
-        public const string PackageName = "dev.voltstro.unitywebbrowser";
-#endif
-
         /// <summary>
         ///     Gets the main directory where logs and cache may be stored
         /// </summary>
@@ -34,7 +27,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Gets the folder that the cef process application lives in
+        ///     Gets the folder that the UWB process application lives in
         /// </summary>
         /// <returns></returns>
         public static string GetBrowserEnginePath(string engine)
@@ -61,7 +54,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Get a direct path to the cef browser process application
+        ///     Get a direct path to the UWB process application
         /// </summary>
         /// <returns></returns>
         public static string GetBrowserEngineProcessPath(string engine)
@@ -85,6 +78,7 @@ namespace UnityWebBrowser
         /// <param name="screenPosition">The screen position</param>
         /// <param name="position">The local delta position</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if image is null</exception>
         public static bool GetScreenPointToLocalPositionDeltaOnImage(RawImage image, Vector2 screenPosition,
             out Vector2 position)
         {
@@ -95,6 +89,9 @@ namespace UnityWebBrowser
 
             //There probs something here that could be done better, if you know, send in a PR
             //Based off: http://answers.unity.com/answers/1455168/view.html
+
+            if (image == null)
+                throw new ArgumentNullException(nameof(image), "Image cannot be null!");
 
             position = new Vector2();
             RectTransform uiImageObjectRect = image.rectTransform;
@@ -119,8 +116,15 @@ namespace UnityWebBrowser
         ///  <param name="onSuccess"></param>
         ///  <param name="onFail"></param>
         ///  <exception cref="TimeoutException"></exception>
+        ///  <exception cref="ArgumentNullException"></exception>
         internal static Task WaitForActiveEngineFile(string path, int timeOutTIme, Action onSuccess, Action onFail)
         {
+            if (onSuccess == null)
+                throw new ArgumentNullException(nameof(onSuccess));
+
+            if (onFail == null)
+                throw new ArgumentNullException(nameof(onFail));
+            
             float timeUntilCancel = Time.time + timeOutTIme;
 
             //Wait until the file exists
