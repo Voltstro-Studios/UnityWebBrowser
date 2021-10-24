@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0-preview.2] - Unreleased
+## [2.0.0-preview.2] - 2021-10-24
 
 ### Changed
-- Updated CEF to 94.4.9
+- Updated CEF to 95.7.10
 - Use VoltRpc from [UnityNuGet](https://github.com/xoofx/UnityNuGet)
 - Events are executed as a task
 - Improved Startup & Shutdown
+- Texture is created at start of init with its colours set to background color.
+- Engine processes location in build was changed from the plugins folder to a dedicated `UWB/` folder
+- Default cache folder was changed to `UWBCache`
+- Updated XML docs
 
 ### Fixed
 - Potential fix for URLs not loading sometimes
