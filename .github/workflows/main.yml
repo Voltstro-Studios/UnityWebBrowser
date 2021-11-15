@@ -20,6 +20,11 @@ jobs:
         submodules: 'recursive'
         lfs: false
         path: 'UnityWebBrowserSource/'
+
+    - uses: actions/setup-dotnet@v1
+      name: Setup .NET
+      with:
+        dotnet-version: '6.0.x'
         
     - name: Setup Environment
       shell: pwsh
