@@ -4,7 +4,7 @@
   "dependencies": {
     "dev.voltstro.unitywebbrowser.engine.cef": "95.7.10"
   },
-  "unity": "2020.3",
+  "unity": "2021.2",
   "displayName": "Unity Web Browser CEF Engine (Windows x64)",
   "version": "95.7.10",
   "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64"
