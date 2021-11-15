@@ -638,7 +638,7 @@ namespace UnityWebBrowser
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
             
-            BrowserTexture.Resize((int)newResolution.Width, (int)newResolution.Height);
+            BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
             communicationsManager.Resize(newResolution);
         }
 

@@ -1,0 +1,5 @@
+ <linker>
+  <assembly fullname="netstandard" preserve="all">
+    <type fullname="System.DateTime" preserve="all" />
+  </assembly>
+</linker>

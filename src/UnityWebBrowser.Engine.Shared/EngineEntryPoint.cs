@@ -126,7 +126,7 @@ namespace UnityWebBrowser.Engine.Shared
                     "The severity of the logs"),
 
                 new Option<string>("-active-engine-file-path",
-                    () => string.Empty,
+                    () => AppContext.BaseDirectory,
                     "Path were the active file will be")
             };
             rootCommand.Description = "Headless browser engine renderer. Communication is done over IPC.";

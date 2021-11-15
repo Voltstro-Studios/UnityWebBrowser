@@ -15,11 +15,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "2.0.7",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.1"
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
@@ -81,10 +81,7 @@
       "version": "file:../../Packages/UnityWebBrowser",
       "depth": 0,
       "source": "local",
-      "dependencies": {
-        "org.nuget.voltrpc": "1.1.1",
-        "org.nuget.voltrpc.communication.pipes": "1.1.0"
-      }
+      "dependencies": {}
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef",
@@ -99,7 +96,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "94.4.9"
+        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.10"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
@@ -107,24 +104,8 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "94.4.9"
+        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.10"
       }
-    },
-    "org.nuget.voltrpc": {
-      "version": "1.1.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.voltrpc.communication.pipes": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.voltrpc": "1.1.0"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.imgui": {
       "version": "1.0.0",

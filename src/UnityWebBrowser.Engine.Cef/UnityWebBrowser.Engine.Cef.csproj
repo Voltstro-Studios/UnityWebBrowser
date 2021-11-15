@@ -5,7 +5,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
         <Description>External process to handel rendering with CEF</Description>
@@ -36,6 +36,10 @@
         <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
         <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
         <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <TrimmerRootDescriptor Include="Roots.xml" />
     </ItemGroup>
 
     <!-- We need to copy different files depending on the OS -->
@@ -121,8 +125,6 @@
             <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
-
-        <PublishReadyToRunExclude Include="System.Diagnostics.Process.dll" />
     </ItemGroup>
 
     <Import Project="../Imports/NatvieDefines.targets" />
