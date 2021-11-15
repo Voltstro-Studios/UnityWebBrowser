@@ -72,8 +72,6 @@ What OS is supported will depend on the web engine you use.
 |Linux        |✔ (Tested on Ubuntu 21.10)|Works natively                                |
 |MacOS (Intel)|✖                         |Planned                                       |
 |MacOS (M1)   |✖                         |No physical hardware to test or develop on    |
-|Android      |✖                         |Waiting for .NET 6 Release                    |
-|IOS          |✖                         |^ + No physical hardware to test or develop on|
 
 ## Screenshots
 
