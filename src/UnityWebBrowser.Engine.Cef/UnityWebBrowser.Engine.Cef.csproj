@@ -28,10 +28,6 @@
         </AllowedReferenceRelatedFileExtensions>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='ReleaseUnity'">
-        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-    </PropertyGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
         <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
