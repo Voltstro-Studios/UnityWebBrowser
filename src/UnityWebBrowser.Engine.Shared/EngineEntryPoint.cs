@@ -203,11 +203,11 @@ namespace UnityWebBrowser.Engine.Shared
                 }
                 
                 ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
-                ipcHost.AddService(engine);
+                ipcHost.AddService(typeof(IEngine), engine);
                 ipcHost.StartListening();
                 
                 ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
-                ipcClient.AddService<IClient>();
+                ipcClient.AddService(typeof(IClient));
                 Task.Run(() =>
                 {
                     //Connect the server (us) back to Unity

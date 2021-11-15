@@ -101,7 +101,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
 				//On Linux we need to tell CEF where everything is, this will assume that the working directory is where everything is!
 				ResourcesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory),
 				LocalesDirPath = System.IO.Path.Combine(Environment.CurrentDirectory, "locales"),
-				BrowserSubprocessPath = Environment.GetCommandLineArgs()[0]
+				BrowserSubprocessPath = Environment.ProcessPath
 #endif
             };
 
