@@ -667,22 +667,33 @@ namespace UnityWebBrowser
             logger.Debug("UWB shutdown...");
             
             Object.Destroy(BrowserTexture);
-            
-            if(IsConnected)
-                communicationsManager.Shutdown();
-            
-            communicationsManager.Dispose();
 
-            if (!IsReady && !IsConnected)
+            try
+            {
+                if (IsConnected)
+                    communicationsManager.Shutdown();
+
+                communicationsManager.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Something failed while trying to shutdown the engine! Force shutting down. {ex}");
+                serverProcess.KillTree();
+                serverProcess.Dispose();
+                serverProcess = null;
+            }
+
+            if (serverProcess != null && !IsReady && !IsConnected)
             {
                 serverProcess.KillTree();
                 serverProcess.Dispose();
+                serverProcess = null;
                 return;
             }
             
             IsReady = false;
             
-            if(serverProcess.HasExited)
+            if(serverProcess is {HasExited: true})
                 return;
             
             WaitForServerProcess().ConfigureAwait(false);
