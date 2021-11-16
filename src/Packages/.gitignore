@@ -6,3 +6,4 @@
 **/*.exe
 **/*.json
 *.dll
+**/UnityWebBrowser.Engine.Cef
