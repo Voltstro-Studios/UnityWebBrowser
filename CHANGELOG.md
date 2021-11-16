@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Updated CEF to 95.7.18
+- Updated VoltRpc to 1.2.0
+- CEF engine uses .NET 6
+    - Should improve performance
+    - App doesn't self-extract on first start anymore
+- Updated to use some newer APIs
+- Updated shutting down stuff
+
 ## [2.0.0-preview.2] - 2021-10-24
 
 ### Changed
