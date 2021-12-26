@@ -27,12 +27,15 @@ The source code for this project can be found at [Voltstro-Studios/UnityWebBrows
 ### Prerequisites
 
 ```
-Unity 2020.3.x
+Unity 2021.2.x
 ```
+
+### Install
 
 1. Open up the package manager via Windows -> Package Manager
 2. Click on the little + sign -> Add package from git URL...
 3. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x` and add it
 4. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base` and add it
-5. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64` and add it
-6. Unity will now download and install the package
+5. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64` and add it (If you need Windows support)
+6. Type `https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/linux-x64` and add it (If you need Linux support)
+7. Unity will now download and install the package
