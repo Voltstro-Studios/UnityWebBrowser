@@ -357,13 +357,13 @@ namespace UnityWebBrowser
                     }
                     catch (Exception)
                     {
-                        logger.Error("An error occured while connecting!");
+                        logger.Error("An error occured while connecting to the UWB process!");
                         Dispose();
                         throw;
                     }
                 }, () =>
                 {
-                    logger.Error("The web browser engine failed to startup in time!");
+                    logger.Error("The UWB engine failed to startup in time!");
                     Dispose();
 
                     throw new TimeoutException("The web browser engine failed to startup in time!");
@@ -393,12 +393,10 @@ namespace UnityWebBrowser
         {
             using (browserLoadTextureMarker.Auto())
             {
-                byte[] pixelData = pixels;
-
-                if (pixelData == null || pixelData.Length == 0)
+                if (pixels == null || pixels.Length == 0)
                     return;
 
-                BrowserTexture.LoadRawTextureData(pixelData);
+                BrowserTexture.LoadRawTextureData(pixels);
                 BrowserTexture.Apply(false);
             }
         }

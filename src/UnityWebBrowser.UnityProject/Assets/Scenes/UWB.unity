@@ -219,12 +219,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.engineStartupTimeout
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.ipcSettings.preferPipes
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984040730585, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -21.000061
+      value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
