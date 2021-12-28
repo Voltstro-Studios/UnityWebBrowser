@@ -1,6 +1,5 @@
 ﻿using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -55,84 +54,107 @@ namespace UnityWebBrowser.Engine.Shared
         /// <returns></returns>
         public int Main(string[] args)
         {
+            //We got a lot of arguments
+            
+            //Url to start with
+            Option<string> initialUrl = new Option<string>("-initial-url",
+                () => "https://voltstro.dev",
+                "The initial URL");
+            
+            //Resolution
+            Option<int> width = new Option<int>("-width",
+                () => 1920,
+                "The width of the window");
+            Option<int> height = new Option<int>("-height",
+                () => 1080,
+                "The height of the window");
+
+            //General browser settings
+            Option<bool> javaScript = new Option<bool>("-javascript",
+                () => true,
+                "Enable or disable javascript");
+            Option<bool> webRtc = new Option<bool>("-web-rtc",
+                () => false,
+                "Enable or disable web RTC");
+            Option<int> remoteDebugging = new Option<int>("-remote-debugging",
+                () => 0,
+                "Some browser engines may have remote debugging");
+            Option<FileInfo> cachePath = new Option<FileInfo>("-cache-path",
+                () => null,
+                "The path to the cache (null for no cache)");
+
+            //Background color
+            Option<byte> bcr = new Option<byte>("-bcr",
+                () => 255,
+                "Background color (red)");
+            Option<byte> bcg = new Option<byte>("-bcg",
+                () => 255,
+                "Background color (green)");
+            Option<byte> bcb = new Option<byte>("-bcb",
+                () => 255,
+                "Background color (blue)");
+            Option<byte> bca = new Option<byte>("-bca",
+                () => 255,
+                "Background color (alpha)");
+
+            //Proxy settings
+            Option<bool> proxyServer = new Option<bool>("-proxy-server",
+                () => true,
+                "Use a proxy server or direct connect");
+            Option<string> proxyUsername = new Option<string>("-proxy-username",
+                () => null,
+                "The username to use in proxy auth");
+            Option<string> proxyPassword = new Option<string>("-proxy-password",
+                () => null,
+                "The proxy auth password");
+            
+            //IPC settings
+            Option<bool> pipes = new Option<bool>("-pipes",
+                () => true,
+                "Use pipes or TCP");
+            Option<string> inLocation = new Option<string>("-in-location",
+                () => "UnityWebBrowserIn",
+                "In location for IPC (Pipes location or TCP port in TCP mode)");
+            Option<string> outLocation = new Option<string>("-out-location",
+                () => "UnityWebBrowserOut",
+                "Out location for IPC (Pipes location or TCP port in TCP mode)");
+
+            Option<FileInfo> logPath = new Option<FileInfo>("-log-path",
+                () => new FileInfo("engine.log"),
+                "The path to where the log will be");
+            Option<LogSeverity> logSeverity = new Option<LogSeverity>("-log-severity",
+                () => LogSeverity.Info,
+                "The severity of the logs");
+
+            Option<string> activeEngineFilePath = new Option<string>("-active-engine-file-path",
+                () => AppContext.BaseDirectory,
+                "Path were the active file will be");
+
             RootCommand rootCommand = new()
             {
-                //We got a lot of arguments
-                new Option<string>("-initial-url",
-                    () => "https://voltstro.dev",
-                    "The initial URL"),
-
-                new Option<int>("-width",
-                    () => 1920,
-                    "The width of the window"),
-                new Option<int>("-height",
-                    () => 1080,
-                    "The height of the window"),
-
-                new Option<bool>("-javascript",
-                    () => true,
-                    "Enable or disable javascript"),
-
-                new Option<bool>("-web-rtc",
-                    () => false,
-                    "Enable or disable web RTC"),
-
-                new Option<int>("-remote-debugging",
-                    () => 0,
-                    "Some browser engines may have remote debugging"),
-
-                new Option<byte>("-bcr",
-                    () => 255,
-                    "Background color (red)"),
-                new Option<byte>("-bcg",
-                    () => 255,
-                    "Background color (green)"),
-                new Option<byte>("-bcb",
-                    () => 255,
-                    "Background color (blue)"),
-                new Option<byte>("-bca",
-                    () => 255,
-                    "Background color (alpha)"),
-
-                new Option<FileInfo>("-cache-path",
-                    () => null,
-                    "The path to the cache (null for no cache)"),
-
-                new Option<bool>("-proxy-server",
-                    () => true,
-                    "Use a proxy server or direct connect"),
-                new Option<string>("-proxy-username",
-                    () => null,
-                    "The username to use in proxy auth"),
-                new Option<string>("-proxy-password",
-                    () => null,
-                    "The proxy auth password"),
-
-                new Option<bool>("-pipes",
-                    () => true,
-                    "Use pipes or TCP"),
-                new Option<string>("-in-location",
-                    () => "UnityWebBrowserIn",
-                    "In location for IPC (Pipes location or TCP port in TCP mode)"),
-                new Option<string>("-out-location",
-                    () => "UnityWebBrowserOut",
-                    "Out location for IPC (Pipes location or TCP port in TCP mode)"),
-
-                new Option<FileInfo>("-log-path",
-                    () => new FileInfo("engine.log"),
-                    "The path to where the log will be"),
-                new Option<LogSeverity>("-log-severity",
-                    () => LogSeverity.Info,
-                    "The severity of the logs"),
-
-                new Option<string>("-active-engine-file-path",
-                    () => AppContext.BaseDirectory,
-                    "Path were the active file will be")
+                initialUrl,
+                width, height,
+                javaScript, webRtc, remoteDebugging, cachePath,
+                bcr, bcg, bcb, bca,
+                proxyServer, proxyUsername, proxyPassword, 
+                pipes, inLocation, outLocation, 
+                logPath, logSeverity,
+                activeEngineFilePath
             };
             rootCommand.Description = "Headless browser engine renderer. Communication is done over IPC.";
             //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
             rootCommand.TreatUnmatchedTokensAsErrors = false;
-            rootCommand.Handler = CommandHandler.Create<LaunchArguments>(parsedArgs =>
+            
+            //The new version of System.CommandLine is very boiler platey
+            LaunchArgumentsBinder launchArgumentBinder = new(initialUrl,
+                width, height,
+                javaScript, webRtc, remoteDebugging, cachePath,
+                bcr, bcg, bcb, bca,
+                proxyServer, proxyUsername, proxyPassword, 
+                pipes, inLocation, outLocation, 
+                logPath, logSeverity,
+                activeEngineFilePath);
+            rootCommand.SetHandler((LaunchArguments parsedArgs) =>
             {
                 //Is debug log enabled or not
                 Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
@@ -151,7 +173,8 @@ namespace UnityWebBrowser.Engine.Shared
 #endif
                     Environment.Exit(-1);
                 }
-            });
+            }, launchArgumentBinder);
+            
             //Invoke the command line parser and start the handler (the stuff above)
             return rootCommand.Invoke(args);
         }

@@ -5,6 +5,10 @@
   "unity": "2021.2",
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
+  "dependencies": {
+    "org.nuget.voltrpc": "1.2.2",
+    "org.nuget.voltrpc.communication.pipes": "1.2.0"
+  },
   "samples": [
     {
       "displayName": "Basic",
