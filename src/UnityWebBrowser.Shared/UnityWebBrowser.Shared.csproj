@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="VoltRpc" Version="1.2.0" />
+        <PackageReference Include="VoltRpc" Version="1.2.2" />
         <PackageReference Include="VoltRpc.Communication.Pipes" Version="1.2.0" />
         <PackageReference Include="VoltRpc.Proxy.Generator" Version="1.1.1" />
     </ItemGroup>
