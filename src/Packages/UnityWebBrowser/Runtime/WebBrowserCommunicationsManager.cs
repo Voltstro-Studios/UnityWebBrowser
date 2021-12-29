@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Profiling;
@@ -14,9 +15,12 @@ using VoltRpc.Proxy.Generated;
 
 namespace UnityWebBrowser
 {
+    /// <summary>
+    ///     Handles the RPC methods and two-way communication between the UWB engine and Unity
+    /// </summary>
     internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
-        private static ProfilerMarker sendEventMarker = new ProfilerMarker("UWB.SendEvent");
+        private static ProfilerMarker sendEventMarker = new ("UWB.SendEvent");
         
         private readonly IEngine engineProxy;
         private readonly Client ipcClient;
@@ -28,8 +32,15 @@ namespace UnityWebBrowser
         private readonly IWebBrowserLogger logger;
         private readonly WebBrowserClient client;
 
+        /// <summary>
+        ///     Is our client connected to the UWB engine
+        /// </summary>
         public bool IsConnected => ipcClient.IsConnected;
 
+        /// <summary>
+        ///     Creates a new <see cref="WebBrowserCommunicationsManager"/> instance
+        /// </summary>
+        /// <param name="browserClient"></param>
         public WebBrowserCommunicationsManager(WebBrowserClient browserClient)
         {
             threadLock = new object();
@@ -89,61 +100,49 @@ namespace UnityWebBrowser
             }
         }
 
-        public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
-        {
+        public void SendKeyboardEvent(KeyboardEvent keyboardEvent) => 
             ExecuteTask(() => engineProxy.SendKeyboardEvent(keyboardEvent));
-        }
 
-        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
-        {
+        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent) => 
             ExecuteTask(() => engineProxy.SendMouseMoveEvent(mouseMoveEvent));
-        }
 
-        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
-        {
+        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent) => 
             ExecuteTask(() => engineProxy.SendMouseClickEvent(mouseClickEvent));
-        }
 
-        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
-        {
+        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent) => 
             ExecuteTask(() => engineProxy.SendMouseScrollEvent(mouseScrollEvent));
-        }
 
-        public void GoForward()
-        {
-            ExecuteTask(() => engineProxy.GoForward());
-        }
+        public void GoForward() => ExecuteTask(() => engineProxy.GoForward());
 
-        public void GoBack()
-        {
-            ExecuteTask(() => engineProxy.GoBack());
-        }
+        public void GoBack() => ExecuteTask(() => engineProxy.GoBack());
 
-        public void Refresh()
-        {
-            ExecuteTask(() => engineProxy.Refresh());
-        }
+        public void Refresh() => ExecuteTask(() => engineProxy.Refresh());
 
-        public void LoadUrl(string url)
-        {
-            ExecuteTask(() => engineProxy.LoadUrl(url));
-        }
+        public void LoadUrl(string url) => ExecuteTask(() => engineProxy.LoadUrl(url));
 
-        public void LoadHtml(string html)
-        {
-            ExecuteTask(() => engineProxy.LoadHtml(html));
-        }
+        public void LoadHtml(string html) => ExecuteTask(() => engineProxy.LoadHtml(html));
 
-        public void ExecuteJs(string js)
-        {
-            ExecuteTask(() => engineProxy.ExecuteJs(js));
-        }
+        public void ExecuteJs(string js) => ExecuteTask(() => engineProxy.ExecuteJs(js));
 
-        public void Resize(Resolution resolution)
-        {
-            ExecuteTask(() => engineProxy.Resize(resolution));
-        }
+        public void Resize(Resolution resolution) => ExecuteTask(() => engineProxy.Resize(resolution));
 
+        #region Client Events
+
+        public void UrlChange(string url) => ExecuteOnUnity(() => client.InvokeUrlChanged(url));
+
+        public void LoadStart(string url) => ExecuteOnUnity(() => client.InvokeLoadStart(url));
+
+        public void LoadFinish(string url) => ExecuteOnUnity(() => client.InvokeLoadFinish(url));
+
+        public void TitleChange(string title) => ExecuteOnUnity(() => client.InvokeTitleChange(title));
+
+        public void ProgressChange(double progress) =>
+            ExecuteOnUnity(() => client.InvokeLoadProgressChange(progress));
+
+        public void Fullscreen(bool fullScreen) => ExecuteOnUnity(() => client.InvokeFullscreen(fullScreen));
+
+        #endregion
+        
         public void Dispose()
         {
             lock (threadLock)
@@ -153,103 +152,39 @@ namespace UnityWebBrowser
             }
         }
 
-        public void UrlChange(string url)
+        private void ExecuteOnUnity(Action action, [CallerMemberName] string memberName = "")
         {
-            unityThread.Post(state =>
+            unityThread.Post(_ =>
             {
                 try
                 {
-                    client.InvokeUrlChanged(url);
+                    action.Invoke();
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"An error occured in OnUrlChanged! {ex}");
+                    logger.Error($"An error occured in {memberName}! {ex}");
                 }
             }, null);
         }
 
-        public void LoadStart(string url)
+        private void ExecuteTask(Action action, [CallerMemberName] string memberName = "")
         {
-            unityThread.Post(d =>
-            {
-                try
-                {
-                    client.InvokeLoadStart(url);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An error occured in OnLoadStart! {ex}");
-                }
-            }, null);
-        }
-
-        public void LoadFinish(string url)
-        {
-            unityThread.Post(d =>
-            {
-                try
-                {
-                    client.InvokeLoadFinish(url);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An error occured in OnLoadFinish! {ex}");
-                }
-            }, null);
-        }
-
-        public void TitleChange(string title)
-        {
-            unityThread.Post(d =>
-            {
-                try
-                {
-                    client.InvokeTitleChange(title);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An error occured in OnTitleChange! {ex}");
-                }
-            }, null);
-        }
-
-        public void ProgressChange(double progress)
-        {
-            unityThread.Post(d =>
-            {
-                try
-                {
-                    client.InvokeLoadProgressChange(progress);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An error occured in OnLoadProgressChange! {ex}");
-                }
-            }, null);
-        }
-
-        public void Fullscreen(bool fullScreen)
-        {
-            unityThread.Post(d =>
-            {
-                try
-                {
-                    client.InvokeFullscreen(fullScreen);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An error occured in OnFullscreen! {ex}");
-                }
-            }, null);
-        }
-
-        private void ExecuteTask(Action action)
-        {
+            if(!IsConnected)
+                return;
+            
             _ = Task.Run(() =>
             {
-                using (sendEventMarker.Auto())
+                sendEventMarker.Begin();
+                try
+                {
                     lock (threadLock)
                         action.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"An error occured while executing task {memberName}! {ex}");
+                }
+                sendEventMarker.End();
             });
         }
     }

@@ -29,10 +29,10 @@ namespace UnityWebBrowser
         IPointerUpHandler
     {
         /// <summary>
-        ///     The <see cref="WebBrowserClient" />, what handles the communication between the CEF process and Unity
+        ///     The <see cref="WebBrowserClient" />, what handles the communication between the UWB engine and Unity
         /// </summary>
-        [Tooltip("The browser client, what handles the communication between the CEF process and Unity")]
-        public WebBrowserClient browserClient = new WebBrowserClient();
+        [Tooltip("The browser client, what handles the communication between the UWB engine and Unity")]
+        public WebBrowserClient browserClient = new();
 
         /// <summary>
         ///     Support automatically handling fullscreen events.
@@ -171,6 +171,18 @@ namespace UnityWebBrowser
             Keyboard.current.onTextInput += c => currentInputBuffer += c;
 #endif
         }
+        
+        private void FixedUpdate()
+        {
+            //We load the pixel data into the texture at a fixed rate
+            browserClient.LoadTextureData();
+        }
+
+        private void OnDestroy()
+        {
+            cancellationToken.Cancel();
+            browserClient.Dispose();
+        }
 
         /// <summary>
         ///     Toggles fullscreen.
@@ -209,18 +221,6 @@ namespace UnityWebBrowser
                     imageRectTransform.sizeDelta = lastImageSize;
                 }
             }
-        }
-
-        private void FixedUpdate()
-        {
-            //We load the pixel data into the texture at a fixed rate
-            browserClient.LoadTextureData();
-        }
-
-        private void OnDestroy()
-        {
-            cancellationToken.Cancel();
-            browserClient.Dispose();
         }
 
 #if UNITY_EDITOR

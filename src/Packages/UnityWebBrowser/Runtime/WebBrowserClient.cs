@@ -50,7 +50,7 @@ namespace UnityWebBrowser
 
         #region Resoltuion
 
-        [SerializeField] private Resolution resolution = new Resolution(1920, 1080);
+        [SerializeField] private Resolution resolution = new(1920, 1080);
 
         /// <summary>
         ///     The resolution of the browser
@@ -71,7 +71,7 @@ namespace UnityWebBrowser
         ///     The background <see cref="Color32" /> of the webpage
         /// </summary>
         [Tooltip("The background color of the webpage")]
-        public Color32 backgroundColor = new Color32(255, 255, 255, 255);
+        public Color32 backgroundColor = new(255, 255, 255, 255);
 
         /// <summary>
         ///     Enable or disable JavaScript
@@ -88,12 +88,14 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Enable or disable WebRTC
         /// </summary>
-        [Tooltip("Enable or disable WebRTC")] public bool webRtc;
+        [Tooltip("Enable or disable WebRTC")] 
+        public bool webRtc;
 
         /// <summary>
         ///     Proxy Settings
         /// </summary>
-        [Tooltip("Proxy settings")] public ProxySettings proxySettings;
+        [Tooltip("Proxy settings")] 
+        public ProxySettings proxySettings;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -104,13 +106,15 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The port to use for remote debugging
         /// </summary>
-        [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
+        [Tooltip("The port to use for remote debugging")] 
+        [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
 
         /// <summary>
         ///     Settings related to IPC
         /// </summary>
-        [Header("IPC Settings")] public WebBrowserIpcSettings ipcSettings = new WebBrowserIpcSettings();
+        [Header("IPC Settings")] 
+        public WebBrowserIpcSettings ipcSettings = new();
 
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
@@ -124,22 +128,19 @@ namespace UnityWebBrowser
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
         public LogSeverity logSeverity;
 
-        private Process serverProcess;
-
-        private WebBrowserCommunicationsManager communicationsManager;
-
         /// <summary>
         ///     Texture that the browser will paint to
         /// </summary>
         public Texture2D BrowserTexture { get; private set; }
 
         /// <summary>
-        ///     Is the Unity client connected to the browser engine
+        ///     Are we connected to the UW engine process
         /// </summary>
         public bool IsConnected => communicationsManager is { IsConnected: true };
 
+        #region IsReady
+
         private object isReadyLock;
-        
         private bool isReady;
         
         /// <summary>
@@ -163,12 +164,14 @@ namespace UnityWebBrowser
             }
         }
 
+        #endregion
+
         #region Log Path
 
         private FileInfo logPath;
 
         /// <summary>
-        ///     The path that CEF will log to
+        ///     The path that UWB engine will log to
         /// </summary>
         /// <exception cref="WebBrowserIsConnectedException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
@@ -233,6 +236,9 @@ namespace UnityWebBrowser
         }
 
         #endregion
+        
+        private Process serverProcess;
+        private WebBrowserCommunicationsManager communicationsManager;
 
         /// <summary>
         ///     Inits the browser client
@@ -391,6 +397,9 @@ namespace UnityWebBrowser
         /// </summary>
         public void LoadTextureData()
         {
+            if(!IsReady || !IsConnected)
+                return;
+
             using (browserLoadTextureMarker.Auto())
             {
                 if (pixels == null || pixels.Length == 0)
@@ -409,28 +418,24 @@ namespace UnityWebBrowser
         ///     Invoked when the url changes
         /// </summary>
         public event OnUrlChangeDelegate OnUrlChanged;
-
         internal void InvokeUrlChanged(string url) => OnUrlChanged?.Invoke(url);
 
         /// <summary>
         ///     Invoked when the page starts to load
         /// </summary>
         public event OnLoadStartDelegate OnLoadStart;
-
         internal void InvokeLoadStart(string url) => OnLoadStart?.Invoke(url);
 
         /// <summary>
         ///     Invoked when the page finishes loading
         /// </summary>
         public event OnLoadFinishDelegate OnLoadFinish;
-
         internal void InvokeLoadFinish(string url) => OnLoadFinish?.Invoke(url);
 
         /// <summary>
         ///     Invoked when the title changes
         /// </summary>
         public event OnTitleChange OnTitleChange;
-
         internal void InvokeTitleChange(string title) => OnTitleChange?.Invoke(title);
 
         /// <summary>
@@ -438,14 +443,12 @@ namespace UnityWebBrowser
         ///     <para>Progress goes from 0 to 1</para>
         /// </summary>
         public event OnLoadingProgressChange OnLoadProgressChange;
-
         internal void InvokeLoadProgressChange(double progress) => OnLoadProgressChange?.Invoke(progress);
 
         /// <summary>
         ///     Invoked when the browser goes in or out of fullscreen
         /// </summary>
         public event OnFullscreenChange OnFullscreen;
-
         internal void InvokeFullscreen(bool fullscreen) => OnFullscreen?.Invoke(fullscreen);
 
         #endregion
