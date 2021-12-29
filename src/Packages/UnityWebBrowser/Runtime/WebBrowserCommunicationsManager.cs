@@ -147,8 +147,8 @@ namespace UnityWebBrowser
         {
             lock (threadLock)
             {
-                ipcClient.Dispose();
-                ipcHost.Dispose();
+                ipcHost?.Dispose();
+                ipcClient?.Dispose();
             }
         }
 

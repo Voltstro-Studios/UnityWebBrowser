@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityEngine;
@@ -409,7 +408,7 @@ namespace UnityWebBrowser
                     if (!IsReady || !IsConnected)
                         continue;
 
-                    await Task.Delay(25, cancellationToken.Token);
+                    await UniTask.Delay(25, cancellationToken: cancellationToken.Token);
                     
                     if(cancellationToken.Token.IsCancellationRequested)
                         return;
@@ -419,7 +418,7 @@ namespace UnityWebBrowser
                     browserPixelDataMarker.End();
 
                 }
-                catch (TaskCanceledException)
+                catch (OperationCanceledException)
                 {
                     //Do nothing
                 }
@@ -692,64 +691,52 @@ namespace UnityWebBrowser
         }
 #endif
 
+        private bool hasDisposed;
+
         /// <summary>
         ///     Destroys this <see cref="WebBrowserClient" /> instance
         /// </summary>
         public void Dispose()
         {
+            if(hasDisposed)
+                return;
+            
             ReleaseResources();
             GC.SuppressFinalize(this);
         }
 
         private void ReleaseResources()
         {
+            if(hasDisposed)
+                return;
+
+            hasDisposed = true;
             logger.Debug("UWB shutdown...");
             
             cancellationToken.Cancel();
             Object.Destroy(BrowserTexture);
+            
+            if (IsReady && IsConnected)
+                communicationsManager.Shutdown();
 
             try
             {
-                if (IsConnected)
-                    communicationsManager.Shutdown();
-
+                //TODO: Issue with VoltRpc with TCP client stream not disposing if the client hasn't connected
                 communicationsManager.Dispose();
             }
             catch (Exception ex)
             {
-                Logger.Error($"Something failed while trying to shutdown the engine! Force shutting down. {ex}");
-                serverProcess.KillTree();
+                logger.Error($"Some error occured while destroying the communications manager! {ex}");
+            }
+
+            if (serverProcess != null)
+            {
+                if(IsReady)
+                    serverProcess.KillTree();
+                
                 serverProcess.Dispose();
                 serverProcess = null;
             }
-
-            if (serverProcess != null && !IsReady && !IsConnected)
-            {
-                serverProcess.KillTree();
-                serverProcess.Dispose();
-                serverProcess = null;
-                return;
-            }
-            
-            IsReady = false;
-            
-            if(serverProcess is {HasExited: true})
-                return;
-            
-            WaitForServerProcess().ConfigureAwait(false);
-        }
-
-        private async Task WaitForServerProcess()
-        {
-            await Task.Delay(5000);
-
-            if (!serverProcess.HasExited)
-            {
-                serverProcess.KillTree();
-                logger.Warn("Forced killed web browser process!");
-            }
-
-            serverProcess.Dispose();
         }
 
         #endregion
