@@ -13,7 +13,7 @@ namespace UnityWebBrowser.Shared.Events
         Up
     }
 
-    public class MouseClickEvent
+    public struct MouseClickEvent
     {
         public int MouseX { get; set; }
         public int MouseY { get; set; }

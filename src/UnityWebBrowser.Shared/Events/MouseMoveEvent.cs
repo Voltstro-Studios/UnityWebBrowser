@@ -1,6 +1,6 @@
 namespace UnityWebBrowser.Shared.Events
 {
-    public class MouseMoveEvent
+    public struct MouseMoveEvent
     {
         public int MouseX { get; set; }
         public int MouseY { get; set; }
