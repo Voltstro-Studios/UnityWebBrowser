@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
@@ -120,7 +121,7 @@ namespace UnityWebBrowser
         ///     Timeout time for waiting for the engine to start (in milliseconds)
         /// </summary>
         [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
-        public int engineStartupTimeout = 100000;
+        public int engineStartupTimeout = 4000;
 
         /// <summary>
         ///     The log severity. Only messages of this severity level or higher will be logged
@@ -239,6 +240,7 @@ namespace UnityWebBrowser
         
         private Process serverProcess;
         private WebBrowserCommunicationsManager communicationsManager;
+        private CancellationTokenSource cancellationToken;
 
         /// <summary>
         ///     Inits the browser client
@@ -351,44 +353,80 @@ namespace UnityWebBrowser
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
+            
+            cancellationToken = new CancellationTokenSource();
 
-            WebBrowserUtils.WaitForActiveEngineFile(
-                Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}"), engineStartupTimeout, () =>
+            UniTask.Run(async () =>
+            {
+                string fileLocation = Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}");
+                try
                 {
-                    try
-                    {
-                        logger.Debug("UWB startup success, connecting...");
-                        communicationsManager.Connect();
-                        IsReady = true;
-                    }
-                    catch (Exception)
-                    {
-                        logger.Error("An error occured while connecting to the UWB process!");
+                    await WaitForFile(fileLocation)
+                        .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout))
+                        .ContinueWith(() => PixelDataLoop().Forget());
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"An error occured while waiting to connect to the UWB engine process! {ex}");
+                    await using (UniTask.ReturnToMainThread())
                         Dispose();
-                        throw;
-                    }
-                }, () =>
-                {
-                    logger.Error("The UWB engine failed to startup in time!");
-                    Dispose();
+                }
+            });
+        }
 
-                    throw new TimeoutException("The web browser engine failed to startup in time!");
-                }).ConfigureAwait(false);
+        private async UniTask WaitForFile(string path)
+        {
+            try
+            {
+                logger.Debug("Waiting for engine active signal...");
+                while (!File.Exists(path))
+                {
+                    await UniTask.Delay(100);
+                }
+                
+                logger.Debug("UWB startup success, connecting...");
+                communicationsManager.Connect();
+                IsReady = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"An error occured while waiting to connect to the UWB engine process! {ex}");
+                await using (UniTask.ReturnToMainThread())
+                    Dispose();
+            }
         }
 
         #region Main Loop
 
         private byte[] pixels;
 
-        internal async Task PixelDataLoop(CancellationToken cancellationToken)
+        internal async UniTaskVoid PixelDataLoop()
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.Token.IsCancellationRequested)
             {
-                await Task.Delay(25, cancellationToken);
+                try
+                {
+                    if (!IsReady || !IsConnected)
+                        continue;
 
-                browserPixelDataMarker.Begin();
-                pixels = communicationsManager.GetPixels().PixelData;
-                browserPixelDataMarker.End();
+                    await Task.Delay(25, cancellationToken.Token);
+                    
+                    if(cancellationToken.Token.IsCancellationRequested)
+                        return;
+
+                    browserPixelDataMarker.Begin();
+                    pixels = communicationsManager.GetPixels().PixelData;
+                    browserPixelDataMarker.End();
+
+                }
+                catch (TaskCanceledException)
+                {
+                    //Do nothing
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"Error in data loop! {ex}");
+                }
             }
         }
 
@@ -667,6 +705,7 @@ namespace UnityWebBrowser
         {
             logger.Debug("UWB shutdown...");
             
+            cancellationToken.Cancel();
             Object.Destroy(BrowserTexture);
 
             try

@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -104,42 +102,6 @@ namespace UnityWebBrowser
             position.y = -(ptLocationRelativeToImageInScreenCoordinates.y / uiImageObjectRect.rect.height) + 1;
 
             return true;
-        }
-
-        ///  <summary>
-        /// 		Waits until the file exists
-        ///  </summary>
-        ///  <param name="path"></param>
-        ///  <param name="timeOutTIme"></param>
-        ///  <param name="onSuccess"></param>
-        ///  <param name="onFail"></param>
-        ///  <exception cref="TimeoutException"></exception>
-        ///  <exception cref="ArgumentNullException"></exception>
-        internal static Task WaitForActiveEngineFile(string path, int timeOutTIme, Action onSuccess, Action onFail)
-        {
-            if (onSuccess == null)
-                throw new ArgumentNullException(nameof(onSuccess));
-
-            if (onFail == null)
-                throw new ArgumentNullException(nameof(onFail));
-            
-            float timeUntilCancel = Time.time + timeOutTIme;
-
-            //Wait until the file exists
-            while (!File.Exists(path))
-            {
-                //If we hit the timeout time, then fail it
-                if (Time.time >= timeUntilCancel)
-                {
-                    onFail.Invoke();
-                    return Task.CompletedTask;
-                }
-
-                Thread.Sleep(100);
-            }
-            
-            onSuccess.Invoke();
-            return Task.CompletedTask;
         }
 
         /// <summary>

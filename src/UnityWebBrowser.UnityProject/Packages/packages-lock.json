@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.cysharp.slnmerge": {
-      "version": "1.4.0",
-      "depth": 0,
+    "com.cysharp.unitask": {
+      "version": "2.2.5",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
@@ -15,7 +15,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.7",
+      "version": "3.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -82,6 +82,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
+        "com.cysharp.unitask": "2.2.5",
         "org.nuget.voltrpc": "1.2.2",
         "org.nuget.voltrpc.communication.pipes": "1.2.0"
       }

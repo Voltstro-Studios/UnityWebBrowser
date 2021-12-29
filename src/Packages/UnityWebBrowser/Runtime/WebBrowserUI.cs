@@ -56,8 +56,6 @@ namespace UnityWebBrowser
         private Vector2 lastAnchorMax;
         private Vector2 lastImagePosition;
 
-        private CancellationTokenSource cancellationToken;
-
 #if ENABLE_INPUT_SYSTEM
         private string currentInputBuffer;
 #else
@@ -156,10 +154,6 @@ namespace UnityWebBrowser
         {
             //Start the browser client
             browserClient.Init();
-            cancellationToken = new CancellationTokenSource();
-            
-            //Run the pixel loop
-            _ = Task.Run(() => browserClient.PixelDataLoop(cancellationToken.Token));
 
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
@@ -180,7 +174,6 @@ namespace UnityWebBrowser
 
         private void OnDestroy()
         {
-            cancellationToken.Cancel();
             browserClient.Dispose();
         }
 
@@ -274,17 +267,23 @@ namespace UnityWebBrowser
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if(browserClient is {IsConnected: false})
+                return;
+            
             pointerKeyboardHandler = StartCoroutine(HandlerPointerAndKeyboardData());
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if(browserClient is {IsConnected: false} || pointerKeyboardHandler == null)
+                return;
+            
             StopCoroutine(pointerKeyboardHandler);
         }
 
         private IEnumerator HandlerPointerAndKeyboardData()
         {
-            while (Application.isPlaying)
+            while (Application.isPlaying && browserClient is {IsConnected: true})
             {
                 List<int> keysDown = new List<int>();
                 List<int> keysUp = new List<int>();

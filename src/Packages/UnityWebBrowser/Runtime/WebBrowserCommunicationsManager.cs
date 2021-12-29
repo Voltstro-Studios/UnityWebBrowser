@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
@@ -171,8 +171,8 @@ namespace UnityWebBrowser
         {
             if(!IsConnected)
                 return;
-            
-            _ = Task.Run(() =>
+
+            UniTask.Run(() =>
             {
                 sendEventMarker.Begin();
                 try
