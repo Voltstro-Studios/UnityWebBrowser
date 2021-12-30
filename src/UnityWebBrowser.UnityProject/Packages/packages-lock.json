@@ -83,8 +83,8 @@
       "source": "local",
       "dependencies": {
         "com.cysharp.unitask": "2.2.5",
-        "org.nuget.voltrpc": "1.2.2",
-        "org.nuget.voltrpc.communication.pipes": "1.2.0"
+        "org.nuget.voltrpc": "1.3.0",
+        "org.nuget.voltrpc.communication.pipes": "1.2.1"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
@@ -112,18 +112,18 @@
       }
     },
     "org.nuget.voltrpc": {
-      "version": "1.2.2",
+      "version": "1.3.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.voltrpc.communication.pipes": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "org.nuget.voltrpc": "1.2.0"
+        "org.nuget.voltrpc": "1.3.0"
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
