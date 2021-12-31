@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Voltstro-Studios")]
 [assembly: AssemblyProduct("Unity Web Browser")]
-[assembly: AssemblyCopyright("Copyright © 2021 Voltstro-Studios")]
+[assembly: AssemblyCopyright("Copyright © 2021-2022 Voltstro-Studios")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
