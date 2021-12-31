@@ -3,7 +3,6 @@ using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
@@ -17,10 +16,6 @@ namespace UnityWebBrowser.Engine.Shared
 	/// </summary>
 	public abstract class EngineEntryPoint : IDisposable
     {
-        private const string ActiveEngineFileName = "EngineActive";
-
-        private FileStream activeFileStream;
-
         /// <summary>
         ///     Allows the engine to fire events on the Unity client side
         /// </summary>
@@ -126,10 +121,6 @@ namespace UnityWebBrowser.Engine.Shared
                 () => LogSeverity.Info,
                 "The severity of the logs");
 
-            Option<string> activeEngineFilePath = new Option<string>("-active-engine-file-path",
-                () => AppContext.BaseDirectory,
-                "Path were the active file will be");
-
             RootCommand rootCommand = new()
             {
                 initialUrl,
@@ -138,8 +129,7 @@ namespace UnityWebBrowser.Engine.Shared
                 bcr, bcg, bcb, bca,
                 proxyServer, proxyUsername, proxyPassword, 
                 pipes, inLocation, outLocation, 
-                logPath, logSeverity,
-                activeEngineFilePath
+                logPath, logSeverity
             };
             rootCommand.Description = "Headless browser engine renderer. Communication is done over IPC.";
             //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
@@ -152,8 +142,7 @@ namespace UnityWebBrowser.Engine.Shared
                 bcr, bcg, bcb, bca,
                 proxyServer, proxyUsername, proxyPassword, 
                 pipes, inLocation, outLocation, 
-                logPath, logSeverity,
-                activeEngineFilePath);
+                logPath, logSeverity);
             rootCommand.SetHandler((LaunchArguments parsedArgs) =>
             {
                 //Is debug log enabled or not
@@ -231,22 +220,20 @@ namespace UnityWebBrowser.Engine.Shared
                 
                 ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
                 ipcClient.AddService(typeof(IClient));
-                Task.Run(() =>
+                
+                //Connect the server (us) back to Unity
+                try
                 {
-                    //Connect the server (us) back to Unity
-                    try
-                    {
-                        ipcClient.Connect();
-                    }
-                    catch (ConnectionFailed)
-                    {
-                        Logger.Error(
-                            "The engine failed to connect back to the Unity client! Client events will not fire!");
-                        ipcClient.Dispose();
-                        ipcClient = null;
-                    }
-                });
-                ClientActions.SetIpcClient(ipcClient);
+                    ipcClient.Connect();
+                    ClientActions.SetIpcClient(ipcClient);
+                }
+                catch (ConnectionFailed)
+                {
+                    Logger.Error(
+                        "The engine failed to connect back to the Unity client! Client events will not fire!");
+                    ipcClient.Dispose();
+                    ipcClient = null;
+                }
 
                 Logger.Debug("IPC Setup done.");
             }
@@ -259,13 +246,9 @@ namespace UnityWebBrowser.Engine.Shared
         /// <summary>
         ///     Call when you are ready
         /// </summary>
-        /// <param name="arguments"></param>
-        protected void Ready(LaunchArguments arguments)
+        protected void Ready()
         {
-            string path = Path.GetFullPath($"{arguments.ActiveEngineFilePath}/{ActiveEngineFileName}");
-
-            activeFileStream = File.Create(path, 12, FileOptions.DeleteOnClose);
-            File.SetAttributes(path, FileAttributes.Hidden);
+            ClientActions.Ready();
         }
 
         #region Destroy
@@ -289,12 +272,7 @@ namespace UnityWebBrowser.Engine.Shared
         /// </summary>
         protected virtual void ReleaseResources()
         {
-            if (activeFileStream != null)
-            {
-                activeFileStream.Close();
-                activeFileStream.Dispose();
-            }
-
+            ClientActions.Dispose();
             ipcHost?.Dispose();
         }
 

@@ -33,16 +33,13 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<FileInfo> logPath;
     private readonly Option<LogSeverity> logSeverity;
 
-    private readonly Option<string> activeEngineFilePath;
-
     public LaunchArgumentsBinder(Option<string> initialUrl, 
         Option<int> width, Option<int> height, 
         Option<bool> javaScript, Option<bool> webRtc, Option<int> remoteDebugging, Option<FileInfo> cachePath, 
         Option<byte> bcr, Option<byte> bcg, Option<byte> bcb, Option<byte> bca, 
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword, 
         Option<bool> pipes, Option<string> inLocation, Option<string> outLocation, 
-        Option<FileInfo> logPath, Option<LogSeverity> logSeverity, 
-        Option<string> activeEngineFilePath)
+        Option<FileInfo> logPath, Option<LogSeverity> logSeverity)
     {
         this.initialUrl = initialUrl;
         this.width = width;
@@ -63,7 +60,6 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.outLocation = outLocation;
         this.logPath = logPath;
         this.logSeverity = logSeverity;
-        this.activeEngineFilePath = activeEngineFilePath;
     }
 
     protected override LaunchArguments GetBoundValue(BindingContext bindingContext)
@@ -96,8 +92,6 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             
             LogPath = bindingContext.ParseResult.GetValueForOption(logPath),
             LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity),
-            
-            ActiveEngineFilePath = bindingContext.ParseResult.GetValueForOption(activeEngineFilePath)
         };
     }
 }

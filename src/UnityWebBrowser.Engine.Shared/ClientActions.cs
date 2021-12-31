@@ -10,7 +10,7 @@ namespace UnityWebBrowser.Engine.Shared
     ///     This is a wrapper around <see cref="IClient"/>. It checks if we are connected first before firing an event.
     ///     <para>The reason why we do the check here is that VoltRpc will throw an exception, rather then not do anything.</para>
     /// </summary>
-    public class ClientActions : IClient
+    public class ClientActions : IClient, IDisposable
     {
         private Client? client;
         private IClient? clientActions;
@@ -55,6 +55,28 @@ namespace UnityWebBrowser.Engine.Shared
         {
             if(client is { IsConnected: true })
                 clientActions?.Fullscreen(fullScreen);
+        }
+
+        public void Ready()
+        {
+            if(client is { IsConnected: true })
+                clientActions?.Ready();
+        }
+
+        ~ClientActions()
+        {
+            ReleaseResources();
+        }
+
+        public void Dispose()
+        {
+            ReleaseResources();
+            GC.SuppressFinalize(this);
+        }
+
+        private void ReleaseResources()
+        {
+            client?.Dispose();
         }
     }
 }

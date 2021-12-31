@@ -32,8 +32,6 @@ namespace UnityWebBrowser
     [Serializable]
     public class WebBrowserClient : IDisposable
     {
-        private const string ActiveEngineFileName = "EngineActive";
-
         private static ProfilerMarker browserPixelDataMarker = new ProfilerMarker("UWB.LoadPixelData");
         private static ProfilerMarker browserLoadTextureMarker = new ProfilerMarker("UWB.LoadTextureData");
 
@@ -326,9 +324,6 @@ namespace UnityWebBrowser
             if (!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
 
-            //Our engine active file
-            argsBuilder.AppendArgument("active-engine-file-path", browserEngineMainDir, true);
-
             //Final built arguments
             string arguments = argsBuilder.ToString();
 
@@ -356,37 +351,58 @@ namespace UnityWebBrowser
             
             cancellationToken = new CancellationTokenSource();
 
+            WaitForEngineReady();
+        }
+
+        #region Readying
+        
+        private bool readySignalReceived;
+
+        /// <summary>
+        ///     Will wait for <see cref="readySignalReceived"/> to be true
+        /// </summary>
+        private void WaitForEngineReady()
+        {
             UniTask.Void(async () =>
             {
-                string fileLocation = Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}");
                 try
                 {
-                    await WaitForFile(fileLocation)
-                        .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout))
-                        .ContinueWith(() => Task.Run(PixelDataLoop));
+                    await WaitForEngineReadyTask()
+                        .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout));
+                }
+                catch (TimeoutException)
+                {
+                    logger.Error("The engine did not get ready within engine startup timeout!");
+                    await using (UniTask.ReturnToMainThread())
+                        Dispose();
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"An error occured while waiting to connect to the UWB engine process! {ex}");
+                    logger.Error($"An unknown error occured while waiting for engine to get ready! {ex}");
                     await using (UniTask.ReturnToMainThread())
                         Dispose();
                 }
             });
         }
-
-        private async UniTask WaitForFile(string path)
+        
+        private async UniTask WaitForEngineReadyTask()
         {
+            await UniTask.WaitUntil(() => readySignalReceived);
+        }
+
+        /// <summary>
+        ///     Called when the engine sends the ready signal
+        /// </summary>
+        internal async UniTaskVoid EngineReady()
+        {
+            readySignalReceived = true;
+
             try
             {
-                logger.Debug("Waiting for engine active signal...");
-                while (!File.Exists(path))
-                {
-                    await UniTask.Delay(100);
-                }
-                
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
                 IsReady = true;
+                _ = Task.Run(PixelDataLoop);
             }
             catch (Exception ex)
             {
@@ -395,6 +411,8 @@ namespace UnityWebBrowser
                     Dispose();
             }
         }
+
+        #endregion
 
         #region Main Loop
 
@@ -722,7 +740,6 @@ namespace UnityWebBrowser
 
             try
             {
-                //TODO: Issue with VoltRpc with TCP client stream not disposing if the client hasn't connected
                 communicationsManager.Dispose();
             }
             catch (Exception ex)

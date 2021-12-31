@@ -103,11 +103,6 @@ namespace UnityWebBrowser.Engine.Shared
         ///     What is the log severity
         /// </summary>
         public LogSeverity LogSeverity { get; set; }
-
-        /// <summary>
-        ///     Path where the active engine file will be placed
-        /// </summary>
-        public string ActiveEngineFilePath { get; set; }
     }
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 }

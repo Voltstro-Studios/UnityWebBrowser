@@ -140,6 +140,11 @@ namespace UnityWebBrowser
             ExecuteOnUnity(() => client.InvokeLoadProgressChange(progress));
 
         public void Fullscreen(bool fullScreen) => ExecuteOnUnity(() => client.InvokeFullscreen(fullScreen));
+        
+        public void Ready()
+        {
+            client.EngineReady().Forget();
+        }
 
         #endregion
         
