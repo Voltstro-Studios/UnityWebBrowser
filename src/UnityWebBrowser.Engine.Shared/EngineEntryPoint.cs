@@ -54,7 +54,7 @@ namespace UnityWebBrowser.Engine.Shared
             //Url to start with
             Option<string> initialUrl = new Option<string>("-initial-url",
                 () => "https://voltstro.dev",
-                "The initial URL");
+                "The initial URL that the browser will first load to");
             
             //Resolution
             Option<int> width = new Option<int>("-width",
@@ -73,7 +73,7 @@ namespace UnityWebBrowser.Engine.Shared
                 "Enable or disable web RTC");
             Option<int> remoteDebugging = new Option<int>("-remote-debugging",
                 () => 0,
-                "Some browser engines may have remote debugging");
+                "If the engine has remote debugging, what port to use (0 for disable)");
             Option<FileInfo> cachePath = new Option<FileInfo>("-cache-path",
                 () => null,
                 "The path to the cache (null for no cache)");
@@ -98,10 +98,10 @@ namespace UnityWebBrowser.Engine.Shared
                 "Use a proxy server or direct connect");
             Option<string> proxyUsername = new Option<string>("-proxy-username",
                 () => null,
-                "The username to use in proxy auth");
+                "The username to use in the proxy auth");
             Option<string> proxyPassword = new Option<string>("-proxy-password",
                 () => null,
-                "The proxy auth password");
+                "The password to use in the proxy auth");
             
             //IPC settings
             Option<bool> pipes = new Option<bool>("-pipes",
@@ -116,7 +116,7 @@ namespace UnityWebBrowser.Engine.Shared
 
             Option<FileInfo> logPath = new Option<FileInfo>("-log-path",
                 () => new FileInfo("engine.log"),
-                "The path to where the log will be");
+                "The path to where the log file will be");
             Option<LogSeverity> logSeverity = new Option<LogSeverity>("-log-severity",
                 () => LogSeverity.Info,
                 "The severity of the logs");
@@ -131,12 +131,13 @@ namespace UnityWebBrowser.Engine.Shared
                 pipes, inLocation, outLocation, 
                 logPath, logSeverity
             };
-            rootCommand.Description = "Headless browser engine renderer. Communication is done over IPC.";
+            rootCommand.Description = "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
             //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
             rootCommand.TreatUnmatchedTokensAsErrors = false;
             
             //The new version of System.CommandLine is very boiler platey
-            LaunchArgumentsBinder launchArgumentBinder = new(initialUrl,
+            LaunchArgumentsBinder launchArgumentBinder = new(
+                initialUrl,
                 width, height,
                 javaScript, webRtc, remoteDebugging, cachePath,
                 bcr, bcg, bcb, bca,
@@ -163,7 +164,7 @@ namespace UnityWebBrowser.Engine.Shared
                     Environment.Exit(-1);
                 }
             }, launchArgumentBinder);
-            
+
             //Invoke the command line parser and start the handler (the stuff above)
             return rootCommand.Invoke(args);
         }
