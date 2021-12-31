@@ -13,6 +13,13 @@
         <IsTrimmable>false</IsTrimmable>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="VoltRpc" Version="1.3.0" />
         <PackageReference Include="VoltRpc.Communication.Pipes" Version="1.2.1" />
@@ -21,6 +28,8 @@
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb" />
     </Target>
 
 </Project>

@@ -1,1 +1,2 @@
-!VoltRpc*.dll
+*.pdb
+*.xml

@@ -110,13 +110,13 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.json" Link="Libs/%(Filename)%(Extension)">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.json" Link="Libs/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>%(Filename)%(Extension)</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/%(Filename)%(Extension)">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
