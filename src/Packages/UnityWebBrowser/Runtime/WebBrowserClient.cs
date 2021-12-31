@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityEngine;
@@ -355,14 +356,14 @@ namespace UnityWebBrowser
             
             cancellationToken = new CancellationTokenSource();
 
-            UniTask.Run(async () =>
+            UniTask.Void(async () =>
             {
                 string fileLocation = Path.GetFullPath($"{browserEngineMainDir}/{ActiveEngineFileName}");
                 try
                 {
                     await WaitForFile(fileLocation)
                         .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout))
-                        .ContinueWith(() => PixelDataLoop().Forget());
+                        .ContinueWith(() => Task.Run(PixelDataLoop));
                 }
                 catch (Exception ex)
                 {
@@ -399,7 +400,7 @@ namespace UnityWebBrowser
 
         private byte[] pixels;
 
-        internal async UniTaskVoid PixelDataLoop()
+        internal async Task PixelDataLoop()
         {
             while (!cancellationToken.Token.IsCancellationRequested)
             {
@@ -408,7 +409,7 @@ namespace UnityWebBrowser
                     if (!IsReady || !IsConnected)
                         continue;
 
-                    await UniTask.Delay(25, cancellationToken: cancellationToken.Token);
+                    await Task.Delay(25, cancellationToken: cancellationToken.Token);
                     
                     if(cancellationToken.Token.IsCancellationRequested)
                         return;
@@ -418,7 +419,7 @@ namespace UnityWebBrowser
                     browserPixelDataMarker.End();
 
                 }
-                catch (OperationCanceledException)
+                catch (TaskCanceledException)
                 {
                     //Do nothing
                 }

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -68,18 +68,18 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
+    m_FontSize: 25
+    m_FontStyle: 2
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
-    m_RichText: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Enter URL...
 --- !u!1 &3603482957840665211
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +200,8 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3843828474661868353}
-  m_TextComponent: {fileID: 0}
-  m_Placeholder: {fileID: 0}
+  m_TextComponent: {fileID: 945981061753187135}
+  m_Placeholder: {fileID: 2670640863394542495}
   m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -295,15 +295,15 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_RichText: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
@@ -428,7 +428,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7454210982751758222}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2090336616946191105}
+        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUIControls, UnityWebBrowser
+        m_MethodName: SubmitInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7454210983125624615
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,7 +638,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7454210983313359671}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7454210984040730582}
+        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+        m_MethodName: Refresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7454210983333951894
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +772,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7454210983333951891}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7454210984040730582}
+        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+        m_MethodName: GoBack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7454210983584133262
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +953,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7454210983610425328}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7454210984040730582}
+        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+        m_MethodName: GoForward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7454210983829796803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,7 +1108,7 @@ MonoBehaviour:
     initialUrl: https://voltstro.dev
     resolution:
       Width: 1920
-      Height: 1080
+      Height: 1038
     backgroundColor:
       serializedVersion: 2
       rgba: 4294967295
@@ -1083,7 +1131,8 @@ MonoBehaviour:
     engineStartupTimeout: 4000
     logSeverity: 0
   supportFullscreen: 1
-  hideOnFullscreen: []
+  hideOnFullscreen:
+  - {fileID: 7454210983829796803}
 --- !u!114 &2090336616946191105
 MonoBehaviour:
   m_ObjectHideFlags: 0

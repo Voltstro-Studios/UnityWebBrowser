@@ -205,18 +205,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 945981061753187135, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    - target: {fileID: 2090336616946191105, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: inputField
-      value: 
-      objectReference: {fileID: 1103863897}
-    - target: {fileID: 2670640863394542495, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
       value: UnityWebBrowser
@@ -307,17 +295,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
---- !u!114 &1103863897 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3784142199285309107, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-  m_PrefabInstance: {fileID: 906994671}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1460405560
 GameObject:
   m_ObjectHideFlags: 0
