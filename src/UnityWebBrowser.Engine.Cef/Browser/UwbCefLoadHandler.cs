@@ -1,5 +1,7 @@
 using System.Linq;
+using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser
@@ -23,7 +25,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             if (ignoredLoadUrls.Contains(url))
                 return;
 
-            Logger.Debug($"Loading: {url}");
+            CefLoggerWrapper.Debug($"Loading: {url}");
 
             if (frame.IsMain) client.client.LoadStart(url);
         }
@@ -34,7 +36,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
             if (ignoredLoadUrls.Contains(url))
                 return;
 
-            Logger.Debug($"Loaded: {url}");
+            CefLoggerWrapper.Debug($"Loaded: {url}");
 
             if (frame.IsMain) client.client.LoadFinish(url);
         }
@@ -60,7 +62,7 @@ font-family: 'Ubuntu', sans-serif;
 <p>Error: {errorText}<br>(Code: {(int)errorCode})</p>";
             client.LoadHtml(html);
 
-            Logger.Error(
+            CefLoggerWrapper.Error(
                 $"An error occurred while trying to load '{failedUrl}'! Error: {errorText} (Code: {errorCode})");
         }
     }

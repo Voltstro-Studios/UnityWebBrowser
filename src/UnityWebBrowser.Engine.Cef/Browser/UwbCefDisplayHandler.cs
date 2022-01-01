@@ -1,5 +1,7 @@
 using System;
+using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
 using Xilium.CefGlue;
 
@@ -19,7 +21,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser
 
         protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
         {
-            Logger.Debug($"URL Change: {url}");
+            CefLoggerWrapper.Debug($"URL Change: {url}");
             client.UrlChange(url);
         }
 
@@ -60,17 +62,17 @@ namespace UnityWebBrowser.Engine.Cef.Browser
                     break;
                 case CefLogSeverity.Default:
                 case CefLogSeverity.Info:
-                    Logger.Info($"CEF: {message}");
+                    CefLoggerWrapper.Info($"CEF: {message}");
                     break;
                 case CefLogSeverity.Warning:
-                    Logger.Warn($"CEF: {message}");
+                    CefLoggerWrapper.Warn($"CEF: {message}");
                     break;
                 case CefLogSeverity.Error:
                 case CefLogSeverity.Fatal:
-                    Logger.Error($"CEF: {message}");
+                    CefLoggerWrapper.Error($"CEF: {message}");
                     break;
                 case CefLogSeverity.Verbose:
-                    Logger.Debug($"CEF: {message}");
+                    CefLoggerWrapper.Debug($"CEF: {message}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);

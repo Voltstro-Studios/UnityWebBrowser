@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
@@ -13,46 +14,47 @@ namespace UnityWebBrowser.Engine.Cef.Core
 	/// </summary>
 	internal class CefEngineManager : IEngine, IDisposable
     {
-        private readonly string[] args;
-        private readonly LaunchArguments launchArguments;
+        private string[] args;
+        private LaunchArguments launchArguments;
 
         private UwbCefClient cefClient;
+        private CefMainArgs cefMainArgs;
+        private UwbCefApp cefApp;
 
         /// <summary>
         ///     Creates a new <see cref="CefEngineManager" /> instance
         /// </summary>
-        /// <param name="arguments"></param>
-        /// <param name="rawArguments"></param>
         /// <exception cref="DllNotFoundException"></exception>
         /// <exception cref="CefVersionMismatchException"></exception>
         /// <exception cref="Exception"></exception>
-        public CefEngineManager(LaunchArguments arguments, string[] rawArguments)
+        public CefEngineManager()
         {
             //Setup CEF
             CefRuntime.Load();
-
-            launchArguments = arguments;
-            args = rawArguments;
         }
 
         /// <summary>
-        ///     Starts CEF
+        ///     Does early init stuff
         /// </summary>
-        /// <exception cref="Exception"></exception>
-        public void Init(IClient clientActions)
+        /// <param name="arguments"></param>
+        /// <param name="rawArguments"></param>
+        public void EarlyInit(LaunchArguments arguments, string[] rawArguments)
         {
+            launchArguments = arguments;
+            args = rawArguments;
+            
             // ReSharper disable once RedundantAssignment
             string[] argv = args;
 #if LINUX
-	        //On Linux we need to do this, otherwise it will just crash, no idea why tho
-			argv = new string[args.Length + 1];
-			Array.Copy(args, 0, argv, 1, args.Length);
-			argv[0] = "-";
+            //On Linux we need to do this, otherwise it will just crash, no idea why tho
+            argv = new string[args.Length + 1];
+            Array.Copy(args, 0, argv, 1, args.Length);
+            argv[0] = "-";
 #endif
 
             //Set up CEF args and the CEF app
-            CefMainArgs cefMainArgs = new(argv);
-            UwbCefApp cefApp = new(launchArguments);
+            cefMainArgs = new(argv);
+            cefApp = new(launchArguments);
 
             //Run our sub-processes
             int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
@@ -66,9 +68,16 @@ namespace UnityWebBrowser.Engine.Cef.Core
             if (argv.Any(arg => arg.StartsWith("--type=")))
             {
                 Environment.Exit(-2);
-                return;
+                throw new Exception("Invalid process type!");
             }
+        }
 
+        /// <summary>
+        ///     Starts CEF
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public void Init(IClient clientActions)
+        {
             //Do we have a cache or not, if not CEF will run in "incognito" mode.
             string cachePathArgument = null;
             if (launchArguments.CachePath != null)
@@ -137,7 +146,7 @@ namespace UnityWebBrowser.Engine.Cef.Core
             CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
         }
 
-        private static void PostTask(CefThreadId threadId, Action action)
+        public static void PostTask(CefThreadId threadId, Action action)
         {
             CefRuntime.PostTask(threadId, new CefActionTask(action));
         }

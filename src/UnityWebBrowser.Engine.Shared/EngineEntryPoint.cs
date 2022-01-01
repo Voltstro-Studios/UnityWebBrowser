@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
@@ -29,6 +30,13 @@ namespace UnityWebBrowser.Engine.Shared
         /// </summary>
         protected bool IsConnected => ipcClient.IsConnected;
 
+        protected abstract bool ShouldInitLogger(LaunchArguments launchArguments, string[] args);
+        
+        /// <summary>
+        ///     Do your early init stuff here
+        /// </summary>
+        protected abstract void EarlyInit(LaunchArguments launchArguments, string[] args);
+        
         /// <summary>
         ///     Called when the arguments are parsed.
         ///     <para>Remember to lock if you don't want to immediately exit</para>
@@ -134,7 +142,7 @@ namespace UnityWebBrowser.Engine.Shared
             rootCommand.Description = "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
             //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
             rootCommand.TreatUnmatchedTokensAsErrors = false;
-            
+
             //The new version of System.CommandLine is very boiler platey
             LaunchArgumentsBinder launchArgumentBinder = new(
                 initialUrl,
@@ -146,9 +154,22 @@ namespace UnityWebBrowser.Engine.Shared
                 logPath, logSeverity);
             rootCommand.SetHandler((LaunchArguments parsedArgs) =>
             {
+                if(ShouldInitLogger(parsedArgs, args))
+                    Logger.Init(parsedArgs.LogSeverity);
+                
                 //Is debug log enabled or not
-                Logger.DebugLog = parsedArgs.LogSeverity == LogSeverity.Debug;
                 ClientActions = new ClientActions();
+
+                //Run early init
+                try
+                {
+                    EarlyInit(parsedArgs, args);
+                }
+                catch (Exception)
+                {
+                    Environment.Exit(-1);
+                    return;
+                }
 
                 //Run the entry point
                 try
@@ -157,12 +178,14 @@ namespace UnityWebBrowser.Engine.Shared
                 }
                 catch (Exception ex)
                 {
-                    Logger.ErrorException(ex, "Uncaught exception occured in the entry point!");
+                    Logger.Error(ex, "Uncaught exception occured in the entry point!");
 #if DEBUG
                     Debugger.Break();
 #endif
                     Environment.Exit(-1);
                 }
+                
+                Logger.Shutdown();
             }, launchArgumentBinder);
 
             //Invoke the command line parser and start the handler (the stuff above)
@@ -181,15 +204,14 @@ namespace UnityWebBrowser.Engine.Shared
                 //Setup IPC, if we are pipes then we use the PipesHost/PipesClient, otherwise TCP
                 if (arguments.Pipes)
                 {
-                    Logger.Debug($"Using pipes host on pipe: '{arguments.InLocation}'");
+                    Logger.Debug("Using pipes host on pipe: {InLocation}", arguments.InLocation);
                     ipcHost = new PipesHost(arguments.InLocation);
 
-                    Logger.Debug($"Using pipes client on pipe: '{arguments.OutLocation}'");
+                    Logger.Debug("Using pipes client on pipe: {OutLocation}", arguments.OutLocation);
                     ipcClient = new PipesClient(arguments.OutLocation);
                 }
                 else
                 {
-                    Logger.Debug($"Using pipes host on pipe: '{arguments.InLocation}'");
                     if (!int.TryParse(arguments.InLocation, out int inPort))
                     {
                         Logger.Error("The provided in port is not an int!");
@@ -197,8 +219,8 @@ namespace UnityWebBrowser.Engine.Shared
                         Dispose();
                         return;
                     }
-
-                    Logger.Debug($"Using TCP host port: {inPort}");
+                    Logger.Debug("Using TCP host on port: {InLocation}", inPort);
+                    
                     IPEndPoint hostIp = new(IPAddress.Loopback, inPort);
                     ipcHost = new TCPHost(hostIp);
 
@@ -209,8 +231,8 @@ namespace UnityWebBrowser.Engine.Shared
                         Dispose();
                         return;
                     }
-
-                    Logger.Debug($"Using TCP client port: {outPort}");
+                    Logger.Debug($"Using TCP client on port: {outPort}");
+                    
                     IPEndPoint clientIp = new(IPAddress.Loopback, outPort);
                     ipcClient = new TCPClient(clientIp);
                 }
@@ -240,7 +262,7 @@ namespace UnityWebBrowser.Engine.Shared
             }
             catch (Exception ex)
             {
-                Logger.ErrorException(ex, "Error setting up IPC!");
+                Logger.Error(ex, "Error setting up IPC!");
             }
         }
 
