@@ -8,6 +8,11 @@ namespace UnityWebBrowser.Shared
     [Serializable]
     public struct Resolution
     {
+        /// <summary>
+        ///     Creates a new <see cref="Resolution"/> instance
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public Resolution(uint width, uint height)
         {
             Width = width;
