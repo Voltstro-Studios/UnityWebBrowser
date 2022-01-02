@@ -4,7 +4,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "UnityWebBrowser"
+        "UnityWebBrowser",
+        "UniTask",
+        "UniTask.Linq"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

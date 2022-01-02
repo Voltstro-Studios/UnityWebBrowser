@@ -139,16 +139,29 @@ namespace UnityWebBrowser
 
         #region IsReady
 
+        /// <summary>
+        ///     The UWB engine has signaled that it is ready
+        /// </summary>
+        public bool ReadySignalReceived
+        {
+            get;
+            internal set;
+        }
+
         private object isReadyLock;
         private bool isReady;
         
         /// <summary>
-        ///     Is UWB ready?
+        ///     Is everything for UWB ready? (Engine and client)
         /// </summary>
         public bool IsReady 
         {
+            // ReSharper disable InconsistentlySynchronizedField
             get
             {
+                if (isReadyLock == null)
+                    return isReady;
+
                 lock (isReadyLock)
                 {
                     return isReady;
@@ -156,11 +169,18 @@ namespace UnityWebBrowser
             }
             private set
             {
+                if (isReadyLock == null)
+                {
+                    isReady = value;
+                    return;
+                }
+                
                 lock (isReadyLock)
                 {
                     isReady = value;
                 }
             }
+            // ReSharper restore InconsistentlySynchronizedField
         }
 
         #endregion
@@ -351,43 +371,33 @@ namespace UnityWebBrowser
             
             cancellationToken = new CancellationTokenSource();
 
-            WaitForEngineReady();
+            UniTask.Create(WaitForEngineReadyTask);
         }
 
         #region Readying
-        
-        private bool readySignalReceived;
 
         /// <summary>
-        ///     Will wait for <see cref="readySignalReceived"/> to be true
+        ///     Will wait for <see cref="ReadySignalReceived"/> to be true
         /// </summary>
-        private void WaitForEngineReady()
+        internal async UniTask WaitForEngineReadyTask()
         {
-            UniTask.Void(async () =>
+            try
             {
-                try
-                {
-                    await WaitForEngineReadyTask()
-                        .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout));
-                }
-                catch (TimeoutException)
-                {
-                    logger.Error("The engine did not get ready within engine startup timeout!");
-                    await using (UniTask.ReturnToMainThread())
-                        Dispose();
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"An unknown error occured while waiting for engine to get ready! {ex}");
-                    await using (UniTask.ReturnToMainThread())
-                        Dispose();
-                }
-            });
-        }
-        
-        private async UniTask WaitForEngineReadyTask()
-        {
-            await UniTask.WaitUntil(() => readySignalReceived);
+                await UniTask.WaitUntil(() => ReadySignalReceived)
+                    .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout));
+            }
+            catch (TimeoutException)
+            {
+                logger.Error("The engine did not get ready within engine startup timeout!");
+                await using (UniTask.ReturnToMainThread())
+                    Dispose();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"An unknown error occured while waiting for engine to get ready! {ex}");
+                await using (UniTask.ReturnToMainThread())
+                    Dispose();
+            }
         }
 
         /// <summary>
@@ -395,7 +405,7 @@ namespace UnityWebBrowser
         /// </summary>
         internal async UniTaskVoid EngineReady()
         {
-            readySignalReceived = true;
+            ReadySignalReceived = true;
 
             try
             {
@@ -710,14 +720,21 @@ namespace UnityWebBrowser
         }
 #endif
 
-        private bool hasDisposed;
+        /// <summary>
+        ///     Has this object been disposed
+        /// </summary>
+        public bool HasDisposed
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         ///     Destroys this <see cref="WebBrowserClient" /> instance
         /// </summary>
         public void Dispose()
         {
-            if(hasDisposed)
+            if(HasDisposed)
                 return;
             
             ReleaseResources();
@@ -726,21 +743,22 @@ namespace UnityWebBrowser
 
         private void ReleaseResources()
         {
-            if(hasDisposed)
+            if(HasDisposed)
                 return;
 
-            hasDisposed = true;
+            HasDisposed = true;
             logger.Debug("UWB shutdown...");
             
-            cancellationToken.Cancel();
-            Object.Destroy(BrowserTexture);
+            cancellationToken?.Cancel();
+            if(BrowserTexture != null)
+                Object.Destroy(BrowserTexture);
             
             if (IsReady && IsConnected)
                 communicationsManager.Shutdown();
 
             try
             {
-                communicationsManager.Dispose();
+                communicationsManager?.Dispose();
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@ namespace UnityWebBrowser.Logging
             {
                 JsonLogStructure logStructure = ReadJsonLog(e.Data);
 
-                if (logStructure.Level == LogSeverity.Debug || logStructure.Level == LogSeverity.Info)
+                if (logStructure.Level is LogSeverity.Debug or LogSeverity.Info)
                     logger.Debug(logStructure.Message);
                 else if(logStructure.Level == LogSeverity.Warn)
                     logger.Warn(logStructure.Message);
@@ -39,7 +39,7 @@ namespace UnityWebBrowser.Logging
             }
             catch (Exception ex)
             {
-                
+                logger.Error($"An error occured with processing a log event from the UWB engine! {ex}");
             }
         }
 
