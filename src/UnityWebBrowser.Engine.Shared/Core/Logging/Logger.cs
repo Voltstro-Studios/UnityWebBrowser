@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
 using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Engine.Shared.Core.Logging;
@@ -81,7 +82,10 @@ public static class Logger
 
         log = new LoggerConfiguration()
             .MinimumLevel.ControlledBy(level)
-            .WriteTo.Console(new RenderedCompactJsonFormatter(), logEventLevel)
+            .WriteTo.Console(new RenderedCompactJsonFormatter
+            {
+                
+            }, logEventLevel)
             .CreateLogger();
 
         log.Debug("Logger initialized at {@Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));

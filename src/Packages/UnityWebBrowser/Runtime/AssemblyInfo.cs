@@ -33,3 +33,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("2.0.0")]
 
 [assembly: InternalsVisibleTo("UnityWebBrowser.Editor")]
+[assembly: InternalsVisibleTo("UnityWebBrowser.Tests")]

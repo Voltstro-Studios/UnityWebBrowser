@@ -5,7 +5,8 @@
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "UnityWebBrowser.Editor.BE",
-        "UniTask"
+        "UniTask",
+        ""
     ],
     "includePlatforms": [
         "Editor",
@@ -17,6 +18,7 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "UnityWebBrowser.Shared.dll",
+        "Newtonsoft.Json.dll",
         "VoltRpc.dll",
         "VoltRpc.Communication.Pipes.dll"
     ],
