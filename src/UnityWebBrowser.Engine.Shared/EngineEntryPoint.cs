@@ -250,7 +250,7 @@ namespace UnityWebBrowser.Engine.Shared
                     ipcClient.Connect();
                     ClientActions.SetIpcClient(ipcClient);
                 }
-                catch (ConnectionFailed)
+                catch (ConnectionFailedException)
                 {
                     Logger.Error(
                         "The engine failed to connect back to the Unity client! Client events will not fire!");

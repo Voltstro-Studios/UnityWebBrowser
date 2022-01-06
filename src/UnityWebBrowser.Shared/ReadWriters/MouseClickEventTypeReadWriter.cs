@@ -4,11 +4,10 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters
 {
-    public sealed class MouseClickEventTypeReadWriter : ITypeReadWriter
+    public sealed class MouseClickEventTypeReadWriter : TypeReadWriter<MouseClickEvent>
     {
-        public void Write(BufferedWriter writer, object obj)
+        public override void Write(BufferedWriter writer, MouseClickEvent mouseClickEvent)
         {
-            MouseClickEvent mouseClickEvent = (MouseClickEvent)obj;
             writer.WriteInt(mouseClickEvent.MouseX);
             writer.WriteInt(mouseClickEvent.MouseY);
             writer.WriteInt(mouseClickEvent.MouseClickCount);
@@ -16,7 +15,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
             writer.WriteByte((byte)mouseClickEvent.MouseEventType);
         }
 
-        public object Read(BufferedReader reader)
+        public override MouseClickEvent Read(BufferedReader reader)
         {
             return new MouseClickEvent
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Proxy;
 using VoltRpc.Communication;
-using VoltRpc.Proxy.Generated;
 
 #nullable enable
 namespace UnityWebBrowser.Engine.Shared

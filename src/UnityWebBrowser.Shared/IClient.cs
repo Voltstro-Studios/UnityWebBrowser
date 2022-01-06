@@ -5,7 +5,7 @@ namespace UnityWebBrowser.Shared
     /// <summary>
     ///     Shared interface for events that client has
     /// </summary>
-    [GenerateProxy(GeneratedName = "ClientProxy")]
+    [GenerateProxy(GeneratedName = "ClientProxy", GeneratedNamespace = "UnityWebBrowser.Shared.Proxy")]
     public interface IClient
     {
         /// <summary>

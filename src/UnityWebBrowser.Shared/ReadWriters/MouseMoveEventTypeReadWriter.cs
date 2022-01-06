@@ -4,16 +4,15 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters
 {
-    public sealed class MouseMoveEventTypeReadWriter : ITypeReadWriter
+    public sealed class MouseMoveEventTypeReadWriter : TypeReadWriter<MouseMoveEvent>
     {
-        public void Write(BufferedWriter writer, object obj)
+        public override void Write(BufferedWriter writer, MouseMoveEvent mouseMove)
         {
-            MouseMoveEvent mouseMove = (MouseMoveEvent)obj;
             writer.WriteInt(mouseMove.MouseX);
             writer.WriteInt(mouseMove.MouseY);
         }
 
-        public object Read(BufferedReader reader)
+        public override MouseMoveEvent Read(BufferedReader reader)
         {
             return new MouseMoveEvent
             {

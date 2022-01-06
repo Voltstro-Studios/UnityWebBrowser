@@ -3,16 +3,15 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters
 {
-    public class ResolutionTypeReadWriter : ITypeReadWriter
+    public class ResolutionTypeReadWriter : TypeReadWriter <Resolution>
     {
-        public void Write(BufferedWriter writer, object obj)
+        public override void Write(BufferedWriter writer, Resolution resolution)
         {
-            Resolution resolution = (Resolution)obj;
             writer.WriteUInt(resolution.Width);
             writer.WriteUInt(resolution.Height);
         }
 
-        public object Read(BufferedReader reader)
+        public override Resolution Read(BufferedReader reader)
         {
             return new Resolution(reader.ReadUInt(), reader.ReadUInt());
         }

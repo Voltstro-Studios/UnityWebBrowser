@@ -5,11 +5,10 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters
 {
-    public class PixelsEventTypeReadWriter : ITypeReadWriter
+    public class PixelsEventTypeReadWriter : TypeReadWriter<PixelsEvent>
     {
-        public void Write(BufferedWriter writer, object obj)
+        public override void Write(BufferedWriter writer, PixelsEvent pixelsEvent)
         {
-            PixelsEvent pixelsEvent = (PixelsEvent)obj;
             if (pixelsEvent.PixelData == null)
             {
                 writer.WriteInt(-1);
@@ -22,7 +21,7 @@ namespace UnityWebBrowser.Shared.ReadWriters
                 writer.WriteByte(b);
         }
 
-        public object Read(BufferedReader reader)
+        public override PixelsEvent Read(BufferedReader reader)
         {
             PixelsEvent pixelsEvent = new PixelsEvent();
             int size = reader.ReadInt();
