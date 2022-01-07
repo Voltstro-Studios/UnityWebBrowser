@@ -17,10 +17,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<int> remoteDebugging;
     private readonly Option<FileInfo> cachePath;
 
-    private readonly Option<byte> bcr;
-    private readonly Option<byte> bcg;
-    private readonly Option<byte> bcb;
-    private readonly Option<byte> bca;
+    private readonly Option<Color> backgroundColor;
 
     private readonly Option<bool> proxyServer;
     private readonly Option<string> proxyUsername;
@@ -36,7 +33,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     public LaunchArgumentsBinder(Option<string> initialUrl, 
         Option<int> width, Option<int> height, 
         Option<bool> javaScript, Option<bool> webRtc, Option<int> remoteDebugging, Option<FileInfo> cachePath, 
-        Option<byte> bcr, Option<byte> bcg, Option<byte> bcb, Option<byte> bca, 
+        Option<Color> backgroundColor,
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword, 
         Option<bool> pipes, Option<string> inLocation, Option<string> outLocation, 
         Option<FileInfo> logPath, Option<LogSeverity> logSeverity)
@@ -48,10 +45,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.webRtc = webRtc;
         this.remoteDebugging = remoteDebugging;
         this.cachePath = cachePath;
-        this.bcr = bcr;
-        this.bcg = bcg;
-        this.bcb = bcb;
-        this.bca = bca;
+        this.backgroundColor = backgroundColor;
         this.proxyServer = proxyServer;
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
@@ -75,11 +69,8 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             WebRtc = bindingContext.ParseResult.GetValueForOption(webRtc),
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
             
-            Bcr = bindingContext.ParseResult.GetValueForOption(bcr),
-            Bcg = bindingContext.ParseResult.GetValueForOption(bcg),
-            Bcb = bindingContext.ParseResult.GetValueForOption(bcb),
-            Bca = bindingContext.ParseResult.GetValueForOption(bca),
-            
+            BackgroundColor = bindingContext.ParseResult.GetValueForOption(backgroundColor),
+
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
             
             ProxyEnabled = bindingContext.ParseResult.GetValueForOption(proxyServer),

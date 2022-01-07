@@ -298,10 +298,7 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("javascript", javascript);
 
             //Background color
-            argsBuilder.AppendArgument("bcr", backgroundColor.r);
-            argsBuilder.AppendArgument("bcg", backgroundColor.g);
-            argsBuilder.AppendArgument("bcb", backgroundColor.b);
-            argsBuilder.AppendArgument("bca", backgroundColor.a);
+            argsBuilder.AppendArgument("background-color", WebBrowserUtils.ColorToHex(backgroundColor));
 
             //Logging
             LogPath ??= new FileInfo($"{browserEngineMainDir}/{browserEngine}.log");

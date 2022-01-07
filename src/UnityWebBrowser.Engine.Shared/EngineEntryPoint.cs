@@ -87,18 +87,9 @@ namespace UnityWebBrowser.Engine.Shared
                 "The path to the cache (null for no cache)");
 
             //Background color
-            Option<byte> bcr = new Option<byte>("-bcr",
-                () => 255,
-                "Background color (red)");
-            Option<byte> bcg = new Option<byte>("-bcg",
-                () => 255,
-                "Background color (green)");
-            Option<byte> bcb = new Option<byte>("-bcb",
-                () => 255,
-                "Background color (blue)");
-            Option<byte> bca = new Option<byte>("-bca",
-                () => 255,
-                "Background color (alpha)");
+            Option<Color> backgroundColor = new Option<Color>("-background-color",
+                () => new Color("ffffffff"),
+                "The color to use for the background");
 
             //Proxy settings
             Option<bool> proxyServer = new Option<bool>("-proxy-server",
@@ -134,7 +125,7 @@ namespace UnityWebBrowser.Engine.Shared
                 initialUrl,
                 width, height,
                 javaScript, webRtc, remoteDebugging, cachePath,
-                bcr, bcg, bcb, bca,
+                backgroundColor,
                 proxyServer, proxyUsername, proxyPassword, 
                 pipes, inLocation, outLocation, 
                 logPath, logSeverity
@@ -148,7 +139,7 @@ namespace UnityWebBrowser.Engine.Shared
                 initialUrl,
                 width, height,
                 javaScript, webRtc, remoteDebugging, cachePath,
-                bcr, bcg, bcb, bca,
+                backgroundColor,
                 proxyServer, proxyUsername, proxyPassword, 
                 pipes, inLocation, outLocation, 
                 logPath, logSeverity);

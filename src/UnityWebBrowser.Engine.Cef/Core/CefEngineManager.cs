@@ -122,8 +122,8 @@ namespace UnityWebBrowser.Engine.Cef.Core
             cefWindowInfo.SetAsWindowless(IntPtr.Zero, false);
 
             //Create our CEF browser settings
-            CefColor backgroundColor = new(launchArguments.Bca, launchArguments.Bcr, launchArguments.Bcg,
-                launchArguments.Bcb);
+            Color suppliedColor = launchArguments.BackgroundColor;
+            CefColor backgroundColor = new(suppliedColor.A, suppliedColor.R, suppliedColor.G, suppliedColor.B);
             CefBrowserSettings cefBrowserSettings = new()
             {
                 BackgroundColor = backgroundColor,
@@ -131,9 +131,9 @@ namespace UnityWebBrowser.Engine.Cef.Core
                 LocalStorage = CefState.Disabled
             };
 
-            Logger.Debug("CEF starting with these options:" +
+            Logger.Debug("Starting CEF with these options:" +
                          $"\nJS: {launchArguments.JavaScript}" +
-                         $"\nBackgroundColor: {backgroundColor}" +
+                         $"\nBackgroundColor: {suppliedColor}" +
                          $"\nCache Path: {cachePathArgument}" +
                          $"\nLog Path: {launchArguments.LogPath.FullName}" +
                          $"\nLog Severity: {launchArguments.LogSeverity}");

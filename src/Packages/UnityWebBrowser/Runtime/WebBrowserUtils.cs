@@ -105,6 +105,15 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
+        ///     Converts a <see cref="Color32"/> to hex
+        /// </summary>
+        /// <param name="color"></param>
+        public static string ColorToHex(Color32 color)
+        {
+            return ColorUtility.ToHtmlStringRGBA(color);
+        }
+
+        /// <summary>
         ///     Sets every single pixel in a <see cref="Texture2D"/> to one <see cref="Color32"/>
         /// </summary>
         /// <param name="texture"></param>

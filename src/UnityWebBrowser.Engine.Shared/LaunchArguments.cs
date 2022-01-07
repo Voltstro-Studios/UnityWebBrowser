@@ -39,24 +39,9 @@ namespace UnityWebBrowser.Engine.Shared
         public int RemoteDebugging { get; init; }
 
         /// <summary>
-        ///     Background color (red)
+        ///     The <see cref="Color"/> to use for the background
         /// </summary>
-        public byte Bcr { get; init; }
-
-        /// <summary>
-        ///     Background color (green)
-        /// </summary>
-        public byte Bcg { get; init; }
-
-        /// <summary>
-        ///     Background color (blue)
-        /// </summary>
-        public byte Bcb { get; init; }
-
-        /// <summary>
-        ///     Background color (alpha)
-        /// </summary>
-        public byte Bca { get; init; }
+        public Color BackgroundColor { get; init; }
 
         /// <summary>
         ///     The path you should use for your cache

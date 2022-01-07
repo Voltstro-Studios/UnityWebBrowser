@@ -22,6 +22,8 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Shared", "UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj", "{2AC661BC-6119-49AF-876C-52F756B10E42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Tests", "UnityWebBrowser.Tests\UnityWebBrowser.Tests.csproj", "{A96CD9A3-9F63-4BDB-91DA-227759EABE99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,12 @@ Global
 		{2AC661BC-6119-49AF-876C-52F756B10E42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AC661BC-6119-49AF-876C-52F756B10E42}.ReleaseUnity|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AC661BC-6119-49AF-876C-52F756B10E42}.ReleaseUnity|Any CPU.Build.0 = Debug|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.ReleaseUnity|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.ReleaseUnity|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
