@@ -2,17 +2,15 @@
 using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Communications;
+using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
-using VoltRpc.Communication.Pipes;
-using VoltRpc.Communication.TCP;
 
-namespace UnityWebBrowser.Engine.Shared
+namespace UnityWebBrowser.Engine.Shared.Core
 {
 	/// <summary>
 	///     Handles entry stuff for browser engines

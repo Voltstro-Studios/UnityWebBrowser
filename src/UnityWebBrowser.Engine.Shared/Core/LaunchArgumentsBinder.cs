@@ -3,7 +3,7 @@ using System.CommandLine.Binding;
 using System.IO;
 using UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Engine.Shared;
+namespace UnityWebBrowser.Engine.Shared.Core;
 
 public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
 {

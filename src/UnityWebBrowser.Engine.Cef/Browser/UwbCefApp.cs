@@ -1,4 +1,5 @@
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser

@@ -1,7 +1,7 @@
 ﻿using UnityWebBrowser.Shared.Events;
 using VoltRpc.Proxy;
 
-namespace UnityWebBrowser.Shared
+namespace UnityWebBrowser.Shared.Core
 {
     /// <summary>
     ///     Shared interface for a UWB engine
@@ -9,7 +9,7 @@ namespace UnityWebBrowser.Shared
     ///         Defines what RPC calls the client can call to invoke on the UWB engine
     ///     </para>
     /// </summary>
-    [GenerateProxy(GeneratedName = "EngineProxy")]
+    [GenerateProxy(GeneratedName = "EngineProxy", GeneratedNamespace = "UnityWebBrowser.Shared.Proxy")]
     public interface IEngine
     {
         /// <summary>

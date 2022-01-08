@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using Xilium.CefGlue;
 

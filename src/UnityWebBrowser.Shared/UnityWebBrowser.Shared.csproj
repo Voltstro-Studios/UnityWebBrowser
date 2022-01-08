@@ -3,7 +3,7 @@
     <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>9</LangVersion>
         <AssemblyTitle>Unity Web Browser Shared</AssemblyTitle>
         <Description>Shared resources for Unity Web Browser engines and Unity</Description>
@@ -11,6 +11,7 @@
         <Platforms>AnyCPU</Platforms>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <IsTrimmable>false</IsTrimmable>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Proxy;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
-using VoltRpc.Communication.Pipes;
-using VoltRpc.Communication.TCP;
-using VoltRpc.Proxy.Generated;
 
 namespace UnityWebBrowser
 {

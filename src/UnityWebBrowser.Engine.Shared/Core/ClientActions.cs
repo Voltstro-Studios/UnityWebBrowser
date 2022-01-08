@@ -1,10 +1,10 @@
 ﻿using System;
-using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Proxy;
 using VoltRpc.Communication;
 
 #nullable enable
-namespace UnityWebBrowser.Engine.Shared
+namespace UnityWebBrowser.Engine.Shared.Core
 {
     /// <summary>
     ///     This is a wrapper around <see cref="IClient"/>. It checks if we are connected first before firing an event.

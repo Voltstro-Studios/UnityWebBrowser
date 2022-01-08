@@ -1,6 +1,6 @@
 using System;
 
-namespace UnityWebBrowser.Engine.Shared.Core;
+namespace UnityWebBrowser.Shared;
 
 /// <summary>
 ///     An error when something failed while initializing or de-initializing

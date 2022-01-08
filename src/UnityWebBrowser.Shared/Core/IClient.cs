@@ -1,6 +1,6 @@
 ﻿using VoltRpc.Proxy;
 
-namespace UnityWebBrowser.Shared
+namespace UnityWebBrowser.Shared.Core
 {
     /// <summary>
     ///     Shared interface for events that client has

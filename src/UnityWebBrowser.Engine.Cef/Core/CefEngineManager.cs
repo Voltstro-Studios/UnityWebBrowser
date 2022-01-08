@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
+using UnityWebBrowser.Engine.Shared.Core;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 

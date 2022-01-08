@@ -3,6 +3,7 @@ using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Core;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser

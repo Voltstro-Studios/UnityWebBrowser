@@ -1,7 +1,7 @@
 using System.IO;
 using UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Engine.Shared
+namespace UnityWebBrowser.Engine.Shared.Core
 {
     /// <summary>
     ///     Launch arguments for the app

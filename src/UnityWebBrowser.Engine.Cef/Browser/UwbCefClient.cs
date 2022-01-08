@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
 using Xilium.CefGlue;
 
