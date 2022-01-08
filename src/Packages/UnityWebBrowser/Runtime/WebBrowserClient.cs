@@ -280,11 +280,7 @@ namespace UnityWebBrowser
             
             //Check communication layer
             if (communicationLayer.IsInUse)
-            {
-                //TODO: Custom exception
-                throw new Exception("The communication layer is already in use!");
-            }
-
+                throw new InitializationException("The communication layer is already in use!");
             communicationLayer.IsInUse = true;
 
             isReadyLock = new object();
