@@ -49,21 +49,8 @@ namespace UnityWebBrowser
             logger = browserClient.logger;
             client = browserClient;
 
-            if (browserClient.ipcSettings.preferPipes)
-            {
-                logger.Debug("Using pipes communication...");
-
-                ipcHost = new PipesHost(browserClient.ipcSettings.inPipeName);
-                ipcClient = new PipesClient(browserClient.ipcSettings.outPipeName, browserClient.ipcSettings.connectionTimeout,
-                    Client.DefaultBufferSize);
-            }
-            else
-            {
-                logger.Debug("Using TCP communication...");
-
-                ipcHost = new TCPHost(new IPEndPoint(IPAddress.Loopback, (int)browserClient.ipcSettings.inPort));
-                ipcClient = new TCPClient(new IPEndPoint(IPAddress.Loopback, (int)browserClient.ipcSettings.outPort));
-            }
+            ipcClient = browserClient.communicationLayer.CreateClient();
+            ipcHost = browserClient.communicationLayer.CreateHost();
 
             ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService<IClient>(this);

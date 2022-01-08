@@ -23,7 +23,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<string> proxyUsername;
     private readonly Option<string> proxyPassword;
 
-    private readonly Option<bool> pipes;
+    private readonly Option<FileInfo> communicationLayerPath;
     private readonly Option<string> inLocation;
     private readonly Option<string> outLocation;
 
@@ -35,7 +35,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<bool> javaScript, Option<bool> webRtc, Option<int> remoteDebugging, Option<FileInfo> cachePath, 
         Option<Color> backgroundColor,
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword, 
-        Option<bool> pipes, Option<string> inLocation, Option<string> outLocation, 
+        Option<FileInfo> communicationLayerPath, Option<string> inLocation, Option<string> outLocation, 
         Option<FileInfo> logPath, Option<LogSeverity> logSeverity)
     {
         this.initialUrl = initialUrl;
@@ -49,7 +49,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.proxyServer = proxyServer;
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
-        this.pipes = pipes;
+        this.communicationLayerPath = communicationLayerPath;
         this.inLocation = inLocation;
         this.outLocation = outLocation;
         this.logPath = logPath;
@@ -77,7 +77,7 @@ public class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             ProxyUsername = bindingContext.ParseResult.GetValueForOption(proxyUsername),
             ProxyPassword = bindingContext.ParseResult.GetValueForOption(proxyPassword),
             
-            Pipes = bindingContext.ParseResult.GetValueForOption(pipes),
+            CommunicationLayerPath = bindingContext.ParseResult.GetValueForOption(communicationLayerPath),
             InLocation = bindingContext.ParseResult.GetValueForOption(inLocation),
             OutLocation = bindingContext.ParseResult.GetValueForOption(outLocation),
             

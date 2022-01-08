@@ -63,10 +63,7 @@ namespace UnityWebBrowser.Engine.Shared
         /// </summary>
         public string ProxyPassword { get; init; }
 
-        /// <summary>
-        ///     Pipes or not
-        /// </summary>
-        public bool Pipes { get; init; }
+        public FileInfo CommunicationLayerPath { get; init; }
 
         /// <summary>
         ///     In location (Either the pipe name or port)

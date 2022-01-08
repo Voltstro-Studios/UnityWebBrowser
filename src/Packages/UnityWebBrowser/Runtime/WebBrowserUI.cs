@@ -216,55 +216,6 @@ namespace UnityWebBrowser
             }
         }
 
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            //Use this to check user settings
-            if (browserClient.ipcSettings.preferPipes)
-            {
-                if (string.IsNullOrWhiteSpace(browserClient.ipcSettings.inPipeName))
-                {
-                    browserClient.ipcSettings.inPipeName = "UnityWebBrowserIn";
-                    Debug.LogError("The in pipe name cannot be null or white space!");
-                }
-
-                if (string.IsNullOrWhiteSpace(browserClient.ipcSettings.outPipeName))
-                {
-                    browserClient.ipcSettings.outPipeName = "UnityWebBrowserOut";
-                    Debug.LogError("The out pipe name cannot be null or white space!");
-                }
-
-                if (browserClient.ipcSettings.inPipeName == browserClient.ipcSettings.outPipeName)
-                {
-                    browserClient.ipcSettings.inPipeName = "UnityWebBrowserIn";
-                    browserClient.ipcSettings.outPipeName = "UnityWebBrowserOut";
-                    Debug.LogError("The pipe names cannot be the same!");
-                }
-            }
-            else
-            {
-                if (browserClient.ipcSettings.inPort == browserClient.ipcSettings.outPort)
-                {
-                    browserClient.ipcSettings.outPort = 5555;
-                    browserClient.ipcSettings.inPort = 5556;
-                    Debug.LogError("The in and out IPC ports cannot be the same!");
-                }
-
-                if (browserClient.remoteDebugging &&
-                    browserClient.remoteDebuggingPort == browserClient.ipcSettings.inPort ||
-                    browserClient.remoteDebuggingPort == browserClient.ipcSettings.outPort)
-                {
-                    browserClient.remoteDebuggingPort = 9022;
-                    browserClient.ipcSettings.outPort = 5555;
-                    browserClient.ipcSettings.inPort = 5556;
-                    Debug.LogError("The remote debugging port cannot be the same as the in or out IPC ports!");
-                }
-            }
-        }
-
-#endif
-
         public void OnPointerEnter(PointerEventData eventData)
         {
             if(browserClient is {IsConnected: false})

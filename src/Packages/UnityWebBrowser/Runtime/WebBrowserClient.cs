@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
+using UnityWebBrowser.Communication;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
@@ -110,10 +111,11 @@ namespace UnityWebBrowser
         public uint remoteDebuggingPort = 9022;
 
         /// <summary>
-        ///     Settings related to IPC
+        ///     The <see cref="CommunicationLayer"/> to use
         /// </summary>
         [Header("IPC Settings")] 
-        public WebBrowserIpcSettings ipcSettings = new();
+        [Tooltip("The communication layer to use")]
+        public CommunicationLayer communicationLayer;
 
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
@@ -275,6 +277,15 @@ namespace UnityWebBrowser
                 logger.Error("The browser engine process doesn't exist!");
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
+            
+            //Check communication layer
+            if (communicationLayer.IsInUse)
+            {
+                //TODO: Custom exception
+                throw new Exception("The communication layer is already in use!");
+            }
+
+            communicationLayer.IsInUse = true;
 
             isReadyLock = new object();
             
@@ -306,19 +317,11 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
             //IPC settings
-            argsBuilder.AppendArgument("pipes", ipcSettings.preferPipes);
-            if (ipcSettings.preferPipes)
-            {
-                argsBuilder.AppendArgument("in-location", ipcSettings.outPipeName, true);
-                argsBuilder.AppendArgument("out-location", ipcSettings.inPipeName, true);
-            }
-            else
-            {
-                argsBuilder.AppendArgument("in-location", ipcSettings.outPort);
-                argsBuilder.AppendArgument("out-location", ipcSettings.inPort);
-            }
+            communicationLayer.GetIpcSettings(out object outLocation, out object inLocation);
+            argsBuilder.AppendArgument("in-location", inLocation, true);
+            argsBuilder.AppendArgument("out-location", outLocation, true);
 
-            //If we have a cache, set the cache path
+                //If we have a cache, set the cache path
             if (cache)
             {
                 cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
@@ -761,6 +764,8 @@ namespace UnityWebBrowser
             {
                 logger.Error($"Some error occured while destroying the communications manager! {ex}");
             }
+
+            communicationLayer.IsInUse = false;
 
             if (serverProcess != null)
             {

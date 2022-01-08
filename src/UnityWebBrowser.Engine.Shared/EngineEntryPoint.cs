@@ -3,8 +3,10 @@ using System.CommandLine;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Communications;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
 using VoltRpc.Communication.Pipes;
@@ -103,14 +105,14 @@ namespace UnityWebBrowser.Engine.Shared
                 "The password to use in the proxy auth");
             
             //IPC settings
-            Option<bool> pipes = new Option<bool>("-pipes",
-                () => true,
+            Option<FileInfo> communicationLayerPath = new Option<FileInfo>("-comms-layer-path",
+                () => null,
                 "Use pipes or TCP");
             Option<string> inLocation = new Option<string>("-in-location",
-                () => "UnityWebBrowserIn",
+                () => "5555",
                 "In location for IPC (Pipes location or TCP port in TCP mode)");
             Option<string> outLocation = new Option<string>("-out-location",
-                () => "UnityWebBrowserOut",
+                () => "5556",
                 "Out location for IPC (Pipes location or TCP port in TCP mode)");
 
             Option<FileInfo> logPath = new Option<FileInfo>("-log-path",
@@ -127,7 +129,7 @@ namespace UnityWebBrowser.Engine.Shared
                 javaScript, webRtc, remoteDebugging, cachePath,
                 backgroundColor,
                 proxyServer, proxyUsername, proxyPassword, 
-                pipes, inLocation, outLocation, 
+                communicationLayerPath, inLocation, outLocation, 
                 logPath, logSeverity
             };
             rootCommand.Description = "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
@@ -141,7 +143,7 @@ namespace UnityWebBrowser.Engine.Shared
                 javaScript, webRtc, remoteDebugging, cachePath,
                 backgroundColor,
                 proxyServer, proxyUsername, proxyPassword, 
-                pipes, inLocation, outLocation, 
+                communicationLayerPath, inLocation, outLocation, 
                 logPath, logSeverity);
             rootCommand.SetHandler((LaunchArguments parsedArgs) =>
             {
@@ -192,42 +194,29 @@ namespace UnityWebBrowser.Engine.Shared
         {
             try
             {
-                //Setup IPC, if we are pipes then we use the PipesHost/PipesClient, otherwise TCP
-                if (arguments.Pipes)
+                ICommunicationLayer communicationLayer;
+                if (arguments.CommunicationLayerPath == null)
                 {
-                    Logger.Debug("Using pipes host on pipe: {InLocation}", arguments.InLocation);
-                    ipcHost = new PipesHost(arguments.InLocation);
-
-                    Logger.Debug("Using pipes client on pipe: {OutLocation}", arguments.OutLocation);
-                    ipcClient = new PipesClient(arguments.OutLocation);
+                    //Use TCP
+                    Logger.Debug("No communication layer provided, using default TCP...");
+                    communicationLayer = new TCPCommunicationLayer();
                 }
                 else
                 {
-                    if (!int.TryParse(arguments.InLocation, out int inPort))
-                    {
-                        Logger.Error("The provided in port is not an int!");
+                    throw new NotImplementedException();
+                }
 
-                        Dispose();
-                        return;
-                    }
-                    Logger.Debug("Using TCP host on port: {InLocation}", inPort);
-                    
-                    IPEndPoint hostIp = new(IPAddress.Loopback, inPort);
-                    ipcHost = new TCPHost(hostIp);
-
-                    if (!int.TryParse(arguments.OutLocation, out int outPort))
-                    {
-                        Logger.Error("The provided out port is not an int!");
-
-                        Dispose();
-                        return;
-                    }
-                    Logger.Debug($"Using TCP client on port: {outPort}");
-                    
-                    IPEndPoint clientIp = new(IPAddress.Loopback, outPort);
-                    ipcClient = new TCPClient(clientIp);
+                try
+                {
+                    ipcHost = communicationLayer.CreateHost(arguments.InLocation);
+                    ipcClient = communicationLayer.CreateClient(arguments.OutLocation);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "An error occured setting up the communication layer!");
                 }
                 
+                //Add type readers
                 ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
                 ipcHost.AddService(typeof(IEngine), engine);
                 ipcHost.StartListening();
