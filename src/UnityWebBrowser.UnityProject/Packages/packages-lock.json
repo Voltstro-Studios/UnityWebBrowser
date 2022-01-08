@@ -91,8 +91,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "2.0.2",
         "com.cysharp.unitask": "2.2.5",
-        "org.nuget.voltrpc": "2.0.0",
-        "org.nuget.voltrpc.communication.pipes": "2.0.0"
+        "org.nuget.voltrpc": "2.0.0"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
@@ -124,15 +123,6 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.voltrpc.communication.pipes": {
-      "version": "2.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.voltrpc": "2.0.0"
-      },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.imgui": {
