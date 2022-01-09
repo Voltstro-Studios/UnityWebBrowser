@@ -1,0 +1,12 @@
+{
+  "name": "dev.voltstro.unitywebbrowser.communication.pipes",
+  "displayName": "Unity Web Browser Pipes Communication",
+  "version": "1.0.0",
+  "unity": "2021.2",
+  "description": "Adds support to use pipes in UWB.",
+  "author": "Voltstro",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser": "2.0.0",
+    "org.nuget.voltrpc.communication.pipes": "2.0.0"
+  }
+}
