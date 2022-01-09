@@ -18,32 +18,27 @@ namespace UnityWebBrowser
     /// </summary>
     internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
-        private static ProfilerMarker sendEventMarker = new ("UWB.SendEvent");
-        
+        private static ProfilerMarker sendEventMarker = new("UWB.SendEvent");
+        private readonly WebBrowserClient client;
+
         private readonly IEngine engineProxy;
         private readonly Client ipcClient;
         private readonly Host ipcHost;
 
-        private readonly SynchronizationContext unityThread;
-        private readonly object threadLock;
-        
         private readonly IWebBrowserLogger logger;
-        private readonly WebBrowserClient client;
+        private readonly object threadLock;
+
+        private readonly SynchronizationContext unityThread;
 
         /// <summary>
-        ///     Is our client connected to the UWB engine
-        /// </summary>
-        public bool IsConnected => ipcClient.IsConnected;
-
-        /// <summary>
-        ///     Creates a new <see cref="WebBrowserCommunicationsManager"/> instance
+        ///     Creates a new <see cref="WebBrowserCommunicationsManager" /> instance
         /// </summary>
         /// <param name="browserClient"></param>
         public WebBrowserCommunicationsManager(WebBrowserClient browserClient)
         {
             threadLock = new object();
             unityThread = SynchronizationContext.Current;
-            
+
             logger = browserClient.logger;
             client = browserClient;
 
@@ -58,23 +53,29 @@ namespace UnityWebBrowser
             engineProxy = new EngineProxy(ipcClient);
         }
 
-        public void Connect()
-        {
-            ipcClient.Connect();
-        }
+        /// <summary>
+        ///     Is our client connected to the UWB engine
+        /// </summary>
+        public bool IsConnected => ipcClient.IsConnected;
 
-        public void Listen()
+        public void Dispose()
         {
-            ipcHost.StartListening();
+            lock (threadLock)
+            {
+                ipcHost?.Dispose();
+                ipcClient?.Dispose();
+            }
         }
 
         public PixelsEvent GetPixels()
         {
             using (sendEventMarker.Auto())
+            {
                 lock (threadLock)
                 {
                     return engineProxy.GetPixels();
                 }
+            }
         }
 
         public void Shutdown()
@@ -85,61 +86,69 @@ namespace UnityWebBrowser
             }
         }
 
-        public void SendKeyboardEvent(KeyboardEvent keyboardEvent) => 
-            ExecuteTask(() => engineProxy.SendKeyboardEvent(keyboardEvent));
-
-        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent) => 
-            ExecuteTask(() => engineProxy.SendMouseMoveEvent(mouseMoveEvent));
-
-        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent) => 
-            ExecuteTask(() => engineProxy.SendMouseClickEvent(mouseClickEvent));
-
-        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent) => 
-            ExecuteTask(() => engineProxy.SendMouseScrollEvent(mouseScrollEvent));
-
-        public void GoForward() => ExecuteTask(() => engineProxy.GoForward());
-
-        public void GoBack() => ExecuteTask(() => engineProxy.GoBack());
-
-        public void Refresh() => ExecuteTask(() => engineProxy.Refresh());
-
-        public void LoadUrl(string url) => ExecuteTask(() => engineProxy.LoadUrl(url));
-
-        public void LoadHtml(string html) => ExecuteTask(() => engineProxy.LoadHtml(html));
-
-        public void ExecuteJs(string js) => ExecuteTask(() => engineProxy.ExecuteJs(js));
-
-        public void Resize(Resolution resolution) => ExecuteTask(() => engineProxy.Resize(resolution));
-
-        #region Client Events
-
-        public void UrlChange(string url) => ExecuteOnUnity(() => client.InvokeUrlChanged(url));
-
-        public void LoadStart(string url) => ExecuteOnUnity(() => client.InvokeLoadStart(url));
-
-        public void LoadFinish(string url) => ExecuteOnUnity(() => client.InvokeLoadFinish(url));
-
-        public void TitleChange(string title) => ExecuteOnUnity(() => client.InvokeTitleChange(title));
-
-        public void ProgressChange(double progress) =>
-            ExecuteOnUnity(() => client.InvokeLoadProgressChange(progress));
-
-        public void Fullscreen(bool fullScreen) => ExecuteOnUnity(() => client.InvokeFullscreen(fullScreen));
-        
-        public void Ready()
+        public void SendKeyboardEvent(KeyboardEvent keyboardEvent)
         {
-            client.EngineReady().Forget();
+            ExecuteTask(() => engineProxy.SendKeyboardEvent(keyboardEvent));
         }
 
-        #endregion
-        
-        public void Dispose()
+        public void SendMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
         {
-            lock (threadLock)
-            {
-                ipcHost?.Dispose();
-                ipcClient?.Dispose();
-            }
+            ExecuteTask(() => engineProxy.SendMouseMoveEvent(mouseMoveEvent));
+        }
+
+        public void SendMouseClickEvent(MouseClickEvent mouseClickEvent)
+        {
+            ExecuteTask(() => engineProxy.SendMouseClickEvent(mouseClickEvent));
+        }
+
+        public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
+        {
+            ExecuteTask(() => engineProxy.SendMouseScrollEvent(mouseScrollEvent));
+        }
+
+        public void GoForward()
+        {
+            ExecuteTask(() => engineProxy.GoForward());
+        }
+
+        public void GoBack()
+        {
+            ExecuteTask(() => engineProxy.GoBack());
+        }
+
+        public void Refresh()
+        {
+            ExecuteTask(() => engineProxy.Refresh());
+        }
+
+        public void LoadUrl(string url)
+        {
+            ExecuteTask(() => engineProxy.LoadUrl(url));
+        }
+
+        public void LoadHtml(string html)
+        {
+            ExecuteTask(() => engineProxy.LoadHtml(html));
+        }
+
+        public void ExecuteJs(string js)
+        {
+            ExecuteTask(() => engineProxy.ExecuteJs(js));
+        }
+
+        public void Resize(Resolution resolution)
+        {
+            ExecuteTask(() => engineProxy.Resize(resolution));
+        }
+
+        public void Connect()
+        {
+            ipcClient.Connect();
+        }
+
+        public void Listen()
+        {
+            ipcHost.StartListening();
         }
 
         private void ExecuteOnUnity(Action action, [CallerMemberName] string memberName = "")
@@ -159,7 +168,7 @@ namespace UnityWebBrowser
 
         private void ExecuteTask(Action action, [CallerMemberName] string memberName = "")
         {
-            if(!IsConnected)
+            if (!IsConnected)
                 return;
 
             UniTask.Run(() =>
@@ -168,14 +177,56 @@ namespace UnityWebBrowser
                 try
                 {
                     lock (threadLock)
+                    {
                         action.Invoke();
+                    }
                 }
                 catch (Exception ex)
                 {
                     logger.Error($"An error occured while executing task {memberName}! {ex}");
                 }
+
                 sendEventMarker.End();
             });
         }
+
+        #region Client Events
+
+        public void UrlChange(string url)
+        {
+            ExecuteOnUnity(() => client.InvokeUrlChanged(url));
+        }
+
+        public void LoadStart(string url)
+        {
+            ExecuteOnUnity(() => client.InvokeLoadStart(url));
+        }
+
+        public void LoadFinish(string url)
+        {
+            ExecuteOnUnity(() => client.InvokeLoadFinish(url));
+        }
+
+        public void TitleChange(string title)
+        {
+            ExecuteOnUnity(() => client.InvokeTitleChange(title));
+        }
+
+        public void ProgressChange(double progress)
+        {
+            ExecuteOnUnity(() => client.InvokeLoadProgressChange(progress));
+        }
+
+        public void Fullscreen(bool fullScreen)
+        {
+            ExecuteOnUnity(() => client.InvokeFullscreen(fullScreen));
+        }
+
+        public void Ready()
+        {
+            client.EngineReady().Forget();
+        }
+
+        #endregion
     }
 }

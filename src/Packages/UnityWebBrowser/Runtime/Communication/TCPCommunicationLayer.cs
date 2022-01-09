@@ -11,16 +11,13 @@ namespace UnityWebBrowser.Communication
         /// <summary>
         ///     The in port to communicate on
         /// </summary>
-        [Header("TCP Settings")]
-        [Range(1024, 65353)]
-        [Tooltip("The in port to communicate on")]
+        [Header("TCP Settings")] [Range(1024, 65353)] [Tooltip("The in port to communicate on")]
         public int inPort = 5555;
-        
+
         /// <summary>
         ///     The out port to communicate on
         /// </summary>
-        [Range(1024, 65353)]
-        [Tooltip("The out port to communicate on")]
+        [Range(1024, 65353)] [Tooltip("The out port to communicate on")]
         public int outPort = 5556;
 
         public override Client CreateClient()

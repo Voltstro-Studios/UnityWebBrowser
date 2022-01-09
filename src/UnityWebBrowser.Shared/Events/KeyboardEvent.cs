@@ -1,9 +1,8 @@
-namespace UnityWebBrowser.Shared.Events
+namespace UnityWebBrowser.Shared.Events;
+
+public struct KeyboardEvent
 {
-    public struct KeyboardEvent
-    {
-        public int[] KeysUp { get; set; }
-        public int[] KeysDown { get; set; }
-        public string Chars { get; set; }
-    }
+    public int[] KeysUp { get; set; }
+    public int[] KeysDown { get; set; }
+    public string Chars { get; set; }
 }

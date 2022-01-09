@@ -1,4 +1,3 @@
-using System.Reflection;
 using UnityEngine;
 using UnityWebBrowser.Communication.Pipes.Base;
 using VoltRpc.Communication;
@@ -10,7 +9,7 @@ namespace UnityWebBrowser.Communication.Pipes
     {
         public string inPipeName = "UnityWebBrowserIn";
         public string outPipeName = "UnityWebBrowserOut";
-        
+
         public override Client CreateClient()
         {
             return new PipesClient(inPipeName, connectionTimeout, Client.DefaultBufferSize);

@@ -1,13 +1,13 @@
 ﻿using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser
+namespace UnityWebBrowser.Engine.Cef.Browser;
+
+public class UwbCefContextMenuHandler : CefContextMenuHandler
 {
-    public class UwbCefContextMenuHandler : CefContextMenuHandler
+    protected override bool RunContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams parameters,
+        CefMenuModel model,
+        CefRunContextMenuCallback callback)
     {
-        protected override bool RunContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams parameters, CefMenuModel model,
-            CefRunContextMenuCallback callback)
-        {
-            return true;
-        }
+        return true;
     }
 }

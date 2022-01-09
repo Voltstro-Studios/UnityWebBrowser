@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -216,7 +215,7 @@ namespace UnityWebBrowser.Input
 
 #if ENABLE_INPUT_SYSTEM
         /// <summary>
-        ///		Converts a <see cref="Key"/> to <see cref="WindowsKey"/>
+        ///     Converts a <see cref="Key" /> to <see cref="WindowsKey" />
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>

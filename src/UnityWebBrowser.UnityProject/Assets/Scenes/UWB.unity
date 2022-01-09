@@ -208,7 +208,7 @@ PrefabInstance:
     - target: {fileID: 7454210984040730582, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.communicationLayer
       value: 
-      objectReference: {fileID: 11400000, guid: c2c480e10a5df0c5fb813a22469b1c05, type: 2}
+      objectReference: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc, type: 2}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
       value: UnityWebBrowser

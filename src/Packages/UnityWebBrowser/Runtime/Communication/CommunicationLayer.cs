@@ -5,13 +5,13 @@ namespace UnityWebBrowser.Communication
 {
     public abstract class CommunicationLayer : ScriptableObject
     {
+        public int connectionTimeout = 7000;
+
         /// <summary>
-        ///     Is this <see cref="CommunicationLayer"/> in use?
+        ///     Is this <see cref="CommunicationLayer" /> in use?
         /// </summary>
         internal bool IsInUse { get; set; }
-        
-        public int connectionTimeout = 7000;
-        
+
         public abstract Client CreateClient();
 
         public abstract Host CreateHost();

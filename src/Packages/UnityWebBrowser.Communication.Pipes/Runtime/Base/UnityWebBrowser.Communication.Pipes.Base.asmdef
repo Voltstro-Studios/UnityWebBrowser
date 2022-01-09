@@ -1,17 +1,17 @@
 {
-    "name": "UnityWebBrowser.Communication.Pipes.Base",
-    "rootNamespace": "UnityWebBrowser.Communication.Pipes.Base",
-    "references": [],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "VoltRpc.dll",
-        "UnityWebBrowser.Shared.dll"
-    ],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": true
+  "name": "UnityWebBrowser.Communication.Pipes.Base",
+  "rootNamespace": "UnityWebBrowser.Communication.Pipes.Base",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "VoltRpc.dll",
+    "UnityWebBrowser.Shared.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true
 }

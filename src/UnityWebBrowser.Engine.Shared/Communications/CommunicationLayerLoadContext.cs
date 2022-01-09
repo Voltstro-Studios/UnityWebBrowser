@@ -3,7 +3,7 @@ using System.Runtime.Loader;
 
 namespace UnityWebBrowser.Engine.Shared.Communications;
 
-public class CommunicationLayerLoadContext : AssemblyLoadContext
+internal class CommunicationLayerLoadContext : AssemblyLoadContext
 {
     private readonly AssemblyDependencyResolver resolver;
 

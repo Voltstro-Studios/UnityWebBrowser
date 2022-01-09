@@ -7,7 +7,7 @@ using UnityEngine;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///    Included UI controller for UWB (For TMP).
+    ///     Included UI controller for UWB (For TMP).
     ///     <para>Handles the URL input field.</para>
     /// </summary>
     [AddComponentMenu("UWB/Web Browser UI Controls (TMP)")]
@@ -16,7 +16,7 @@ namespace UnityWebBrowser
     public class WebBrowserUIControlsTMP : MonoBehaviour
     {
         /// <summary>
-        ///     The <see cref="TMP_InputField"/> for the URL
+        ///     The <see cref="TMP_InputField" /> for the URL
         /// </summary>
         [Tooltip("The input field for the URL")]
         public TMP_InputField inputField;

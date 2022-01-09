@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityWebBrowser.Input;
 using UnityWebBrowser.Shared.Events;
-
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -17,9 +14,10 @@ using UnityEngine.InputSystem.Controls;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     This class handles the UI side of UWB. It is also the <see cref="MonoBehaviour"/> holder for the <see cref="WebBrowserClient"/>,
+    ///     This class handles the UI side of UWB. It is also the <see cref="MonoBehaviour" /> holder for the
+    ///     <see cref="WebBrowserClient" />,
     ///     which is where all the actual magic happens.
-    ///     <para><see cref="WebBrowserUI"/> will also automatically handle setting up the <see cref="RawImage"/> for you.</para>
+    ///     <para><see cref="WebBrowserUI" /> will also automatically handle setting up the <see cref="RawImage" /> for you.</para>
     ///     <para>If you need to invoke events on UWB process, you can do it from here.</para>
     /// </summary>
     [AddComponentMenu("UWB/Web Browser UI")]
@@ -36,9 +34,13 @@ namespace UnityWebBrowser
 
         /// <summary>
         ///     Support automatically handling fullscreen events.
-        ///     <para>If enabled, it will make the <see cref="image"/> the full size of the window when the browser gets a fullscreen event.</para>
+        ///     <para>
+        ///         If enabled, it will make the <see cref="image" /> the full size of the window when the browser gets a
+        ///         fullscreen event.
+        ///     </para>
         /// </summary>
-        [Tooltip("Support automatically handling fullscreen events.\nIf enabled, it will make the image the full size of the window when the browser gets a fullscreen event.")]
+        [Tooltip(
+            "Support automatically handling fullscreen events.\nIf enabled, it will make the image the full size of the window when the browser gets a fullscreen event.")]
         public bool supportFullscreen = true;
 
         /// <summary>
@@ -158,14 +160,14 @@ namespace UnityWebBrowser
             image = GetComponent<RawImage>();
             image.texture = browserClient.BrowserTexture;
             image.uvRect = new Rect(0f, 0f, 1f, -1f);
-            
+
             browserClient.OnFullscreen += ToggleFullscreen;
 
 #if ENABLE_INPUT_SYSTEM
             Keyboard.current.onTextInput += c => currentInputBuffer += c;
 #endif
         }
-        
+
         private void FixedUpdate()
         {
             //We load the pixel data into the texture at a fixed rate
@@ -179,7 +181,7 @@ namespace UnityWebBrowser
 
         /// <summary>
         ///     Toggles fullscreen.
-        ///     <para>Requires <see cref="supportFullscreen"/> to be enabled.</para>
+        ///     <para>Requires <see cref="supportFullscreen" /> to be enabled.</para>
         /// </summary>
         /// <param name="fullscreen">Go into fullscreen or not.</param>
         public void ToggleFullscreen(bool fullscreen)
@@ -196,7 +198,7 @@ namespace UnityWebBrowser
                     lastAnchorMax = imageRectTransform.anchorMax;
                     lastAnchorMin = imageRectTransform.anchorMin;
                     lastImagePosition = imageRectTransform.anchoredPosition;
-                    
+
                     imageRectTransform.anchoredPosition = Vector2.zero;
                     imageRectTransform.anchorMin = Vector2.zero;
                     imageRectTransform.anchorMax = Vector2.one;
@@ -206,7 +208,7 @@ namespace UnityWebBrowser
                 {
                     foreach (GameObject obj in hideOnFullscreen)
                         obj.SetActive(true);
-                    
+
                     RectTransform imageRectTransform = image.rectTransform;
                     imageRectTransform.anchoredPosition = lastImagePosition;
                     imageRectTransform.anchorMin = lastAnchorMin;
@@ -218,17 +220,17 @@ namespace UnityWebBrowser
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if(browserClient is {IsConnected: false})
+            if (browserClient is {IsConnected: false})
                 return;
-            
+
             pointerKeyboardHandler = StartCoroutine(HandlerPointerAndKeyboardData());
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if(browserClient is {IsConnected: false} || pointerKeyboardHandler == null)
+            if (browserClient is {IsConnected: false} || pointerKeyboardHandler == null)
                 return;
-            
+
             StopCoroutine(pointerKeyboardHandler);
         }
 
@@ -236,8 +238,8 @@ namespace UnityWebBrowser
         {
             while (Application.isPlaying && browserClient is {IsConnected: true})
             {
-                List<int> keysDown = new List<int>();
-                List<int> keysUp = new List<int>();
+                List<int> keysDown = new();
+                List<int> keysUp = new();
 
 #if ENABLE_INPUT_SYSTEM
                 //We need to find all keys that were pressed and released
@@ -245,10 +247,10 @@ namespace UnityWebBrowser
                     try
                     {
                         if (key.wasPressedThisFrame)
-                            keysDown.Add((int)key.keyCode.UnityKeyToWindowKey());
+                            keysDown.Add((int) key.keyCode.UnityKeyToWindowKey());
 
                         if (key.wasReleasedThisFrame)
-                            keysUp.Add((int)key.keyCode.UnityKeyToWindowKey());
+                            keysUp.Add((int) key.keyCode.UnityKeyToWindowKey());
                     }
                     catch (Exception)
                     {
@@ -312,7 +314,7 @@ namespace UnityWebBrowser
                     scroll *= browserClient.BrowserTexture.height;
 
                     if (scroll != 0)
-                        browserClient.SendMouseScroll((int)pos.x, (int)pos.y, (int)scroll);
+                        browserClient.SendMouseScroll((int) pos.x, (int) pos.y, (int) scroll);
                 }
 
                 yield return 0;

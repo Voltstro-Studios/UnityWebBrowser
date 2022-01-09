@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UnityWebBrowser.Logging
 {
     /// <summary>
-    ///     An <see cref="IWebBrowserLogger"/> using Unity's <see cref="ILogger"/>
+    ///     An <see cref="IWebBrowserLogger" /> using Unity's <see cref="ILogger" />
     /// </summary>
     public sealed class DefaultUnityWebBrowserLogger : IWebBrowserLogger
     {

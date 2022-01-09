@@ -31,7 +31,7 @@ namespace UnityWebBrowser
             }
             else
             {
-                HashSet<int> children = new HashSet<int>();
+                HashSet<int> children = new();
                 GetAllChildIdsUnix(process.Id, children, timeout);
                 foreach (int childId in children) KillProcessUnix(childId, timeout);
                 KillProcessUnix(process.Id, timeout);
@@ -47,7 +47,7 @@ namespace UnityWebBrowser
                 out string stdout);
 
             if (exitCode != 0 || string.IsNullOrEmpty(stdout)) return;
-            using StringReader reader = new StringReader(stdout);
+            using StringReader reader = new(stdout);
             while (true)
             {
                 string text = reader.ReadLine();
@@ -73,7 +73,7 @@ namespace UnityWebBrowser
         private static int RunProcessAndWaitForExit(string fileName, string arguments, TimeSpan timeout,
             out string stdout)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new()
             {
                 FileName = fileName,
                 Arguments = arguments,
@@ -85,7 +85,7 @@ namespace UnityWebBrowser
             Process process = Process.Start(startInfo);
 
             stdout = null;
-            if (process.WaitForExit((int)timeout.TotalMilliseconds))
+            if (process.WaitForExit((int) timeout.TotalMilliseconds))
                 stdout = process.StandardOutput.ReadToEnd();
             else
                 process.Kill();

@@ -14,7 +14,7 @@ public static class Logger
     private static LoggerConfig loggerConfig;
 
     private static LoggingLevelSwitch level;
-    
+
     /// <summary>
     ///     The logger's config, can only be set while the logger isn't running
     /// </summary>
@@ -29,7 +29,7 @@ public static class Logger
         }
         get => loggerConfig;
     }
-    
+
     /// <summary>
     ///     Is the logger initialized?
     ///     <para>Returns true if it is</para>
@@ -74,7 +74,7 @@ public static class Logger
         {
             MinimumLevel = logEventLevel
         };
-        
+
         log = new LoggerConfiguration()
             .MinimumLevel.ControlledBy(level)
             .WriteTo.Console(new RenderedCompactJsonFormatter(), logEventLevel)
@@ -82,7 +82,7 @@ public static class Logger
 
         log.Debug("Logger initialized at {Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));
     }
-    
+
     /// <summary>
     ///     Shuts down the logger
     /// </summary>
@@ -98,7 +98,7 @@ public static class Logger
 
         loggerConfig = null;
     }
-    
+
     private static void CheckInitialization()
     {
         if (!IsLoggerInitialized)

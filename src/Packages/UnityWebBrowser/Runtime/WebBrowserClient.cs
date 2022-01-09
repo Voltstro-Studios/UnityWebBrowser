@@ -22,19 +22,19 @@ namespace UnityWebBrowser
     ///     <para>
     ///         This class handles:
     ///         <list type="bullet">
-    ///              <item>UWB process setup</item>
-    ///              <item>Texture setup and rendering</item>
-    ///              <item>Wrapper for invoking methods on the UWB process</item>
-    ///              <item>Shutdown</item>
-    ///          </list>
-    ///          If you need to do something with UWB, its probably here.
+    ///             <item>UWB process setup</item>
+    ///             <item>Texture setup and rendering</item>
+    ///             <item>Wrapper for invoking methods on the UWB process</item>
+    ///             <item>Shutdown</item>
+    ///         </list>
+    ///         If you need to do something with UWB, its probably here.
     ///     </para>
     /// </summary>
     [Serializable]
     public class WebBrowserClient : IDisposable
     {
-        private static ProfilerMarker browserPixelDataMarker = new ProfilerMarker("UWB.LoadPixelData");
-        private static ProfilerMarker browserLoadTextureMarker = new ProfilerMarker("UWB.LoadTextureData");
+        private static ProfilerMarker browserPixelDataMarker = new("UWB.LoadPixelData");
+        private static ProfilerMarker browserLoadTextureMarker = new("UWB.LoadTextureData");
 
         /// <summary>
         ///     The active browser engine this instance is using
@@ -68,7 +68,7 @@ namespace UnityWebBrowser
         #endregion
 
         /// <summary>
-        ///     The background <see cref="Color32" /> of the webpage
+        ///     The background <see cref="UnityEngine.Color32" /> of the webpage
         /// </summary>
         [Tooltip("The background color of the webpage")]
         public Color32 backgroundColor = new(255, 255, 255, 255);
@@ -88,14 +88,12 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Enable or disable WebRTC
         /// </summary>
-        [Tooltip("Enable or disable WebRTC")] 
-        public bool webRtc;
+        [Tooltip("Enable or disable WebRTC")] public bool webRtc;
 
         /// <summary>
         ///     Proxy Settings
         /// </summary>
-        [Tooltip("Proxy settings")] 
-        public ProxySettings proxySettings;
+        [Tooltip("Proxy settings")] public ProxySettings proxySettings;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -106,15 +104,13 @@ namespace UnityWebBrowser
         /// <summary>
         ///     The port to use for remote debugging
         /// </summary>
-        [Tooltip("The port to use for remote debugging")] 
-        [Range(1024, 65353)]
+        [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
 
         /// <summary>
-        ///     The <see cref="CommunicationLayer"/> to use
+        ///     The <see cref="CommunicationLayer" /> to use
         /// </summary>
-        [Header("IPC Settings")] 
-        [Tooltip("The communication layer to use")]
+        [Header("IPC Settings")] [Tooltip("The communication layer to use")]
         public CommunicationLayer communicationLayer;
 
         /// <summary>
@@ -137,26 +133,22 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Are we connected to the UW engine process
         /// </summary>
-        public bool IsConnected => communicationsManager is { IsConnected: true };
+        public bool IsConnected => communicationsManager is {IsConnected: true};
 
         #region IsReady
 
         /// <summary>
         ///     The UWB engine has signaled that it is ready
         /// </summary>
-        public bool ReadySignalReceived
-        {
-            get;
-            internal set;
-        }
+        public bool ReadySignalReceived { get; internal set; }
 
         private object isReadyLock;
         private bool isReady;
-        
+
         /// <summary>
         ///     Is everything for UWB ready? (Engine and client)
         /// </summary>
-        public bool IsReady 
+        public bool IsReady
         {
             // ReSharper disable InconsistentlySynchronizedField
             get
@@ -176,7 +168,7 @@ namespace UnityWebBrowser
                     isReady = value;
                     return;
                 }
-                
+
                 lock (isReadyLock)
                 {
                     isReady = value;
@@ -242,12 +234,12 @@ namespace UnityWebBrowser
         #region Logger
 
         /// <summary>
-        ///     Internal usage of <see cref="IWebBrowserLogger"/>
+        ///     Internal usage of <see cref="IWebBrowserLogger" />
         /// </summary>
         internal IWebBrowserLogger logger = new DefaultUnityWebBrowserLogger();
 
         /// <summary>
-        ///     Gets the <see cref="IWebBrowserLogger"/> to use for logging
+        ///     Gets the <see cref="IWebBrowserLogger" /> to use for logging
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         public IWebBrowserLogger Logger
@@ -257,7 +249,7 @@ namespace UnityWebBrowser
         }
 
         #endregion
-        
+
         private Process serverProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
@@ -277,22 +269,23 @@ namespace UnityWebBrowser
                 logger.Error("The browser engine process doesn't exist!");
                 throw new FileNotFoundException($"{browserEngine} process could not be found!");
             }
-            
+
             //Check communication layer
             if (communicationLayer.IsInUse)
                 throw new InitializationException("The communication layer is already in use!");
             communicationLayer.IsInUse = true;
 
             isReadyLock = new object();
-            
+
             //Setup texture
-            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false, false);
+            BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
+                false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
 
             string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
 
             //Start to build our arguments
-            WebBrowserArgsBuilder argsBuilder = new WebBrowserArgsBuilder();
+            WebBrowserArgsBuilder argsBuilder = new();
 
             //Initial URL
             argsBuilder.AppendArgument("initial-url", initialUrl, true);
@@ -313,7 +306,8 @@ namespace UnityWebBrowser
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
             //IPC settings
-            communicationLayer.GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation);
+            communicationLayer.GetIpcSettings(out object outLocation, out object inLocation,
+                out string assemblyLocation);
             if (assemblyLocation != null)
             {
                 if (!File.Exists(assemblyLocation))
@@ -321,15 +315,15 @@ namespace UnityWebBrowser
                     logger.Error("Failed to find provided communication layer assembly!");
                     throw new FileNotFoundException("Failed to find provided communication layer assembly!");
                 }
-                
+
                 argsBuilder.AppendArgument("comms-layer-path", assemblyLocation, true);
                 logger.Debug($"Using communication layer assembly at '{assemblyLocation}'.");
             }
-            
+
             argsBuilder.AppendArgument("in-location", inLocation, true);
             argsBuilder.AppendArgument("out-location", outLocation, true);
 
-                //If we have a cache, set the cache path
+            //If we have a cache, set the cache path
             if (cache)
             {
                 cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
@@ -376,7 +370,7 @@ namespace UnityWebBrowser
             serverProcess.Start();
             serverProcess.BeginOutputReadLine();
             serverProcess.BeginErrorReadLine();
-            
+
             cancellationToken = new CancellationTokenSource();
 
             UniTask.Create(WaitForEngineReadyTask);
@@ -385,7 +379,7 @@ namespace UnityWebBrowser
         #region Readying
 
         /// <summary>
-        ///     Will wait for <see cref="ReadySignalReceived"/> to be true
+        ///     Will wait for <see cref="ReadySignalReceived" /> to be true
         /// </summary>
         internal async UniTask WaitForEngineReadyTask()
         {
@@ -398,13 +392,17 @@ namespace UnityWebBrowser
             {
                 logger.Error("The engine did not get ready within engine startup timeout!");
                 await using (UniTask.ReturnToMainThread())
+                {
                     Dispose();
+                }
             }
             catch (Exception ex)
             {
                 logger.Error($"An unknown error occured while waiting for engine to get ready! {ex}");
                 await using (UniTask.ReturnToMainThread())
+                {
                     Dispose();
+                }
             }
         }
 
@@ -426,7 +424,9 @@ namespace UnityWebBrowser
             {
                 logger.Error($"An error occured while waiting to connect to the UWB engine process! {ex}");
                 await using (UniTask.ReturnToMainThread())
+                {
                     Dispose();
+                }
             }
         }
 
@@ -439,21 +439,19 @@ namespace UnityWebBrowser
         internal async Task PixelDataLoop()
         {
             while (!cancellationToken.Token.IsCancellationRequested)
-            {
                 try
                 {
                     if (!IsReady || !IsConnected)
                         continue;
 
-                    await Task.Delay(25, cancellationToken: cancellationToken.Token);
-                    
-                    if(cancellationToken.Token.IsCancellationRequested)
+                    await Task.Delay(25, cancellationToken.Token);
+
+                    if (cancellationToken.Token.IsCancellationRequested)
                         return;
 
                     browserPixelDataMarker.Begin();
                     pixels = communicationsManager.GetPixels().PixelData;
                     browserPixelDataMarker.End();
-
                 }
                 catch (TaskCanceledException)
                 {
@@ -463,15 +461,14 @@ namespace UnityWebBrowser
                 {
                     logger.Error($"Error in data loop! {ex}");
                 }
-            }
         }
 
         /// <summary>
-        ///     Loads the pixel data into the <see cref="BrowserTexture"/>
+        ///     Loads the pixel data into the <see cref="BrowserTexture" />
         /// </summary>
         public void LoadTextureData()
         {
-            if(!IsReady || !IsConnected)
+            if (!IsReady || !IsConnected)
                 return;
 
             using (browserLoadTextureMarker.Auto())
@@ -492,38 +489,62 @@ namespace UnityWebBrowser
         ///     Invoked when the url changes
         /// </summary>
         public event OnUrlChangeDelegate OnUrlChanged;
-        internal void InvokeUrlChanged(string url) => OnUrlChanged?.Invoke(url);
+
+        internal void InvokeUrlChanged(string url)
+        {
+            OnUrlChanged?.Invoke(url);
+        }
 
         /// <summary>
         ///     Invoked when the page starts to load
         /// </summary>
         public event OnLoadStartDelegate OnLoadStart;
-        internal void InvokeLoadStart(string url) => OnLoadStart?.Invoke(url);
+
+        internal void InvokeLoadStart(string url)
+        {
+            OnLoadStart?.Invoke(url);
+        }
 
         /// <summary>
         ///     Invoked when the page finishes loading
         /// </summary>
         public event OnLoadFinishDelegate OnLoadFinish;
-        internal void InvokeLoadFinish(string url) => OnLoadFinish?.Invoke(url);
+
+        internal void InvokeLoadFinish(string url)
+        {
+            OnLoadFinish?.Invoke(url);
+        }
 
         /// <summary>
         ///     Invoked when the title changes
         /// </summary>
         public event OnTitleChange OnTitleChange;
-        internal void InvokeTitleChange(string title) => OnTitleChange?.Invoke(title);
+
+        internal void InvokeTitleChange(string title)
+        {
+            OnTitleChange?.Invoke(title);
+        }
 
         /// <summary>
         ///     Invoked when the loading progress changes
         ///     <para>Progress goes from 0 to 1</para>
         /// </summary>
         public event OnLoadingProgressChange OnLoadProgressChange;
-        internal void InvokeLoadProgressChange(double progress) => OnLoadProgressChange?.Invoke(progress);
+
+        internal void InvokeLoadProgressChange(double progress)
+        {
+            OnLoadProgressChange?.Invoke(progress);
+        }
 
         /// <summary>
         ///     Invoked when the browser goes in or out of fullscreen
         /// </summary>
         public event OnFullscreenChange OnFullscreen;
-        internal void InvokeFullscreen(bool fullscreen) => OnFullscreen?.Invoke(fullscreen);
+
+        internal void InvokeFullscreen(bool fullscreen)
+        {
+            OnFullscreen?.Invoke(fullscreen);
+        }
 
         #endregion
 
@@ -537,9 +558,9 @@ namespace UnityWebBrowser
         /// <param name="chars"></param>
         internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -557,16 +578,16 @@ namespace UnityWebBrowser
         /// <param name="mousePos"></param>
         internal void SendMouseMove(Vector2 mousePos)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
-                MouseX = (int)mousePos.x,
-                MouseY = (int)mousePos.y
+                MouseX = (int) mousePos.x,
+                MouseY = (int) mousePos.y
             });
         }
 
@@ -580,16 +601,16 @@ namespace UnityWebBrowser
         internal void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
-                MouseX = (int)mousePos.x,
-                MouseY = (int)mousePos.y,
+                MouseX = (int) mousePos.x,
+                MouseY = (int) mousePos.y,
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
@@ -604,9 +625,9 @@ namespace UnityWebBrowser
         /// <param name="mouseScroll"></param>
         internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -624,9 +645,9 @@ namespace UnityWebBrowser
         /// <param name="url"></param>
         internal void LoadUrl(string url)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -638,9 +659,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoForward()
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -652,9 +673,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void GoBack()
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -666,9 +687,9 @@ namespace UnityWebBrowser
         /// </summary>
         internal void Refresh()
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -681,9 +702,9 @@ namespace UnityWebBrowser
         /// <param name="html"></param>
         internal void LoadHtml(string html)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -696,9 +717,9 @@ namespace UnityWebBrowser
         /// <param name="js"></param>
         internal void ExecuteJs(string js)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
@@ -707,13 +728,13 @@ namespace UnityWebBrowser
 
         internal void Resize(Resolution newResolution)
         {
-            if(!IsReady)
+            if (!IsReady)
                 return;
-            
+
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
-            
-            BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
+
+            BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
             communicationsManager.Resize(newResolution);
         }
 
@@ -731,36 +752,32 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Has this object been disposed
         /// </summary>
-        public bool HasDisposed
-        {
-            get;
-            private set;
-        }
+        public bool HasDisposed { get; private set; }
 
         /// <summary>
         ///     Destroys this <see cref="WebBrowserClient" /> instance
         /// </summary>
         public void Dispose()
         {
-            if(HasDisposed)
+            if (HasDisposed)
                 return;
-            
+
             ReleaseResources();
             GC.SuppressFinalize(this);
         }
 
         private void ReleaseResources()
         {
-            if(HasDisposed)
+            if (HasDisposed)
                 return;
 
             HasDisposed = true;
             logger.Debug("UWB shutdown...");
-            
+
             cancellationToken?.Cancel();
-            if(BrowserTexture != null)
+            if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
-            
+
             if (IsReady && IsConnected)
                 communicationsManager.Shutdown();
 
@@ -777,9 +794,9 @@ namespace UnityWebBrowser
 
             if (serverProcess != null)
             {
-                if(IsReady)
+                if (IsReady)
                     serverProcess.KillTree();
-                
+
                 serverProcess.Dispose();
                 serverProcess = null;
             }

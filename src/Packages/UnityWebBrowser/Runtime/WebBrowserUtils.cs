@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityWebBrowser.Editor;
 
 namespace UnityWebBrowser
 {
@@ -32,15 +34,15 @@ namespace UnityWebBrowser
         {
             //Editor
 #if UNITY_EDITOR
-            Editor.BrowserEngine browserEngine = Editor.BrowserEngineManager.GetBrowser(engine);
+            Editor.BrowserEngine browserEngine = BrowserEngineManager.GetBrowser(engine);
 
 #if UNITY_EDITOR_WIN
             return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
                 x.Key == UnityEditor.BuildTarget.StandaloneWindows ||
                 x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
 #elif UNITY_EDITOR_LINUX
-			return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
-		        x.Key == UnityEditor.BuildTarget.StandaloneLinux64).Value);
+            return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
+                x.Key == BuildTarget.StandaloneLinux64).Value);
 #endif
 
             //Player builds (Standalone)
@@ -58,7 +60,7 @@ namespace UnityWebBrowser
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return $"{GetBrowserEnginePath(engine)}{engine}.exe";
 #else
-		    return $"{GetBrowserEnginePath(engine)}{engine}";
+            return $"{GetBrowserEnginePath(engine)}{engine}";
 #endif
         }
 
@@ -92,12 +94,12 @@ namespace UnityWebBrowser
             position = new Vector2();
             RectTransform uiImageObjectRect = image.rectTransform;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRect, screenPosition, null,
-                out Vector2 localCursor)) return false;
+                    out Vector2 localCursor)) return false;
 
-            Vector2 ptPivotCancelledLocation = new Vector2(localCursor.x - uiImageObjectRect.rect.x,
+            Vector2 ptPivotCancelledLocation = new(localCursor.x - uiImageObjectRect.rect.x,
                 localCursor.y - uiImageObjectRect.rect.y);
             Vector2 ptLocationRelativeToImageInScreenCoordinates =
-                new Vector2(ptPivotCancelledLocation.x, ptPivotCancelledLocation.y);
+                new(ptPivotCancelledLocation.x, ptPivotCancelledLocation.y);
             position.x = ptLocationRelativeToImageInScreenCoordinates.x / uiImageObjectRect.rect.width;
             position.y = -(ptLocationRelativeToImageInScreenCoordinates.y / uiImageObjectRect.rect.height) + 1;
 
@@ -105,7 +107,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Converts a <see cref="Color32"/> to hex
+        ///     Converts a <see cref="Color32" /> to hex
         /// </summary>
         /// <param name="color"></param>
         public static string ColorToHex(Color32 color)
@@ -114,7 +116,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Sets every single pixel in a <see cref="Texture2D"/> to one <see cref="Color32"/>
+        ///     Sets every single pixel in a <see cref="Texture2D" /> to one <see cref="Color32" />
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="color"></param>
@@ -122,7 +124,7 @@ namespace UnityWebBrowser
         {
             if (texture == null)
                 throw new ArgumentNullException(nameof(texture), "Texture cannot be null!");
-            
+
             Color32[] colors = new Color32[texture.width * texture.height];
             for (int i = 0; i < colors.Length; i++)
                 colors[i] = color;

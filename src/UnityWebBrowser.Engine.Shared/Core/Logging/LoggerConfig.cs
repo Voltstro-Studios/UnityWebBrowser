@@ -1,5 +1,3 @@
-using System;
-
 namespace UnityWebBrowser.Engine.Shared.Core.Logging;
 
 /// <summary>

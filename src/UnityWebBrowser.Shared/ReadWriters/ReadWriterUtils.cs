@@ -1,18 +1,16 @@
-﻿using UnityWebBrowser.Shared.Events;
-using VoltRpc.Types;
+﻿using VoltRpc.Types;
 
-namespace UnityWebBrowser.Shared.ReadWriters
+namespace UnityWebBrowser.Shared.ReadWriters;
+
+public static class ReadWriterUtils
 {
-    public static class ReadWriterUtils
+    public static void AddTypeReadWriters(TypeReaderWriterManager readerWriterManager)
     {
-        public static void AddTypeReadWriters(TypeReaderWriterManager readerWriterManager)
-        {
-            readerWriterManager.AddType<KeyboardEvent>(new KeyboardEventTypeReadWriter());
-            readerWriterManager.AddType<MouseClickEvent>(new MouseClickEventTypeReadWriter());
-            readerWriterManager.AddType<MouseMoveEvent>(new MouseMoveEventTypeReadWriter());
-            readerWriterManager.AddType<MouseScrollEvent>(new MouseScrollEventTypeReadWriter());
-            readerWriterManager.AddType<PixelsEvent>(new PixelsEventTypeReadWriter());
-            readerWriterManager.AddType<Resolution>(new ResolutionTypeReadWriter());
-        }
+        readerWriterManager.AddType(new KeyboardEventTypeReadWriter());
+        readerWriterManager.AddType(new MouseClickEventTypeReadWriter());
+        readerWriterManager.AddType(new MouseMoveEventTypeReadWriter());
+        readerWriterManager.AddType(new MouseScrollEventTypeReadWriter());
+        readerWriterManager.AddType(new PixelsEventTypeReadWriter());
+        readerWriterManager.AddType(new ResolutionTypeReadWriter());
     }
 }

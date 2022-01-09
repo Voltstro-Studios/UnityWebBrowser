@@ -4,6 +4,9 @@ using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core;
 
+/// <summary>
+///     Wrapper for Cef to use the <see cref="Logger"/>
+/// </summary>
 public static class CefLoggerWrapper
 {
     #region Debug Log
@@ -19,7 +22,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Debug(message));
             return;
         }
-        
+
         Logger.Debug(message);
     }
 
@@ -35,12 +38,12 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Debug(message, values));
             return;
         }
-        
+
         Logger.Debug(message, values);
     }
 
     #endregion
-    
+
     #region Info Log
 
     /// <summary>
@@ -54,7 +57,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Info(message));
             return;
         }
-        
+
         Logger.Info(message);
     }
 
@@ -70,7 +73,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Info(message, values));
             return;
         }
-        
+
         Logger.Info(message, values);
     }
 
@@ -89,7 +92,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Warn(message));
             return;
         }
-        
+
         Logger.Warn(message);
     }
 
@@ -105,14 +108,14 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Warn(message, values));
             return;
         }
-        
+
         Logger.Warn(message, values);
     }
 
     #endregion
 
     #region Error
-    
+
     /// <summary>
     ///     Writes an error log
     /// </summary>
@@ -124,7 +127,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Error(message));
             return;
         }
-        
+
         Logger.Error(message);
     }
 
@@ -140,7 +143,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Error(message, values));
             return;
         }
-        
+
         Logger.Error(message, values);
     }
 
@@ -156,7 +159,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Error(exception, message));
             return;
         }
-        
+
         Logger.Error(exception, message);
     }
 
@@ -173,7 +176,7 @@ public static class CefLoggerWrapper
             CefEngineManager.PostTask(CefThreadId.UI, () => Error(exception, message, values));
             return;
         }
-        
+
         Logger.Error(exception, message, values);
     }
 

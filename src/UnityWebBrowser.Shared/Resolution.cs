@@ -1,32 +1,31 @@
 ﻿using System;
 
-namespace UnityWebBrowser.Shared
+namespace UnityWebBrowser.Shared;
+
+/// <summary>
+///     Screen resolution
+/// </summary>
+[Serializable]
+public struct Resolution
 {
     /// <summary>
-    ///     Screen resolution
+    ///     Creates a new <see cref="Resolution" /> instance
     /// </summary>
-    [Serializable]
-    public struct Resolution
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public Resolution(uint width, uint height)
     {
-        /// <summary>
-        ///     Creates a new <see cref="Resolution"/> instance
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public Resolution(uint width, uint height)
-        {
-            Width = width;
-            Height = height;
-        }
-
-        /// <summary>
-        ///     Width of the screen
-        /// </summary>
-        public uint Width;
-
-        /// <summary>
-        ///     Height of the screen
-        /// </summary>
-        public uint Height;
+        Width = width;
+        Height = height;
     }
+
+    /// <summary>
+    ///     Width of the screen
+    /// </summary>
+    public uint Width;
+
+    /// <summary>
+    ///     Height of the screen
+    /// </summary>
+    public uint Height;
 }

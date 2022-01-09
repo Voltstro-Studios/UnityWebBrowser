@@ -22,7 +22,7 @@ namespace UnityWebBrowser.Input
         /// <summary>
         ///     The bit mask to extract modifiers from a key value.
         /// </summary>
-        Modifiers = unchecked((int)0xFFFF0000),
+        Modifiers = unchecked((int) 0xFFFF0000),
 
         /// <summary>
         ///     No key pressed.

@@ -11,7 +11,7 @@ public class MathTests
         byte result = MathHelper.HexToDec("FF");
         Assert.AreEqual(255, result);
     }
-    
+
     [Test]
     public void HexByte15Test()
     {

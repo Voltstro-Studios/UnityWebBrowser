@@ -14,7 +14,7 @@ namespace UnityWebBrowser
     public class WebBrowserUIControls : MonoBehaviour
     {
         /// <summary>
-        ///     The <see cref="InputField"/> for the URL
+        ///     The <see cref="InputField" /> for the URL
         /// </summary>
         [Tooltip("The input field for the URL")]
         public InputField inputField;
@@ -34,14 +34,14 @@ namespace UnityWebBrowser
             inputField.text = webBrowserUi.browserClient.initialUrl;
         }
 
-        private void OnUrlChanged(string url)
-        {
-            inputField.text = url;
-        }
-
         private void OnDestroy()
         {
             webBrowserUi.browserClient.OnUrlChanged -= OnUrlChanged;
+        }
+
+        private void OnUrlChanged(string url)
+        {
+            inputField.text = url;
         }
 
         /// <summary>

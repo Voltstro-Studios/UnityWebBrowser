@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     Creates a <see cref="string"/> 
+    ///     Creates a <see cref="string" />
     /// </summary>
     internal class WebBrowserArgsBuilder
     {
@@ -36,7 +36,7 @@ namespace UnityWebBrowser
         }
 
         /// <summary>
-        ///     Gets the joined arguments <see cref="string"/>
+        ///     Gets the joined arguments <see cref="string" />
         /// </summary>
         /// <returns></returns>
         public override string ToString()
