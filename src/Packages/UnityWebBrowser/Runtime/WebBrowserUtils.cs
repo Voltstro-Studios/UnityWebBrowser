@@ -1,10 +1,13 @@
 using System;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+using UnityEditor;
 using UnityWebBrowser.Editor;
+#endif
 
 namespace UnityWebBrowser
 {
