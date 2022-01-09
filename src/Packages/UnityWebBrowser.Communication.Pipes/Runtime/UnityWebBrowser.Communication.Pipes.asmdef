@@ -1,0 +1,21 @@
+{
+    "name": "UnityWebBrowser.Communication.Pipes",
+    "rootNamespace": "UnityWebBrowser.Communication.Pipes",
+    "references": [
+        "UnityWebBrowser",
+        "UnityWebBrowser.Communication.Pipes.Base"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "UnityWebBrowser.Shared.dll",
+        "VoltRpc.dll",
+        "VoltRpc.Communication.Pipes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

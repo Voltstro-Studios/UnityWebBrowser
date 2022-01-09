@@ -16,6 +16,6 @@ namespace UnityWebBrowser.Communication
 
         public abstract Host CreateHost();
 
-        public abstract void GetIpcSettings(out object outLocation, out object inLocation);
+        public abstract void GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation);
     }
 }

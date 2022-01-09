@@ -8,6 +8,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.ugui": "1.0.0",
     "dev.voltstro.unitywebbrowser": "file:../../Packages/UnityWebBrowser",
+    "dev.voltstro.unitywebbrowser.communication.pipes": "file:../../Packages/UnityWebBrowser.Communication.Pipes",
     "dev.voltstro.unitywebbrowser.engine.cef": "file:../../Packages/UnityWebBrowser.Engine.Cef",
     "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Linux-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",

@@ -35,10 +35,11 @@ namespace UnityWebBrowser.Communication
             return new TCPHost(ipEndPoint);
         }
 
-        public override void GetIpcSettings(out object outLocation, out object inLocation)
+        public override void GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation)
         {
             outLocation = outPort;
             inLocation = inPort;
+            assemblyLocation = null;
         }
     }
 }

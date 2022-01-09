@@ -94,6 +94,15 @@
         "org.nuget.voltrpc": "2.0.0"
       }
     },
+    "dev.voltstro.unitywebbrowser.communication.pipes": {
+      "version": "file:../../Packages/UnityWebBrowser.Communication.Pipes",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser": "2.0.0",
+        "org.nuget.voltrpc.communication.pipes": "2.0.0"
+      }
+    },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef",
       "depth": 0,
@@ -123,6 +132,15 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.voltrpc.communication.pipes": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.voltrpc": "2.0.0"
+      },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.imgui": {

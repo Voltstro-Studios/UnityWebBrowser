@@ -105,7 +105,7 @@ namespace UnityWebBrowser.Engine.Shared.Core
             //IPC settings
             Option<FileInfo> communicationLayerPath = new Option<FileInfo>("-comms-layer-path",
                 () => null,
-                "Use pipes or TCP");
+                "The location of where the dll for the communication layer is. If none is provided then the in-built TCP layer will be used.");
             Option<string> inLocation = new Option<string>("-in-location",
                 () => "5555",
                 "In location for IPC (Pipes location or TCP port in TCP mode)");
@@ -201,7 +201,8 @@ namespace UnityWebBrowser.Engine.Shared.Core
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    communicationLayer = CommunicationLayerLoader.GetCommunicationLayerFromAssembly(
+                        arguments.CommunicationLayerPath.FullName);
                 }
 
                 try
