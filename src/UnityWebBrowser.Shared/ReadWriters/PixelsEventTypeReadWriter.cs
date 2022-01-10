@@ -1,4 +1,6 @@
-﻿using UnityWebBrowser.Shared.Events;
+﻿#nullable enable
+using System;
+using UnityWebBrowser.Shared.Events;
 using VoltRpc.IO;
 using VoltRpc.Types;
 
@@ -6,9 +8,11 @@ namespace UnityWebBrowser.Shared.ReadWriters;
 
 public class PixelsEventTypeReadWriter : TypeReadWriter<PixelsEvent>
 {
+    private byte[]? buffer;
+
     public override void Write(BufferedWriter writer, PixelsEvent pixelsEvent)
     {
-        if (pixelsEvent.PixelData == null)
+        if (pixelsEvent.PixelData.Length <= 0)
         {
             writer.WriteInt(-1);
             return;
@@ -16,7 +20,7 @@ public class PixelsEventTypeReadWriter : TypeReadWriter<PixelsEvent>
 
         writer.WriteInt(pixelsEvent.PixelData.Length);
 
-        foreach (byte b in pixelsEvent.PixelData)
+        foreach (byte b in pixelsEvent.PixelData.Span)
             writer.WriteByte(b);
     }
 
@@ -27,8 +31,13 @@ public class PixelsEventTypeReadWriter : TypeReadWriter<PixelsEvent>
         if (size == -1)
             return pixelsEvent;
 
-        pixelsEvent.PixelData = new byte[size];
-        for (int i = 0; i < size; i++) pixelsEvent.PixelData[i] = reader.ReadByte();
+        if (buffer == null || buffer.Length < size)
+            buffer = new byte[size];
+        
+        for (int i = 0; i < size; i++) 
+            buffer[i] = reader.ReadByte();
+
+        pixelsEvent.PixelData = new ReadOnlyMemory<byte>(buffer, 0, size);
 
         return pixelsEvent;
     }

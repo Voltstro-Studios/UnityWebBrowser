@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,6 +135,14 @@ namespace UnityWebBrowser
 
             texture.SetPixels32(colors);
             texture.Apply();
+        }
+
+        internal static void CopySpanToNativeArray(ReadOnlySpan<byte> copyFrom, NativeArray<byte> copyTo)
+        {
+            for (int i = 0; i < copyFrom.Length; i++)
+            {
+                copyTo[i] = copyFrom[i];
+            }
         }
     }
 }

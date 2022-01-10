@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
@@ -33,8 +34,17 @@ namespace UnityWebBrowser
     [Serializable]
     public class WebBrowserClient : IDisposable
     {
-        private static ProfilerMarker browserPixelDataMarker = new("UWB.LoadPixelData");
-        private static ProfilerMarker browserLoadTextureMarker = new("UWB.LoadTextureData");
+        #region Profile Markers
+
+        private static ProfilerMarker markerGetPixels = new("UWB.GetPixels");
+        private static ProfilerMarker markerGetPixelsRpc = new("UWB.GetPixels.RPC");
+        private static ProfilerMarker markerGetPixelsCopy = new("UWB.GetPixels.Copy");
+        
+        private static ProfilerMarker markerLoadTexture = new("UWB.LoadTexture");
+        private static ProfilerMarker markerLoadTextureLoad = new("UWB.LoadTexture.LoadRawData");
+        private static ProfilerMarker markerLoadTextureApply = new("UWB.LoadTexture.Apply");
+
+        #endregion
 
         /// <summary>
         ///     The active browser engine this instance is using
@@ -116,7 +126,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
         /// </summary>
-        [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
+        [Tooltip("Timeout time for waiting for the engine to start (in markerGetPixelsRpcmilliseconds)")]
         public int engineStartupTimeout = 4000;
 
         /// <summary>
@@ -281,6 +291,7 @@ namespace UnityWebBrowser
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
+            pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
 
             string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
 
@@ -433,25 +444,39 @@ namespace UnityWebBrowser
         #endregion
 
         #region Main Loop
-
-        private byte[] pixels;
+        
+        private NativeArray<byte> pixelData;
 
         internal async Task PixelDataLoop()
         {
-            while (!cancellationToken.Token.IsCancellationRequested)
+            CancellationToken token = cancellationToken.Token;
+            while (!token.IsCancellationRequested)
                 try
                 {
                     if (!IsReady || !IsConnected)
                         continue;
+                    
 
-                    await Task.Delay(25, cancellationToken.Token);
+                    await Task.Delay(25, token);
 
-                    if (cancellationToken.Token.IsCancellationRequested)
+                    if (token.IsCancellationRequested)
                         return;
-
-                    browserPixelDataMarker.Begin();
-                    pixels = communicationsManager.GetPixels().PixelData;
-                    browserPixelDataMarker.End();
+                    
+                    markerGetPixels.Begin();
+                    {
+                        markerGetPixelsRpc.Begin();
+                        ReadOnlyMemory<byte> pixels = communicationsManager.GetPixels().PixelData;
+                        markerGetPixelsRpc.End();
+                        
+                        //There can be a good amount of time between first getting the pixels and when we go to copy it to the native array
+                        if(token.IsCancellationRequested)
+                            return;
+                    
+                        markerGetPixelsCopy.Begin();
+                        WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData);
+                        markerGetPixelsCopy.End();
+                    }
+                    markerGetPixels.End();
                 }
                 catch (TaskCanceledException)
                 {
@@ -471,13 +496,19 @@ namespace UnityWebBrowser
             if (!IsReady || !IsConnected)
                 return;
 
-            using (browserLoadTextureMarker.Auto())
+            using (markerLoadTexture.Auto())
             {
-                if (pixels == null || pixels.Length == 0)
+                if (pixelData.Length == 0)
                     return;
-
-                BrowserTexture.LoadRawTextureData(pixels);
-                BrowserTexture.Apply(false);
+                
+                Texture2D texture = BrowserTexture;
+                markerLoadTextureLoad.Begin();
+                texture.LoadRawTextureData(pixelData);
+                markerLoadTextureLoad.End();
+                
+                markerLoadTextureApply.Begin();
+                texture.Apply(false);
+                markerLoadTextureApply.End();
             }
         }
 
@@ -777,6 +808,7 @@ namespace UnityWebBrowser
             cancellationToken?.Cancel();
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
+            pixelData.Dispose();
 
             if (IsReady && IsConnected)
                 communicationsManager.Shutdown();
