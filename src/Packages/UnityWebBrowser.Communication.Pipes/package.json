@@ -6,7 +6,6 @@
   "description": "Adds support to use pipes in UWB.",
   "author": "Voltstro",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser": "2.0.0",
-    "org.nuget.voltrpc.communication.pipes": "2.0.0"
+    "dev.voltstro.unitywebbrowser": "2.0.0"
   }
 }
