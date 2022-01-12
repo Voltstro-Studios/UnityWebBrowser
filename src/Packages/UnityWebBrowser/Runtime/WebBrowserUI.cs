@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityWebBrowser.Core;
+using UnityWebBrowser.Helper;
 using UnityWebBrowser.Input;
 using UnityWebBrowser.Shared.Events;
 #if ENABLE_INPUT_SYSTEM
@@ -184,37 +186,37 @@ namespace UnityWebBrowser
         ///     <para>Requires <see cref="supportFullscreen" /> to be enabled.</para>
         /// </summary>
         /// <param name="fullscreen">Go into fullscreen or not.</param>
-        public void ToggleFullscreen(bool fullscreen)
+        private void ToggleFullscreen(bool fullscreen)
         {
-            if (supportFullscreen)
+            if (!supportFullscreen) 
+                return;
+            
+            if (fullscreen)
             {
-                if (fullscreen)
-                {
-                    foreach (GameObject obj in hideOnFullscreen)
-                        obj.SetActive(false);
+                foreach (GameObject obj in hideOnFullscreen)
+                    obj.SetActive(false);
 
-                    RectTransform imageRectTransform = image.rectTransform;
-                    lastImageSize = imageRectTransform.sizeDelta;
-                    lastAnchorMax = imageRectTransform.anchorMax;
-                    lastAnchorMin = imageRectTransform.anchorMin;
-                    lastImagePosition = imageRectTransform.anchoredPosition;
+                RectTransform imageRectTransform = image.rectTransform;
+                lastImageSize = imageRectTransform.sizeDelta;
+                lastAnchorMax = imageRectTransform.anchorMax;
+                lastAnchorMin = imageRectTransform.anchorMin;
+                lastImagePosition = imageRectTransform.anchoredPosition;
 
-                    imageRectTransform.anchoredPosition = Vector2.zero;
-                    imageRectTransform.anchorMin = Vector2.zero;
-                    imageRectTransform.anchorMax = Vector2.one;
-                    imageRectTransform.sizeDelta = Vector2.zero;
-                }
-                else
-                {
-                    foreach (GameObject obj in hideOnFullscreen)
-                        obj.SetActive(true);
+                imageRectTransform.anchoredPosition = Vector2.zero;
+                imageRectTransform.anchorMin = Vector2.zero;
+                imageRectTransform.anchorMax = Vector2.one;
+                imageRectTransform.sizeDelta = Vector2.zero;
+            }
+            else
+            {
+                foreach (GameObject obj in hideOnFullscreen)
+                    obj.SetActive(true);
 
-                    RectTransform imageRectTransform = image.rectTransform;
-                    imageRectTransform.anchoredPosition = lastImagePosition;
-                    imageRectTransform.anchorMin = lastAnchorMin;
-                    imageRectTransform.anchorMax = lastAnchorMax;
-                    imageRectTransform.sizeDelta = lastImageSize;
-                }
+                RectTransform imageRectTransform = image.rectTransform;
+                imageRectTransform.anchoredPosition = lastImagePosition;
+                imageRectTransform.anchorMin = lastAnchorMin;
+                imageRectTransform.anchorMax = lastAnchorMax;
+                imageRectTransform.sizeDelta = lastImageSize;
             }
         }
 

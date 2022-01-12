@@ -1,35 +1,33 @@
 {
-  "name": "UnityWebBrowser",
-  "rootNamespace": "UnityWebBrowser",
-  "references": [
-    "Unity.TextMeshPro",
-    "Unity.InputSystem",
-    "UnityWebBrowser.Editor.BE",
-    "UniTask",
-    ""
-  ],
-  "includePlatforms": [
-    "Editor",
-    "LinuxStandalone64",
-    "WindowsStandalone64"
-  ],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": true,
-  "precompiledReferences": [
-    "UnityWebBrowser.Shared.dll",
-    "Newtonsoft.Json.dll",
-    "VoltRpc.dll",
-    "VoltRpc.Communication.Pipes.dll"
-  ],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [
-    {
-      "name": "com.unity.textmeshpro",
-      "expression": "3.0",
-      "define": "TMP_ENABLED"
-    }
-  ],
-  "noEngineReferences": false
+    "name": "UnityWebBrowser",
+    "rootNamespace": "UnityWebBrowser",
+    "references": [
+        "UnityWebBrowser.Editor.BE",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem",
+        "UniTask"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "LinuxStandalone64",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "UnityWebBrowser.Shared.dll",
+        "VoltRpc.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "3.0",
+            "define": "TMP_ENABLED"
+        }
+    ],
+    "noEngineReferences": false
 }

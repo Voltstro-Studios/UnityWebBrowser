@@ -4,7 +4,7 @@ using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Logging
 {
-    public class JsonLogSeverityConverter : JsonConverter
+    internal class JsonLogSeverityConverter : JsonConverter
     {
         public override bool CanWrite => false;
 

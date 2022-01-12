@@ -11,7 +11,7 @@ using UnityEditor;
 using UnityWebBrowser.Editor;
 #endif
 
-namespace UnityWebBrowser
+namespace UnityWebBrowser.Helper
 {
     /// <summary>
     ///     Provides Utils to be used by the web browser
@@ -115,11 +115,19 @@ namespace UnityWebBrowser
         ///     Converts a <see cref="Color32" /> to hex
         /// </summary>
         /// <param name="color"></param>
-        public static string ColorToHex(Color32 color)
+        internal static string ColorToHex(Color32 color)
         {
             return ColorUtility.ToHtmlStringRGBA(color);
         }
 
+        /// <summary>
+        ///     Creates a <see cref="Process"/> for an engine
+        /// </summary>
+        /// <param name="browserEngine"></param>
+        /// <param name="browserEnginePath"></param>
+        /// <param name="arguments"></param>
+        /// <param name="onLogEvent"></param>
+        /// <returns></returns>
         internal static Process CreateEngineProcess(string browserEngine, string browserEnginePath, string arguments, 
             DataReceivedEventHandler onLogEvent)
         {

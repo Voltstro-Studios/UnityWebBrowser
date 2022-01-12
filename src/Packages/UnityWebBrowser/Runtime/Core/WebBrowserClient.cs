@@ -10,13 +10,14 @@ using UnityEngine;
 using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Communication;
 using UnityWebBrowser.Events;
+using UnityWebBrowser.Helper;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 using Object = UnityEngine.Object;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 
-namespace UnityWebBrowser
+namespace UnityWebBrowser.Core
 {
     /// <summary>
     ///     The main object responsible for UWB.
@@ -581,7 +582,7 @@ namespace UnityWebBrowser
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
         /// <param name="chars"></param>
-        internal void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
+        public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
         {
             if (!IsReady)
                 return;
@@ -601,7 +602,7 @@ namespace UnityWebBrowser
         ///     Sends a mouse event
         /// </summary>
         /// <param name="mousePos"></param>
-        internal void SendMouseMove(Vector2 mousePos)
+        public void SendMouseMove(Vector2 mousePos)
         {
             if (!IsReady)
                 return;
@@ -623,7 +624,7 @@ namespace UnityWebBrowser
         /// <param name="clickCount"></param>
         /// <param name="clickType"></param>
         /// <param name="eventType"></param>
-        internal void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
+        public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
             if (!IsReady)
@@ -648,7 +649,7 @@ namespace UnityWebBrowser
         /// <param name="mouseX"></param>
         /// <param name="mouseY"></param>
         /// <param name="mouseScroll"></param>
-        internal void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
+        public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
         {
             if (!IsReady)
                 return;
@@ -668,7 +669,7 @@ namespace UnityWebBrowser
         ///     Tells the browser to load a URL
         /// </summary>
         /// <param name="url"></param>
-        internal void LoadUrl(string url)
+        public void LoadUrl(string url)
         {
             if (!IsReady)
                 return;
@@ -682,7 +683,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Tells the browser to go forward
         /// </summary>
-        internal void GoForward()
+        public void GoForward()
         {
             if (!IsReady)
                 return;
@@ -696,7 +697,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Tells the browser to go back
         /// </summary>
-        internal void GoBack()
+        public void GoBack()
         {
             if (!IsReady)
                 return;
@@ -710,7 +711,7 @@ namespace UnityWebBrowser
         /// <summary>
         ///     Refreshes the browser
         /// </summary>
-        internal void Refresh()
+        public void Refresh()
         {
             if (!IsReady)
                 return;
@@ -725,7 +726,7 @@ namespace UnityWebBrowser
         ///     Makes the browser load html
         /// </summary>
         /// <param name="html"></param>
-        internal void LoadHtml(string html)
+        public void LoadHtml(string html)
         {
             if (!IsReady)
                 return;
@@ -740,7 +741,7 @@ namespace UnityWebBrowser
         ///     Executes JS in the browser
         /// </summary>
         /// <param name="js"></param>
-        internal void ExecuteJs(string js)
+        public void ExecuteJs(string js)
         {
             if (!IsReady)
                 return;
@@ -751,7 +752,12 @@ namespace UnityWebBrowser
             communicationsManager.ExecuteJs(js);
         }
 
-        internal void Resize(Resolution newResolution)
+        /// <summary>
+        ///     Resizes the screen
+        /// </summary>
+        /// <param name="newResolution"></param>
+        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        public void Resize(Resolution newResolution)
         {
             if (!IsReady)
                 return;

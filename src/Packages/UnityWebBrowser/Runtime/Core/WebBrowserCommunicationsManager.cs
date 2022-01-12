@@ -11,7 +11,7 @@ using UnityWebBrowser.Shared.Proxy;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
 
-namespace UnityWebBrowser
+namespace UnityWebBrowser.Core
 {
     /// <summary>
     ///     Handles the RPC methods and two-way communication between the UWB engine and Unity

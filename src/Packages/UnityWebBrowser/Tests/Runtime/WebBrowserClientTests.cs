@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityWebBrowser.Core;
 
 namespace UnityWebBrowser.Tests
 {

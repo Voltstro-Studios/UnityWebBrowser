@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityWebBrowser.Helper;
 
 namespace UnityWebBrowser.Tests
 {

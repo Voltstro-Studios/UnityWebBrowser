@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace UnityWebBrowser
+namespace UnityWebBrowser.Helper
 {
-    public static class ProcessExtensions
+    internal static class ProcessExtensions
     {
         private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
@@ -19,7 +19,7 @@ namespace UnityWebBrowser
             process.KillTree(DefaultTimeout);
         }
 
-        public static void KillTree(this Process process, TimeSpan timeout)
+        private static void KillTree(this Process process, TimeSpan timeout)
         {
             if (IsWindows)
             {

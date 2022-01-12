@@ -3,15 +3,11 @@ using System;
 namespace UnityWebBrowser
 {
     /// <summary>
-    ///     The web browser is not ready exception
+    ///     An <see cref="Exception"/> related to when you are trying to do something when the engine is not running
     /// </summary>
-    public class WebBrowserIsNotConnectedException : Exception
+    public sealed class WebBrowserIsNotConnectedException : Exception
     {
-        public WebBrowserIsNotConnectedException()
-        {
-        }
-
-        public WebBrowserIsNotConnectedException(string message) : base(message)
+        internal WebBrowserIsNotConnectedException(string message) : base(message)
         {
         }
     }

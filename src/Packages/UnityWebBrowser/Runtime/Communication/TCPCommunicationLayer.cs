@@ -5,8 +5,11 @@ using VoltRpc.Communication.TCP;
 
 namespace UnityWebBrowser.Communication
 {
+    /// <summary>
+    ///     In-Built TCP layer that uses VoltRpc's <see cref="TCPClient"/> and <see cref="TCPHost"/>
+    /// </summary>
     [CreateAssetMenu(fileName = "TCP Communication Layer", menuName = "UWB/TCP Communication Layer")]
-    public class TCPCommunicationLayer : CommunicationLayer
+    public sealed class TCPCommunicationLayer : CommunicationLayer
     {
         /// <summary>
         ///     The in port to communicate on

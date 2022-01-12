@@ -2,9 +2,12 @@ using System;
 
 namespace UnityWebBrowser
 {
-    public class WebBrowserIsConnectedException : Exception
+    /// <summary>
+    ///     An <see cref="Exception"/> related to when you are trying to change something that cannot be changed when the engine is already running
+    /// </summary>
+    public sealed class WebBrowserIsConnectedException : Exception
     {
-        public WebBrowserIsConnectedException(string message)
+        internal WebBrowserIsConnectedException(string message)
             : base(message)
         {
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using UnityWebBrowser.Core;
 using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Logging
