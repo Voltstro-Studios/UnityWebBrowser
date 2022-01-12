@@ -2,7 +2,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -173,10 +176,15 @@ namespace UnityWebBrowser.Helper
         /// </summary>
         /// <param name="copyFrom"></param>
         /// <param name="copyTo"></param>
-        internal static void CopySpanToNativeArray(ReadOnlySpan<byte> copyFrom, NativeArray<byte> copyTo)
+        /// <param name="token"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void CopySpanToNativeArray<T>(ReadOnlySpan<T> copyFrom, NativeArray<T> copyTo, CancellationToken token) where T : struct
         {
             for (int i = 0; i < copyFrom.Length; i++)
             {
+                if(token.IsCancellationRequested)
+                    return;
+                
                 copyTo[i] = copyFrom[i];
             }
         }

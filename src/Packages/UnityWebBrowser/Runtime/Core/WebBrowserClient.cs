@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -451,7 +452,6 @@ namespace UnityWebBrowser.Core
                     if (!IsReady || !IsConnected)
                         continue;
                     
-
                     await Task.Delay(25, token);
 
                     if (token.IsCancellationRequested)
@@ -466,9 +466,11 @@ namespace UnityWebBrowser.Core
                         //There can be a good amount of time between first getting the pixels and when we go to copy it to the native array
                         if(token.IsCancellationRequested)
                             return;
-                    
+                        
                         markerGetPixelsCopy.Begin();
-                        WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData);
+                        
+                        WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token);
+                        
                         markerGetPixelsCopy.End();
                     }
                     markerGetPixels.End();
@@ -486,6 +488,7 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     Loads the pixel data into the <see cref="BrowserTexture" />
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void LoadTextureData()
         {
             if (!IsReady || !IsConnected)
