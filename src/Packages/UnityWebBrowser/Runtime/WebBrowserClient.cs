@@ -260,7 +260,7 @@ namespace UnityWebBrowser
 
         #endregion
 
-        private Process serverProcess;
+        private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
 
@@ -364,24 +364,18 @@ namespace UnityWebBrowser
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
 
-            //Start the server process
-            serverProcess = new Process
+            //Start the engine process
+            try
             {
-                StartInfo = new ProcessStartInfo(browserEnginePath, arguments)
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    WorkingDirectory = WebBrowserUtils.GetBrowserEnginePath(browserEngine)
-                },
-                EnableRaisingEvents = true
-            };
-            serverProcess.OutputDataReceived += new ProcessLogHandler(this).HandleProcessLog;
-            serverProcess.Start();
-            serverProcess.BeginOutputReadLine();
-            serverProcess.BeginErrorReadLine();
-
+                engineProcess = WebBrowserUtils.CreateEngineProcess(browserEngine, browserEnginePath, arguments,
+                    new ProcessLogHandler(this).HandleProcessLog);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"An error occured while setting up the engine process! {ex}");
+                throw;
+            }
+            
             cancellationToken = new CancellationTokenSource();
 
             UniTask.Create(WaitForEngineReadyTask);
@@ -824,13 +818,13 @@ namespace UnityWebBrowser
 
             communicationLayer.IsInUse = false;
 
-            if (serverProcess != null)
+            if (engineProcess != null)
             {
                 if (IsReady)
-                    serverProcess.KillTree();
+                    engineProcess.KillTree();
 
-                serverProcess.Dispose();
-                serverProcess = null;
+                engineProcess.Dispose();
+                engineProcess = null;
             }
         }
 

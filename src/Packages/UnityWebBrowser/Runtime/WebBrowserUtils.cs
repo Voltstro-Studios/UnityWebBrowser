@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Unity.Collections;
@@ -119,6 +120,28 @@ namespace UnityWebBrowser
             return ColorUtility.ToHtmlStringRGBA(color);
         }
 
+        internal static Process CreateEngineProcess(string browserEngine, string browserEnginePath, string arguments, 
+            DataReceivedEventHandler onLogEvent)
+        {
+            Process process = new()
+            {
+                StartInfo = new ProcessStartInfo(browserEnginePath, arguments)
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    WorkingDirectory = GetBrowserEnginePath(browserEngine)
+                },
+                EnableRaisingEvents = true
+            };
+            process.OutputDataReceived += onLogEvent;
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            return process;
+        }
+
         /// <summary>
         ///     Sets every single pixel in a <see cref="Texture2D" /> to one <see cref="Color32" />
         /// </summary>
@@ -137,6 +160,11 @@ namespace UnityWebBrowser
             texture.Apply();
         }
 
+        /// <summary>
+        ///     Copies a <see cref="ReadOnlyMemory{T}"/> to a <see cref="NativeArray{T}"/>
+        /// </summary>
+        /// <param name="copyFrom"></param>
+        /// <param name="copyTo"></param>
         internal static void CopySpanToNativeArray(ReadOnlySpan<byte> copyFrom, NativeArray<byte> copyTo)
         {
             for (int i = 0; i < copyFrom.Length; i++)
