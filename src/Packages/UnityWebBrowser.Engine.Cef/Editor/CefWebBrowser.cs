@@ -16,8 +16,8 @@ namespace UnityWebBrowser.Engine.Cef.Editor
         {
             Dictionary<BuildTarget, string> buildFiles = new Dictionary<BuildTarget, string>();
             
-            string windowsPath = $"Packages/{CefBrowserEngineWindowsPackageName}/Plugins/win-x64/";
-            string linuxPath = $"Packages/{CefBrowserEngineLinuxPackageName}/Plugins/linux-x64/";
+            string windowsPath = $"Packages/{CefBrowserEngineWindowsPackageName}/Engine~/";
+            string linuxPath = $"Packages/{CefBrowserEngineLinuxPackageName}/Engine~/";
             
             if(Directory.Exists(windowsPath))
                 buildFiles.Add(BuildTarget.StandaloneWindows64, windowsPath);
