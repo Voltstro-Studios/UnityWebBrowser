@@ -6,6 +6,7 @@
     "com.unity.inputsystem": "1.2.0",
     "com.unity.test-framework": "1.1.30",
     "com.unity.textmeshpro": "3.0.6",
+    "com.unity.toolchain.linux-x86_64": "1.0.0",
     "com.unity.ugui": "1.0.0",
     "dev.voltstro.unitywebbrowser": "file:../../Packages/UnityWebBrowser",
     "dev.voltstro.unitywebbrowser.communication.pipes": "file:../../Packages/UnityWebBrowser.Communication.Pipes",
@@ -17,7 +18,9 @@
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.uielements": "1.0.0"
   },
-  "testables": ["dev.voltstro.unitywebbrowser"],
+  "testables": [
+    "dev.voltstro.unitywebbrowser"
+  ],
   "scopedRegistries": [
     {
       "name": "Unity NuGet",

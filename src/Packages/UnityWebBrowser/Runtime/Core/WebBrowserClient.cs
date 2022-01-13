@@ -293,6 +293,7 @@ namespace UnityWebBrowser.Core
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
             pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
+            pixelDataLock = new object();
 
             string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
 
@@ -441,6 +442,7 @@ namespace UnityWebBrowser.Core
         #region Main Loop
         
         private NativeArray<byte> pixelData;
+        private object pixelDataLock;
 
         internal async Task PixelDataLoop()
         {
@@ -467,9 +469,12 @@ namespace UnityWebBrowser.Core
                             return;
                         
                         markerGetPixelsCopy.Begin();
-                        
-                        WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token);
-                        
+
+                        lock (pixelDataLock)
+                        {
+                            WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token);
+                        }
+
                         markerGetPixelsCopy.End();
                     }
                     markerGetPixels.End();
@@ -500,7 +505,10 @@ namespace UnityWebBrowser.Core
                 
                 Texture2D texture = BrowserTexture;
                 markerLoadTextureLoad.Begin();
-                texture.LoadRawTextureData(pixelData);
+                lock (pixelDataLock)
+                {
+                    texture.LoadRawTextureData(pixelData);
+                }
                 markerLoadTextureLoad.End();
                 
                 markerLoadTextureApply.Begin();
@@ -810,7 +818,11 @@ namespace UnityWebBrowser.Core
             cancellationToken?.Cancel();
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
-            pixelData.Dispose();
+
+            lock (pixelDataLock)
+            {
+                pixelData.Dispose();
+            }
 
             if (IsReady && IsConnected)
                 communicationsManager.Shutdown();
