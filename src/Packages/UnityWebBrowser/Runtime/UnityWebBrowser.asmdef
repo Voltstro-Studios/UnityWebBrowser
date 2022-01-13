@@ -2,6 +2,7 @@
     "name": "UnityWebBrowser",
     "rootNamespace": "UnityWebBrowser",
     "references": [
+        "UnityWebBrowser.UnixSupport",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "UniTask"
@@ -26,6 +27,11 @@
             "name": "com.unity.textmeshpro",
             "expression": "3.0",
             "define": "TMP_ENABLED"
+        },
+        {
+            "name": "dev.voltstro.unitywebbrowser.unix-support",
+            "expression": "1",
+            "define": "UNIX_SUPPORT"
         }
     ],
     "noEngineReferences": false

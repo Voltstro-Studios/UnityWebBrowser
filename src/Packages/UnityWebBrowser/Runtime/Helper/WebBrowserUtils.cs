@@ -7,6 +7,7 @@ using System.Threading;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityWebBrowser.Logging;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -125,14 +126,20 @@ namespace UnityWebBrowser.Helper
         /// <summary>
         ///     Creates a <see cref="Process"/> for an engine
         /// </summary>
+        /// <param name="logger"></param>
         /// <param name="browserEngine"></param>
         /// <param name="browserEnginePath"></param>
         /// <param name="arguments"></param>
         /// <param name="onLogEvent"></param>
         /// <returns></returns>
-        internal static Process CreateEngineProcess(string browserEngine, string browserEnginePath, string arguments, 
+        internal static Process CreateEngineProcess(IWebBrowserLogger logger, string browserEngine, string browserEnginePath, string arguments, 
             DataReceivedEventHandler onLogEvent)
         {
+#if UNIX_SUPPORT && (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
+            if(UnixSupport.PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(browserEnginePath))
+                logger.Warn("UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
+#endif
+            
             Process process = new()
             {
                 StartInfo = new ProcessStartInfo(browserEnginePath, arguments)

@@ -17,11 +17,6 @@ namespace UnityWebBrowser.Logging
             logger = UnityEngine.Debug.unityLogger;
         }
 
-        public DefaultUnityWebBrowserLogger(ILogger unityLogger)
-        {
-            logger = unityLogger ?? throw new ArgumentNullException(nameof(unityLogger));
-        }
-
         public void Debug(object message)
         {
             logger.Log(LogType.Log, LoggingTag, message);

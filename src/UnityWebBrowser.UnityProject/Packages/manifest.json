@@ -13,6 +13,7 @@
     "dev.voltstro.unitywebbrowser.engine.cef": "file:../../Packages/UnityWebBrowser.Engine.Cef",
     "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Linux-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",
+    "dev.voltstro.unitywebbrowser.unix-support": "file:../../Packages/UnityWebBrowser.Unix-Support",
     "com.unity.modules.imgui": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
@@ -37,6 +38,13 @@
         "com.cysharp.unitask",
         "com.neuecc.messagepack",
         "com.openupm"
+      ]
+    },
+    {
+      "name": "Voltstro-Studios UPM",
+      "url": "https://pkgs.dev.azure.com/Voltstro-Studios/UnityPackages/_packaging/UPM/npm/registry/",
+      "scopes": [
+        "dev.voltstro"
       ]
     }
   ]

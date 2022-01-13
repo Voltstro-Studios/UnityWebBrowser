@@ -42,11 +42,18 @@ MonoBehaviour:
     - com.openupm
     m_IsDefault: 0
     m_Capabilities: 0
-  m_UserSelectedRegistryName: package.openupm.com
+  - m_Id: scoped:Voltstro-Studios UPM
+    m_Name: Voltstro-Studios UPM
+    m_Url: https://pkgs.dev.azure.com/Voltstro-Studios/UnityPackages/_packaging/UPM/npm/registry
+    m_Scopes:
+    - dev.voltstro
+    m_IsDefault: 0
+    m_Capabilities: 0
+  m_UserSelectedRegistryName: Voltstro-Studios UPM
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -822
-    m_OriginalInstanceId: -826
+    m_UserModificationsInstanceId: -826
+    m_OriginalInstanceId: -830
   m_LoadAssets: 0

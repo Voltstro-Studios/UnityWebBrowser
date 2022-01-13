@@ -1,0 +1,11 @@
+{
+  "name": "dev.voltstro.unitywebbrowser.unix-support",
+  "displayName": "Unity Web Browser Unix Support",
+  "version": "1.0.0",
+  "unity": "2021.2",
+  "description": "Additional requirement for UWB on Unix systems (Linux & MacOS).",
+  "author": "Voltstro",
+  "dependencies": {
+    "dev.voltstro.unity.mono.unix": "1.0.0"
+  }
+}

@@ -375,7 +375,7 @@ namespace UnityWebBrowser.Core
             //Start the engine process
             try
             {
-                engineProcess = WebBrowserUtils.CreateEngineProcess(browserEngine, browserEnginePath, arguments,
+                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, browserEngine, browserEnginePath, arguments,
                     new ProcessLogHandler(this).HandleProcessLog);
             }
             catch (Exception ex)
