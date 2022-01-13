@@ -1,12 +1,15 @@
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityWebBrowser.BrowserEngine;
+using UnityWebBrowser.Core;
+using UnityWebBrowser.Editor.EngineManagement;
 
-namespace UnityWebBrowser.Editor
+namespace UnityWebBrowser.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(ActiveBrowserEngineAttribute))]
-    public class ActiveBrowserEngineDrawer : PropertyDrawer
+    internal class ActiveBrowserEngineDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -55,3 +58,5 @@ namespace UnityWebBrowser.Editor
         }
     }
 }
+
+#endif

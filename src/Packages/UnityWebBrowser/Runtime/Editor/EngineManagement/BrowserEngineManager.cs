@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -5,13 +7,21 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace UnityWebBrowser.Editor
+namespace UnityWebBrowser.Editor.EngineManagement
 {
+    /// <summary>
+    ///     Manages UWB engines
+    /// </summary>
     public static class BrowserEngineManager
     {
-        public static List<BrowserEngine> Engines { get; } = new List<BrowserEngine>();
+        internal static List<BrowserEngine> Engines { get; } = new();
 
-        public static void AddBrowserEngine(BrowserEngine engine)
+        /// <summary>
+        ///     Adds a <see cref="BrowserEngine" />.
+        ///     <para>This must be called every assembly reload!</para>
+        /// </summary>
+        /// <param name="engine">The <see cref="BrowserEngine" /> you want to add</param>
+        public static void AddEngine(BrowserEngine engine)
         {
             if (!CheckIfAppExists(engine))
             {
@@ -22,7 +32,12 @@ namespace UnityWebBrowser.Editor
             Engines.Add(engine);
         }
 
-        public static BrowserEngine GetBrowser(string engineAppName)
+        /// <summary>
+        ///     Gets a <see cref="BrowserEngine" /> by its <see cref="BrowserEngine.EngineAppFile" />
+        /// </summary>
+        /// <param name="engineAppName"></param>
+        /// <returns></returns>
+        public static BrowserEngine GetEngine(string engineAppName)
         {
             return Engines.FirstOrDefault(x => x.EngineAppFile == engineAppName);
         }
@@ -38,18 +53,18 @@ namespace UnityWebBrowser.Editor
                 else
                     engineFile = engine.EngineAppFile;
 
-                if (!File.Exists($"{path}{engineFile}"))
-                {
-                    Debug.LogError($"{files.Key} target is missing {engine.EngineAppFile}!");
-                    return false;
-                }
+                if (File.Exists($"{path}{engineFile}"))
+                    continue;
+
+                Debug.LogError($"{files.Key} target is missing {engine.EngineAppFile}!");
+                return false;
             }
 
             return true;
         }
 
         [PostProcessBuild(1)]
-        public static void CopyFilesOnBuild(BuildTarget target, string pathToBuiltProject)
+        private static void CopyFilesOnBuild(BuildTarget target, string pathToBuiltProject)
         {
             Debug.Log("Copying browser engine files...");
 
@@ -115,3 +130,5 @@ namespace UnityWebBrowser.Editor
         }
     }
 }
+
+#endif

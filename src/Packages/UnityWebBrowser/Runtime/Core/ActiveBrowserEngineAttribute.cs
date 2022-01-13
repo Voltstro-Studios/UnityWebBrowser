@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UnityWebBrowser.BrowserEngine
+namespace UnityWebBrowser.Core
 {
     internal class ActiveBrowserEngineAttribute : PropertyAttribute
     {

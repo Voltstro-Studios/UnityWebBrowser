@@ -1,27 +1,29 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 
-namespace UnityWebBrowser.Editor
+namespace UnityWebBrowser.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(Resolution))]
-    public class ResolutionDrawer : PropertyDrawer
+    internal class ResolutionDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-            
+
             int indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
-            
-            Rect xFieldSize = new Rect(position.x, position.y, 50, position.height);
-            Rect xLabelSize = new Rect(position.x + 55, position.y, 25, position.height);
-            Rect yFieldSize = new Rect(position.x + 70, position.y, 50, position.height);
+
+            Rect xFieldSize = new(position.x, position.y, 50, position.height);
+            Rect xLabelSize = new(position.x + 55, position.y, 25, position.height);
+            Rect yFieldSize = new(position.x + 70, position.y, 50, position.height);
 
             SerializedProperty widthProp = property.FindPropertyRelative("Width");
             SerializedProperty heightProp = property.FindPropertyRelative("Height");
-            
+
             int widthValue = EditorGUI.IntField(xFieldSize, widthProp.intValue);
             if (widthValue < 0)
                 Debug.LogError("Width cannot be lower then 0!");
@@ -29,7 +31,7 @@ namespace UnityWebBrowser.Editor
                 widthProp.intValue = widthValue;
 
             EditorGUI.LabelField(xLabelSize, "x");
-            
+
             int heightValue = EditorGUI.IntField(yFieldSize, heightProp.intValue);
             if (heightValue < 0)
                 Debug.LogError("Height cannot be lower then 0!");
@@ -41,3 +43,5 @@ namespace UnityWebBrowser.Editor
         }
     }
 }
+
+#endif

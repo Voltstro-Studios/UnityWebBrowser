@@ -5,13 +5,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityWebBrowser.Editor;
+using UnityWebBrowser.Editor.EngineManagement;
 #endif
 
 namespace UnityWebBrowser.Helper
@@ -42,7 +41,7 @@ namespace UnityWebBrowser.Helper
         {
             //Editor
 #if UNITY_EDITOR
-            Editor.BrowserEngine browserEngine = BrowserEngineManager.GetBrowser(engine);
+            BrowserEngine browserEngine = BrowserEngineManager.GetEngine(engine);
 
 #if UNITY_EDITOR_WIN
             return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>

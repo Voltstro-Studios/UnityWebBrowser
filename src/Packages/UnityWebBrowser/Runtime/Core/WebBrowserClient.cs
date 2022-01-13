@@ -8,7 +8,6 @@ using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
-using UnityWebBrowser.BrowserEngine;
 using UnityWebBrowser.Communication;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Helper;

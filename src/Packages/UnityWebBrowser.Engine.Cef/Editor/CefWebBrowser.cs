@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityWebBrowser.Editor;
+using UnityWebBrowser.Editor.EngineManagement;
 
 namespace UnityWebBrowser.Engine.Cef.Editor
 {
@@ -24,7 +25,7 @@ namespace UnityWebBrowser.Engine.Cef.Editor
                 buildFiles.Add(BuildTarget.StandaloneLinux64, linuxPath);
             
             if(buildFiles.Count > 0)
-                BrowserEngineManager.AddBrowserEngine(new BrowserEngine("Cef Browser Engine", "UnityWebBrowser.Engine.Cef",
+                BrowserEngineManager.AddEngine(new BrowserEngine("Cef Browser Engine", "UnityWebBrowser.Engine.Cef",
                 buildFiles));
         }
     }
