@@ -13,9 +13,7 @@
         "Mono.Unix.dll"
     ],
     "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_STANDALONE_LINUX"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }
