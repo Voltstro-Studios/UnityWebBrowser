@@ -127,7 +127,7 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     Timeout time for waiting for the engine to start (in milliseconds)
         /// </summary>
-        [Tooltip("Timeout time for waiting for the engine to start (in markerGetPixelsRpcmilliseconds)")]
+        [Tooltip("Timeout time for waiting for the engine to start (in milliseconds)")]
         public int engineStartupTimeout = 4000;
 
         /// <summary>
@@ -135,6 +135,12 @@ namespace UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
         public LogSeverity logSeverity;
+
+        /// <summary>
+        ///     Has higher performance with a trade-off of screen tearing
+        /// </summary>
+        [Tooltip("Has higher performance with a trade-off of screen tearing")]
+        public bool performanceMode;
 
         /// <summary>
         ///     Texture that the browser will paint to
@@ -470,10 +476,8 @@ namespace UnityWebBrowser.Core
                         
                         markerGetPixelsCopy.Begin();
 
-                        lock (pixelDataLock)
-                        {
-                            WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token);
-                        }
+                        RunPixelDataLockAction(() =>
+                            WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token));
 
                         markerGetPixelsCopy.End();
                     }
@@ -505,16 +509,27 @@ namespace UnityWebBrowser.Core
                 
                 Texture2D texture = BrowserTexture;
                 markerLoadTextureLoad.Begin();
-                lock (pixelDataLock)
-                {
-                    texture.LoadRawTextureData(pixelData);
-                }
+                RunPixelDataLockAction(() => texture.LoadRawTextureData(pixelData));
                 markerLoadTextureLoad.End();
                 
                 markerLoadTextureApply.Begin();
                 texture.Apply(false);
                 markerLoadTextureApply.End();
             }
+        }
+
+        private void RunPixelDataLockAction(Action action)
+        {
+            if (!performanceMode)
+            {
+                lock (pixelDataLock)
+                {
+                    action();
+                }
+                return;
+            }
+
+            action();
         }
 
         #endregion
