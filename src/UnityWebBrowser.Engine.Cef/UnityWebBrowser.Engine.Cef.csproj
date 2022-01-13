@@ -76,6 +76,12 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\swiftshader\*.dll" Link="Libs/switfshader/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>swiftshader/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
     </ItemGroup>
 
     <!-- Files we need on Linux -->
@@ -119,6 +125,12 @@
         <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\swiftshader\*.so" Link="Libs/switfshader/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>swiftshader/%(Filename)%(Extension)</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
     </ItemGroup>
