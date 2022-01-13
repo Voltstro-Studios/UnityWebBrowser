@@ -1121,15 +1121,10 @@ MonoBehaviour:
       ProxyServer: 0
     remoteDebugging: 0
     remoteDebuggingPort: 9022
-    ipcSettings:
-      preferPipes: 0
-      outPipeName: UnityWebBrowserOut
-      inPipeName: UnityWebBrowserIn
-      outPort: 5555
-      inPort: 5556
-      connectionTimeout: 100000
+    communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc, type: 2}
     engineStartupTimeout: 4000
-    logSeverity: 0
+    logSeverity: 1
+    performanceMode: 0
   supportFullscreen: 1
   hideOnFullscreen:
   - {fileID: 7454210983829796803}
@@ -1371,10 +1366,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
