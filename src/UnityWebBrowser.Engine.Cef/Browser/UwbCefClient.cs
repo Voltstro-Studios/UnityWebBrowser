@@ -108,18 +108,18 @@ public class UwbCefClient : CefClient, IDisposable
     public void ProcessKeyboardEvent(KeyboardEvent keyboardEvent)
     {
         //Keys down
-        foreach (int i in keyboardEvent.KeysDown)
+        foreach (WindowsKey i in keyboardEvent.KeysDown)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = i,
+                WindowsKeyCode = (int)i,
                 EventType = CefKeyEventType.KeyDown
             });
 
         //Keys up
-        foreach (int i in keyboardEvent.KeysUp)
+        foreach (WindowsKey i in keyboardEvent.KeysUp)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = i,
+                WindowsKeyCode = (int)i,
                 EventType = CefKeyEventType.KeyUp
             });
 
@@ -128,7 +128,7 @@ public class UwbCefClient : CefClient, IDisposable
             KeyEvent(new CefKeyEvent
             {
 #if WINDOWS
-                    WindowsKeyCode = c,
+                WindowsKeyCode = c,
 #else
                 Character = c,
 #endif

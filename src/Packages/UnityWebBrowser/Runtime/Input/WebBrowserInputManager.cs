@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityWebBrowser.Shared;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -245,58 +246,6 @@ namespace UnityWebBrowser.Input
                     return WindowsKey.OemCloseBrackets;
                 case Key.Minus:
                     return WindowsKey.OemMinus;
-                case Key.A:
-                    return WindowsKey.A;
-                case Key.B:
-                    return WindowsKey.B;
-                case Key.C:
-                    return WindowsKey.C;
-                case Key.D:
-                    return WindowsKey.D;
-                case Key.E:
-                    return WindowsKey.E;
-                case Key.F:
-                    return WindowsKey.F;
-                case Key.G:
-                    return WindowsKey.G;
-                case Key.H:
-                    return WindowsKey.H;
-                case Key.I:
-                    return WindowsKey.I;
-                case Key.J:
-                    return WindowsKey.J;
-                case Key.K:
-                    return WindowsKey.K;
-                case Key.L:
-                    return WindowsKey.L;
-                case Key.M:
-                    return WindowsKey.M;
-                case Key.N:
-                    return WindowsKey.N;
-                case Key.O:
-                    return WindowsKey.O;
-                case Key.P:
-                    return WindowsKey.P;
-                case Key.Q:
-                    return WindowsKey.Q;
-                case Key.R:
-                    return WindowsKey.R;
-                case Key.S:
-                    return WindowsKey.S;
-                case Key.T:
-                    return WindowsKey.T;
-                case Key.U:
-                    return WindowsKey.U;
-                case Key.V:
-                    return WindowsKey.V;
-                case Key.W:
-                    return WindowsKey.W;
-                case Key.X:
-                    return WindowsKey.X;
-                case Key.Y:
-                    return WindowsKey.Y;
-                case Key.Z:
-                    return WindowsKey.Z;
                 case Key.LeftShift:
                     return WindowsKey.LShiftKey;
                 case Key.RightShift:

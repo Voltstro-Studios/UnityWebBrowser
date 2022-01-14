@@ -23,17 +23,17 @@ public sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent>
         };
     }
 
-    private void WriteKeys(BufferedWriter writer, int[] keys)
+    private void WriteKeys(BufferedWriter writer, WindowsKey[] keys)
     {
         writer.WriteInt(keys.Length);
 
-        foreach (int key in keys) writer.WriteInt(key);
+        foreach (WindowsKey key in keys) writer.WriteInt((int)key);
     }
 
-    private int[] ReadKeys(BufferedReader reader)
+    private WindowsKey[] ReadKeys(BufferedReader reader)
     {
-        int[] keys = new int[reader.ReadInt()];
-        for (int i = 0; i < keys.Length; i++) keys[i] = reader.ReadInt();
+        WindowsKey[] keys = new WindowsKey[reader.ReadInt()];
+        for (int i = 0; i < keys.Length; i++) keys[i] = (WindowsKey)reader.ReadInt();
 
         return keys;
     }

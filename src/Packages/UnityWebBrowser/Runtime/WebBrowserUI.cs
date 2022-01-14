@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityWebBrowser.Core;
 using UnityWebBrowser.Helper;
 using UnityWebBrowser.Input;
+using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -240,8 +241,8 @@ namespace UnityWebBrowser
         {
             while (Application.isPlaying && browserClient is {IsConnected: true})
             {
-                List<int> keysDown = new();
-                List<int> keysUp = new();
+                List<WindowsKey> keysDown = new();
+                List<WindowsKey> keysUp = new();
 
 #if ENABLE_INPUT_SYSTEM
                 //We need to find all keys that were pressed and released
@@ -249,14 +250,14 @@ namespace UnityWebBrowser
                     try
                     {
                         if (key.wasPressedThisFrame)
-                            keysDown.Add((int) key.keyCode.UnityKeyToWindowKey());
+                            keysDown.Add(key.keyCode.UnityKeyToWindowKey());
 
                         if (key.wasReleasedThisFrame)
-                            keysUp.Add((int) key.keyCode.UnityKeyToWindowKey());
+                            keysUp.Add(key.keyCode.UnityKeyToWindowKey());
                     }
-                    catch (Exception)
+                    catch (ArgumentOutOfRangeException)
                     {
-                        browserClient.logger.Warn($"Unsupported key conversion attempted! Key: {key}");
+                        //All good to ignore
                     }
 
                 //Send our input if any key is down or up
@@ -282,9 +283,9 @@ namespace UnityWebBrowser
                         if (UnityEngine.Input.GetKeyUp(key))
                             keysUp.Add((int) key.UnityKeyCodeToWindowKey());
                     }
-                    catch (Exception)
+                    catch (ArgumentOutOfRangeException)
                     {
-                        browserClient.LogWarning($"Unsupported key conversion attempted! KeyCode: {key}");
+                        //All good to ignore
                     }
                 }
 

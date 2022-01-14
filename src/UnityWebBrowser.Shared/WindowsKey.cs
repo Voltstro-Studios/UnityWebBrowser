@@ -6,7 +6,7 @@
 
 using System;
 
-namespace UnityWebBrowser.Input
+namespace UnityWebBrowser.Shared
 {
     /// <summary>
     ///     Specifies key codes and modifiers.

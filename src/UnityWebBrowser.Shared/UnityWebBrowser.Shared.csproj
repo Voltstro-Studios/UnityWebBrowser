@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/Properties.props"/>
+    <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
@@ -27,14 +27,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="VoltRpc" Version="2.0.0"/>
-        <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.0.1"/>
+        <PackageReference Include="VoltRpc" Version="2.0.0" />
+        <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.0.1" />
     </ItemGroup>
 
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll"/>
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml"/>
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb"/>
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb" />
     </Target>
 
 </Project>

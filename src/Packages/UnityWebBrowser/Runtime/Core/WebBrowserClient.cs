@@ -607,7 +607,7 @@ namespace UnityWebBrowser.Core
         /// <param name="keysDown"></param>
         /// <param name="keysUp"></param>
         /// <param name="chars"></param>
-        public void SendKeyboardControls(int[] keysDown, int[] keysUp, string chars)
+        public void SendKeyboardControls(WindowsKey[] keysDown, WindowsKey[] keysUp, string chars)
         {
             if (!IsReady)
                 return;
