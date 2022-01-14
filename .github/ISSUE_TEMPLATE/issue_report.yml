@@ -60,6 +60,11 @@ body:
       label: Provide reproducible steps for this issue.
       description: Providing reproducible steps always helps. You could also provide a project with the issue here. If its a Unity project please delete the cache folder (`/Library`) and other unnecessary files from it (Such as `/Temp`, `/obj`, `*.csproj` files and builds).
       placeholder: Please provide reproducible steps
+      value: "1. I did this.
+
+2. I then did that.
+
+3. Boom! Issue."
     validations:
       required: true
   - type: textarea
