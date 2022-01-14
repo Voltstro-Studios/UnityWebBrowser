@@ -1,0 +1,78 @@
+name: Issue Report
+description: File an issue report related to the project
+title: "[Issue]: "
+labels: ["issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hello, and thank you for reporting an issue with Unity Web Browser (UWB)!
+        When filling out the information below, please try to provide as much details as you can, the more you provide, the more likely we can help and fix something.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: What platform are you experiencing this issue on?
+      options:
+        - Windows
+        - Linux
+        - MacOS
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: What architecture is your platform?
+      options:
+        - 64-Bit
+        - 32-Bit
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: What version of UWB are you using?
+      options:
+        - Git Repo
+        - Preview GitLab Package
+        - Stable (1.6.3) GitLab Package
+    validations:
+      required: true
+  - type: input
+    id: unity-version
+    attributes:
+      label: What Unity version are you running?
+      placeholder: 2021.2.7f1
+    validations:
+      required: true
+  - type: textarea
+    id: issue-describe
+    attributes:
+      label: Describe what the issue you are experiencing is.
+      description: Tells us what the issue exactly is.
+      placeholder: Please provide a description on the issue
+      value: ""
+    validations:
+      required: true
+  - type: textarea
+    id: reproducible-steps
+    attributes:
+      label: Provide reproducible steps for this issue.
+      description: Providing reproducible steps always helps. You could also provide a project with the issue here. If its a Unity project please delete the cache folder (`/Library`) and other unnecessary files from it (Such as `/Temp`, `/obj`, `*.csproj` files and builds).
+      placeholder: Please provide reproducible steps
+      value: "1. I did this.
+
+2. I then did that.
+
+3. Boom! Issue."
+    validations:
+      required: true
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Any additional info you like to provide?
+      description: Provide images, use code blocks for code or other info if you think it will help. Remember more info is always better.
+      value: ""
+    validations:
+      required: false
