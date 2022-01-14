@@ -1,5 +1,5 @@
 name: Issue Report
-description: File an issue report related to the project
+description: File an issue report related to UWB. This should ONLY be used for issues (such as bugs or something broken)!
 title: "[Issue]: "
 labels: ["issue"]
 body:
