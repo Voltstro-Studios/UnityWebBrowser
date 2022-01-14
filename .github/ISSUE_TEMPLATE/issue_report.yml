@@ -52,7 +52,6 @@ body:
       label: Describe what the issue you are experiencing is.
       description: Tells us what the issue exactly is.
       placeholder: Please provide a description on the issue
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -61,11 +60,6 @@ body:
       label: Provide reproducible steps for this issue.
       description: Providing reproducible steps always helps. You could also provide a project with the issue here. If its a Unity project please delete the cache folder (`/Library`) and other unnecessary files from it (Such as `/Temp`, `/obj`, `*.csproj` files and builds).
       placeholder: Please provide reproducible steps
-      value: "1. I did this.
-
-2. I then did that.
-
-3. Boom! Issue."
     validations:
       required: true
   - type: textarea
@@ -73,6 +67,5 @@ body:
     attributes:
       label: Any additional info you like to provide?
       description: Provide images, use code blocks for code or other info if you think it will help. Remember more info is always better.
-      value: ""
     validations:
       required: false
