@@ -99,26 +99,6 @@ namespace UnityWebBrowser.Input
                     return WindowsKey.F14;
                 case KeyCode.F15:
                     return WindowsKey.F15;
-                case KeyCode.Alpha0:
-                    return WindowsKey.D0;
-                case KeyCode.Alpha1:
-                    return WindowsKey.D1;
-                case KeyCode.Alpha2:
-                    return WindowsKey.D2;
-                case KeyCode.Alpha3:
-                    return WindowsKey.D3;
-                case KeyCode.Alpha4:
-                    return WindowsKey.D4;
-                case KeyCode.Alpha5:
-                    return WindowsKey.D5;
-                case KeyCode.Alpha6:
-                    return WindowsKey.D6;
-                case KeyCode.Alpha7:
-                    return WindowsKey.D7;
-                case KeyCode.Alpha8:
-                    return WindowsKey.D8;
-                case KeyCode.Alpha9:
-                    return WindowsKey.D9;
                 case KeyCode.DoubleQuote:
                     return WindowsKey.OemQuotes;
                 case KeyCode.Quote:
@@ -137,58 +117,6 @@ namespace UnityWebBrowser.Input
                     return WindowsKey.OemPeriod;
                 case KeyCode.Semicolon:
                     return WindowsKey.OemSemicolon;
-                case KeyCode.A:
-                    return WindowsKey.A;
-                case KeyCode.B:
-                    return WindowsKey.B;
-                case KeyCode.C:
-                    return WindowsKey.C;
-                case KeyCode.D:
-                    return WindowsKey.D;
-                case KeyCode.E:
-                    return WindowsKey.E;
-                case KeyCode.F:
-                    return WindowsKey.F;
-                case KeyCode.G:
-                    return WindowsKey.G;
-                case KeyCode.H:
-                    return WindowsKey.H;
-                case KeyCode.I:
-                    return WindowsKey.I;
-                case KeyCode.J:
-                    return WindowsKey.J;
-                case KeyCode.K:
-                    return WindowsKey.K;
-                case KeyCode.L:
-                    return WindowsKey.L;
-                case KeyCode.M:
-                    return WindowsKey.M;
-                case KeyCode.N:
-                    return WindowsKey.N;
-                case KeyCode.O:
-                    return WindowsKey.O;
-                case KeyCode.P:
-                    return WindowsKey.P;
-                case KeyCode.Q:
-                    return WindowsKey.Q;
-                case KeyCode.R:
-                    return WindowsKey.R;
-                case KeyCode.S:
-                    return WindowsKey.S;
-                case KeyCode.T:
-                    return WindowsKey.T;
-                case KeyCode.U:
-                    return WindowsKey.U;
-                case KeyCode.V:
-                    return WindowsKey.V;
-                case KeyCode.W:
-                    return WindowsKey.W;
-                case KeyCode.X:
-                    return WindowsKey.X;
-                case KeyCode.Y:
-                    return WindowsKey.Y;
-                case KeyCode.Z:
-                    return WindowsKey.Z;
                 case KeyCode.RightShift:
                     return WindowsKey.RShiftKey;
                 case KeyCode.LeftShift:

@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityWebBrowser.Core
 {
-    public abstract class BaseUwbFullscreenHandler : BaseUwbClientManager
+    [Serializable]
+    public class FullscreenHandler
     {
-        public Graphic graphicComponent;
+        [NonSerialized] public Graphic graphicComponent;
         
         /// <summary>
         ///     What objects to hide when the browser wants to be in fullscreen mode
@@ -17,13 +19,8 @@ namespace UnityWebBrowser.Core
         private Vector2 lastGraphicMin;
         private Vector2 lastGraphicMax;
         private Vector2 lastGraphicPosition;
-        
-        protected override void OnStart()
-        {
-            browserClient.OnFullscreen += OnEngineFullscreen;
-        }
 
-        private void OnEngineFullscreen(bool fullscreen)
+        public void OnEngineFullscreen(bool fullscreen)
         {
             RectTransform graphicRectTransform = graphicComponent.rectTransform;
             

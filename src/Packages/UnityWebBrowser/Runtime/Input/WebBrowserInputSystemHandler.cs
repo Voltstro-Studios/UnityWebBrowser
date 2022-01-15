@@ -1,3 +1,5 @@
+#if ENABLE_INPUT_SYSTEM
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +9,7 @@ using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Input
 {
-    [CreateAssetMenu(fileName = "Input System", menuName = "UWB/Input System")]
+    [CreateAssetMenu(fileName = "Input System Handler", menuName = "UWB/Inputs/Input System Handler")]
     public sealed class WebBrowserInputSystemHandler : WebBrowserInputHandler
     {
         [Header("Scroll Input")]
@@ -112,3 +114,5 @@ namespace UnityWebBrowser.Input
         }
     }
 }
+
+#endif
