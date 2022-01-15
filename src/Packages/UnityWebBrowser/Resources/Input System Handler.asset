@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1374d48f2db4e12b5a2595d1f478b09, type: 3}
+  m_Name: Input System Handler
+  m_EditorClassIdentifier: 
+  scrollInput:
+    m_Name: Scroll Input
+    m_Type: 2
+    m_ExpectedControlType: Vector2
+    m_Id: 8507c5d7-c9f7-4dff-89cc-608986e3f9d7
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c0e8b49e-ee80-4158-899e-538d912b91a0
+      m_Path: <Mouse>/scroll
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Scroll Input
+      m_Flags: 0
+    m_Flags: 0
+  scrollValue: 0.2
+  pointPosition:
+    m_Name: Point Position
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: de7d1d14-98b1-4561-a83e-011489592e09
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 29af4fab-f80e-4b36-8e1f-9dd3081adc19
+      m_Path: <Mouse>/position
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Point Position
+      m_Flags: 0
+    m_Flags: 0

@@ -73,19 +73,19 @@ namespace UnityWebBrowser.Helper
         }
 
         /// <summary>
-        ///     Gets the local position delta (0 -> 1) from a screen position on a <see cref="RawImage" />
+        ///     Gets the local position delta (0 -> 1) from a screen position on a <see cref="Graphic" />
         ///     from a top-left origin point
         ///     <para>
         ///         To calculate the pixel position,
         ///         do <see cref="Vector2.x" /> * [Desired height] and <see cref="Vector2.y" /> * [Desired Width]
         ///     </para>
         /// </summary>
-        /// <param name="image"><see cref="RawImage" /> that you want to calculate the local position on</param>
+        /// <param name="graphic"><see cref="Graphic" /> that you want to calculate the local position on</param>
         /// <param name="screenPosition">The screen position</param>
         /// <param name="position">The local delta position</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">Thrown if image is null</exception>
-        public static bool GetScreenPointToLocalPositionDeltaOnImage(RawImage image, Vector2 screenPosition,
+        /// <exception cref="ArgumentNullException">Thrown if the graphic is null</exception>
+        public static bool GetScreenPointToLocalPositionDeltaOnImage(Graphic graphic, Vector2 screenPosition,
             out Vector2 position)
         {
             //This was a pain in the ass to figure out how to do, I never want anything to do with mouses and UI elements ever again.
@@ -96,11 +96,11 @@ namespace UnityWebBrowser.Helper
             //There probs something here that could be done better, if you know, send in a PR
             //Based off: http://answers.unity.com/answers/1455168/view.html
 
-            if (image == null)
-                throw new ArgumentNullException(nameof(image), "Image cannot be null!");
+            if (graphic == null)
+                throw new ArgumentNullException(nameof(graphic), "Image cannot be null!");
 
             position = new Vector2();
-            RectTransform uiImageObjectRect = image.rectTransform;
+            RectTransform uiImageObjectRect = graphic.rectTransform;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRect, screenPosition, null,
                     out Vector2 localCursor)) return false;
 

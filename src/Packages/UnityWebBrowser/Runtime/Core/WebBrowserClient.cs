@@ -134,7 +134,7 @@ namespace UnityWebBrowser.Core
         ///     The log severity. Only messages of this severity level or higher will be logged
         /// </summary>
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
-        public LogSeverity logSeverity;
+        public LogSeverity logSeverity = LogSeverity.Info;
 
         /// <summary>
         ///     Has higher performance with a trade-off of screen tearing
