@@ -36,7 +36,7 @@ namespace UnityWebBrowser.Input
             return scroll;
         }
 
-        public override Vector2 GetMousePos()
+        public override Vector2 GetCursorPos()
         {
             return pointPosition.ReadValue<Vector2>();
         }

@@ -5,23 +5,34 @@ using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Input
 {
+    /// <summary>
+    ///     Input handler using Unity's old <see cref="UnityEngine.Input"/>
+    /// </summary>
     [CreateAssetMenu(fileName = "Old Input Handler", menuName = "UWB/Inputs/Old Input Handler")]
-    public class WebBrowserOldInputHandler : WebBrowserInputHandler
+    public sealed class WebBrowserOldInputHandler : WebBrowserInputHandler
     {
+        /// <summary>
+        ///     The name of the axis for the scroll
+        /// </summary>
+        [Tooltip("The name of the axis for the scroll")]
         public string scrollAxisName = "Mouse ScrollWheel";
+        
+        /// <summary>
+        ///     How much sensitivity for the scroll
+        /// </summary>
+        [Tooltip("How much sensitivity for the scroll")]
         public float scrollSensitivity = 2.0f;
         
         private static readonly KeyCode[] Keymap = (KeyCode[]) Enum.GetValues(typeof(KeyCode));
         private readonly List<WindowsKey> keysDown = new();
         private readonly List<WindowsKey> keysUp = new();
         
-        
         public override float GetScroll()
         {
             return UnityEngine.Input.GetAxis(scrollAxisName) * scrollSensitivity;
         }
 
-        public override Vector2 GetMousePos()
+        public override Vector2 GetCursorPos()
         {
             return UnityEngine.Input.mousePosition;
         }

@@ -2,7 +2,10 @@
     "name": "UnityWebBrowser.Communication.Pipes.Base",
     "rootNamespace": "UnityWebBrowser.Communication.Pipes.Base",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

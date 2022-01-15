@@ -1,8 +1,14 @@
+using UnityEngine;
 using UnityWebBrowser.Core;
 
 namespace UnityWebBrowser
 {
-    public class WebBrowserUIFull : RawImageUwbClientInputHandler
+    /// <summary>
+    ///     Full fat version of UWB, has fullscreen controls.
+    /// </summary>
+    [AddComponentMenu("UWB/Web Browser Full")]
+    [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
+    public sealed class WebBrowserUIFull : RawImageUwbClientInputHandler
     {
         public FullscreenHandler fullscreenHandler = new();
 

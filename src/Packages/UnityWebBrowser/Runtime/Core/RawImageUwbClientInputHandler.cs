@@ -9,16 +9,30 @@ using UnityWebBrowser.Shared.Events;
 
 namespace UnityWebBrowser.Core
 {
+    /// <summary>
+    ///     Input handler for <see cref="RawImageUwbClientManager"/>.
+    /// </summary>
     public abstract class RawImageUwbClientInputHandler : RawImageUwbClientManager, 
         IPointerEnterHandler, 
         IPointerExitHandler, 
         IPointerDownHandler,
         IPointerUpHandler
     {
+        /// <summary>
+        ///     The <see cref="WebBrowserInputHandler"/> to use
+        /// </summary>
+        [Tooltip("The input handler to use")]
         public WebBrowserInputHandler inputHandler;
         
         private Coroutine keyboardAndMouseHandlerCoroutine;
         private Vector2 lastSuccessfulMousePositionSent;
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            if (inputHandler == null)
+                throw new NullReferenceException("The input handler is null! You need to assign it in the editor!");
+        }
 
         protected override void OnDestroyed()
         {
@@ -87,7 +101,7 @@ namespace UnityWebBrowser.Core
 
         private bool GetMousePosition(out Vector2 pos)
         {
-            Vector2 mousePos = inputHandler.GetMousePos();
+            Vector2 mousePos = inputHandler.GetCursorPos();
 
             if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, mousePos, out pos))
             {

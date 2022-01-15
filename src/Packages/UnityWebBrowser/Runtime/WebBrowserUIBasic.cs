@@ -1,14 +1,14 @@
-using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityWebBrowser.Core;
-using UnityWebBrowser.Input;
 
 namespace UnityWebBrowser
 {
-    public class WebBrowserUIBasic : RawImageUwbClientInputHandler
+    /// <summary>
+    ///     Basic version of UWB. Lacks fullscreen controls
+    /// </summary>
+    [AddComponentMenu("UWB/Web Browser Basic")]
+    [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
+    public sealed class WebBrowserUIBasic : RawImageUwbClientInputHandler
     {
-        
     }
 }

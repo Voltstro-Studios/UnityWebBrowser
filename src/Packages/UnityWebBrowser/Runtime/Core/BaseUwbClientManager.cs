@@ -4,7 +4,13 @@ using UnityEngine;
 namespace UnityWebBrowser.Core
 {
     /// <summary>
-    ///     Base for all other systems that want to build custom rendering with UWB
+    ///     Base for all other systems that want to build custom rendering with UWB.
+    ///     <para>Provides controls that can be used with Unity events (such as OnClick).</para>
+    ///     <para>For other controls and events, use the <see cref="browserClient"/>.</para>
+    ///     <para>
+    ///         For those who want to implement this base, DO NOT USE <c>Start()</c>, <c>FixedUpdate</c> or <c>OnDestroy</c>,
+    ///         instead override <see cref="OnStart"/>, <see cref="OnFixedUpdate"/> and <see cref="OnDestroyed"/>.
+    ///     </para>
     /// </summary>
     public abstract class BaseUwbClientManager : MonoBehaviour
     {

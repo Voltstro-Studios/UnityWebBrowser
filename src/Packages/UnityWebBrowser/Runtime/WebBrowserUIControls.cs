@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityWebBrowser.Core;
 
 namespace UnityWebBrowser
 {
@@ -10,8 +11,8 @@ namespace UnityWebBrowser
     /// </summary>
     [AddComponentMenu("UWB/Web Browser UI Controls")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
-    [RequireComponent(typeof(WebBrowserUI))]
-    public class WebBrowserUIControls : MonoBehaviour
+    [RequireComponent(typeof(BaseUwbClientManager))]
+    public sealed class WebBrowserUIControls : MonoBehaviour
     {
         /// <summary>
         ///     The <see cref="InputField" /> for the URL
@@ -19,14 +20,14 @@ namespace UnityWebBrowser
         [Tooltip("The input field for the URL")]
         public InputField inputField;
 
-        private WebBrowserUI webBrowserUi;
+        private BaseUwbClientManager webBrowserUi;
 
         private void Start()
         {
             if (inputField == null)
                 throw new NullReferenceException("Input field is null!");
 
-            webBrowserUi = GetComponent<WebBrowserUI>();
+            webBrowserUi = GetComponent<BaseUwbClientManager>();
             if (webBrowserUi == null)
                 throw new NullReferenceException("Web browser UI is null!");
 

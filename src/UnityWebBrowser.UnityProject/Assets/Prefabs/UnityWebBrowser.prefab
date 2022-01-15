@@ -639,8 +639,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 906994673}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: Refresh
         m_Mode: 1
         m_Arguments:
@@ -773,8 +773,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 906994673}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:
@@ -954,8 +954,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 906994673}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: GoForward
         m_Mode: 1
         m_Arguments:
@@ -1027,7 +1027,7 @@ GameObject:
   - component: {fileID: 7454210984040730585}
   - component: {fileID: 7454210984040730583}
   - component: {fileID: 7454210984040730584}
-  - component: {fileID: 7454210984040730582}
+  - component: {fileID: 906994673}
   - component: {fileID: 2090336616946191105}
   m_Layer: 5
   m_Name: BrowserController
@@ -1091,7 +1091,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &7454210984040730582
+--- !u!114 &906994673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7454210984040730586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1b3c29db30831458683c82a632cde6, type: 3}
+  m_Script: {fileID: 11500000, guid: 53d0570114d34f649962da70092c0cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
@@ -1125,9 +1125,7 @@ MonoBehaviour:
     engineStartupTimeout: 4000
     logSeverity: 1
     performanceMode: 0
-  supportFullscreen: 1
-  hideOnFullscreen:
-  - {fileID: 7454210983829796803}
+  inputHandler: {fileID: 11400000, guid: 565be9a8022a65c7288f47df26d5fe7f, type: 2}
 --- !u!114 &2090336616946191105
 MonoBehaviour:
   m_ObjectHideFlags: 0

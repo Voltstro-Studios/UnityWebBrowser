@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 namespace UnityWebBrowser.Core
 {
+    /// <summary>
+    ///     Handles dealing with fullscreen stuff
+    /// </summary>
     [Serializable]
-    public class FullscreenHandler
+    public sealed class FullscreenHandler
     {
         [NonSerialized] public Graphic graphicComponent;
         

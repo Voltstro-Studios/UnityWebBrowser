@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace UnityWebBrowser.Core
 {
+    /// <summary>
+    ///     Implementation of <see cref="BaseUwbClientManager"/> for rendering to a <see cref="RawImage"/>
+    /// </summary>
     [RequireComponent(typeof(RawImage))]
     public abstract class RawImageUwbClientManager : BaseUwbClientManager
     {

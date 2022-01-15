@@ -3,6 +3,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityWebBrowser.Core;
 
 namespace UnityWebBrowser
 {
@@ -12,8 +13,8 @@ namespace UnityWebBrowser
     /// </summary>
     [AddComponentMenu("UWB/Web Browser UI Controls (TMP)")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
-    [RequireComponent(typeof(WebBrowserUI))]
-    public class WebBrowserUIControlsTMP : MonoBehaviour
+    [RequireComponent(typeof(BaseUwbClientManager))]
+    public sealed class WebBrowserUIControlsTMP : MonoBehaviour
     {
         /// <summary>
         ///     The <see cref="TMP_InputField" /> for the URL
@@ -21,18 +22,29 @@ namespace UnityWebBrowser
         [Tooltip("The input field for the URL")]
         public TMP_InputField inputField;
 
-        private WebBrowserUI webBrowserUi;
+        private BaseUwbClientManager webBrowserUi;
 
         private void Start()
         {
             if (inputField == null)
                 throw new NullReferenceException("Input field is null!");
 
-            webBrowserUi = GetComponent<WebBrowserUI>();
+            webBrowserUi = GetComponent<BaseUwbClientManager>();
             if (webBrowserUi == null)
                 throw new NullReferenceException("Web browser UI is null!");
 
+            webBrowserUi.browserClient.OnUrlChanged += OnUrlChanged;
             inputField.text = webBrowserUi.browserClient.initialUrl;
+        }
+        
+        private void OnDestroy()
+        {
+            webBrowserUi.browserClient.OnUrlChanged -= OnUrlChanged;
+        }
+        
+        private void OnUrlChanged(string url)
+        {
+            inputField.text = url;
         }
 
         /// <summary>
