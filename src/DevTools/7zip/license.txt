@@ -5,13 +5,11 @@
 
   7-Zip Copyright (C) 1999-2021 Igor Pavlov.
 
-  The licenses for files are:
+  The licenses for 7zz file are:
 
-    1) 7z.dll:
          - The "GNU LGPL" as main license for most of the code
          - The "GNU LGPL" with "unRAR license restriction" for some code
          - The "BSD 3-clause License" for some code
-    2) All other files: the "GNU LGPL".
 
   Redistributions in binary form must reproduce related license information from this file.
 

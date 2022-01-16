@@ -14,13 +14,52 @@ function Reset
     Pop-Location
 }
 
-#We will set our location first
+function CheckProcess
+{
+    param(
+    [Parameter (Mandatory = $true)] [String]$ErrorMessage,
+    [Parameter (Mandatory = $true)] [System.Diagnostics.Process]$Process
+    )
+
+    if($Process.ExitCode -ne 0) 
+    {
+        Reset
+        throw $ErrorMessage
+    }
+}
+
+#Set location
 Push-Location $PSScriptRoot
 
 #Find what version CefGlue wants
 $CefGlueVersionFile = "../ThirdParty/CefGlue/CefGlue/Interop/version.g.cs"
+
+#Check if the version.g.cs file exists, if it doesn't then there is a good chance the user didn't clone the repo recursively, 
+#and didn't init the submodules.
+if(-not (Test-Path -Path $CefGlueVersionFile))
+{
+    Write-Warning "The CefGlue version file doesn't exist! Initalizing the submodules for you..."
+    Push-Location "$($PSScriptRoot)../../"
+
+    #Run git submodule init and update
+    $p = Start-Process git -ArgumentList 'submodule init' -Wait -NoNewWindow -PassThru
+    CheckProcess "Error running git submodule init!" $p
+
+    $p = Start-Process git -ArgumentList 'submodule update' -Wait -NoNewWindow -PassThru
+    CheckProcess "Error running git submodule update!" $p
+
+    #Return location
+    Push-Location $PSScriptRoot
+}
+
 $CefGlueVersionfileContent = Get-Content $CefGlueVersionFile
 $CefGlueVersionRegex = [regex] 'CEF_VERSION = \"(.*)\"'
+
+if(!$CefGlueVersionfileContent)
+{
+    Reset
+    throw "Failed to read version info!"
+}
 
 $CefVersion = ""
 foreach($Content in $CefGlueVersionfileContent)
@@ -46,7 +85,7 @@ $CefBinTarBz2FileLocation = "$($TempDirectory)$($CefBinTarBz2FileName)"
 
 Write-Output "Downloading CEF version $($CefVersion) for $($OperatingSystem)..."
 
-#We download the CEF builds off from spotify's build server
+#We download the CEF builds off from Spotify's CEF build server
 #The URL look like this:
 #   https://cef-builds.spotifycdn.com/cef_binary_[CEF-VERSION]_[OPERATING-SYSTEM]_minimal.tar.bz2
 #   Example: https://cef-builds.spotifycdn.com/cef_binary_85.3.12+g3e94ebf+chromium-85.0.4183.121_linux64_minimal.tar.bz2
@@ -59,10 +98,11 @@ $progressPreference = 'Continue'
 if(-not (Test-Path -Path $CefBinTarBz2FileLocation))
 {
     Reset
-    throw "Cef failed to download!"
+    throw "CEF build failed to download!"
 }
 
-Write-Output "Exracting CEF bins..."
+Write-Output "Downloaded CEF build to '$($CefBinTarBz2FileLocation)'."
+Write-Output "Exracting CEF build..."
 
 #Get 7Zip
 $7zipApp = ""
@@ -75,9 +115,14 @@ else
     $7zipApp = "../DevTools/7zip/win-x64/7za.exe"
 }
 
+$7zipApp = (Resolve-Path -Path $7zipApp).Path
+
 #Extract our files
-& $7zipApp x $CefBinTarBz2FileLocation "-o$($TempDirectory)" *.tar -r -y
-& $7zipApp x $CefBinTarFileLocation "-o$($TempDirectory)" "$($CefBinName)/" -r -y
+$p = Start-Process $7zipApp -ArgumentList "x $($CefBinTarBz2FileLocation) -o$($TempDirectory) *.tar -r -y" -Wait -NoNewWindow -PassThru
+CheckProcess "Extracting failed!" $p
+
+$p = Start-Process $7zipApp -ArgumentList "x $($CefBinTarFileLocation) -o$($TempDirectory) $($CefBinName)/ -r -y" -Wait -NoNewWindow -PassThru
+CheckProcess "Extracting failed!" $p
 
 #Setup some variables to using the copying phase
 $CefExtractedLocation = (Resolve-Path -Path "$($TempDirectory)/$($CefBinName)/").Path
