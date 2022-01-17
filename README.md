@@ -11,7 +11,7 @@ Adds a functional web browser to Unity without any issues or hassle. This projec
 
 Currently, 2.x is in development, for 1.x document, see the [1.6.3 release](https://github.com/Voltstro-Studios/UnityWebBrowser/tree/1.6.3) (latest).
 
-# Features
+## Features
 
 - Displays the web in your project via using a web browser engine.
 - Full keyboard and mouse input
@@ -21,21 +21,21 @@ Currently, 2.x is in development, for 1.x document, see the [1.6.3 release](http
 - 100% free and open-source
 - Multi-Platform Support
 
-# Getting Started
+## Getting Started
 
-## How does this work?
+### How does this work?
 
 Getting an web engine to work in Unity is a pain, it usually ends up just crashing Unity. This project resolves that issue via running the browser engine in separate process and IPCing data between Unity and the engine.
 
-## Package Installation
+### Package Installation
 
-### Prerequisites
+#### Prerequisites
 
 ```
 Unity 2021.2.x
 ```
 
-### Install
+#### Install
 
 1. Open up the package manager via Windows -> Package Manager
 2. Click on the little + sign -> Add package from git URL...
@@ -88,17 +88,17 @@ What OS is supported will depend on the web engine you use.
 
 </details>
 
-# Authors
+## Authors
 
 * **Voltstro** - *Initial work* - [Voltstro](https://github.com/Voltstro)
 
-# License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](/LICENSE.md) file for details.
 
-# Credits
+## Credits
 
-## CEF Engine
+### CEF Engine
 
 - [CEF](https://bitbucket.org/chromiumembedded/cef/src/master/) - Underlying web engine.
 - [CefGlue](https://gitlab.com/xiliumhq/chromiumembedded/cefglue) - C# wrapper.
