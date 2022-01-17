@@ -52,7 +52,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2021.2.2f1
+Unity 2021.2.8f1
 .NET 6 SDK
 Powershell Core 
 ```
