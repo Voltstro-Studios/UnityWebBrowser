@@ -23,7 +23,7 @@ public class UwbCefLoadHandler : CefLoadHandler
         if (ignoredLoadUrls.Contains(url))
             return;
 
-        CefLoggerWrapper.Debug($"Loading: {url}");
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load start: {url}");
 
         if (frame.IsMain) client.Client.LoadStart(url);
     }
@@ -34,7 +34,7 @@ public class UwbCefLoadHandler : CefLoadHandler
         if (ignoredLoadUrls.Contains(url))
             return;
 
-        CefLoggerWrapper.Debug($"Loaded: {url}");
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load end: {url}");
 
         if (frame.IsMain) client.Client.LoadFinish(url);
     }
@@ -42,6 +42,9 @@ public class UwbCefLoadHandler : CefLoadHandler
     protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode,
         string errorText, string failedUrl)
     {
+        CefLoggerWrapper.Error(
+            $"{CefLoggerWrapper.ConsoleMessageTag} An error occurred while trying to load '{failedUrl}'! Error details: {errorText} (Code: {errorCode})");
+        
         if (errorCode is CefErrorCode.Aborted
             or CefErrorCode.BLOCKED_BY_RESPONSE
             or CefErrorCode.BLOCKED_BY_CLIENT
@@ -59,8 +62,5 @@ font-family: 'Ubuntu', sans-serif;
 <h2>An error occurred while trying to load '{failedUrl}'!</h2>
 <p>Error: {errorText}<br>(Code: {(int) errorCode})</p>";
         client.LoadHtml(html);
-
-        CefLoggerWrapper.Error(
-            $"An error occurred while trying to load '{failedUrl}'! Error: {errorText} (Code: {errorCode})");
     }
 }

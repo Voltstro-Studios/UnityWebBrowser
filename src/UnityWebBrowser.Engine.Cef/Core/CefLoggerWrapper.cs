@@ -9,6 +9,10 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// </summary>
 public static class CefLoggerWrapper
 {
+    private const string CefMessageTag = "CEF Engine";
+    public const string FullCefMessageTag = $"[{CefMessageTag}]:";
+    public const string ConsoleMessageTag = $"[{CefMessageTag} Console]:";
+    
     #region Debug Log
 
     /// <summary>

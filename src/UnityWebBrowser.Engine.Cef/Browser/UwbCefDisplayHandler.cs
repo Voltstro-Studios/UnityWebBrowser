@@ -19,35 +19,25 @@ public class UwbCefDisplayHandler : CefDisplayHandler
 
     protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
     {
-        CefLoggerWrapper.Debug($"URL Change: {url}");
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} URL change: {url}");
         client.UrlChange(url);
     }
 
     protected override void OnFullscreenModeChange(CefBrowser browser, bool fullscreen)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Fullscreen change: {fullscreen}");
         client.Fullscreen(fullscreen);
-    }
-
-    protected override bool OnCursorChange(CefBrowser browser, IntPtr cursorHandle, CefCursorType type,
-        CefCursorInfo customCursorInfo)
-    {
-        //TODO: Possibly implement events for this
-        return base.OnCursorChange(browser, cursorHandle, type, customCursorInfo);
     }
 
     protected override void OnTitleChange(CefBrowser browser, string title)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Title change: {title}");
         client.TitleChange(title);
-    }
-
-    protected override void OnFaviconUrlChange(CefBrowser browser, string[] iconUrls)
-    {
-        //TODO: Implement events for this
-        base.OnFaviconUrlChange(browser, iconUrls);
     }
 
     protected override void OnLoadingProgressChange(CefBrowser browser, double progress)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Progress change: {progress}");
         client.ProgressChange(progress);
     }
 
@@ -60,17 +50,17 @@ public class UwbCefDisplayHandler : CefDisplayHandler
                 break;
             case CefLogSeverity.Default:
             case CefLogSeverity.Info:
-                CefLoggerWrapper.Info($"CEF: {message}");
+                CefLoggerWrapper.Info($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
                 break;
             case CefLogSeverity.Warning:
-                CefLoggerWrapper.Warn($"CEF: {message}");
+                CefLoggerWrapper.Warn($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
                 break;
             case CefLogSeverity.Error:
             case CefLogSeverity.Fatal:
-                CefLoggerWrapper.Error($"CEF: {message}");
+                CefLoggerWrapper.Error($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
                 break;
             case CefLogSeverity.Verbose:
-                CefLoggerWrapper.Debug($"CEF: {message}");
+                CefLoggerWrapper.Debug($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(level), level, null);
