@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 using UnityWebBrowser.Editor.EngineManagement;
 
 namespace UnityWebBrowser.Engine.Cef.Editor
@@ -24,8 +25,10 @@ namespace UnityWebBrowser.Engine.Cef.Editor
                 buildFiles.Add(BuildTarget.StandaloneLinux64, linuxPath);
 
             if (buildFiles.Count > 0)
-                BrowserEngineManager.AddEngine(new BrowserEngine("Cef Browser Engine", "UnityWebBrowser.Engine.Cef",
+                BrowserEngineManager.AddEngine(new BrowserEngine("Cef Engine", "UnityWebBrowser.Engine.Cef",
                     buildFiles));
+            else
+                Debug.LogWarning($"The base Cef Engine has been installed, but no platform packages have been added! You need to add either {CefBrowserEngineWindowsPackageName} or {CefBrowserEngineLinuxPackageName} to your project!");
         }
     }
 }
