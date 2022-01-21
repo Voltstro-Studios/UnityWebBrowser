@@ -1,11 +1,11 @@
 {
+  "version": "97.1.5",
+  "description": "CEF Engine for Unity Web Browser",
+  "author": "Voltstro",
   "name": "dev.voltstro.unitywebbrowser.engine.cef",
   "displayName": "Unity Web Browser CEF Engine",
-  "description": "CEF Engine for Unity Web Browser",
   "dependencies": {
     "dev.voltstro.unitywebbrowser": "2.0.0"
   },
-  "author": "Voltstro",
-  "version": "95.7.18",
   "unity": "2020.3"
 }
