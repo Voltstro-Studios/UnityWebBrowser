@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 using UnityWebBrowser.Logging;
 
@@ -19,6 +20,7 @@ namespace UnityWebBrowser.Helper
     /// <summary>
     ///     Provides Utils to be used by the web browser
     /// </summary>
+    [Preserve]
     public static class WebBrowserUtils
     {
         /// <summary>

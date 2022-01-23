@@ -1,0 +1,8 @@
+<linker>
+  <assembly fullname="UnityWebBrowser.Shared">
+    <type fullname="UnityWebBrowser.Shared.Core.IClient" preserve="all" />
+    <type fullname="UnityWebBrowser.Shared.Core.IEngine" preserve="all" />
+    <type fullname="UnityWebBrowser.Shared.Proxy.ClientProxy" preserve="all" />
+    <type fullname="UnityWebBrowser.Shared.Proxy.EngineProxy" preserve="all" />
+  </assembly>
+</linker>

@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
+using UnityEngine.Scripting;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
@@ -16,6 +17,7 @@ namespace UnityWebBrowser.Core
     /// <summary>
     ///     Handles the RPC methods and two-way communication between the UWB engine and Unity
     /// </summary>
+    [UnityEngine.Scripting.Preserve]
     internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
         private static ProfilerMarker sendEventMarker = new("UWB.SendEvent");

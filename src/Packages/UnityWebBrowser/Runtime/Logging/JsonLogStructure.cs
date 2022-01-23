@@ -1,9 +1,11 @@
 using System;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Logging
 {
+    [Preserve]
     internal class JsonLogStructure
     {
         [JsonProperty("@t")] public DateTime Timestamp { get; set; }

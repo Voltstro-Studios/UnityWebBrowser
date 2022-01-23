@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 using UnityWebBrowser.Core;
 using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Logging
 {
+    [Preserve]
     internal class ProcessLogHandler
     {
         private readonly IWebBrowserLogger logger;
