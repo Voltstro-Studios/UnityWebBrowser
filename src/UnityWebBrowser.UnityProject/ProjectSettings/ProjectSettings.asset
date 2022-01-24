@@ -776,7 +776,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Standalone: NET_STANDARD_2_0
+    Standalone: UWB_ENGINE_PRJ
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

@@ -9,6 +9,7 @@ using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.Communication;
+using UnityWebBrowser.Core.Engines;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Helper;
 using UnityWebBrowser.Logging;
@@ -50,8 +51,8 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     The active browser engine this instance is using
         /// </summary>
-        [Header("Browser Settings")] [Tooltip("The active browser engine this instance is using")] [ActiveBrowserEngine]
-        public string browserEngine;
+        [Header("Browser Settings")] [Tooltip("The active browser engine this instance is using")]
+        public Engine engine;
 
         /// <summary>
         ///     The initial URl the browser will start at
@@ -278,13 +279,13 @@ namespace UnityWebBrowser.Core
         internal void Init()
         {
             //Get the path to the UWB process we are using and make sure it exists
-            string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(browserEngine);
+            string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
             logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
 
             if (!File.Exists(browserEnginePath))
             {
-                logger.Error("The browser engine process doesn't exist!");
-                throw new FileNotFoundException($"{browserEngine} process could not be found!");
+                logger.Error("The engine process could not be found!");
+                throw new FileNotFoundException("The engine process could not be found!");
             }
 
             //Check communication layer
@@ -298,10 +299,10 @@ namespace UnityWebBrowser.Core
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
-            pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
             pixelDataLock = new object();
+            pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
 
-            string browserEngineMainDir = WebBrowserUtils.GetBrowserEngineMainDirectory();
+            string browserEngineMainDir = WebBrowserUtils.GetAdditionFilesDirectory();
 
             //Start to build our arguments
             WebBrowserArgsBuilder argsBuilder = new();
@@ -320,7 +321,7 @@ namespace UnityWebBrowser.Core
             argsBuilder.AppendArgument("background-color", WebBrowserUtils.ColorToHex(backgroundColor));
 
             //Logging
-            LogPath ??= new FileInfo($"{browserEngineMainDir}/{browserEngine}.log");
+            LogPath ??= new FileInfo($"{browserEngineMainDir}/{engine.engineAppName}.log");
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
@@ -375,7 +376,7 @@ namespace UnityWebBrowser.Core
             //Start the engine process
             try
             {
-                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, browserEngine, browserEnginePath, arguments,
+                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, engine, arguments,
                     new ProcessLogHandler(this).HandleProcessLog);
             }
             catch (Exception ex)
@@ -834,10 +835,10 @@ namespace UnityWebBrowser.Core
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
 
-            lock (pixelDataLock)
-            {
-                pixelData.Dispose();
-            }
+            //The pixel data will be null as well if the pixel data lock is null
+            if(pixelDataLock != null)
+                lock (pixelDataLock)
+                    pixelData.Dispose();
 
             if (IsReady && IsConnected)
                 communicationsManager.Shutdown();
@@ -851,7 +852,8 @@ namespace UnityWebBrowser.Core
                 logger.Error($"Some error occured while destroying the communications manager! {ex}");
             }
 
-            communicationLayer.IsInUse = false;
+            if(communicationLayer != null)
+                communicationLayer.IsInUse = false;
 
             if (engineProcess != null)
             {

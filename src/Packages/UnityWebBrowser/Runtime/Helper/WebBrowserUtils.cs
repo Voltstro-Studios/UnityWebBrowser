@@ -8,6 +8,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
+using UnityWebBrowser.Core.Engines;
 using UnityWebBrowser.Logging;
 
 #if UNITY_EDITOR
@@ -27,7 +28,7 @@ namespace UnityWebBrowser.Helper
         ///     Gets the main directory where logs and cache may be stored
         /// </summary>
         /// <returns></returns>
-        public static string GetBrowserEngineMainDirectory()
+        public static string GetAdditionFilesDirectory()
         {
 #if UNITY_EDITOR
             return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
@@ -35,25 +36,16 @@ namespace UnityWebBrowser.Helper
 			return Application.dataPath;
 #endif
         }
-
+        
         /// <summary>
         ///     Gets the folder that the UWB process application lives in
         /// </summary>
         /// <returns></returns>
-        public static string GetBrowserEnginePath(string engine)
+        public static string GetBrowserEnginePath(Engine engine)
         {
             //Editor
 #if UNITY_EDITOR
-            BrowserEngine browserEngine = BrowserEngineManager.GetEngine(engine);
-
-#if UNITY_EDITOR_WIN
-            return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
-                x.Key == UnityEditor.BuildTarget.StandaloneWindows ||
-                x.Key == UnityEditor.BuildTarget.StandaloneWindows64).Value);
-#elif UNITY_EDITOR_LINUX
-            return Path.GetFullPath(browserEngine.BuildFiles.FirstOrDefault(x =>
-                x.Key == BuildTarget.StandaloneLinux64).Value);
-#endif
+            return EngineManager.GetEngineDirectory(engine);
 
             //Player builds (Standalone)
 #elif UNITY_STANDALONE
@@ -65,12 +57,16 @@ namespace UnityWebBrowser.Helper
         ///     Get a direct path to the UWB process application
         /// </summary>
         /// <returns></returns>
-        public static string GetBrowserEngineProcessPath(string engine)
+        public static string GetBrowserEngineProcessPath(Engine engine)
         {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            return $"{GetBrowserEnginePath(engine)}{engine}.exe";
+#if UNITY_EDITOR
+            return EngineManager.GetEngineProcessFullPath(engine);
 #else
-            return $"{GetBrowserEnginePath(engine)}{engine}";
+            string path = $"{GetBrowserEnginePath(null)}/{engine.engineAppName}";
+#if UNITY_STANDALONE_WIN
+            path += ".exe";
+#endif
+            return  Path.GetFullPath(path);
 #endif
         }
 
@@ -129,28 +125,32 @@ namespace UnityWebBrowser.Helper
         ///     Creates a <see cref="Process"/> for an engine
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="browserEngine"></param>
-        /// <param name="browserEnginePath"></param>
+        /// <param name="engine"></param>
         /// <param name="arguments"></param>
         /// <param name="onLogEvent"></param>
         /// <returns></returns>
-        internal static Process CreateEngineProcess(IWebBrowserLogger logger, string browserEngine, string browserEnginePath, string arguments, 
+        internal static Process CreateEngineProcess(IWebBrowserLogger logger, Engine engine, string arguments, 
             DataReceivedEventHandler onLogEvent)
         {
+            string engineFullProcessPath = GetBrowserEngineProcessPath(engine);
+            string engineDirectory = GetBrowserEnginePath(engine);
+            
+            logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
+            
 #if UNIX_SUPPORT && (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
-            if(UnixSupport.PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(browserEnginePath))
+            if(UnixSupport.PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))
                 logger.Warn("UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
 #endif
             
             Process process = new()
             {
-                StartInfo = new ProcessStartInfo(browserEnginePath, arguments)
+                StartInfo = new ProcessStartInfo(engineFullProcessPath, arguments)
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = GetBrowserEnginePath(browserEngine)
+                    WorkingDirectory = engineDirectory
                 },
                 EnableRaisingEvents = true
             };
