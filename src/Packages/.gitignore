@@ -1,10 +1,1 @@
-**/*.pak
-**/*.so
-**/*.so.1
-**/*.dat
-**/*.bin
-**/*.exe
-**/*.json
-!**/package.json
-*.dll
-**/UnityWebBrowser.Engine.Cef
+**/*.dll

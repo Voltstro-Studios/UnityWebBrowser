@@ -15,10 +15,10 @@ namespace UnityWebBrowser.Editor.EngineManagement
     {
         public static string GetEngineDirectory(Engine engine, Platform platform)
         {
-            Engine.EngineFiles files = engine.engineFiles.FirstOrDefault(x => x.platform == platform);
+            Engine.EnginePlatformFiles files = engine.EngineFiles.FirstOrDefault(x => x.platform == platform);
             if (files.engineFileLocation == null)
             {
-                Debug.LogError(engine.engineFilesNotFoundError);
+                Debug.LogError(engine.EngineFilesNotFoundError);
                 return null;
             }
 
@@ -30,7 +30,7 @@ namespace UnityWebBrowser.Editor.EngineManagement
         
         public static string GetEngineProcessFullPath(Engine engine, Platform platform)
         {
-            string appPath = $"{GetEngineDirectory(engine, platform)}{engine.engineAppName}";
+            string appPath = $"{GetEngineDirectory(engine, platform)}{engine.GetEngineExecutableName()}";
             if (platform == Platform.Windows64)
                 appPath += ".exe";
             
@@ -77,12 +77,12 @@ namespace UnityWebBrowser.Editor.EngineManagement
 
             foreach (Engine engine in engines)
             {
-                if (engine.engineFiles.Any(x => x.platform == GetCurrentEditorPlatform()))
+                if (engine.EngineFiles.Any(x => x.platform == GetCurrentEditorPlatform()))
                 {
                     Debug.Log("Copying UWB engine files...");
                     
-                    Engine.EngineFiles engineFiles =
-                        engine.engineFiles.First(x => x.platform == GetCurrentEditorPlatform());
+                    Engine.EnginePlatformFiles engineFiles =
+                        engine.EngineFiles.First(x => x.platform == GetCurrentEditorPlatform());
 
                     //Get the location where we are copying all the files
                     string engineFilesDir = Path.GetFullPath(engineFiles.engineFileLocation);

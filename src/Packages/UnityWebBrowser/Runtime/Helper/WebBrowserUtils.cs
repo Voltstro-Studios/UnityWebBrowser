@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Collections;
@@ -12,7 +11,6 @@ using UnityWebBrowser.Core.Engines;
 using UnityWebBrowser.Logging;
 
 #if UNITY_EDITOR
-using UnityEditor;
 using UnityWebBrowser.Editor.EngineManagement;
 #endif
 
@@ -62,7 +60,7 @@ namespace UnityWebBrowser.Helper
 #if UNITY_EDITOR
             return EngineManager.GetEngineProcessFullPath(engine);
 #else
-            string path = $"{GetBrowserEnginePath(null)}/{engine.engineAppName}";
+            string path = $"{GetBrowserEnginePath(null)}/{engine.GetEngineExecutableName()}";
 #if UNITY_STANDALONE_WIN
             path += ".exe";
 #endif

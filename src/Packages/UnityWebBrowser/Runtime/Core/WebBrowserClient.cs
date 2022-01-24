@@ -321,7 +321,7 @@ namespace UnityWebBrowser.Core
             argsBuilder.AppendArgument("background-color", WebBrowserUtils.ColorToHex(backgroundColor));
 
             //Logging
-            LogPath ??= new FileInfo($"{browserEngineMainDir}/{engine.engineAppName}.log");
+            LogPath ??= new FileInfo($"{browserEngineMainDir}/{engine.GetEngineExecutableName()}.log");
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
