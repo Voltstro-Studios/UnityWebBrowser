@@ -134,13 +134,13 @@ internal class CefEngineManager : IEngine, IDisposable
             LocalStorage = CefState.Disabled
         };
 
-        Logger.Debug("Starting CEF with these options:" +
+        Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF with these options:" +
                      $"\nJS: {launchArguments.JavaScript}" +
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePathArgument}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
-        Logger.Info("Starting CEF client...");
+        Logger.Info($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF client...");
 
         //Create cef browser
         cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),

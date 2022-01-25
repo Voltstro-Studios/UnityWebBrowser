@@ -35,7 +35,7 @@ public class UwbCefEngineEntry : EngineEntryPoint
         CefRuntime.RunMessageLoop();
 
         //If the message loop quits
-        Logger.Debug("Message loop quit.");
+        Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Message loop quit.");
         Dispose();
         Environment.Exit(0);
     }

@@ -157,8 +157,10 @@ public abstract class EngineEntryPoint : IDisposable
             {
                 EarlyInit(parsedArgs, args);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Error($"{Logger.BaseLoggingTag}: Uncaught exception occured in early init!");
+                Logger.Shutdown();
                 Environment.Exit(-1);
                 return;
             }
@@ -170,11 +172,10 @@ public abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "Uncaught exception occured in the entry point!");
-#if DEBUG
-                Debugger.Break();
-#endif
+                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in the entry point!");
+                Logger.Shutdown();
                 Environment.Exit(-1);
+                return;
             }
 
             Logger.Shutdown();
@@ -197,7 +198,7 @@ public abstract class EngineEntryPoint : IDisposable
             if (arguments.CommunicationLayerPath == null)
             {
                 //Use TCP
-                Logger.Debug("No communication layer provided, using default TCP...");
+                Logger.Debug($"{Logger.BaseLoggingTag}: No communication layer provided, using default TCP...");
                 communicationLayer = new TCPCommunicationLayer();
             }
             else
@@ -213,7 +214,7 @@ public abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "An error occured setting up the communication layer!");
+                Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured setting up the communication layer!");
             }
 
             //Add type readers
@@ -233,16 +234,16 @@ public abstract class EngineEntryPoint : IDisposable
             catch (ConnectionFailedException)
             {
                 Logger.Error(
-                    "The engine failed to connect back to the Unity client! Client events will not fire!");
+                    $"{Logger.BaseLoggingTag}: The engine failed to connect back to the Unity client! Client events will not fire!");
                 ipcClient.Dispose();
                 ipcClient = null;
             }
 
-            Logger.Debug("IPC Setup done.");
+            Logger.Debug($"{Logger.BaseLoggingTag}: IPC Setup done.");
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, "Error setting up IPC!");
+            Logger.Error(ex, $"{Logger.BaseLoggingTag}: Error setting up IPC!");
         }
     }
 
