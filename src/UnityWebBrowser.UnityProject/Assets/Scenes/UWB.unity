@@ -205,18 +205,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: browserClient.engine
-      value: 
-      objectReference: {fileID: 11400000, guid: 649ce3cfdf00ca615abcf2bb62227f5c, type: 2}
-    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: browserClient.logSeverity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
-      propertyPath: browserClient.engineStartupTimeout
-      value: 7000
-      objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
       value: UnityWebBrowser

@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
-    browserEngine: UnityWebBrowser.Engine.Cef
+    engine: {fileID: 11400000, guid: 649ce3cfdf00ca615abcf2bb62227f5c, type: 2}
     initialUrl: https://voltstro.dev
     resolution:
       Width: 1920
@@ -1122,7 +1122,7 @@ MonoBehaviour:
     remoteDebugging: 0
     remoteDebuggingPort: 9022
     communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc, type: 2}
-    engineStartupTimeout: 4000
+    engineStartupTimeout: 7000
     logSeverity: 1
     performanceMode: 0
   inputHandler: {fileID: 11400000, guid: 565be9a8022a65c7288f47df26d5fe7f, type: 2}

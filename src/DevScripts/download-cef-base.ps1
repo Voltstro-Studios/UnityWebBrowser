@@ -5,7 +5,13 @@
 param
 (
     [Parameter(Mandatory=$true)]
-    [string] $OperatingSystem
+    [string] $OperatingSystem,
+
+    [Parameter(Mandatory=$false)]
+    [bool] $Cleanup = $true,
+
+    [Parameter(Mandatory=$false)]
+    [bool] $IncludeResources = $true
 )
 
 function Reset 
@@ -127,19 +133,29 @@ CheckProcess "Extracting failed!" $p
 #Setup some variables to using the copying phase
 $CefExtractedLocation = (Resolve-Path -Path "$($TempDirectory)/$($CefBinName)/").Path
 $CefExtractedReleaseLocation = "$($CefExtractedLocation)Release/"
-$CefExtractedResourcesLocation = "$($CefExtractedLocation)Resources/"
+
 $CefLibsLocation = (Resolve-Path -Path ../ThirdParty/Libs/cef/$($OperatingSystem)).Path
 
 #Copy files
 Write-Output "Copying files..."
 Copy-Item -Path "$($CefExtractedReleaseLocation)/*" -Destination $CefLibsLocation -Force -PassThru -Recurse
-Copy-Item -Path "$($CefExtractedResourcesLocation)/*" -Destination $CefLibsLocation -Force -PassThru -Recurse
+
+if($IncludeResources)
+{
+    $CefExtractedResourcesLocation = "$($CefExtractedLocation)Resources/"
+    Copy-Item -Path "$($CefExtractedResourcesLocation)/*" -Destination $CefLibsLocation -Force -PassThru -Recurse
+}
+
 Copy-Item -Path "$($CefExtractedLocation)/README.txt" -Destination $CefLibsLocation -Force -PassThru
 Copy-Item -Path "$($CefExtractedLocation)/LICENSE.txt" -Destination $CefLibsLocation -Force -PassThru
 
 #Cleanup
-Write-Output "Cleaning up..."
-Remove-Item -Path $CefBinTarFileLocation -Force
-Remove-Item -Path $CefBinTarBz2FileLocation -Force
-Remove-Item -Path $CefExtractedLocation -Force -Recurse
+if($Cleanup)
+{
+    Write-Output "Cleaning up..."
+    Remove-Item -Path $CefBinTarFileLocation -Force
+    Remove-Item -Path $CefBinTarBz2FileLocation -Force
+    Remove-Item -Path $CefExtractedLocation -Force -Recurse
+}
+
 Reset
