@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
+using UnityWebBrowser.Engine.Cef.Core;
 using Xilium.CefGlue;
 
 //From: https://github.com/chromelyapps/Chromely/blob/989d74141aabb8d874b2ad9b75757f56f3e6fdba/src_5.2/Chromely/Browser/Handlers/ResourceHandler.cs
@@ -14,7 +15,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// used to implement a custom request handler interface. The methods of this class will always be called on the IO thread. 
 /// Static helper methods are included like FromStream and FromString that make dealing with fixed resources easy.
 /// </summary>
-public class UwbCefResourceHandler : CefResourceHandler
+public class SteamCefResourceHandler : CefResourceHandler
 {
     /// <summary>
     /// MimeType to be used if none provided
@@ -80,14 +81,14 @@ public class UwbCefResourceHandler : CefResourceHandler
     public CefErrorCode? ErrorCode { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ResourceHandler"/> class.
+    /// Initializes a new instance of the <see cref="CefResourceHandler"/> class.
     /// </summary>
     /// <param name="mimeType">Optional mimeType defaults to <see cref="DefaultMimeType"/></param>
     /// <param name="stream">Optional Stream - must be set at some point to provide a valid response</param>
     /// <param name="autoDisposeStream">When true the Stream will be disposed when this instance is Disposed, you will
     /// be unable to use this ResourceHandler after the Stream has been disposed</param>
     /// <param name="charset">response charset</param>
-    public UwbCefResourceHandler(string mimeType = DefaultMimeType, Stream? stream = null, bool autoDisposeStream = false, string? charset = null)
+    public SteamCefResourceHandler(string mimeType = DefaultMimeType, Stream? stream = null, bool autoDisposeStream = false, string? charset = null)
     {
         if (string.IsNullOrEmpty(mimeType))
         {

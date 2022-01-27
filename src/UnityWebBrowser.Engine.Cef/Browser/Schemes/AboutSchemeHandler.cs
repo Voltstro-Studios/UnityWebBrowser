@@ -15,7 +15,7 @@ public class AboutSchemeHandler : CefSchemeHandlerFactory
         MemoryStream stream = new MemoryStream();
         stream.Write(bytes, 0, size);
 
-        UwbCefResourceHandler resourceHandler = new UwbCefResourceHandler(stream: stream, autoDisposeStream: true);
+        SteamCefResourceHandler resourceHandler = new SteamCefResourceHandler(stream: stream, autoDisposeStream: true);
         return resourceHandler;
     }
 }

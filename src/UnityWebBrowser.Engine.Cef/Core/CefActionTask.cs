@@ -1,7 +1,7 @@
 ﻿using System;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Core;
 
 public class CefActionTask : CefTask
 {
