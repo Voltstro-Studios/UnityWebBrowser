@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/NativeDefines.props"/>
-    <Import Project="../Imports/Properties.props"/>
+    <Import Project="../Imports/NativeDefines.props" />
+    <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -29,13 +29,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
-        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj"/>
-        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj"/>
+        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
+        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
+        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="Roots.xml"/>
+        <TrimmerRootDescriptor Include="Roots.xml" />
     </ItemGroup>
 
     <!-- We need to copy different files depending on the OS -->
@@ -147,6 +147,6 @@
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <Import Project="../Imports/NatvieDefines.targets"/>
+    <Import Project="../Imports/NatvieDefines.targets" />
 
 </Project>

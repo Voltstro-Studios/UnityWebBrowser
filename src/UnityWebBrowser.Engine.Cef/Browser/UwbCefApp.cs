@@ -29,4 +29,9 @@ public class UwbCefApp : CefApp
         if (!commandLine.HasSwitch("--no-zygote")) commandLine.AppendSwitch("--no-zygote");
 #endif
     }
+
+    protected override CefBrowserProcessHandler GetBrowserProcessHandler()
+    {
+        return new UwbCefBrowserProcessHandler();
+    }
 }
