@@ -11,6 +11,8 @@ public class UwbCefApp : CefApp
     private readonly bool mediaStreamingEnabled;
     private readonly bool noProxyServer;
 
+    private UwbCefBrowserProcessHandler browserProcessHandler;
+
     public UwbCefApp(LaunchArguments launchArguments)
     {
         mediaStreamingEnabled = launchArguments.WebRtc;
@@ -32,6 +34,13 @@ public class UwbCefApp : CefApp
 
     protected override CefBrowserProcessHandler GetBrowserProcessHandler()
     {
-        return new UwbCefBrowserProcessHandler();
+        browserProcessHandler = new UwbCefBrowserProcessHandler();
+        return browserProcessHandler;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        browserProcessHandler.Dispose();
+        base.Dispose(disposing);
     }
 }
