@@ -3,15 +3,13 @@ name: Build
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
   # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
   
-  build-windows:
-    name: 'Windows Build'
+  build:
+    name: 'Build'
     runs-on: windows-latest
 
     steps:
@@ -21,6 +19,7 @@ jobs:
         lfs: false
         path: 'UnityWebBrowserSource/'
 
+    # Setup the Environment
     - uses: actions/setup-dotnet@v1
       name: Setup .NET
       with:
@@ -30,39 +29,29 @@ jobs:
       shell: pwsh
       run: '& ./setup-all.ps1'
       working-directory: UnityWebBrowserSource/src/
-      
-    - name: Build Base Projects
-      shell: pwsh
-      run: '& ./publish-all.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
-      
-  build-linux:
-    name: 'Linux Build'
-    runs-on: ubuntu-20.04
 
-    steps:
-    - uses: actions/checkout@v2
+    # Setup and build the pages project
+    - name: Yarn Cache
+      uses: actions/cache@v2.1.6
       with:
-        submodules: 'recursive'
-        lfs: false
-        path: 'UnityWebBrowserSource/'
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
+        key: Node-Cache
+    
+    - name: Yarn Install
+      run: 'yarn install'
+      working-directory: UnityWebBrowserSource/src/UnityWebBrowser.Pages/
 
-    - uses: actions/setup-dotnet@v1
-      name: Setup .NET
-      with:
-        dotnet-version: '6.0.x'
-        
-    - name: Setup Environment
-      shell: pwsh
-      run: '& ./setup-all.ps1'
-      working-directory: UnityWebBrowserSource/src/
-      
+    - name: Yarn Build
+      run: 'yarn run build'
+      working-directory: UnityWebBrowserSource/src/UnityWebBrowser.Pages/
+
+    # Build the base projects  
     - name: Build Base Projects
       shell: pwsh
       run: '& ./publish-all.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
 
-    # Only the Linux job will build the Unity project (This is due to licensing)
+    # Build Unity
     - name: Unity Cache
       uses: actions/cache@v2.1.6
       with:
@@ -81,4 +70,3 @@ jobs:
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
         versioning: Tag
         androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
-    
