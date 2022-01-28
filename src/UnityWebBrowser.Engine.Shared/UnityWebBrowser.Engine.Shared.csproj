@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="..\UnityWebBrowser.Pages\About.html">
+      <EmbeddedResource Include="..\UnityWebBrowser.Pages\dist\about.html">
         <Link>Pages/About.html</Link>
       </EmbeddedResource>
     </ItemGroup>
