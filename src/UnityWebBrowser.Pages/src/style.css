@@ -1,8 +1,26 @@
-p {
+.content {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 40px 25px 25px 25px;
+}
+
+.header {
+  border-bottom: black 2px solid;
+}
+
+.bottom-spacer {
+  margin-bottom: 1.2em;
+}
+
+.footer {
+  position:absolute;
+  bottom:0;
+}
+
+.fuckyou-text {
+  font-size: 8px;
+  color: grey;
+}
+
+body {
+  background-color: white;
 }

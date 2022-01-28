@@ -38,6 +38,11 @@ public class UwbCefApp : CefApp
         return browserProcessHandler;
     }
 
+    protected override CefRenderProcessHandler GetRenderProcessHandler()
+    {
+        return new UwbCefRenderProcessHandler();
+    }
+
     protected override void Dispose(bool disposing)
     {
         browserProcessHandler.Dispose();
