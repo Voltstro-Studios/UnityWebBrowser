@@ -24,26 +24,17 @@ jobs:
       name: Setup .NET
       with:
         dotnet-version: '6.0.x'
+
+    - name: Pages Cache
+      uses: actions/cache@v2.1.6
+      with:
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
+        key: Node-Cache
         
     - name: Setup Environment
       shell: pwsh
       run: '& ./setup-all.ps1'
       working-directory: UnityWebBrowserSource/src/
-
-    # Setup and build the pages project
-    - name: Yarn Cache
-      uses: actions/cache@v2.1.6
-      with:
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
-        key: Node-Cache
-    
-    - name: Yarn Install
-      run: 'yarn install'
-      working-directory: UnityWebBrowserSource/src/UnityWebBrowser.Pages/
-
-    - name: Yarn Build
-      run: 'yarn run build'
-      working-directory: UnityWebBrowserSource/src/UnityWebBrowser.Pages/
 
     # Build the base projects  
     - name: Build Base Projects
