@@ -6,20 +6,22 @@ namespace UnityWebBrowser.Engine.Cef.Browser.Schemes;
 
 public sealed class PageResourceScheme : CefSchemeHandlerFactory, IDisposable
 {
-    private readonly SteamCefResourceHandler resourceHandler;
+    private readonly Stream stream;
+    private readonly string mimeType;
     
-    public PageResourceScheme(Stream stream, string mimeType = SteamCefResourceHandler.DefaultMimeType)
+    public PageResourceScheme(Stream stream, string mimeType = StreamCefResourceHandler.DefaultMimeType)
     {
-        resourceHandler = new SteamCefResourceHandler(mimeType, stream, true);
+        this.stream = stream;
+        this.mimeType = mimeType;
     }
 
     protected override CefResourceHandler Create(CefBrowser browser, CefFrame frame, string schemeName, CefRequest request)
     {
-        return resourceHandler;
+        return new StreamCefResourceHandler(mimeType, stream, false);
     }
 
     public void Dispose()
     {
-        resourceHandler.Dispose();
+        stream.Dispose();
     }
 }

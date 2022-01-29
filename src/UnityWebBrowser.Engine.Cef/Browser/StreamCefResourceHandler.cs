@@ -15,7 +15,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// used to implement a custom request handler interface. The methods of this class will always be called on the IO thread. 
 /// Static helper methods are included like FromStream and FromString that make dealing with fixed resources easy.
 /// </summary>
-public class SteamCefResourceHandler : CefResourceHandler
+public class StreamCefResourceHandler : CefResourceHandler
 {
     /// <summary>
     /// MimeType to be used if none provided
@@ -88,7 +88,7 @@ public class SteamCefResourceHandler : CefResourceHandler
     /// <param name="autoDisposeStream">When true the Stream will be disposed when this instance is Disposed, you will
     /// be unable to use this ResourceHandler after the Stream has been disposed</param>
     /// <param name="charset">response charset</param>
-    public SteamCefResourceHandler(string mimeType = DefaultMimeType, Stream? stream = null, bool autoDisposeStream = false, string? charset = null)
+    public StreamCefResourceHandler(string mimeType = DefaultMimeType, Stream? stream = null, bool autoDisposeStream = false, string? charset = null)
     {
         if (string.IsNullOrEmpty(mimeType))
         {
@@ -170,6 +170,7 @@ public class SteamCefResourceHandler : CefResourceHandler
 
     protected override bool Open(CefRequest request, out bool handleRequest, CefCallback callback)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Open() called.");
         var processRequest = ProcessRequestAsync(request, callback);
 
         //Process the request in an async fashion
@@ -194,6 +195,7 @@ public class SteamCefResourceHandler : CefResourceHandler
 
     protected override void GetResponseHeaders(CefResponse response, out long responseLength, out string redirectUrl)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler GetResponseHeaders() called.");
         redirectUrl = string.Empty;
         responseLength = -1;
 
@@ -227,6 +229,7 @@ public class SteamCefResourceHandler : CefResourceHandler
 
     protected override bool Skip(long bytesToSkip, out long bytesSkipped, CefResourceSkipCallback callback)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Skip() called.");
         //No Stream or Stream cannot seek then we indicate failure
         if (Stream is null || !Stream.CanSeek)
         {
@@ -246,6 +249,7 @@ public class SteamCefResourceHandler : CefResourceHandler
 
     protected override bool Read(IntPtr dataOut, int bytesToRead, out int bytesRead, CefResourceReadCallback callback)
     {
+        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Read() called.");
         bytesRead = 0;
 
         //We don't need the callback, as it's an unmanaged resource we should dispose it (could wrap it in a using statement).
@@ -281,6 +285,12 @@ public class SteamCefResourceHandler : CefResourceHandler
         }
 
         return bytesRead > 0;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        Dispose();
+        base.Dispose(disposing);
     }
 
     protected override void Cancel()

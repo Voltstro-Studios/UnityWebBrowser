@@ -63,6 +63,7 @@ internal class CefEngineManager : IEngine, IDisposable
         int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
         if (exitCode != -1)
         {
+            CefLoggerWrapper.Debug("Sub-Process exit: {ExitCode}", exitCode);
             Environment.Exit(exitCode);
             return;
         }
@@ -70,6 +71,7 @@ internal class CefEngineManager : IEngine, IDisposable
         //Backup
         if (argv.Any(arg => arg.StartsWith("--type=")))
         {
+            CefLoggerWrapper.Error("Invalid process type!");
             Environment.Exit(-2);
             throw new Exception("Invalid process type!");
         }
