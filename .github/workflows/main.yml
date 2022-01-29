@@ -50,7 +50,7 @@ jobs:
         key: Library-Cache
 
     - name: Unity Build
-      uses: game-ci/unity-builder@v2.0-alpha-14
+      uses: game-ci/unity-builder@v2.0.0-alpha-14
       env:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
