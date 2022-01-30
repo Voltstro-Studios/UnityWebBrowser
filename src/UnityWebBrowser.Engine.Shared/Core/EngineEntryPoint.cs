@@ -1,6 +1,5 @@
 ﻿using System;
 using System.CommandLine;
-using System.Diagnostics;
 using System.IO;
 using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
@@ -159,9 +158,8 @@ public abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                Logger.Error($"{Logger.BaseLoggingTag}: Uncaught exception occured in early init!");
-                Logger.Shutdown();
-                Environment.Exit(-1);
+                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in early init!");
+                ShutdownAndExitWithError();
                 return;
             }
 
@@ -173,8 +171,7 @@ public abstract class EngineEntryPoint : IDisposable
             catch (Exception ex)
             {
                 Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in the entry point!");
-                Logger.Shutdown();
-                Environment.Exit(-1);
+                ShutdownAndExitWithError();
                 return;
             }
 
@@ -215,6 +212,8 @@ public abstract class EngineEntryPoint : IDisposable
             catch (Exception ex)
             {
                 Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured setting up the communication layer!");
+                ShutdownAndExitWithError();
+                return;
             }
 
             //Add type readers
@@ -253,6 +252,13 @@ public abstract class EngineEntryPoint : IDisposable
     protected void Ready()
     {
         ClientActions.Ready();
+    }
+
+    private void ShutdownAndExitWithError()
+    {
+        Dispose();
+        Logger.Shutdown();
+        Environment.Exit(-1);
     }
 
     #region Destroy
