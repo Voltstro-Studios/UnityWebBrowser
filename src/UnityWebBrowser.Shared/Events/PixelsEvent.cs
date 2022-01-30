@@ -7,5 +7,8 @@ namespace UnityWebBrowser.Shared.Events;
 /// </summary>
 public struct PixelsEvent
 {
+    /// <summary>
+    ///     The raw pixel data
+    /// </summary>
     public ReadOnlyMemory<byte> PixelData { get; set; }
 }
