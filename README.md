@@ -52,16 +52,18 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2021.2.8f1
+Unity 2021.2.x
 .NET 6 SDK
-Powershell Core 
+PowerShell (formally PowerShell Core)
+NodeJS & Yarn
+Git
 ```
 
 1. Clone the repo with `git clone --recursive https://github.com/Voltstro-Studios/UnityWebBrowser.git` (Clone with sub-modules!)
 
-2. Run `src/setup-all.ps1`. This script might take a little awhile as it will download some rather large binaries and setup everything for you! You will only need to run this once.
+2. Run the `src/setup-all.ps1` script with PowerShell. Depending on your system, and your download speeds, this script could take upto a minute or longer. You only need to run this once.
 
-3. Open `UnityWebBrowser.UnityProject` with Unity.
+3. You can now open up the `src/UnityWebBrowser.UnityProject` project with Unity.
 
 ## Operating System Support
 
