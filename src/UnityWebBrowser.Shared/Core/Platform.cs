@@ -9,7 +9,7 @@ public enum Platform
     ///     Windows 64-bit
     /// </summary>
     Windows64,
-    
+
     /// <summary>
     ///     Linux 64-bit
     /// </summary>

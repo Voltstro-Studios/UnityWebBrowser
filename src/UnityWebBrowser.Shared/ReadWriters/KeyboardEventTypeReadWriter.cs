@@ -27,13 +27,13 @@ public sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent>
     {
         writer.WriteInt(keys.Length);
 
-        foreach (WindowsKey key in keys) writer.WriteInt((int)key);
+        foreach (WindowsKey key in keys) writer.WriteInt((int) key);
     }
 
     private WindowsKey[] ReadKeys(BufferedReader reader)
     {
         WindowsKey[] keys = new WindowsKey[reader.ReadInt()];
-        for (int i = 0; i < keys.Length; i++) keys[i] = (WindowsKey)reader.ReadInt();
+        for (int i = 0; i < keys.Length; i++) keys[i] = (WindowsKey) reader.ReadInt();
 
         return keys;
     }

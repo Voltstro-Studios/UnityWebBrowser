@@ -8,7 +8,7 @@ namespace UnityWebBrowser.Engine.Shared.Core;
 public static class MathHelper
 {
     /// <summary>
-    ///     Converts a hex to a <see cref="byte"/>
+    ///     Converts a hex to a <see cref="byte" />
     /// </summary>
     /// <param name="hex"></param>
     /// <returns></returns>

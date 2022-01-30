@@ -10,7 +10,7 @@ namespace UnityWebBrowser.Engine.Shared.Core.Logging;
 public static class Logger
 {
     public const string BaseLoggingTag = "[Engine]";
-    
+
     private static Serilog.Core.Logger log;
 
     private static LoggerConfig loggerConfig;

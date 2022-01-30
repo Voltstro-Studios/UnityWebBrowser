@@ -44,7 +44,7 @@ public class UwbCefLoadHandler : CefLoadHandler
     {
         CefLoggerWrapper.Error(
             $"{CefLoggerWrapper.ConsoleMessageTag} An error occurred while trying to load '{failedUrl}'! Error details: {errorText} (Code: {errorCode})");
-        
+
         if (errorCode is CefErrorCode.Aborted
             or CefErrorCode.BLOCKED_BY_RESPONSE
             or CefErrorCode.BLOCKED_BY_CLIENT

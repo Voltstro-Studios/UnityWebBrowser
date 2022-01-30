@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/NativeDefines.props" />
-    <Import Project="../Imports/Properties.props" />
+    <Import Project="../Imports/NativeDefines.props"/>
+    <Import Project="../Imports/Properties.props"/>
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -22,7 +22,7 @@
             .allowedextension
         </AllowedReferenceRelatedFileExtensions>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'And'$(RuntimeIdentifier)'!=''">
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
@@ -30,14 +30,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
-        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
-        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" PrivateAssets="all" />
+        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
+        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj"/>
+        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj"/>
+        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" PrivateAssets="all"/>
     </ItemGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="Roots.xml" />
+        <TrimmerRootDescriptor Include="Roots.xml"/>
     </ItemGroup>
 
     <!-- We need to copy different files depending on the OS -->
@@ -149,6 +149,6 @@
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <Import Project="../Imports/NatvieDefines.targets" />
+    <Import Project="../Imports/NatvieDefines.targets"/>
 
 </Project>

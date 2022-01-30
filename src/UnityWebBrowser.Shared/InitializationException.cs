@@ -8,14 +8,14 @@ namespace UnityWebBrowser.Shared;
 public class InitializationException : Exception
 {
     /// <summary>
-    ///     Creates a new <see cref="InitializationException"/>
+    ///     Creates a new <see cref="InitializationException" />
     /// </summary>
     public InitializationException()
     {
     }
 
     /// <summary>
-    ///     Creates a new <see cref="InitializationException"/>
+    ///     Creates a new <see cref="InitializationException" />
     /// </summary>
     public InitializationException(string message)
         : base(message)
@@ -23,7 +23,7 @@ public class InitializationException : Exception
     }
 
     /// <summary>
-    ///     Creates a new <see cref="InitializationException"/>
+    ///     Creates a new <see cref="InitializationException" />
     /// </summary>
     public InitializationException(string message, Exception inner)
         : base(message, inner)

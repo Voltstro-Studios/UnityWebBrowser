@@ -7,7 +7,7 @@
         <Platforms>AnyCPU</Platforms>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
         <IsReleaseBuild>true</IsReleaseBuild>
     </PropertyGroup>

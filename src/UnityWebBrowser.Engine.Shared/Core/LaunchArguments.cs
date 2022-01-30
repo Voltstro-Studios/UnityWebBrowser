@@ -72,7 +72,7 @@ public class LaunchArguments
     ///     What is the log severity
     /// </summary>
     public LogSeverity LogSeverity { get; init; }
-    
+
     /// <summary>
     ///     Path for the assembly containing the communication layer
     /// </summary>

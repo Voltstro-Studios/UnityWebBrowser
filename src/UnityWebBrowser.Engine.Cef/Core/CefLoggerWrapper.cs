@@ -5,14 +5,14 @@ using Xilium.CefGlue;
 namespace UnityWebBrowser.Engine.Cef.Core;
 
 /// <summary>
-///     Wrapper for Cef to use the <see cref="Logger"/>
+///     Wrapper for Cef to use the <see cref="Logger" />
 /// </summary>
 public static class CefLoggerWrapper
 {
     private const string CefMessageTag = "CEF Engine";
     public const string FullCefMessageTag = $"[{CefMessageTag}]:";
     public const string ConsoleMessageTag = $"[{CefMessageTag} Console]:";
-    
+
     #region Debug Log
 
     /// <summary>

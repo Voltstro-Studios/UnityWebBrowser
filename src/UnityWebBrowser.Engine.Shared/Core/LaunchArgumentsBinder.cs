@@ -6,7 +6,7 @@ using UnityWebBrowser.Shared;
 namespace UnityWebBrowser.Engine.Shared.Core;
 
 /// <summary>
-///     <see cref="BinderBase{T}"/> for <see cref="LaunchArguments"/>
+///     <see cref="BinderBase{T}" /> for <see cref="LaunchArguments" />
 /// </summary>
 internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
 {

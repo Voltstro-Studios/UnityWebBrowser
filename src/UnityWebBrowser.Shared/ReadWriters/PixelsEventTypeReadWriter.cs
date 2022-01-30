@@ -33,8 +33,8 @@ public class PixelsEventTypeReadWriter : TypeReadWriter<PixelsEvent>
 
         if (buffer == null || buffer.Length < size)
             buffer = new byte[size];
-        
-        for (int i = 0; i < size; i++) 
+
+        for (int i = 0; i < size; i++)
             buffer[i] = reader.ReadByte();
 
         pixelsEvent.PixelData = new ReadOnlyMemory<byte>(buffer, 0, size);

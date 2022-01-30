@@ -12,7 +12,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 public class UwbCefClient : CefClient, IDisposable
 {
     public readonly IClient Client;
-    
+
     private readonly UwbCefContextMenuHandler contextMenuHandler;
     private readonly UwbCefDisplayHandler displayHandler;
     private readonly UwbCefLifespanHandler lifespanHandler;
@@ -111,7 +111,7 @@ public class UwbCefClient : CefClient, IDisposable
         foreach (WindowsKey i in keyboardEvent.KeysDown)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = (int)i,
+                WindowsKeyCode = (int) i,
                 EventType = CefKeyEventType.KeyDown
             });
 
@@ -119,7 +119,7 @@ public class UwbCefClient : CefClient, IDisposable
         foreach (WindowsKey i in keyboardEvent.KeysUp)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = (int)i,
+                WindowsKeyCode = (int) i,
                 EventType = CefKeyEventType.KeyUp
             });
 

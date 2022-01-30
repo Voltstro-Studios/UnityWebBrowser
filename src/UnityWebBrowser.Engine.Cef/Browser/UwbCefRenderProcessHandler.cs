@@ -10,7 +10,7 @@ public class UwbCefRenderProcessHandler : CefRenderProcessHandler
 
         CefV8Value versionValue = CefV8Value.CreateString(ThisAssembly.Info.Version);
         v8Object.SetValue("uwbVersion", versionValue);
-        
+
         CefV8Value cefVersion = CefV8Value.CreateString(CefRuntime.ChromeVersion);
         v8Object.SetValue("cefVersion", cefVersion);
     }

@@ -9,7 +9,7 @@ public struct MouseMoveEvent
     ///     The X position the moused moved to
     /// </summary>
     public int MouseX { get; set; }
-    
+
     /// <summary>
     ///     The Y position the mouse moved to
     /// </summary>
