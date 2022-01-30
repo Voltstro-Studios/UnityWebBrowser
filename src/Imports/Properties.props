@@ -2,6 +2,20 @@
     <PropertyGroup>
         <Authors>Voltstro-Studios</Authors>
         <Company>Voltstro-Studios</Company>
-        <Copyright>Copyright © 2021-2022 Voltstro-Studios</Copyright>
+        <Copyright>Copyright (c) 2021-2022 Voltstro-Studios</Copyright>
+        <Configurations>Debug;Release;ReleaseUnity</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
+        <IsReleaseBuild>true</IsReleaseBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
+        <Optimize>true</Optimize>
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
     </PropertyGroup>
 </Project>

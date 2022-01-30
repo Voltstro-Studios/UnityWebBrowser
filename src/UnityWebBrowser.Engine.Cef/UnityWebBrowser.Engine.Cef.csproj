@@ -12,20 +12,21 @@
         <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
         <Version>97.1.5</Version>
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
-        <Configurations>Debug;Release;ReleaseUnity</Configurations>
-        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
-        <Optimize>true</Optimize>
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <AllowedReferenceRelatedFileExtensions>
             <!-- Prevent default XML and PDB files copied to output in RELEASE. 
                  Only *.allowedextension files will be included, which doesn't exist in my case.
              -->
             .allowedextension
         </AllowedReferenceRelatedFileExtensions>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'And'$(RuntimeIdentifier)'!=''">
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,24 +4,10 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>9</LangVersion>
         <AssemblyTitle>Unity Web Browser Shared</AssemblyTitle>
         <Description>Shared resources for Unity Web Browser engines and Unity</Description>
-        <Configurations>Debug;Release;ReleaseUnity</Configurations>
-        <Platforms>AnyCPU</Platforms>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <IsTrimmable>false</IsTrimmable>
-        <LangVersion>10</LangVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
-        <Optimize>true</Optimize>
-        <DebugType>pdbonly</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
@@ -31,12 +17,22 @@
         <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.0.1" />
     </ItemGroup>
 
+    <!-- Create debug symbols since this will be shared with Unity as well -->
+    <PropertyGroup Condition="'$(Configuration)'=='Release'Or'$(Configuration)'=='ReleaseUnity'">
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
+    <!-- Xml file for Unity's code stripper -->
     <ItemGroup>
       <EmbeddedResource Include="link.xml">
           <LogicalName>UnityWebBrowser.Shared.xml</LogicalName>
       </EmbeddedResource>
     </ItemGroup>
 
+    <!-- Shit to copy into the UWB Core package -->
     <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
