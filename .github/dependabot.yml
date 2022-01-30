@@ -13,3 +13,7 @@ updates:
     directory: "src/"
     schedule:
       interval: "daily"
+  - package-ecosystem: "npm/"
+    directory: "src/UnityWebBrowser.Pages/"
+    schedule:
+      interval: "daily"
