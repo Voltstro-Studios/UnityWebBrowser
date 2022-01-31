@@ -153,7 +153,7 @@ namespace UnityWebBrowser.Helper
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = "/Users/liam/Library/Application Support/com.DefaultCompany.2DProject/"
+                    WorkingDirectory = engineDirectory
                 },
                 EnableRaisingEvents = true
             };
