@@ -13,5 +13,10 @@ public enum Platform
     /// <summary>
     ///     Linux 64-bit
     /// </summary>
-    Linux64
+    Linux64,
+    
+    /// <summary>
+    ///     MacOS 64-bit (Intel)
+    /// </summary>
+    MacOS
 }

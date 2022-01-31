@@ -45,8 +45,11 @@ namespace UnityWebBrowser.Editor.EngineManagement
             Platform platform = Platform.Linux64;
 #elif UNITY_EDITOR_WIN
             Platform platform = Platform.Windows64;
+#elif UNITY_EDITOR_OSX
+            Platform platform = Platform.MacOS;
 #else
 #error Unsupported platform!
+            
 #endif
 
             return platform;

@@ -1,0 +1,12 @@
+{
+  "version": "97.1.5",
+  "description": "CEF Engine for Unity Web Browser (MacOS x64)",
+  "author": "Voltstro",
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.macos.x64",
+  "displayName": "Unity Web Browser CEF Engine (MacOS x64)",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser.engine.cef": "97.1.5",
+    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+  },
+  "unity": "2021.2"
+}

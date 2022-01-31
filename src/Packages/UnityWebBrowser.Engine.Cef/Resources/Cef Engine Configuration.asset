@@ -20,3 +20,5 @@ MonoBehaviour:
     engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.win.x64/Engine~/
   - platform: 1
     engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.linux.x64/Engine~/
+  - platform: 2
+    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
