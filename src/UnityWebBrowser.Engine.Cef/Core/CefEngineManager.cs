@@ -48,7 +48,7 @@ internal class CefEngineManager : IEngine, IDisposable
 
         // ReSharper disable once RedundantAssignment
         string[] argv = args;
-#if LINUX
+#if LINUX || MACOS
         //On Linux we need to do this, otherwise it will just crash, no idea why tho
         argv = new string[args.Length + 1];
         Array.Copy(args, 0, argv, 1, args.Length);
@@ -111,7 +111,7 @@ internal class CefEngineManager : IEngine, IDisposable
             Locale = "en-US",
             ExternalMessagePump = false,
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
-#if LINUX
+#if LINUX || MACOS
             //On Linux we need to tell CEF where everything is, this will assume that the working directory is where everything is!
             ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
             LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),

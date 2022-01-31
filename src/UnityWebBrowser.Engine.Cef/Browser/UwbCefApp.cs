@@ -27,7 +27,7 @@ public class UwbCefApp : CefApp
         if (mediaStreamingEnabled && !commandLine.HasSwitch("--enable-media-stream"))
             commandLine.AppendSwitch("--enable-media-stream");
 
-#if LINUX
+#if LINUX || MACOS
         if (!commandLine.HasSwitch("--no-zygote")) commandLine.AppendSwitch("--no-zygote");
 #endif
     }

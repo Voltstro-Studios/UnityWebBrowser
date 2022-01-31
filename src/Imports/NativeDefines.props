@@ -15,7 +15,7 @@
         <IsLinuxBuild>true</IsLinuxBuild>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(RuntimeIdentifierContains(`osx`))'=='true' OR ('$(RuntimeIdentifier)'=='' AND '$(IsOSXPC)'=='true')">
-        <IsOSXBuild>true</IsOSXBuild>
+    <PropertyGroup Condition="'$(RuntimeIdentifier.Contains(`osx`))'=='true' OR ('$(RuntimeIdentifier)'=='' AND '$(IsOSXPC)'=='true')">
+        <IsMacOsBuild>true</IsMacOsBuild>
     </PropertyGroup>
 </Project>

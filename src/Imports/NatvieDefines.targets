@@ -9,7 +9,7 @@
         <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(IsOSXBuild)'=='true'">
-        <DefineConstants>$(DefineConstants);OSX</DefineConstants>
+    <PropertyGroup Condition="'$(IsMacOsBuild)'=='true'">
+        <DefineConstants>$(DefineConstants);MACOS</DefineConstants>
     </PropertyGroup>
 </Project>

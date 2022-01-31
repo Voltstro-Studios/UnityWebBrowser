@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Imports/NativeDefines.props"/>
-    <Import Project="../Imports/Properties.props"/>
+    <Import Project="../Imports/NativeDefines.props" />
+    <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -9,7 +9,7 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
         <Description>External process to handel rendering with CEF</Description>
-        <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
         <Version>97.1.5</Version>
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
     </PropertyGroup>
@@ -30,14 +30,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
-        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj"/>
-        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj"/>
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" PrivateAssets="all"/>
+        <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
+        <ProjectReference Include="..\UnityWebBrowser.Engine.Shared\UnityWebBrowser.Engine.Shared.csproj" />
+        <ProjectReference Include="..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="Roots.xml"/>
+        <TrimmerRootDescriptor Include="Roots.xml" />
     </ItemGroup>
 
     <!-- We need to copy different files depending on the OS -->
@@ -148,7 +148,34 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
     </ItemGroup>
+    
+    <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
+        <Content Include="..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\libcef.dylib" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
 
-    <Import Project="../Imports/NatvieDefines.targets"/>
+        <Content Include="..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\Libraries\*.*" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+
+        <Content Include="..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\Resources\**\*.*" Link="Libs/%(RecursiveDir)%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+
+        <Content Include="..\ThirdParty\Libs\cef\macosx64\*.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+        
+    </ItemGroup>
+
+    <Import Project="../Imports/NatvieDefines.targets" />
 
 </Project>
