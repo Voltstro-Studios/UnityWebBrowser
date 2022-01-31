@@ -116,6 +116,10 @@ if($IsLinux)
 {
     $7zipApp = "../DevTools/7zip/linux-x64/7zz"
 }
+if($ISMacOs)
+{
+    $7zipApp = "../DevTools/7zip/macos-x64-intel/7zz"
+}
 else
 {
     $7zipApp = "../DevTools/7zip/win-x64/7za.exe"
