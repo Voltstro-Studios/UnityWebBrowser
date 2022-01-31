@@ -73,6 +73,11 @@ namespace UnityWebBrowser.Editor.EngineManagement
 
             //We need to get the built project's plugins folder
             string buildPluginsDir = Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}_Data/UWB/");
+            if (target == BuildTarget.StandaloneOSX)
+            {
+                buildPluginsDir =
+                    Path.GetFullPath($"{pathToBuiltProject}/{Application.productName}.app/Contents/Resources/Data/UWB/");
+            }
 
             //Make sure it exists
             if (!Directory.Exists(buildPluginsDir))

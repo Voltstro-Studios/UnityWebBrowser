@@ -30,6 +30,8 @@ namespace UnityWebBrowser.Helper
         {
 #if UNITY_EDITOR
             return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
+#elif UNITY_STANDALONE_OSX
+            return Application.persistentDataPath;
 #else
 			return Application.dataPath;
 #endif
@@ -41,11 +43,14 @@ namespace UnityWebBrowser.Helper
         /// <returns></returns>
         public static string GetBrowserEnginePath(Engine engine)
         {
+            
             //Editor
 #if UNITY_EDITOR
             return EngineManager.GetEngineDirectory(engine);
 
             //Player builds (Standalone)
+#elif UNITY_STANDALONE_OSX
+            return Path.GetFullPath($"{Application.dataPath}/Resources/Data/UWB/");
 #elif UNITY_STANDALONE
 		    return Path.GetFullPath($"{Application.dataPath}/UWB/");
 #endif
@@ -148,7 +153,7 @@ namespace UnityWebBrowser.Helper
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = engineDirectory
+                    WorkingDirectory = "/Users/liam/Library/Application Support/com.DefaultCompany.2DProject/"
                 },
                 EnableRaisingEvents = true
             };

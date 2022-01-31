@@ -137,6 +137,7 @@ internal class CefEngineManager : IEngine, IDisposable
         };
 
         Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF with these options:" +
+                     $"\nProcess Path: {Environment.ProcessPath}" +
                      $"\nJS: {launchArguments.JavaScript}" +
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePathArgument}" +
