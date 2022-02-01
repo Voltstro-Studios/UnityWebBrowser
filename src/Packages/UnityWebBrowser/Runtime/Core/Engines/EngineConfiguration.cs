@@ -28,7 +28,7 @@ namespace UnityWebBrowser.Core.Engines
             {
                 string path = EngineManager.GetEngineProcessFullPath(this, engineFile.platform);
                 if(path == null || !File.Exists(path))
-                    Debug.LogError($"Error with engines files for {name}");
+                    Debug.LogError($"Error with engines files for {name} on platform {engineFile.platform}!");
             }
         }
 #endif
