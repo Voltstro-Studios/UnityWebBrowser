@@ -1,4 +1,4 @@
-<img align="right" width="15%" src="media/icon.svg">
+<img align="right" width="20%" src="media/UWB-Icon.svg">
 
 # Unity Web Browser
 
