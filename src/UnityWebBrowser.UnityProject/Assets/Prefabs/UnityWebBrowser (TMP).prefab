@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210983125624614}
   m_Father: {fileID: 7454210983829796802}
@@ -162,6 +163,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210984337109240}
   m_RootOrder: 0
@@ -316,6 +318,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210984337109240}
   m_RootOrder: 1
@@ -450,6 +453,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210982751757936}
   m_RootOrder: 0
@@ -526,6 +530,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210984369384061}
   m_Father: {fileID: 7454210983829796802}
@@ -618,8 +623,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 3377454761578556880}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: Refresh
         m_Mode: 1
         m_Arguments:
@@ -659,6 +664,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210984661012674}
   m_Father: {fileID: 7454210983829796802}
@@ -751,8 +757,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 3377454761578556880}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:
@@ -790,6 +796,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210984040730585}
   - {fileID: 7454210983829796802}
@@ -838,6 +845,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210984443129169}
   m_Father: {fileID: 7454210983829796802}
@@ -930,8 +938,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7454210984040730582}
-        m_TargetAssemblyTypeName: UnityWebBrowser.WebBrowserUI, UnityWebBrowser
+      - m_Target: {fileID: 3377454761578556880}
+        m_TargetAssemblyTypeName: UnityWebBrowser.Core.BaseUwbClientManager, UnityWebBrowser
         m_MethodName: GoForward
         m_Mode: 1
         m_Arguments:
@@ -969,6 +977,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210983333951893}
   - {fileID: 7454210983610425330}
@@ -1002,7 +1011,7 @@ GameObject:
   - component: {fileID: 7454210984040730585}
   - component: {fileID: 7454210984040730583}
   - component: {fileID: 7454210984040730584}
-  - component: {fileID: 7454210984040730582}
+  - component: {fileID: 3377454761578556880}
   - component: {fileID: 7454210984040730581}
   m_Layer: 5
   m_Name: BrowserController
@@ -1021,6 +1030,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210983584133261}
   m_RootOrder: 0
@@ -1065,7 +1075,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &7454210984040730582
+--- !u!114 &3377454761578556880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1074,26 +1084,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 7454210984040730586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1b3c29db30831458683c82a632cde6, type: 3}
+  m_Script: {fileID: 11500000, guid: 53d0570114d34f649962da70092c0cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
+    engine: {fileID: 11400000, guid: 649ce3cfdf00ca615abcf2bb62227f5c, type: 2}
     initialUrl: https://voltstro.dev
-    width: 1920
-    height: 1080
+    resolution:
+      Width: 1920
+      Height: 1080
     backgroundColor:
       serializedVersion: 2
       rgba: 4294967295
     javascript: 1
     cache: 1
-    mediaStream: 0
-    noProxyServer: 0
+    webRtc: 0
+    proxySettings:
+      Username: 
+      Password: 
+      ProxyServer: 0
     remoteDebugging: 0
     remoteDebuggingPort: 9022
-    port: 5555
-    eventPollingTime: 0.045
-    debugLog: 0
-    logSeverity: 0
+    communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc, type: 2}
+    engineStartupTimeout: 4000
+    logSeverity: 1
+    performanceMode: 0
+  inputHandler: {fileID: 11400000, guid: 776a2236bf720e5cbb6ca38016918dd0, type: 2}
 --- !u!114 &7454210984040730581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,6 +1150,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210982861792252}
   - {fileID: 7454210983018091871}
@@ -1187,6 +1204,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210983313359673}
   m_RootOrder: 0
@@ -1262,6 +1280,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210983610425330}
   m_RootOrder: 0
@@ -1322,7 +1341,7 @@ GameObject:
   - component: {fileID: 7454210984458747664}
   - component: {fileID: 7454210984458747665}
   m_Layer: 5
-  m_Name: UnityWebBrowser
+  m_Name: UnityWebBrowser (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1338,6 +1357,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210983584133261}
   m_Father: {fileID: 0}
@@ -1438,6 +1458,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7454210984337109240}
   m_Father: {fileID: 7454210983829796802}
@@ -1612,6 +1633,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7454210983333951893}
   m_RootOrder: 0

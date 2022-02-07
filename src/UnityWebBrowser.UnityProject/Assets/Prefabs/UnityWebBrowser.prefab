@@ -1125,7 +1125,7 @@ MonoBehaviour:
     engineStartupTimeout: 7000
     logSeverity: 1
     performanceMode: 0
-  inputHandler: {fileID: 11400000, guid: 565be9a8022a65c7288f47df26d5fe7f, type: 2}
+  inputHandler: {fileID: 11400000, guid: 776a2236bf720e5cbb6ca38016918dd0, type: 2}
 --- !u!114 &2090336616946191105
 MonoBehaviour:
   m_ObjectHideFlags: 0
