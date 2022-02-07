@@ -18,7 +18,7 @@ dotnet tool install --global xmldocmd
 
 ### How to Generate
 
-1. Build UnityWebBrowser.UnityProject with Unity
+1. Build UnityWebBrowser.UnityProject with Unity and Volt Builder.
 
 2. Build UnityWebBrowser.DocsPrj in Debug configuration
 

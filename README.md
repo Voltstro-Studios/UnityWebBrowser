@@ -65,6 +65,8 @@ Git
 
 3. You can now open up the `src/UnityWebBrowser.UnityProject` project with Unity.
 
+4. To build the Unity project as a player, open Unity Volt Builder by going to Tools **->** Unity Volt Builder **->** Volt Builder and clicking on 'Build Player'.
+
 ## Operating System Support
 
 What OS is supported will depend on the web engine you use.
