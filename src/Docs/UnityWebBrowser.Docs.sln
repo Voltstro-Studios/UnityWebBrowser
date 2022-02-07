@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.DocsPrj", "UnityWebBrowser.DocsPrj\UnityWebBrowser.DocsPrj.csproj", "{AF69A221-0B2F-4374-B1F9-89086DDD2F52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Shared", "..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj", "{A0E6A776-2AA7-43B9-9B73-F02796538962}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF69A221-0B2F-4374-B1F9-89086DDD2F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF69A221-0B2F-4374-B1F9-89086DDD2F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0E6A776-2AA7-43B9-9B73-F02796538962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0E6A776-2AA7-43B9-9B73-F02796538962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal
