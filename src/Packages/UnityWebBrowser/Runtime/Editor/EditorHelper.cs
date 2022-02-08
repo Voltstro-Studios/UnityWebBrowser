@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityWebBrowser.Shared.Core;
 
 #if UNITY_EDITOR
 
@@ -21,6 +23,21 @@ namespace UnityWebBrowser.Editor
                 }
             }
             return assets;
+        }
+
+        public static Platform UnityBuildTargetToPlatform(this BuildTarget buildTarget)
+        {
+            switch (buildTarget)
+            {
+                case BuildTarget.StandaloneLinux64:
+                    return Platform.Linux64;
+                case BuildTarget.StandaloneWindows64:
+                    return Platform.Windows64;
+                case BuildTarget.StandaloneOSX:
+                    return Platform.MacOS;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
