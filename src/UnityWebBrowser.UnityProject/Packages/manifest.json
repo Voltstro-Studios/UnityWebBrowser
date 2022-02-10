@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.unity.ide.rider": "3.0.10",
-    "com.unity.ide.visualstudio": "2.0.12",
-    "com.unity.ide.vscode": "1.2.4",
+    "com.unity.ide.rider": "3.0.12",
+    "com.unity.ide.visualstudio": "2.0.14",
+    "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.2.0",
     "com.unity.test-framework": "1.1.30",
     "com.unity.textmeshpro": "3.0.6",
@@ -12,8 +12,8 @@
     "dev.voltstro.unitywebbrowser": "file:../../Packages/UnityWebBrowser",
     "dev.voltstro.unitywebbrowser.communication.pipes": "file:../../Packages/UnityWebBrowser.Communication.Pipes",
     "dev.voltstro.unitywebbrowser.engine.cef": "file:../../Packages/UnityWebBrowser.Engine.Cef",
-    "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Linux-x64",
+    "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",
     "dev.voltstro.unitywebbrowser.unix-support": "file:../../Packages/UnityWebBrowser.Unix-Support",
     "com.unity.modules.imgui": "1.0.0",
