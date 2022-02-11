@@ -7,6 +7,15 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.unity.burst": {
+      "version": "1.6.4",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
@@ -46,6 +55,13 @@
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.mathematics": {
+      "version": "1.2.5",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
@@ -138,6 +154,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
+        "com.unity.burst": "1.6.4",
         "com.unity.nuget.newtonsoft-json": "2.0.2",
         "com.cysharp.unitask": "2.2.5",
         "org.nuget.voltrpc": "2.0.0"

@@ -6,10 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
+using Unity.Jobs;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.Communication;
 using UnityWebBrowser.Core.Engines;
+using UnityWebBrowser.Core.Jobs;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Helper;
 using UnityWebBrowser.Logging;
@@ -271,6 +273,7 @@ namespace UnityWebBrowser.Core
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
+        private NativeArray<byte> textureData;
 
         /// <summary>
         ///     Inits the browser client
@@ -299,6 +302,8 @@ namespace UnityWebBrowser.Core
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
+            textureData = BrowserTexture.GetRawTextureData<byte>();
+            
             pixelDataLock = new object();
             pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
 
@@ -510,7 +515,19 @@ namespace UnityWebBrowser.Core
                 
                 Texture2D texture = BrowserTexture;
                 markerLoadTextureLoad.Begin();
-                RunPixelDataLockAction(() => texture.LoadRawTextureData(pixelData));
+                
+                RunPixelDataLockAction(() =>
+                {
+                    CopyDataJob copyDataJob = new()
+                    {
+                        toArray = textureData,
+                        fromArray = pixelData
+                    };
+
+                    JobHandle jobHandle = copyDataJob.Schedule(textureData.Length, 512);
+                    jobHandle.Complete();
+                });
+                
                 markerLoadTextureLoad.End();
                 
                 markerLoadTextureApply.Begin();

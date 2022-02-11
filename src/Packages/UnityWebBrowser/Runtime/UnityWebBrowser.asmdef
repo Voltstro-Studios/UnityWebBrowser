@@ -5,6 +5,7 @@
         "UnityWebBrowser.UnixSupport",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
+        "Unity.Burst",
         "UniTask"
     ],
     "includePlatforms": [
