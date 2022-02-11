@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.IO;
 using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
+using UnityWebBrowser.Engine.Shared.ReadWriters;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Communications;
 using UnityWebBrowser.Shared.Core;
@@ -217,11 +218,11 @@ public abstract class EngineEntryPoint : IDisposable
             }
 
             //Add type readers
-            ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
+            EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngine), engine);
             ipcHost.StartListening();
 
-            ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
+            EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClient));
 
             //Connect the server (us) back to Unity

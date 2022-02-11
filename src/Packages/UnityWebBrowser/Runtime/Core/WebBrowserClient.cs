@@ -273,7 +273,7 @@ namespace UnityWebBrowser.Core
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
-        private NativeArray<byte> textureData;
+        internal NativeArray<byte> textureData;
 
         /// <summary>
         ///     Inits the browser client
@@ -473,19 +473,11 @@ namespace UnityWebBrowser.Core
                     markerGetPixels.Begin();
                     {
                         markerGetPixelsRpc.Begin();
-                        ReadOnlyMemory<byte> pixels = communicationsManager.GetPixels().PixelData;
-                        markerGetPixelsRpc.End();
-                        
-                        //There can be a good amount of time between first getting the pixels and when we go to copy it to the native array
-                        if(token.IsCancellationRequested)
-                            return;
-                        
-                        markerGetPixelsCopy.Begin();
-
                         RunPixelDataLockAction(() =>
-                            WebBrowserUtils.CopySpanToNativeArray(pixels.Span, pixelData, token));
-
-                        markerGetPixelsCopy.End();
+                        {
+                            communicationsManager.GetPixels();
+                        });
+                        markerGetPixelsRpc.End();
                     }
                     markerGetPixels.End();
                 }
@@ -510,28 +502,16 @@ namespace UnityWebBrowser.Core
 
             using (markerLoadTexture.Auto())
             {
-                if (pixelData.Length == 0)
+                if (!pixelData.IsCreated || pixelData.Length == 0)
                     return;
                 
                 Texture2D texture = BrowserTexture;
-                markerLoadTextureLoad.Begin();
-                
+ 
+                markerLoadTextureApply.Begin();
                 RunPixelDataLockAction(() =>
                 {
-                    CopyDataJob copyDataJob = new()
-                    {
-                        toArray = textureData,
-                        fromArray = pixelData
-                    };
-
-                    JobHandle jobHandle = copyDataJob.Schedule(textureData.Length, 512);
-                    jobHandle.Complete();
+                    texture.Apply(false);
                 });
-                
-                markerLoadTextureLoad.End();
-                
-                markerLoadTextureApply.Begin();
-                texture.Apply(false);
                 markerLoadTextureApply.End();
             }
         }

@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
-using UnityEngine.Scripting;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
@@ -32,6 +31,8 @@ namespace UnityWebBrowser.Core
 
         private readonly SynchronizationContext unityThread;
 
+        public readonly PixelsEventTypeReader pixelsEventTypeReader;
+
         /// <summary>
         ///     Creates a new <see cref="WebBrowserCommunicationsManager" /> instance
         /// </summary>
@@ -47,10 +48,14 @@ namespace UnityWebBrowser.Core
             ipcClient = browserClient.communicationLayer.CreateClient();
             ipcHost = browserClient.communicationLayer.CreateHost();
 
-            ReadWriterUtils.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
+            ReadWriterUtils.AddBaseTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService<IClient>(this);
 
-            ReadWriterUtils.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
+            ReadWriterUtils.AddBaseTypeReadWriters(ipcClient.TypeReaderWriterManager);
+
+            pixelsEventTypeReader = new PixelsEventTypeReader(browserClient.textureData);
+            ipcClient.TypeReaderWriterManager.AddType(pixelsEventTypeReader);
+            
             ipcClient.AddService<IEngine>();
             engineProxy = new EngineProxy(ipcClient);
         }
