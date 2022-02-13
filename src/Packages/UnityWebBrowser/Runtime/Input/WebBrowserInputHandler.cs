@@ -8,8 +8,8 @@ namespace UnityWebBrowser.Input
     /// </summary>
     public abstract class WebBrowserInputHandler : ScriptableObject
     {
-        //Mouse functions
-        
+        #region Position
+
         /// <summary>
         ///     Get the scroll
         /// </summary>
@@ -21,6 +21,10 @@ namespace UnityWebBrowser.Input
         /// </summary>
         /// <returns></returns>
         public abstract Vector2 GetCursorPos();
+        
+        #endregion
+
+        #region Input
 
         /// <summary>
         ///     Get all keys that are down this frame
@@ -33,15 +37,17 @@ namespace UnityWebBrowser.Input
         /// </summary>
         /// <returns>Returns an array of <see cref="WindowsKey"/> that are down</returns>
         public abstract WindowsKey[] GetUpKeys();
-
+        
         /// <summary>
         ///     Gets the input buffer for this frame
         /// </summary>
         /// <returns></returns>
         public abstract string GetFrameInputBuffer();
-        
-        //General
-        
+
+        #endregion
+
+        #region General
+
         /// <summary>
         ///     Called when inputs are started
         /// </summary>
@@ -51,5 +57,7 @@ namespace UnityWebBrowser.Input
         ///     Called when inputs are stopped
         /// </summary>
         public abstract void OnStop();
+        
+        #endregion
     }
 }
