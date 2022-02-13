@@ -667,10 +667,9 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     Sends a mouse scroll event
         /// </summary>
-        /// <param name="mouseX"></param>
-        /// <param name="mouseY"></param>
+        /// <param name="mousePos"></param>
         /// <param name="mouseScroll"></param>
-        public void SendMouseScroll(int mouseX, int mouseY, int mouseScroll)
+        public void SendMouseScroll(Vector2 mousePos, int mouseScroll)
         {
             if (!IsReady)
                 return;
@@ -680,9 +679,9 @@ namespace UnityWebBrowser.Core
 
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
-                MouseScroll = mouseScroll,
-                MouseX = mouseX,
-                MouseY = mouseY
+                MouseX = (int) mousePos.x,
+                MouseY = (int) mousePos.y,
+                MouseScroll = mouseScroll
             });
         }
 

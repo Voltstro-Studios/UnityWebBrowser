@@ -82,7 +82,7 @@ namespace UnityWebBrowser.Core
                     scroll *= browserClient.BrowserTexture.height;
 
                     if (scroll != 0)
-                        browserClient.SendMouseScroll((int) pos.x, (int) pos.y, (int) scroll);
+                        browserClient.SendMouseScroll(pos, (int) scroll);
                     
                     //Input
                     WindowsKey[] keysDown = inputHandler.GetDownKeys();
