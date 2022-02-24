@@ -21,5 +21,9 @@ module.exports = defineConfig({
             manualChunks: () => "everything.js",
         },
     }
-  }
+  },
+  server: {
+    open: '/about.html'
+  },
+  
 })
