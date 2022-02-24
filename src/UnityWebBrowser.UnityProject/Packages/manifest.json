@@ -8,6 +8,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.toolchain.linux-x86_64": "1.0.0",
     "com.unity.ugui": "1.0.0",
+    "dev.voltstro.unityimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "dev.voltstro.unityvoltbuilder": "4.1.1",
     "dev.voltstro.unitywebbrowser": "file:../../Packages/UnityWebBrowser",
     "dev.voltstro.unitywebbrowser.communication.pipes": "file:../../Packages/UnityWebBrowser.Communication.Pipes",

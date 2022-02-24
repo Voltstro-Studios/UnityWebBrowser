@@ -100,9 +100,11 @@ namespace UnityWebBrowser.Helper
             if (graphic == null)
                 throw new ArgumentNullException(nameof(graphic), "Image cannot be null!");
 
+            Camera camera = graphic.canvas.worldCamera;
+
             position = new Vector2();
             RectTransform uiImageObjectRect = graphic.rectTransform;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRect, screenPosition, null,
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRect, screenPosition, camera,
                     out Vector2 localCursor)) return false;
 
             Vector2 ptPivotCancelledLocation = new(localCursor.x - uiImageObjectRect.rect.x,

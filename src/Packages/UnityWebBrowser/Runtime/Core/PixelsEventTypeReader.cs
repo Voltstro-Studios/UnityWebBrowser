@@ -12,7 +12,12 @@ namespace UnityWebBrowser.Core
 
         public PixelsEventTypeReader(NativeArray<byte> textureData)
         {
-            pixelData = textureData;
+            SetPixelDataArray(textureData);
+        }
+        
+        public void SetPixelDataArray(NativeArray<byte> array)
+        {
+            pixelData = array;
         }
 
         public override void Write(BufferedWriter writer, PixelsEvent value)
@@ -27,7 +32,7 @@ namespace UnityWebBrowser.Core
             if (size <= 0)
                 return default;
             
-            if (pixelData.Length != size)
+            if (!pixelData.IsCreated || pixelData.Length != size)
             {
                 for (int i = 0; i < size; i++)
                 {

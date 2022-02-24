@@ -124,6 +124,15 @@
       "dependencies": {},
       "url": "https://pkgs.dev.azure.com/Voltstro-Studios/UnityPackages/_packaging/UPM/npm/registry"
     },
+    "dev.voltstro.unityimgui": {
+      "version": "https://github.com/Voltstro-Studios/uimgui.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
+      },
+      "hash": "2b982dfe187b007b493a374547417599c7cc3e36"
+    },
     "dev.voltstro.unityvoltbuilder": {
       "version": "4.1.1",
       "depth": 0,
@@ -192,6 +201,13 @@
       "dependencies": {
         "dev.voltstro.unity.mono.unix": "1.0.0"
       }
+    },
+    "org.nuget.system.runtime.compilerservices.unsafe": {
+      "version": "5.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.voltrpc": {
       "version": "2.0.0",

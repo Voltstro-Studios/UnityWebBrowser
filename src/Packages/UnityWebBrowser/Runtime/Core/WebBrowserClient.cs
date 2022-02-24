@@ -787,6 +787,7 @@ namespace UnityWebBrowser.Core
 
             BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
             communicationsManager.Resize(newResolution);
+            textureData = BrowserTexture.GetRawTextureData<byte>();
         }
 
         #endregion
