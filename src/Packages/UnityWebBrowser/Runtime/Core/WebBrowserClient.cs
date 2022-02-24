@@ -65,7 +65,9 @@ namespace UnityWebBrowser.Core
         [SerializeField] private Resolution resolution = new(1920, 1080);
 
         /// <summary>
-        ///     The resolution of the browser
+        ///     The resolution of the browser.
+        ///     <para>There is a chance that resizing the screen causes UWB to crash Unity, use carefully!</para>
+        ///     <para>Resizing in performance mode is not supported!</para>
         /// </summary>
         public Resolution Resolution
         {
@@ -773,10 +775,13 @@ namespace UnityWebBrowser.Core
         }
 
         /// <summary>
-        ///     Resizes the screen
+        ///     Resizes the screen.
+        ///     <para>There is a chance that resizing the screen causes UWB to crash Unity, use carefully!</para>
+        ///     <para>Resizing in performance mode is not supported!</para>
         /// </summary>
         /// <param name="newResolution"></param>
         /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         public void Resize(Resolution newResolution)
         {
             if (!IsReady)
@@ -785,9 +790,16 @@ namespace UnityWebBrowser.Core
             if (!IsConnected)
                 throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
 
+            if (performanceMode)
+                throw new NotSupportedException("Resizing is not allowed in performance mode!");
+
             BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
             communicationsManager.Resize(newResolution);
             textureData = BrowserTexture.GetRawTextureData<byte>();
+            communicationsManager.pixelsEventTypeReader.SetPixelDataArray(textureData);
+            
+
+            logger.Debug($"Resized to {newResolution}.");
         }
 
         #endregion

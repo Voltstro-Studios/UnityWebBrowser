@@ -313,6 +313,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.performanceMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
       value: UnityWebBrowser
@@ -411,6 +415,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+--- !u!114 &1162272219 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+  m_PrefabInstance: {fileID: 906994671}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d0570114d34f649962da70092c0cea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1460405560
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,3 +590,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79379ff4fd8f41ad38f67d58330b0f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  webBrowserUIBasic: {fileID: 1162272219}
+  resolutions:
+  - Width: 1280
+    Height: 720
+  - Width: 1920
+    Height: 1038
