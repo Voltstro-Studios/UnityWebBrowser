@@ -1,0 +1,19 @@
+{
+    "name": "UnityWebBrowser.Prj",
+    "rootNamespace": "UnityWebBrowser.Prj",
+    "references": [
+        "UnityWebBrowser",
+        "UnityImGui"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "UnityWebBrowser.Shared.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

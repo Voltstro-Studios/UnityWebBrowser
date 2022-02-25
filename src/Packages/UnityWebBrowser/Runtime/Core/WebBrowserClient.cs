@@ -38,13 +38,10 @@ namespace UnityWebBrowser.Core
     {
         #region Profile Markers
 
-        private static ProfilerMarker markerGetPixels = new("UWB.GetPixels");
-        private static ProfilerMarker markerGetPixelsRpc = new("UWB.GetPixels.RPC");
-        private static ProfilerMarker markerGetPixelsCopy = new("UWB.GetPixels.Copy");
+        internal static ProfilerMarker markerGetPixels = new("UWB.GetPixels");
+        internal static ProfilerMarker markerGetPixelsRpc = new("UWB.GetPixels.RPC");
         
-        private static ProfilerMarker markerLoadTexture = new("UWB.LoadTexture");
-        private static ProfilerMarker markerLoadTextureLoad = new("UWB.LoadTexture.LoadRawData");
-        private static ProfilerMarker markerLoadTextureApply = new("UWB.LoadTexture.Apply");
+        internal static ProfilerMarker markerLoadTextureApply = new("UWB.LoadTexture.Apply");
 
         #endregion
 
@@ -500,20 +497,17 @@ namespace UnityWebBrowser.Core
             if (!IsReady || !IsConnected)
                 return;
 
-            using (markerLoadTexture.Auto())
-            {
-                if (!pixelData.IsCreated || pixelData.Length == 0)
-                    return;
+            if (!pixelData.IsCreated || pixelData.Length == 0)
+                return;
                 
-                Texture2D texture = BrowserTexture;
+            Texture2D texture = BrowserTexture;
  
-                markerLoadTextureApply.Begin();
-                RunPixelDataLockAction(() =>
-                {
-                    texture.Apply(false);
-                });
-                markerLoadTextureApply.End();
-            }
+            markerLoadTextureApply.Begin();
+            RunPixelDataLockAction(() =>
+            {
+                texture.Apply(false);
+            });
+            markerLoadTextureApply.End();
         }
 
         private void RunPixelDataLockAction(Action action)
