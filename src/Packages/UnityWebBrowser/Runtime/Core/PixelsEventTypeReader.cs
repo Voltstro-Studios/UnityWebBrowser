@@ -32,17 +32,11 @@ namespace UnityWebBrowser.Core
             if (size <= 0)
                 return default;
             
-            if (!pixelData.IsCreated || pixelData.Length != size)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    reader.ReadByte();
-                }
-            }
-
             for (int i = 0; i < size; i++)
             {
-                pixelData[i] = reader.ReadByte();
+                byte data = reader.ReadByte();
+                if(pixelData.IsCreated && pixelData.Length == size)
+                    pixelData[i] = data;
             }
 
             return default;
