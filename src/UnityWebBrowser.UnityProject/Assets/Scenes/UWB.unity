@@ -536,7 +536,7 @@ MonoBehaviour:
   _renderFeature: {fileID: 0}
   _rendererType: 0
   _platformType: 0
-  _iniSettings: {fileID: 0}
+  _iniSettings: {fileID: 11400000, guid: 60f1b1736534ad2bd9e082c43895730f, type: 2}
   _initialConfiguration:
     ImGuiConfig: 65
     DoubleClickTime: 0.3
@@ -596,3 +596,4 @@ MonoBehaviour:
     Height: 720
   - Width: 1920
     Height: 1038
+  refreshRate: 1
