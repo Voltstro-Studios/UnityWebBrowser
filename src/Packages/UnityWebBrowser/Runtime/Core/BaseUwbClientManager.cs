@@ -12,6 +12,7 @@ namespace UnityWebBrowser.Core
     ///         instead override <see cref="OnStart"/>, <see cref="OnFixedUpdate"/> and <see cref="OnDestroyed"/>.
     ///     </para>
     /// </summary>
+    [DisallowMultipleComponent]
     public abstract class BaseUwbClientManager : MonoBehaviour
     {
         /// <summary>

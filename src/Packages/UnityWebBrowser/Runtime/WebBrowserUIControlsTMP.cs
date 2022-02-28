@@ -14,6 +14,7 @@ namespace UnityWebBrowser
     [AddComponentMenu("UWB/Web Browser UI Controls (TMP)")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(BaseUwbClientManager))]
+    [DisallowMultipleComponent]
     public sealed class WebBrowserUIControlsTMP : MonoBehaviour
     {
         /// <summary>

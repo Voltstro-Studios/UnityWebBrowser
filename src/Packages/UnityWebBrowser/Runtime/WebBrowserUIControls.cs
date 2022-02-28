@@ -12,6 +12,7 @@ namespace UnityWebBrowser
     [AddComponentMenu("UWB/Web Browser UI Controls")]
     [HelpURL("https://github.com/Voltstro-Studios/UnityWebBrowser")]
     [RequireComponent(typeof(BaseUwbClientManager))]
+    [DisallowMultipleComponent]
     public sealed class WebBrowserUIControls : MonoBehaviour
     {
         /// <summary>
