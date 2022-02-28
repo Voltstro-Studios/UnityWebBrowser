@@ -87,4 +87,9 @@ public class LaunchArguments
     ///     Out location (Either the pipe name or port)
     /// </summary>
     internal string OutLocation { get; init; }
+    
+    /// <summary>
+    ///     Start delay. Used for testing reasons.
+    /// </summary>
+    internal uint StartDelay { get; set; }
 }

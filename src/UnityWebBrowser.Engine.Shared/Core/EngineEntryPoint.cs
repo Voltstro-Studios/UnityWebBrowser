@@ -1,6 +1,7 @@
 using System;
 using System.CommandLine;
 using System.IO;
+using System.Threading;
 using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Engine.Shared.ReadWriters;
@@ -119,6 +120,9 @@ public abstract class EngineEntryPoint : IDisposable
         Option<LogSeverity> logSeverity = new("-log-severity",
             () => LogSeverity.Info,
             "The severity of the logs");
+        Option<uint> startDelay = new("-start-delay",
+            () => 0,
+            "Delays the starting process. Used for testing reasons.");
 
         RootCommand rootCommand = new()
         {
@@ -128,7 +132,7 @@ public abstract class EngineEntryPoint : IDisposable
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
             communicationLayerPath, inLocation, outLocation,
-            logPath, logSeverity
+            logPath, logSeverity, startDelay
         };
         rootCommand.Description =
             "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
@@ -143,9 +147,12 @@ public abstract class EngineEntryPoint : IDisposable
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
             communicationLayerPath, inLocation, outLocation,
-            logPath, logSeverity);
+            logPath, logSeverity, startDelay);
         rootCommand.SetHandler((LaunchArguments parsedArgs) =>
         {
+            if(parsedArgs.StartDelay != 0)
+                Thread.Sleep((int)parsedArgs.StartDelay);
+            
             if (ShouldInitLogger(parsedArgs, args))
                 Logger.Init(parsedArgs.LogSeverity);
 

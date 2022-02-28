@@ -367,6 +367,12 @@ namespace UnityWebBrowser.Core
 
             if (!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+            
+            //Make sure not to include this, its for testing
+#if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 
+            //argsBuilder.AppendArgument("start-delay", 2000);
+#endif
+            
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
@@ -374,11 +380,20 @@ namespace UnityWebBrowser.Core
             //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
+            
+            cancellationToken = new CancellationTokenSource();
 
             //Start the engine process
+            UniTask.Create(() => StartEngineProcess(arguments)).ContinueWith(WaitForEngineReadyTask).Forget();
+        }
+        
+        #region Starting
+
+        private UniTask StartEngineProcess(string engineProcessArguments)
+        {
             try
             {
-                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, engine, arguments,
+                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, engine, engineProcessArguments,
                     new ProcessLogHandler(this).HandleProcessLog);
             }
             catch (Exception ex)
@@ -387,12 +402,8 @@ namespace UnityWebBrowser.Core
                 throw;
             }
             
-            cancellationToken = new CancellationTokenSource();
-
-            UniTask.Create(WaitForEngineReadyTask);
+            return UniTask.CompletedTask;
         }
-
-        #region Readying
 
         /// <summary>
         ///     Will wait for <see cref="ReadySignalReceived" /> to be true

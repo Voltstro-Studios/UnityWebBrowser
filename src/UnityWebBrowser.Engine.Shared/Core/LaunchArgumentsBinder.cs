@@ -14,14 +14,15 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<FileInfo> cachePath;
 
     private readonly Option<FileInfo> communicationLayerPath;
+    
     private readonly Option<int> height;
+    private readonly Option<int> width;
+    
     private readonly Option<string> initialUrl;
     private readonly Option<string> inLocation;
 
     private readonly Option<bool> javaScript;
 
-    private readonly Option<FileInfo> logPath;
-    private readonly Option<LogSeverity> logSeverity;
     private readonly Option<string> outLocation;
     private readonly Option<string> proxyPassword;
 
@@ -29,8 +30,11 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<string> proxyUsername;
     private readonly Option<int> remoteDebugging;
     private readonly Option<bool> webRtc;
+    
+    private readonly Option<FileInfo> logPath;
+    private readonly Option<LogSeverity> logSeverity;
 
-    private readonly Option<int> width;
+    private readonly Option<uint> startDelay;
 
     public LaunchArgumentsBinder(Option<string> initialUrl,
         Option<int> width, Option<int> height,
@@ -38,7 +42,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<Color> backgroundColor,
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword,
         Option<FileInfo> communicationLayerPath, Option<string> inLocation, Option<string> outLocation,
-        Option<FileInfo> logPath, Option<LogSeverity> logSeverity)
+        Option<FileInfo> logPath, Option<LogSeverity> logSeverity, Option<uint> startDelay)
     {
         this.initialUrl = initialUrl;
         this.width = width;
@@ -56,6 +60,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.outLocation = outLocation;
         this.logPath = logPath;
         this.logSeverity = logSeverity;
+        this.startDelay = startDelay;
     }
 
     protected override LaunchArguments GetBoundValue(BindingContext bindingContext)
@@ -84,7 +89,9 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             OutLocation = bindingContext.ParseResult.GetValueForOption(outLocation),
 
             LogPath = bindingContext.ParseResult.GetValueForOption(logPath),
-            LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity)
+            LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity),
+            
+            StartDelay = bindingContext.ParseResult.GetValueForOption(startDelay)
         };
     }
 }
