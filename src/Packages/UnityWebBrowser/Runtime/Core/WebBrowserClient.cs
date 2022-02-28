@@ -203,7 +203,7 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     The path that UWB engine will log to
         /// </summary>
-        /// <exception cref="WebBrowserIsConnectedException"></exception>
+        /// <exception cref="UwbIsConnectedException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public FileInfo LogPath
         {
@@ -211,7 +211,7 @@ namespace UnityWebBrowser.Core
             set
             {
                 if (IsConnected)
-                    throw new WebBrowserIsConnectedException(
+                    throw new UwbIsConnectedException(
                         "You cannot change the log path once the browser engine is connected");
 
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
@@ -227,7 +227,7 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     The path to the cache
         /// </summary>
-        /// <exception cref="WebBrowserIsConnectedException"></exception>
+        /// <exception cref="UwbIsConnectedException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public FileInfo CachePath
@@ -236,7 +236,7 @@ namespace UnityWebBrowser.Core
             set
             {
                 if (IsConnected)
-                    throw new WebBrowserIsConnectedException(
+                    throw new UwbIsConnectedException(
                         "You cannot change the cache path once the browser engine is connected");
 
                 if (!cache)
@@ -612,11 +612,7 @@ namespace UnityWebBrowser.Core
         /// <param name="chars"></param>
         public void SendKeyboardControls(WindowsKey[] keysDown, WindowsKey[] keysUp, string chars)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.SendKeyboardEvent(new KeyboardEvent
             {
@@ -632,11 +628,7 @@ namespace UnityWebBrowser.Core
         /// <param name="mousePos"></param>
         public void SendMouseMove(Vector2 mousePos)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
@@ -655,11 +647,7 @@ namespace UnityWebBrowser.Core
         public void SendMouseClick(Vector2 mousePos, int clickCount, MouseClickType clickType,
             MouseEventType eventType)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
@@ -678,11 +666,7 @@ namespace UnityWebBrowser.Core
         /// <param name="mouseScroll"></param>
         public void SendMouseScroll(Vector2 mousePos, int mouseScroll)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
@@ -698,11 +682,7 @@ namespace UnityWebBrowser.Core
         /// <param name="url"></param>
         public void LoadUrl(string url)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.LoadUrl(url);
         }
@@ -712,11 +692,7 @@ namespace UnityWebBrowser.Core
         /// </summary>
         public void GoForward()
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.GoForward();
         }
@@ -726,11 +702,7 @@ namespace UnityWebBrowser.Core
         /// </summary>
         public void GoBack()
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.GoBack();
         }
@@ -740,11 +712,7 @@ namespace UnityWebBrowser.Core
         /// </summary>
         public void Refresh()
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.Refresh();
         }
@@ -755,11 +723,7 @@ namespace UnityWebBrowser.Core
         /// <param name="html"></param>
         public void LoadHtml(string html)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.LoadHtml(html);
         }
@@ -770,11 +734,7 @@ namespace UnityWebBrowser.Core
         /// <param name="js"></param>
         public void ExecuteJs(string js)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             communicationsManager.ExecuteJs(js);
         }
@@ -785,15 +745,11 @@ namespace UnityWebBrowser.Core
         ///     <para>Resizing in performance mode is not supported!</para>
         /// </summary>
         /// <param name="newResolution"></param>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        /// <exception cref="UwbIsNotConnectedException"></exception>
         /// <exception cref="NotSupportedException"></exception>
         public void Resize(Resolution newResolution)
         {
-            if (!IsReady)
-                return;
-
-            if (!IsConnected)
-                throw new WebBrowserIsNotConnectedException("The Unity client is not connected to the browser engine!");
+            CheckIfIsReadyAndConnected();
 
             if (performanceMode)
                 throw new NotSupportedException("Resizing is not allowed in performance mode!");
@@ -805,6 +761,16 @@ namespace UnityWebBrowser.Core
             
 
             logger.Debug($"Resized to {newResolution}.");
+        }
+
+        [DebuggerStepThrough]
+        private void CheckIfIsReadyAndConnected()
+        {
+            if (!IsReady)
+                throw new UwbIsNotReadyException("UWB is not currently ready!");
+
+            if (!IsConnected)
+                throw new UwbIsNotConnectedException("UWB is not currently connected!");
         }
 
         #endregion

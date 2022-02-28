@@ -67,70 +67,46 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     Makes the browser go back a page
         /// </summary>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-        public void GoBack()
-        {
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
-            browserClient.GoBack();
-        }
+        /// <exception cref="UwbIsNotConnectedException"></exception>
+        public void GoBack() => browserClient.GoBack();
 
         /// <summary>
         ///     Make the browser go forward a page
         /// </summary>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-        public void GoForward()
-        {
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
-            browserClient.GoForward();
-        }
+        /// <exception cref="UwbIsNotConnectedException"></exception>
+        public void GoForward() => browserClient.GoForward();
 
         /// <summary>
         ///     Makes the browser go to a url
         /// </summary>
         /// <param name="url"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        /// <exception cref="UwbIsNotConnectedException"></exception>
         public void NavigateUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
-
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
+            
             browserClient.LoadUrl(url);
         }
 
         /// <summary>
         ///     Refreshes the browser
         /// </summary>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
-        public void Refresh()
-        {
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
-            browserClient.Refresh();
-        }
+        /// <exception cref="UwbIsNotConnectedException"></exception>
+        public void Refresh() => browserClient.Refresh();
 
         /// <summary>
         ///     Loads HTML code
         /// </summary>
         /// <param name="html"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="WebBrowserIsNotConnectedException"></exception>
+        /// <exception cref="UwbIsNotConnectedException"></exception>
         public void LoadHtml(string html)
         {
             if (string.IsNullOrWhiteSpace(html))
                 throw new ArgumentNullException(nameof(html));
-
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
+            
             browserClient.LoadHtml(html);
         }
 
@@ -138,14 +114,13 @@ namespace UnityWebBrowser.Core
         ///     Executes JS
         /// </summary>
         /// <param name="js"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="UwbIsNotConnectedException"></exception>
         public void ExecuteJs(string js)
         {
             if (string.IsNullOrWhiteSpace(js))
                 throw new ArgumentNullException(nameof(js));
-
-            if (!browserClient.IsConnected)
-                throw new WebBrowserIsNotConnectedException("The web browser is not ready right now!");
-
+            
             browserClient.ExecuteJs(js);
         }
 

@@ -5,9 +5,9 @@ namespace UnityWebBrowser
     /// <summary>
     ///     An <see cref="Exception"/> related to when you are trying to do something when the engine is not running
     /// </summary>
-    public sealed class WebBrowserIsNotConnectedException : Exception
+    public sealed class UwbIsNotConnectedException : Exception
     {
-        internal WebBrowserIsNotConnectedException(string message) : base(message)
+        internal UwbIsNotConnectedException(string message) : base(message)
         {
         }
     }
