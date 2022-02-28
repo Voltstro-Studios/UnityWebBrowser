@@ -151,50 +151,11 @@ namespace UnityWebBrowser.Core
         ///     Are we connected to the UW engine process
         /// </summary>
         public bool IsConnected => communicationsManager is {IsConnected: true};
-
-        #region IsReady
-
+        
         /// <summary>
         ///     The UWB engine has signaled that it is ready
         /// </summary>
         public bool ReadySignalReceived { get; internal set; }
-
-        private object isReadyLock;
-        private bool isReady;
-
-        /// <summary>
-        ///     Is everything for UWB ready? (Engine and client)
-        /// </summary>
-        public bool IsReady
-        {
-            // ReSharper disable InconsistentlySynchronizedField
-            get
-            {
-                if (isReadyLock == null)
-                    return isReady;
-
-                lock (isReadyLock)
-                {
-                    return isReady;
-                }
-            }
-            private set
-            {
-                if (isReadyLock == null)
-                {
-                    isReady = value;
-                    return;
-                }
-
-                lock (isReadyLock)
-                {
-                    isReady = value;
-                }
-            }
-            // ReSharper restore InconsistentlySynchronizedField
-        }
-
-        #endregion
 
         #region Log Path
 
@@ -292,8 +253,6 @@ namespace UnityWebBrowser.Core
             if (communicationLayer.IsInUse)
                 throw new InitializationException("The communication layer is already in use!");
             communicationLayer.IsInUse = true;
-
-            isReadyLock = new object();
 
             //Setup texture
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
@@ -444,7 +403,6 @@ namespace UnityWebBrowser.Core
             {
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
-                IsReady = true;
                 _ = Task.Run(PixelDataLoop);
             }
             catch (Exception ex)
@@ -470,7 +428,7 @@ namespace UnityWebBrowser.Core
             while (!token.IsCancellationRequested)
                 try
                 {
-                    if (!IsReady || !IsConnected)
+                    if (!IsConnected)
                         continue;
                     
                     await Task.Delay(25, token);
@@ -505,7 +463,7 @@ namespace UnityWebBrowser.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void LoadTextureData()
         {
-            if (!IsReady || !IsConnected)
+            if (!IsConnected)
                 return;
 
             if (!pixelData.IsCreated || pixelData.Length == 0)
@@ -766,7 +724,7 @@ namespace UnityWebBrowser.Core
         [DebuggerStepThrough]
         private void CheckIfIsReadyAndConnected()
         {
-            if (!IsReady)
+            if (!ReadySignalReceived)
                 throw new UwbIsNotReadyException("UWB is not currently ready!");
 
             if (!IsConnected)
@@ -818,7 +776,7 @@ namespace UnityWebBrowser.Core
                 lock (pixelDataLock)
                     pixelData.Dispose();
 
-            if (IsReady && IsConnected)
+            if (ReadySignalReceived && IsConnected)
                 communicationsManager.Shutdown();
 
             try
@@ -835,8 +793,7 @@ namespace UnityWebBrowser.Core
 
             if (engineProcess != null)
             {
-                if (IsReady)
-                    engineProcess.KillTree();
+                engineProcess.KillTree();
 
                 engineProcess.Dispose();
                 engineProcess = null;

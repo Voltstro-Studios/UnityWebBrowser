@@ -68,7 +68,7 @@ namespace UnityWebBrowser.Core
 
             while (Application.isPlaying)
             {
-                if(!browserClient.IsReady || !browserClient.IsConnected)
+                if(!browserClient.IsConnected)
                     continue;
                 
                 if (GetMousePosition(out Vector2 pos))
