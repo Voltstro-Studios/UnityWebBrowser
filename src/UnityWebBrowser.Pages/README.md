@@ -13,4 +13,6 @@ Yarn
 
 1. Run `yarn` or `yarn install` in the root of the pages project
 
-2. Run `yarn run build` to build the pages. They will be placed in the `dist/` folder. The UWB engine project will automatically included them as embedded resources.
+2. Run `yarn run start` to preview the site in your local browser.
+
+3. Run `yarn run build` to build the pages. They will be placed in the `dist/` folder. The UWB engine project will automatically included them as an embedded resources.
