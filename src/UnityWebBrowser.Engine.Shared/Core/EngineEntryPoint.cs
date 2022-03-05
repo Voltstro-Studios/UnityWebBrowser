@@ -88,8 +88,8 @@ public abstract class EngineEntryPoint : IDisposable
             "The path to the cache (null for no cache)");
 
         //Background color
-        Option<Color> backgroundColor = new("-background-color",
-            () => new Color("ffffffff"),
+        Option<string> backgroundColor = new("-background-color",
+            () => "ffffffff",
             "The color to use for the background");
 
         //Proxy settings

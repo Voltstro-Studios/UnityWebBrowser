@@ -10,7 +10,7 @@ namespace UnityWebBrowser.Engine.Shared.Core;
 /// </summary>
 internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
 {
-    private readonly Option<Color> backgroundColor;
+    private readonly Option<string> backgroundColor;
     private readonly Option<FileInfo> cachePath;
 
     private readonly Option<FileInfo> communicationLayerPath;
@@ -39,7 +39,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     public LaunchArgumentsBinder(Option<string> initialUrl,
         Option<int> width, Option<int> height,
         Option<bool> javaScript, Option<bool> webRtc, Option<int> remoteDebugging, Option<FileInfo> cachePath,
-        Option<Color> backgroundColor,
+        Option<string> backgroundColor,
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword,
         Option<FileInfo> communicationLayerPath, Option<string> inLocation, Option<string> outLocation,
         Option<FileInfo> logPath, Option<LogSeverity> logSeverity, Option<uint> startDelay)
@@ -76,7 +76,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             WebRtc = bindingContext.ParseResult.GetValueForOption(webRtc),
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
 
-            BackgroundColor = bindingContext.ParseResult.GetValueForOption(backgroundColor),
+            BackgroundColor = new Color(bindingContext.ParseResult.GetValueForOption(backgroundColor)),
 
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
 

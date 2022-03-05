@@ -133,9 +133,10 @@ namespace UnityWebBrowser.Helper
         /// <param name="engine"></param>
         /// <param name="arguments"></param>
         /// <param name="onLogEvent"></param>
+        /// <param name="onErrorLogEvent"></param>
         /// <returns></returns>
         internal static Process CreateEngineProcess(IWebBrowserLogger logger, Engine engine, string arguments, 
-            DataReceivedEventHandler onLogEvent)
+            DataReceivedEventHandler onLogEvent, DataReceivedEventHandler onErrorLogEvent)
         {
             string engineFullProcessPath = GetBrowserEngineProcessPath(engine);
             string engineDirectory = GetBrowserEnginePath(engine);
@@ -160,6 +161,7 @@ namespace UnityWebBrowser.Helper
                 EnableRaisingEvents = true
             };
             process.OutputDataReceived += onLogEvent;
+            process.ErrorDataReceived += onErrorLogEvent;
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();

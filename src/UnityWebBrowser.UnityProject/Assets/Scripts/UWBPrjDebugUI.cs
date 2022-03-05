@@ -28,12 +28,19 @@ namespace UnityWebBrowser.Prj
 
         private double getPixelsTime;
         private double applyTextureTime;
-    
+
+        private List<string> consoleItems;
+
         private void Start()
         {
             if (webBrowserUIBasic == null)
                 throw new ArgumentNullException(nameof(webBrowserUIBasic), "Web browser UI is unassigned!");
-        
+
+            consoleItems = new List<string> {"Debug UI started."};
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog +=
+                message => consoleItems.Add(message);
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += message => consoleItems.Add(message);
+
             UImGuiUtility.Layout += OnImGuiLayout;
 
             getPixelsMarker = ProfilerRecorder.StartNew(WebBrowserClient.markerGetPixels, 15);
@@ -78,17 +85,35 @@ namespace UnityWebBrowser.Prj
             ImGui.Begin("UWB Debug UI");
             {
                 ImGui.Text("UWB Debug UI");
-                ImGui.Spacing();
+                ImGui.Separator();
                 ImGui.Text($"FPS: {fps}");
                 ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
                 ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
                 ImGui.Spacing();
+                ImGui.Separator();
 
                 ImGui.Text("Resolution:");
                 ImGui.PushItemWidth(100);
                 ImGui.ListBox("", ref selectedIndex, resolutionsText, resolutionsText.Length);
                 ImGui.PopItemWidth();
 
+                ImGui.Spacing();
+                ImGui.Separator();
+                ImGui.Text("UWB Console");
+                
+                float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
+                ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
+                {
+                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
+                    {
+                        for (int i = 0; i < consoleItems.Count; i++)
+                        {
+                            ImGui.TextUnformatted(consoleItems[i]);
+                        }
+                    }
+                    ImGui.PopStyleVar();
+                }
+                ImGui.EndChild();
             }
             ImGui.End();
 

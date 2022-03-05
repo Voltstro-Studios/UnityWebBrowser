@@ -211,6 +211,8 @@ namespace UnityWebBrowser.Core
 
         #region Logger
 
+        public ProcessLogHandler processLogHandler;
+        
         /// <summary>
         ///     Internal usage of <see cref="IWebBrowserLogger" />
         /// </summary>
@@ -352,8 +354,9 @@ namespace UnityWebBrowser.Core
         {
             try
             {
+                processLogHandler = new ProcessLogHandler(this);
                 engineProcess = WebBrowserUtils.CreateEngineProcess(logger, engine, engineProcessArguments,
-                    new ProcessLogHandler(this).HandleProcessLog);
+                    processLogHandler.HandleOutputProcessLog, processLogHandler.HandleErrorProcessLog);
             }
             catch (Exception ex)
             {
@@ -376,7 +379,9 @@ namespace UnityWebBrowser.Core
             }
             catch (TimeoutException)
             {
-                logger.Error("The engine did not get ready within engine startup timeout!");
+                logger.Error(engineProcess.HasExited
+                    ? $"The engine did not get ready within engine startup timeout! The engine process is not even running! Exit code: {engineProcess.ExitCode}."
+                    : "The engine did not get ready within engine startup timeout!");
                 await using (UniTask.ReturnToMainThread())
                 {
                     Dispose();

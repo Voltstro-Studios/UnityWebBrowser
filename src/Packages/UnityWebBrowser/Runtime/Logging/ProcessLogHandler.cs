@@ -7,17 +7,32 @@ using UnityWebBrowser.Shared;
 
 namespace UnityWebBrowser.Logging
 {
+    /// <summary>
+    ///     Handles UWB logs
+    /// </summary>
     [Preserve]
-    internal class ProcessLogHandler
+    public class ProcessLogHandler
     {
         private readonly IWebBrowserLogger logger;
 
-        public ProcessLogHandler(WebBrowserClient client)
+        public event Action<string> OnProcessOutputLog;
+
+        public event Action<string> OnProcessErrorLog; 
+
+        internal ProcessLogHandler(WebBrowserClient client)
         {
             logger = client.logger;
         }
 
-        public void HandleProcessLog(object sender, DataReceivedEventArgs e)
+        internal void HandleErrorProcessLog(object sender, DataReceivedEventArgs e)
+        {
+            if(e.Data == null)
+                return;
+            
+            OnProcessErrorLog?.Invoke(e.Data);
+        }
+        
+        internal void HandleOutputProcessLog(object sender, DataReceivedEventArgs e)
         {
             if (e.Data == null)
                 return;
@@ -43,6 +58,8 @@ namespace UnityWebBrowser.Logging
             {
                 logger.Error($"An error occured with processing a log event from the UWB engine! {ex}");
             }
+            
+            OnProcessOutputLog?.Invoke(e.Data);
         }
 
         /// <summary>
