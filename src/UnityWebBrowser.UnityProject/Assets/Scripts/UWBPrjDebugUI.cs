@@ -6,6 +6,7 @@ using UImGui;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.Core;
+using UnityWebBrowser.Logging;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 
 namespace UnityWebBrowser.Prj
@@ -29,17 +30,20 @@ namespace UnityWebBrowser.Prj
         private double getPixelsTime;
         private double applyTextureTime;
 
-        private List<string> consoleItems;
+        private bool formatMessages = true;
+        private List<string> unformattedConsoleItems;
+        private List<string> formattedConsoleItems;
 
         private void Start()
         {
             if (webBrowserUIBasic == null)
                 throw new ArgumentNullException(nameof(webBrowserUIBasic), "Web browser UI is unassigned!");
 
-            consoleItems = new List<string> {"Debug UI started."};
-            webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog +=
-                message => consoleItems.Add(message);
-            webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += message => consoleItems.Add(message);
+            const string startMessage = "Debug UI started.";
+            unformattedConsoleItems = new List<string> {startMessage};
+            formattedConsoleItems = new List<string> {startMessage};
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog += HandleOutputLogMessage;
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += HandleErrorLogMessage;
 
             UImGuiUtility.Layout += OnImGuiLayout;
 
@@ -100,20 +104,37 @@ namespace UnityWebBrowser.Prj
                 ImGui.Spacing();
                 ImGui.Separator();
                 ImGui.Text("UWB Console");
+                ImGui.Checkbox("Format UWB JSON Messages", ref formatMessages);
                 
                 float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
                 ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
                 {
                     ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
                     {
-                        for (int i = 0; i < consoleItems.Count; i++)
+                        if (formatMessages)
                         {
-                            ImGui.TextUnformatted(consoleItems[i]);
+                            for (int i = 0; i < formattedConsoleItems.Count; i++)
+                            {
+                                ImGui.TextUnformatted(formattedConsoleItems[i]);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < unformattedConsoleItems.Count; i++)
+                            {
+                                ImGui.TextUnformatted(unformattedConsoleItems[i]);
+                            }
                         }
                     }
                     ImGui.PopStyleVar();
                 }
                 ImGui.EndChild();
+
+                if (ImGui.Button("Clear"))
+                {
+                    formattedConsoleItems.Clear();
+                    unformattedConsoleItems.Clear();
+                }
             }
             ImGui.End();
 
@@ -122,6 +143,26 @@ namespace UnityWebBrowser.Prj
                 webBrowserUIBasic.browserClient.Resolution = resolutions[selectedIndex];
                 lastSelectedIndex = selectedIndex;
             }
+        }
+
+        private void HandleOutputLogMessage(string message)
+        {
+            unformattedConsoleItems.Add(message);
+            try
+            {
+                JsonLogStructure json = ProcessLogHandler.ReadJsonLog(message);
+                formattedConsoleItems.Add($"[{json.Level}] [{json.Timestamp}] {json.Message}\n{json.Exception}");
+            }
+            catch (Exception ex)
+            {
+                formattedConsoleItems.Add($"Error reading JSON!\n{ex}");
+            }
+        }
+
+        private void HandleErrorLogMessage(string message)
+        {
+            unformattedConsoleItems.Add(message);
+            formattedConsoleItems.Add(message);
         }
     
         private double GetRecorderFrameTimeAverage(ProfilerRecorder recorder)

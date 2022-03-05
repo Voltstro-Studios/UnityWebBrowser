@@ -534,7 +534,7 @@ MonoBehaviour:
   _platformType: 0
   _iniSettings: {fileID: 11400000, guid: 60f1b1736534ad2bd9e082c43895730f, type: 2}
   _initialConfiguration:
-    ImGuiConfig: 65
+    ImGuiConfig: 1
     DoubleClickTime: 0.3
     DoubleClickMaxDist: 6
     DragThreshold: 6

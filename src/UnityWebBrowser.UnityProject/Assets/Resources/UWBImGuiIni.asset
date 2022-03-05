@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data: '[Window][UWB Debug UI]
 
-    Pos=1644,162
+    Pos=391,0
 
-    Size=237,197
+    Size=1527,828
 
-    Collapsed=0'
+    Collapsed=1'
