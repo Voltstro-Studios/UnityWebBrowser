@@ -8,10 +8,13 @@ public class UwbCefRenderProcessHandler : CefRenderProcessHandler
     {
         CefV8Value v8Object = context.GetGlobal();
 
-        CefV8Value versionValue = CefV8Value.CreateString(ThisAssembly.Info.Version);
-        v8Object.SetValue("uwbVersion", versionValue);
+        CefV8Value versionValue = CefV8Value.CreateString(ThisAssembly.Info.InformationalVersion);
+        v8Object.SetValue("uwbEngineVersion", versionValue);
+        
+        CefV8Value engineName = CefV8Value.CreateString("CEF (Chromium Embedded Framework)");
+        v8Object.SetValue("webEngineName", engineName);
 
         CefV8Value cefVersion = CefV8Value.CreateString(CefRuntime.ChromeVersion);
-        v8Object.SetValue("cefVersion", cefVersion);
+        v8Object.SetValue("webEngineVersion", cefVersion);
     }
 }

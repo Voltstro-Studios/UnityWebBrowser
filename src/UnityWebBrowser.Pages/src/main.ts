@@ -2,7 +2,8 @@ import './style.css'
 
 declare global {
     interface Window {
-        uwbVersion: string;
-        cefVersion: string;
+        uwbEngineVersion: string;
+        webEngineName: string;
+        webEngineVersion: string;
     }
 }

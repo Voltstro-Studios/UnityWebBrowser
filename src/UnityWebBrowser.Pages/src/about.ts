@@ -1,18 +1,30 @@
 //Version variables
-const uwbVersion = window.uwbVersion;
-const cefVersion = window.cefVersion;
+const uwbEngineVersion = window.uwbEngineVersion;
+const webEngineName = window.webEngineName;
+const webEngineVersion = window.webEngineVersion;
 
 //Doc Elements
-var uwbVersionText = document.getElementById('uwbVersionText');
-var engineVersionText = document.getElementById('webEngineVersionText');
+var uwbEngineVersionText = document.getElementById('uwbEngineVersionText');
+var webEngineNameText = document.getElementById('webEngineNameText');
+var webEngineVersionText = document.getElementById('webEngineVersionText');
 
 //If we have version info, then set it
-if(uwbVersion !== undefined) {
-    if(uwbVersionText != null)
-        uwbVersionText.textContent = uwbVersion;
+if(uwbEngineVersion !== undefined) {
+    if(uwbEngineVersionText != null) {
+        uwbEngineVersionText.textContent = uwbEngineVersion;
+    }
 
-    if(engineVersionText != null)
-        engineVersionText.textContent = cefVersion;
+    if(webEngineNameText != null) {
+        webEngineNameText.textContent = webEngineName;
+    }
 
-    console.log('[UWB About] Found version info!')
+    if(webEngineVersionText != null) {
+        webEngineVersionText.textContent = webEngineVersion;
+    } 
+
+    console.log('[UWB About] Found version info!');
+}
+//Best to assume that if uwbEngineVersion is undefined, then we aren't a UWB engine
+else {
+    console.error('[UWB About] Failed to get version info! Probably not running in a UWB engine!')
 }

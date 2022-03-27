@@ -173,7 +173,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "97.1.5",
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6",
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
@@ -182,7 +182,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "97.1.5",
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6",
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
@@ -191,7 +191,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "97.1.5"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {
