@@ -1,12 +1,19 @@
-import { viteSingleFile } from "vite-plugin-singlefile"
+import { viteSingleFile } from 'vite-plugin-singlefile'
+import { createHtmlPlugin } from 'vite-plugin-html'
+
 const { resolve } = require('path')
 const { defineConfig } = require('vite')
 
 module.exports = defineConfig({
 
-  plugins: [viteSingleFile()],
+  plugins: [
+    createHtmlPlugin({
+    minify: true
+  }),
+  viteSingleFile()
+  ],
   build: {
-    target: "esnext",
+    target: 'esnext',
     assetsInlineLimit: 100000000,
     chunkSizeWarningLimit: 100000000,
     cssCodeSplit: false,
@@ -18,7 +25,7 @@ module.exports = defineConfig({
             nested: resolve(__dirname, 'error.html')
         },
         output: {
-            manualChunks: () => "everything.js",
+            manualChunks: () => 'everything.js',
         },
     }
   },
