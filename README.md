@@ -52,7 +52,7 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 ### Prerequisites
 
 ```
-Unity 2021.2.x
+Unity 2021.3.x
 .NET 6 SDK
 PowerShell (formally PowerShell Core)
 NodeJS & Yarn
