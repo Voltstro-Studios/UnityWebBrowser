@@ -3,7 +3,7 @@
     <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
         <AssemblyTitle>Unity Web Browser Shared</AssemblyTitle>
         <Description>Shared resources for Unity Web Browser engines and Unity</Description>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -33,7 +33,8 @@
     </ItemGroup>
 
     <!-- Shit to copy into the UWB Core package -->
-    <Target Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|AnyCPU'" Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Target Condition="'$(Configuration)|$(Platform)|$(TargetFramework)'=='ReleaseUnity|AnyCPU|netstandard2.1'" Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Message  Text="Copying shared to Unity package..." />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb" />
