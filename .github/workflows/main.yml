@@ -31,6 +31,12 @@ jobs:
       with:
         path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
         key: Node-Cache
+
+    #Build pages project
+    - name: Build Pages
+      shell: pwsh
+      run: '& ./build-pages.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
         
     #Build everything that is outside of Unity
     - name: Build Externals

@@ -55,7 +55,6 @@ Please READ ALL OF THIS if you want to contribute or work on the project.
 Unity 2021.3.x
 .NET 6 SDK
 PowerShell (formally PowerShell Core)
-NodeJS & Yarn
 Git
 ```
 
@@ -76,7 +75,7 @@ What OS is supported will depend on the web engine you use.
 |OS           |Supported                  |Notes                                         |
 |-------------|---------------------------|----------------------------------------------|
 |Windows      |✔                         |Works natively                                |
-|Linux        |✔ (Tested on Ubuntu 21.10)|Works natively                                |
+|Linux        |✔ (Tested on Ubuntu 22.04)|Works natively                                |
 |MacOS (Intel)|✖                         |Planned                                       |
 |MacOS (M1)   |✖                         |No physical hardware to test or develop on    |
 
