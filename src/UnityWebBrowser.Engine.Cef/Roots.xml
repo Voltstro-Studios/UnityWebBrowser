@@ -1,8 +1,6 @@
 <linker>
-    <assembly fullname="netstandard">
-        <type fullname="System.DateTime" preserve="all"/>
-        <type fullname="System.Threading.Tasks.TaskFactory" preserve="all"/>
-    </assembly>
+    <!-- Need to include netstandard for Serilog -->
+    <assembly fullname="netstandard" preserve="all" />
     <assembly fullname="VoltRpc" preserve="all"/>
     <assembly fullname="System.CommandLine" preserve="all"/>
     <assembly fullname="System.IO.Pipes" preserve="all"/>
