@@ -651,10 +651,13 @@ namespace UnityWebBrowser.Core
         
         /// <summary>
         ///     Gets the mouse scroll position
+        ///     <para>THIS IS INVOKED ON THE THREAD THAT IS CALLING THIS AND IS BLOCKING</para>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the mouse scroll position as a <see cref="Vector2"/></returns>
         public Vector2 GetScrollPosition()
         {
+            CheckIfIsReadyAndConnected();
+            
             //Gotta convert it to a Unity vector2
             System.Numerics.Vector2 position = communicationsManager.GetScrollPosition();
             return new Vector2(position.X, position.Y);
