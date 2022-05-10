@@ -39,6 +39,27 @@ namespace UnityWebBrowser.Core
             base.OnDestroyed();
             StopKeyboardAndMouseHandler();
         }
+        
+        /// <summary>
+        ///     Gets the current mouse position on the image
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns>Returns true if the mouse is in the image.</returns>
+        public bool GetMousePosition(out Vector2 pos)
+        {
+            Vector2 mousePos = inputHandler.GetCursorPos();
+
+            if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, mousePos, out pos))
+            {
+                Texture imageTexture = image.texture;
+                pos.x *= imageTexture.width;
+                pos.y *= imageTexture.height;
+
+                return true;
+            }
+
+            return false;
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -100,22 +121,6 @@ namespace UnityWebBrowser.Core
             }
             
             inputHandler.OnStop();
-        }
-
-        private bool GetMousePosition(out Vector2 pos)
-        {
-            Vector2 mousePos = inputHandler.GetCursorPos();
-
-            if (WebBrowserUtils.GetScreenPointToLocalPositionDeltaOnImage(image, mousePos, out pos))
-            {
-                Texture imageTexture = image.texture;
-                pos.x *= imageTexture.width;
-                pos.y *= imageTexture.height;
-
-                return true;
-            }
-
-            return false;
         }
 
         public void OnPointerDown(PointerEventData eventData)

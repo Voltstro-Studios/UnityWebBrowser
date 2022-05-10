@@ -93,6 +93,9 @@ namespace UnityWebBrowser.Prj
                 ImGui.Text($"FPS: {fps}");
                 ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
                 ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
+                
+                webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
+                ImGui.Text($"Mouse Position: {mousePos}");
                 ImGui.Spacing();
                 ImGui.Separator();
 
