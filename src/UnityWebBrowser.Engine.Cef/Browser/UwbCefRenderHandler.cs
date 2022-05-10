@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security;
 using Xilium.CefGlue;
@@ -13,6 +14,11 @@ public class UwbCefRenderHandler : CefRenderHandler
     private readonly object pixelsLock;
     private CefSize cefSize;
     private byte[] pixels;
+    
+    /// <summary>
+    ///     Tracked mouse scroll position
+    /// </summary>
+    public Vector2 MouseScrollPosition { get; private set; }
 
     public UwbCefRenderHandler(CefSize size)
     {
@@ -96,6 +102,7 @@ public class UwbCefRenderHandler : CefRenderHandler
 
     protected override void OnScrollOffsetChanged(CefBrowser browser, double x, double y)
     {
+        MouseScrollPosition = new Vector2((float)x, (float)y);
     }
 
     protected override void OnImeCompositionRangeChanged(CefBrowser browser, CefRange selectedRange,

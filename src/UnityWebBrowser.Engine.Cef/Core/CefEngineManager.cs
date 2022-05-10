@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Engine.Shared.Core;
@@ -198,6 +199,11 @@ internal class CefEngineManager : IEngine, IDisposable
     public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
     {
         cefClient.ProcessMouseScrollEvent(mouseScrollEvent);
+    }
+
+    public Vector2 GetScrollPosition()
+    {
+        return cefClient.GetMouseScrollPosition();
     }
 
     public void GoForward()

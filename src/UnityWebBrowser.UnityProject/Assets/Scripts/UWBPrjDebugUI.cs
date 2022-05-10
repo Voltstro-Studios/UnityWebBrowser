@@ -96,6 +96,8 @@ namespace UnityWebBrowser.Prj
                 
                 webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
                 ImGui.Text($"Mouse Position: {mousePos}");
+                if(ImGui.Button("Get Scroll Position"))
+                    webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
                 ImGui.Spacing();
                 ImGui.Separator();
 

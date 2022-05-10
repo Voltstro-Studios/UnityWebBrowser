@@ -34,7 +34,7 @@
 
     <!-- Shit to copy into the UWB Core package -->
     <Target Condition="'$(Configuration)|$(Platform)|$(TargetFramework)'=='ReleaseUnity|AnyCPU|netstandard2.1'" Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Message  Text="Copying shared to Unity package..." />
+        <Message Text="Copying shared to Unity package..." />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).dll" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
@@ -201,6 +202,11 @@ public class UwbCefClient : CefClient, IDisposable
     {
         browser.GetMainFrame().LoadUrl(url);
         //mainFrame.LoadUrl(url);
+    }
+
+    public Vector2 GetMouseScrollPosition()
+    {
+        return renderHandler.MouseScrollPosition;
     }
 
     public void LoadHtml(string html)

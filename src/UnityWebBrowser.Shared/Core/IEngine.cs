@@ -1,4 +1,5 @@
-﻿using UnityWebBrowser.Shared.Events;
+﻿using System.Numerics;
+using UnityWebBrowser.Shared.Events;
 using VoltRpc.Proxy;
 
 namespace UnityWebBrowser.Shared.Core;
@@ -46,6 +47,12 @@ public interface IEngine
     /// </summary>
     /// <param name="mouseScrollEvent"></param>
     public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent);
+
+    /// <summary>
+    ///     Gets scroll position
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetScrollPosition();
 
     /// <summary>
     ///     Tells the UWB engine to go forward (if it can)

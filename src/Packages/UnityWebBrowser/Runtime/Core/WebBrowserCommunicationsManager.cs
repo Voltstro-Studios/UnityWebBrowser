@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -111,6 +112,17 @@ namespace UnityWebBrowser.Core
         public void SendMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
         {
             ExecuteTask(() => engineProxy.SendMouseScrollEvent(mouseScrollEvent));
+        }
+
+        public Vector2 GetScrollPosition()
+        {
+            using (sendEventMarker.Auto())
+            {
+                lock (threadLock)
+                {
+                    return engineProxy.GetScrollPosition();
+                }
+            }
         }
 
         public void GoForward()

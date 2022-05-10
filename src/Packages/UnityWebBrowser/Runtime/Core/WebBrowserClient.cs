@@ -333,7 +333,6 @@ namespace UnityWebBrowser.Core
 #if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 
             //argsBuilder.AppendArgument("start-delay", 2000);
 #endif
-            
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
@@ -648,6 +647,17 @@ namespace UnityWebBrowser.Core
             CheckIfIsReadyAndConnected();
 
             communicationsManager.LoadUrl(url);
+        }
+        
+        /// <summary>
+        ///     Gets the mouse scroll position
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetScrollPosition()
+        {
+            //Gotta convert it to a Unity vector2
+            System.Numerics.Vector2 position = communicationsManager.GetScrollPosition();
+            return new Vector2(position.X, position.Y);
         }
 
         /// <summary>
