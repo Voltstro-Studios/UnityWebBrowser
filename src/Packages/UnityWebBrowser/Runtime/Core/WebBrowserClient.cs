@@ -234,6 +234,7 @@ namespace UnityWebBrowser.Core
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
         internal NativeArray<byte> textureData;
+        internal NativeArray<byte> nextTextureData;
 
         /// <summary>
         ///     Inits the browser client
@@ -261,6 +262,7 @@ namespace UnityWebBrowser.Core
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
             textureData = BrowserTexture.GetRawTextureData<byte>();
+            nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
             
             pixelDataLock = new object();
             pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
@@ -446,6 +448,8 @@ namespace UnityWebBrowser.Core
                         RunPixelDataLockAction(() =>
                         {
                             communicationsManager.GetPixels();
+                            textureData.CopyFrom(nextTextureData);
+
                         });
                         markerGetPixelsRpc.End();
                     }
@@ -476,10 +480,8 @@ namespace UnityWebBrowser.Core
             Texture2D texture = BrowserTexture;
  
             markerLoadTextureApply.Begin();
-            RunPixelDataLockAction(() =>
-            {
                 texture.Apply(false);
-            });
+
             markerLoadTextureApply.End();
         }
 
@@ -733,7 +735,9 @@ namespace UnityWebBrowser.Core
             BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
             communicationsManager.Resize(newResolution);
             textureData = BrowserTexture.GetRawTextureData<byte>();
-            communicationsManager.pixelsEventTypeReader.SetPixelDataArray(textureData);
+            nextTextureData.Dispose();
+            nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
+            communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
             
 
             logger.Debug($"Resized to {newResolution}.");
