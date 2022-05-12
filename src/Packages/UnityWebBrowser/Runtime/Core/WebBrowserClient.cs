@@ -233,6 +233,7 @@ namespace UnityWebBrowser.Core
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
+        
         internal NativeArray<byte> textureData;
         internal NativeArray<byte> nextTextureData;
 
@@ -261,11 +262,9 @@ namespace UnityWebBrowser.Core
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
+            
             textureData = BrowserTexture.GetRawTextureData<byte>();
             nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
-            
-            pixelDataLock = new object();
-            pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
 
             string browserEngineMainDir = WebBrowserUtils.GetAdditionFilesDirectory();
 
@@ -424,9 +423,6 @@ namespace UnityWebBrowser.Core
         #endregion
 
         #region Main Loop
-        
-        private NativeArray<byte> pixelData;
-        private object pixelDataLock;
 
         internal async Task PixelDataLoop()
         {
@@ -445,13 +441,12 @@ namespace UnityWebBrowser.Core
                     markerGetPixels.Begin();
                     {
                         markerGetPixelsRpc.Begin();
-                        RunPixelDataLockAction(() =>
                         {
                             communicationsManager.GetPixels();
-                            textureData.CopyFrom(nextTextureData);
-
-                        });
+                        }
                         markerGetPixelsRpc.End();
+                        
+                        textureData.CopyFrom(nextTextureData);
                     }
                     markerGetPixels.End();
                 }
@@ -474,29 +469,11 @@ namespace UnityWebBrowser.Core
             if (!IsConnected)
                 return;
 
-            if (!pixelData.IsCreated || pixelData.Length == 0)
-                return;
-                
             Texture2D texture = BrowserTexture;
  
             markerLoadTextureApply.Begin();
-                texture.Apply(false);
-
+            texture.Apply(false);
             markerLoadTextureApply.End();
-        }
-
-        private void RunPixelDataLockAction(Action action)
-        {
-            if (!performanceMode)
-            {
-                lock (pixelDataLock)
-                {
-                    action();
-                }
-                return;
-            }
-
-            action();
         }
 
         #endregion
@@ -731,15 +708,15 @@ namespace UnityWebBrowser.Core
 
             if (performanceMode)
                 throw new NotSupportedException("Resizing is not allowed in performance mode!");
-
+            
             BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
-            communicationsManager.Resize(newResolution);
             textureData = BrowserTexture.GetRawTextureData<byte>();
+            communicationsManager.Resize(newResolution);
+            
             nextTextureData.Dispose();
             nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
             communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
             
-
             logger.Debug($"Resized to {newResolution}.");
         }
 
@@ -792,12 +769,7 @@ namespace UnityWebBrowser.Core
             cancellationToken?.Cancel();
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
-
-            //The pixel data will be null as well if the pixel data lock is null
-            if(pixelDataLock != null)
-                lock (pixelDataLock)
-                    pixelData.Dispose();
-                    
+            
             if (ReadySignalReceived && IsConnected)
                 communicationsManager.Shutdown();
 
@@ -820,10 +792,9 @@ namespace UnityWebBrowser.Core
                 engineProcess.Dispose();
                 engineProcess = null;
             }
-
-            if(nextTextureData != null){
+            
+            if(nextTextureData.IsCreated)
                 nextTextureData.Dispose();
-            }
         }
 
         #endregion
