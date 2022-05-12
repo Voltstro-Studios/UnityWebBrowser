@@ -7,9 +7,11 @@
 [![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev) 
 [![YouTube](https://img.shields.io/badge/Youtube-Voltstro-red.svg?logo=youtube)](https://www.youtube.com/Voltstro)
 
-Adds a functional web browser to Unity without any issues or hassle. This project is capable of using any desired web engine you want, however for now we only have an engine using [CEF](https://bitbucket.org/chromiumembedded/cef/).
+Unity Web Browser (UWB) is a Unity package that allows displaying and interacting with the web from within a Unity project/game.
 
-Currently, 2.x is in development, for 1.x document, see the [1.6.3 release](https://github.com/Voltstro-Studios/UnityWebBrowser/tree/1.6.3) (latest).
+This project is capable of using any desired web engine you want, however for now we only have an engine using [CEF](https://bitbucket.org/chromiumembedded/cef/).
+
+Currently, 2.x is in development, but is the recommended version to use right now.
 
 ## Features
 
@@ -25,9 +27,11 @@ Currently, 2.x is in development, for 1.x document, see the [1.6.3 release](http
 
 ### How does this work?
 
-Getting an web engine to work in Unity is a pain, it usually ends up just crashing Unity. This project resolves that issue via running the browser engine in separate process and IPCing data between Unity and the engine.
+Getting a web engine to work in Unity is a pain, it usually ends up just crashing Unity. UWB resolves that issue via running the browser engine in separate process and "IPCing" data between the Unity game process and the engine process.
 
 ### Package Installation
+
+NOTE: The current version hosted on GitLab is 2.0.0-preview.3.
 
 #### Prerequisites
 
@@ -58,6 +62,8 @@ PowerShell (formally PowerShell Core)
 Git
 ```
 
+### Setup
+
 1. Clone the repo with `git clone --recursive https://github.com/Voltstro-Studios/UnityWebBrowser.git` (Clone with sub-modules!)
 
 2. Run the `src/setup-all.ps1` script with PowerShell. Depending on your system, and your download speeds, this script could take upto a minute or longer. You only need to run this once.
@@ -68,16 +74,16 @@ Git
 
 ## Operating System Support
 
-What OS is supported will depend on the web engine you use.
+The UWB core library supports all major desktop platforms (no mobile or console). However, each engine does require its own native package. Their platforms are listed below.
 
 ### CEF Engine
 
-|OS           |Supported                  |Notes                                         |
-|-------------|---------------------------|----------------------------------------------|
-|Windows      |✔                         |Works natively                                |
-|Linux        |✔ (Tested on Ubuntu 22.04)|Works natively                                |
-|MacOS (Intel)|✖                         |Planned                                       |
-|MacOS (M1)   |✖                         |No physical hardware to test or develop on    |
+|OS             |Supported                  |Notes                                         |
+|---------------|---------------------------|----------------------------------------------|
+|Windows (x64)  |✔                         |Works natively                                |
+|GNU/Linux (x64)|✔ (Tested on Ubuntu 22.04)|Works natively                                |
+|MacOS (Intel)  |✖                         |Planned                                       |
+|MacOS (M1)     |✖                         |No physical hardware to test or develop on    |
 
 ## Screenshots
 
@@ -97,7 +103,7 @@ What OS is supported will depend on the web engine you use.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](/LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE.md) file for details.
 
 ## Credits
 
