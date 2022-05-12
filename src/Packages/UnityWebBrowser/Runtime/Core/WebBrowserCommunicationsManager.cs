@@ -54,7 +54,7 @@ namespace UnityWebBrowser.Core
 
             ReadWriterUtils.AddBaseTypeReadWriters(ipcClient.TypeReaderWriterManager);
 
-            pixelsEventTypeReader = new PixelsEventTypeReader(browserClient.textureData);
+            pixelsEventTypeReader = new PixelsEventTypeReader(browserClient.nextTextureData);
             ipcClient.TypeReaderWriterManager.AddType(pixelsEventTypeReader);
             
             ipcClient.AddService<IEngine>();

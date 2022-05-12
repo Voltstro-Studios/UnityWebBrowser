@@ -137,12 +137,6 @@ namespace UnityWebBrowser.Core
         public LogSeverity logSeverity = LogSeverity.Info;
 
         /// <summary>
-        ///     Has higher performance with a trade-off of screen tearing
-        /// </summary>
-        [Tooltip("Has higher performance with a trade-off of screen tearing")]
-        public bool performanceMode;
-
-        /// <summary>
         ///     Texture that the browser will paint to
         /// </summary>
         public Texture2D BrowserTexture { get; private set; }
@@ -233,7 +227,10 @@ namespace UnityWebBrowser.Core
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationToken;
-        internal NativeArray<byte> textureData;
+
+        private object resizeLock;
+        private NativeArray<byte> textureData;
+        internal NativeArray<byte> nextTextureData;
 
         /// <summary>
         ///     Inits the browser client
@@ -260,10 +257,10 @@ namespace UnityWebBrowser.Core
             BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
+
+            resizeLock = new object();
             textureData = BrowserTexture.GetRawTextureData<byte>();
-            
-            pixelDataLock = new object();
-            pixelData = new NativeArray<byte>(new byte[(int) resolution.Width * (int) resolution.Height * 4], Allocator.Persistent);
+            nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
 
             string browserEngineMainDir = WebBrowserUtils.GetAdditionFilesDirectory();
 
@@ -422,9 +419,6 @@ namespace UnityWebBrowser.Core
         #endregion
 
         #region Main Loop
-        
-        private NativeArray<byte> pixelData;
-        private object pixelDataLock;
 
         internal async Task PixelDataLoop()
         {
@@ -442,12 +436,16 @@ namespace UnityWebBrowser.Core
                     
                     markerGetPixels.Begin();
                     {
-                        markerGetPixelsRpc.Begin();
-                        RunPixelDataLockAction(() =>
+                        lock (resizeLock)
                         {
-                            communicationsManager.GetPixels();
-                        });
-                        markerGetPixelsRpc.End();
+                            markerGetPixelsRpc.Begin();
+                            {
+                                communicationsManager.GetPixels();
+                            }
+                            markerGetPixelsRpc.End();
+                        
+                            textureData.CopyFrom(nextTextureData);
+                        }
                     }
                     markerGetPixels.End();
                 }
@@ -470,31 +468,11 @@ namespace UnityWebBrowser.Core
             if (!IsConnected)
                 return;
 
-            if (!pixelData.IsCreated || pixelData.Length == 0)
-                return;
-                
             Texture2D texture = BrowserTexture;
  
             markerLoadTextureApply.Begin();
-            RunPixelDataLockAction(() =>
-            {
-                texture.Apply(false);
-            });
+            texture.Apply(false);
             markerLoadTextureApply.End();
-        }
-
-        private void RunPixelDataLockAction(Action action)
-        {
-            if (!performanceMode)
-            {
-                lock (pixelDataLock)
-                {
-                    action();
-                }
-                return;
-            }
-
-            action();
         }
 
         #endregion
@@ -717,8 +695,6 @@ namespace UnityWebBrowser.Core
 
         /// <summary>
         ///     Resizes the screen.
-        ///     <para>There is a chance that resizing the screen causes UWB to crash Unity, use carefully!</para>
-        ///     <para>Resizing in performance mode is not supported!</para>
         /// </summary>
         /// <param name="newResolution"></param>
         /// <exception cref="UwbIsNotConnectedException"></exception>
@@ -727,14 +703,16 @@ namespace UnityWebBrowser.Core
         {
             CheckIfIsReadyAndConnected();
 
-            if (performanceMode)
-                throw new NotSupportedException("Resizing is not allowed in performance mode!");
-
-            BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
-            communicationsManager.Resize(newResolution);
-            textureData = BrowserTexture.GetRawTextureData<byte>();
-            communicationsManager.pixelsEventTypeReader.SetPixelDataArray(textureData);
+            lock (resizeLock)
+            {
+                BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
+                textureData = BrowserTexture.GetRawTextureData<byte>();
+                communicationsManager.Resize(newResolution);
             
+                nextTextureData.Dispose();
+                nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
+                communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
+            }
 
             logger.Debug($"Resized to {newResolution}.");
         }
@@ -788,12 +766,7 @@ namespace UnityWebBrowser.Core
             cancellationToken?.Cancel();
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
-
-            //The pixel data will be null as well if the pixel data lock is null
-            if(pixelDataLock != null)
-                lock (pixelDataLock)
-                    pixelData.Dispose();
-
+            
             if (ReadySignalReceived && IsConnected)
                 communicationsManager.Shutdown();
 
@@ -815,6 +788,12 @@ namespace UnityWebBrowser.Core
 
                 engineProcess.Dispose();
                 engineProcess = null;
+            }
+
+            lock (resizeLock)
+            {
+                if(nextTextureData.IsCreated)
+                    nextTextureData.Dispose();
             }
         }
 
