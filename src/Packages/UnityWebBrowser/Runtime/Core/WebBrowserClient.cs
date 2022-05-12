@@ -798,9 +798,6 @@ namespace UnityWebBrowser.Core
                 lock (pixelDataLock)
                     pixelData.Dispose();
                     
-            if(nextTextureData != null){
-                nextTextureData.Dispose();
-            }
             if (ReadySignalReceived && IsConnected)
                 communicationsManager.Shutdown();
 
@@ -822,6 +819,10 @@ namespace UnityWebBrowser.Core
 
                 engineProcess.Dispose();
                 engineProcess = null;
+            }
+
+            if(nextTextureData != null){
+                nextTextureData.Dispose();
             }
         }
 
