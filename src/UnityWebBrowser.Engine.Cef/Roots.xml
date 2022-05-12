@@ -5,5 +5,8 @@
     <assembly fullname="System.CommandLine" preserve="all"/>
     <assembly fullname="System.IO.Pipes" preserve="all"/>
     <assembly fullname="System.Core" preserve="all"/>
+    <assembly fullname="System.Runtime">
+        <type fullname="System.Threading.Tasks.TaskFactory" preserve="all"/>
+    </assembly>
     <assembly fullname="mscorlib" preserve="all"/>
 </linker>
