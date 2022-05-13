@@ -404,7 +404,13 @@ namespace UnityWebBrowser.Core
             {
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
-                _ = Task.Run(PixelDataLoop);
+                //_ = Task.Run(PixelDataLoop);
+
+                Thread pixelDataLoopThread = new(PixelDataLoop)
+                {
+                    Name = "UWB Pixel Data Loop Thread"
+                };
+                pixelDataLoopThread.Start();
             }
             catch (Exception ex)
             {
@@ -420,7 +426,7 @@ namespace UnityWebBrowser.Core
 
         #region Main Loop
 
-        internal async Task PixelDataLoop()
+        internal void PixelDataLoop()
         {
             CancellationToken token = cancellationToken.Token;
             while (!token.IsCancellationRequested)
@@ -429,7 +435,7 @@ namespace UnityWebBrowser.Core
                     if (!IsConnected)
                         continue;
                     
-                    await Task.Delay(25, token);
+                    Thread.Sleep(25);
 
                     if (token.IsCancellationRequested)
                         return;
