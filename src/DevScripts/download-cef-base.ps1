@@ -55,7 +55,7 @@ if(-not (Test-Path -Path $CefGlueVersionFile))
     CheckProcess "Error running git submodule update!" $p
 
     #Return location
-    Push-Location $PSScriptRoot
+    Reset
 }
 
 $CefGlueVersionfileContent = Get-Content $CefGlueVersionFile
