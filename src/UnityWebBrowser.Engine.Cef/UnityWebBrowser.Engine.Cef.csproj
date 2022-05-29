@@ -10,7 +10,7 @@
         <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
         <Description>External process to handel rendering with CEF</Description>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-        <Version>2.0.0-100.0.22</Version>
+        <Version>2.0.0-102.0.9</Version>
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
     </PropertyGroup>
 
@@ -83,12 +83,6 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\swiftshader\*.dll" Link="Libs/switfshader/%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>swiftshader/%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </ContentWithTargetPath>
-
     </ItemGroup>
 
     <!-- Files we need on Linux -->
@@ -141,11 +135,6 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\swiftshader\*.so" Link="Libs/switfshader/%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>swiftshader/%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </ContentWithTargetPath>
     </ItemGroup>
     
     <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
