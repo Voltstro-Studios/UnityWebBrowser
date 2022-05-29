@@ -27,6 +27,12 @@ public class ClientActions : IClient, IDisposable
             clientActions?.LoadStart(url);
     }
 
+    public void OnPopup(string url)
+    {
+        if(client is {IsConnected: true})
+            clientActions?.OnPopup(url);
+    }
+
     public void LoadFinish(string url)
     {
         if (client is {IsConnected: true})

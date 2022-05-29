@@ -142,12 +142,14 @@ internal class CefEngineManager : IEngine, IDisposable
                      $"\nJS: {launchArguments.JavaScript}" +
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePathArgument}" +
+                     $"\nPopup Action: {launchArguments.PopupAction}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
         Logger.Info($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF client...");
 
         //Create cef browser
         cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
+            launchArguments.PopupAction,
             new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
                 launchArguments.ProxyEnabled), clientActions);
         CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);

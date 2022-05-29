@@ -142,6 +142,7 @@ namespace UnityWebBrowser.Helper
             string engineDirectory = GetBrowserEnginePath(engine);
             
             logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
+            logger.Debug($"Arguments: '{arguments}'");
             
 #if UNIX_SUPPORT && (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
             if(UnixSupport.PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))

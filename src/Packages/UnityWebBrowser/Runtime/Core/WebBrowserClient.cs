@@ -102,6 +102,12 @@ namespace UnityWebBrowser.Core
         [Tooltip("Enable or disable WebRTC")] public bool webRtc;
 
         /// <summary>
+        ///     How to handle popups
+        /// </summary>
+        [Tooltip("How to handle popups")]
+        public PopupAction popupAction;
+
+        /// <summary>
         ///     Proxy Settings
         /// </summary>
         [Tooltip("Proxy settings")] public ProxySettings proxySettings;
@@ -309,6 +315,9 @@ namespace UnityWebBrowser.Core
                 cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
                 argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
             }
+            
+            //Popups
+            argsBuilder.AppendArgument("popup-action", popupAction, true);
 
             //Setup web RTC
             if (webRtc)
@@ -544,6 +553,16 @@ namespace UnityWebBrowser.Core
         internal void InvokeFullscreen(bool fullscreen)
         {
             OnFullscreen?.Invoke(fullscreen);
+        }
+        
+        /// <summary>
+        ///     Invoked when the browser gets a popup
+        /// </summary>
+        public event OnPopup OnPopup;
+
+        internal void InvokeOnPopup(string ur)
+        {
+            OnPopup?.Invoke(ur);
         }
 
         #endregion

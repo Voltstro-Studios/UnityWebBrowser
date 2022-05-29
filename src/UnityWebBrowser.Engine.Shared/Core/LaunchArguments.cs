@@ -32,6 +32,11 @@ public class LaunchArguments
     ///     Is Web RTC enabled
     /// </summary>
     public bool WebRtc { get; init; }
+    
+    /// <summary>
+    ///     How to handle popups
+    /// </summary>
+    public PopupAction PopupAction { get; init; }
 
     /// <summary>
     ///     The port to use for remote debugging

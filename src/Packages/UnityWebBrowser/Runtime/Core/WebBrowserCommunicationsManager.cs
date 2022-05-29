@@ -221,6 +221,11 @@ namespace UnityWebBrowser.Core
             ExecuteOnUnity(() => client.InvokeLoadStart(url));
         }
 
+        public void OnPopup(string url)
+        {
+            ExecuteOnUnity(() => client.InvokeOnPopup(url));
+        }
+
         public void LoadFinish(string url)
         {
             ExecuteOnUnity(() => client.InvokeLoadFinish(url));

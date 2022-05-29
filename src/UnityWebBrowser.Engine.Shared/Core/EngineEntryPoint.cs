@@ -86,6 +86,9 @@ public abstract class EngineEntryPoint : IDisposable
         Option<FileInfo> cachePath = new("-cache-path",
             () => null,
             "The path to the cache (null for no cache)");
+        Option<PopupAction> popupAction = new("-popup-action", 
+            () => PopupAction.Ignore,
+            "What action to take when dealing with a popup");
 
         //Background color
         Option<string> backgroundColor = new("-background-color",
@@ -102,6 +105,14 @@ public abstract class EngineEntryPoint : IDisposable
         Option<string> proxyPassword = new("-proxy-password",
             () => null,
             "The password to use in the proxy auth");
+        
+        //Logging
+        Option<FileInfo> logPath = new("-log-path",
+            () => new FileInfo("engine.log"),
+            "The path to where the log file will be");
+        Option<LogSeverity> logSeverity = new("-log-severity",
+            () => LogSeverity.Info,
+            "The severity of the logs");
 
         //IPC settings
         Option<FileInfo> communicationLayerPath = new("-comms-layer-path",
@@ -114,12 +125,7 @@ public abstract class EngineEntryPoint : IDisposable
             () => "5556",
             "Out location for IPC (Pipes location or TCP port in TCP mode)");
 
-        Option<FileInfo> logPath = new("-log-path",
-            () => new FileInfo("engine.log"),
-            "The path to where the log file will be");
-        Option<LogSeverity> logSeverity = new("-log-severity",
-            () => LogSeverity.Info,
-            "The severity of the logs");
+        //Debugging
         Option<uint> startDelay = new("-start-delay",
             () => 0,
             "Delays the starting process. Used for testing reasons.");
@@ -128,11 +134,12 @@ public abstract class EngineEntryPoint : IDisposable
         {
             initialUrl,
             width, height,
-            javaScript, webRtc, remoteDebugging, cachePath,
+            javaScript, webRtc, remoteDebugging, cachePath, popupAction,
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
+            logPath, logSeverity,
             communicationLayerPath, inLocation, outLocation,
-            logPath, logSeverity, startDelay
+            startDelay
         };
         rootCommand.Description =
             "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
@@ -143,11 +150,12 @@ public abstract class EngineEntryPoint : IDisposable
         LaunchArgumentsBinder launchArgumentBinder = new(
             initialUrl,
             width, height,
-            javaScript, webRtc, remoteDebugging, cachePath,
+            javaScript, webRtc, remoteDebugging, cachePath, popupAction,
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
+            logPath, logSeverity,
             communicationLayerPath, inLocation, outLocation,
-            logPath, logSeverity, startDelay);
+            startDelay);
         rootCommand.SetHandler((LaunchArguments parsedArgs) =>
         {
             if(parsedArgs.StartDelay != 0)

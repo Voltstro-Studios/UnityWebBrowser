@@ -21,6 +21,12 @@ public interface IClient
     public void LoadStart(string url);
 
     /// <summary>
+    ///     Tells the client that a popup has been invoked
+    /// </summary>
+    /// <param name="url"></param>
+    public void OnPopup(string url);
+
+    /// <summary>
     ///     Tell the client that a URL finished
     /// </summary>
     /// <param name="url"></param>
