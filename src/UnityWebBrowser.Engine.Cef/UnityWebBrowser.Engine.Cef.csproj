@@ -14,6 +14,13 @@
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
+        <!-- Prevents XML and PDB files being copied -->
+        <AllowedReferenceRelatedFileExtensions>
+            .allowedextension
+        </AllowedReferenceRelatedFileExtensions>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'And'$(RuntimeIdentifier)'!=''">
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
