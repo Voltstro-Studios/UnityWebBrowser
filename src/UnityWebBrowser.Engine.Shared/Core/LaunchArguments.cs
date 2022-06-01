@@ -34,6 +34,11 @@ public class LaunchArguments
     public bool WebRtc { get; init; }
     
     /// <summary>
+    ///     Control local storage
+    /// </summary>
+    public bool LocalStorage { get; init; }
+    
+    /// <summary>
     ///     How to handle popups
     /// </summary>
     public PopupAction PopupAction { get; init; }

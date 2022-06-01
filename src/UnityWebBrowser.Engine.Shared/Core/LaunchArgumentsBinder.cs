@@ -20,6 +20,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     //General browser settings
     private readonly Option<bool> javaScript;
     private readonly Option<bool> webRtc;
+    private readonly Option<bool> localStorage;
     private readonly Option<int> remoteDebugging;
     private readonly Option<FileInfo> cachePath;
     private readonly Option<PopupAction> popupAction;
@@ -47,7 +48,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     public LaunchArgumentsBinder(
         Option<string> initialUrl,
         Option<int> width, Option<int> height,
-        Option<bool> javaScript, Option<bool> webRtc, Option<int> remoteDebugging, Option<FileInfo> cachePath, Option<PopupAction> popupAction,
+        Option<bool> javaScript, Option<bool> webRtc, Option<bool> localStorage, Option<int> remoteDebugging, Option<FileInfo> cachePath, Option<PopupAction> popupAction,
         Option<string> backgroundColor,
         Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword,
         Option<FileInfo> logPath, Option<LogSeverity> logSeverity,
@@ -60,6 +61,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         
         this.javaScript = javaScript;
         this.webRtc = webRtc;
+        this.localStorage = localStorage;
         this.remoteDebugging = remoteDebugging;
         this.cachePath = cachePath;
         this.popupAction = popupAction;
@@ -91,6 +93,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
 
             JavaScript = bindingContext.ParseResult.GetValueForOption(javaScript),
             WebRtc = bindingContext.ParseResult.GetValueForOption(webRtc),
+            LocalStorage = bindingContext.ParseResult.GetValueForOption(localStorage),
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
             PopupAction = bindingContext.ParseResult.GetValueForOption(popupAction),

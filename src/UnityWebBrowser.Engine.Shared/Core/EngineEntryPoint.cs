@@ -80,6 +80,9 @@ public abstract class EngineEntryPoint : IDisposable
         Option<bool> webRtc = new("-web-rtc",
             () => false,
             "Enable or disable web RTC");
+        Option<bool> localStorage = new("-local-storage",
+            () => true,
+            "Enable or disable local storage");
         Option<int> remoteDebugging = new("-remote-debugging",
             () => 0,
             "If the engine has remote debugging, what port to use (0 for disable)");
@@ -134,7 +137,7 @@ public abstract class EngineEntryPoint : IDisposable
         {
             initialUrl,
             width, height,
-            javaScript, webRtc, remoteDebugging, cachePath, popupAction,
+            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
             logPath, logSeverity,
@@ -150,7 +153,7 @@ public abstract class EngineEntryPoint : IDisposable
         LaunchArgumentsBinder launchArgumentBinder = new(
             initialUrl,
             width, height,
-            javaScript, webRtc, remoteDebugging, cachePath, popupAction,
+            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
             logPath, logSeverity,

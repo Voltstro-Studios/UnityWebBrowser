@@ -112,6 +112,8 @@ internal class CefEngineManager : IEngine, IDisposable
             Locale = "en-US",
             ExternalMessagePump = false,
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
+            PersistSessionCookies = true,
+            PersistUserPreferences = true,
 #if LINUX || MACOS
             //On Linux we need to tell CEF where everything is, this will assume that the working directory is where everything is!
             ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
@@ -134,12 +136,13 @@ internal class CefEngineManager : IEngine, IDisposable
         {
             BackgroundColor = backgroundColor,
             JavaScript = launchArguments.JavaScript ? CefState.Enabled : CefState.Disabled,
-            LocalStorage = CefState.Disabled
+            LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled
         };
 
         Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF with these options:" +
                      $"\nProcess Path: {Environment.ProcessPath}" +
                      $"\nJS: {launchArguments.JavaScript}" +
+                     $"\nLocal Storage: {launchArguments.LocalStorage}" +
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePathArgument}" +
                      $"\nPopup Action: {launchArguments.PopupAction}" +

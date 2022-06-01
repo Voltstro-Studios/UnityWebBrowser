@@ -102,6 +102,12 @@ namespace UnityWebBrowser.Core
         [Tooltip("Enable or disable WebRTC")] public bool webRtc;
 
         /// <summary>
+        ///     Enable or disable local storage
+        /// </summary>
+        [Tooltip("Enable or disable local storage")]
+        public bool localStorage = true;
+
+        /// <summary>
         ///     How to handle popups
         /// </summary>
         [Tooltip("How to handle popups")]
@@ -322,6 +328,8 @@ namespace UnityWebBrowser.Core
             //Setup web RTC
             if (webRtc)
                 argsBuilder.AppendArgument("web-rtc", webRtc);
+            
+            argsBuilder.AppendArgument("local-storage", localStorage);
 
             //Setup remote debugging
             if (remoteDebugging)
