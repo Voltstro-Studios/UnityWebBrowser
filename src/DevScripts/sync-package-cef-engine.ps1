@@ -1,3 +1,9 @@
+# Version Check
+if ($PSVersionTable.PSVersion.Major -lt 7)
+{
+    throw "You need to use the NEW PowerShell version! You can get it here: https://github.com/powershell/powershell#get-powershell"
+}
+
 $LicensePath = "../../LICENSE.md"
 Copy-Item -Path $LicensePath -Destination "../Packages/UnityWebBrowser.Engine.Cef/LICENSE.md" -Force -PassThru
 Copy-Item -Path $LicensePath -Destination "../Packages/UnityWebBrowser.Engine.Cef.Linux-x64/LICENSE.md" -Force -PassThru

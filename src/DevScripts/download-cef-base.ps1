@@ -34,6 +34,12 @@ function CheckProcess
     }
 }
 
+# Version Check
+if ($PSVersionTable.PSVersion.Major -lt 7)
+{
+    throw "You need to use the NEW PowerShell version! You can get it here: https://github.com/powershell/powershell#get-powershell"
+}
+
 #Set location
 Push-Location $PSScriptRoot
 
