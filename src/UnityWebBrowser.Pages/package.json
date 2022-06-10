@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "typescript": "^4.7.2",
-    "vite": "^2.9.9",
+    "vite": "^2.9.11",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-singlefile": "^0.7.2"
   }
