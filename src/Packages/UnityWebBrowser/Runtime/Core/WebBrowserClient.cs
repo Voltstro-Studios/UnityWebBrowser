@@ -797,12 +797,23 @@ namespace UnityWebBrowser.Core
             logger.Debug("UWB shutdown...");
 
             cancellationToken?.Cancel();
+            
+            //Destroy textures
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
-            
-            if (ReadySignalReceived && IsConnected)
-                communicationsManager.Shutdown();
 
+            //Engine shutdown
+            try
+            {
+                if (ReadySignalReceived && IsConnected)
+                    communicationsManager.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Some error occured while shutting down the engine! {ex}");
+            }
+
+            //Communication manager destruction
             try
             {
                 communicationsManager?.Dispose();
@@ -812,9 +823,11 @@ namespace UnityWebBrowser.Core
                 logger.Error($"Some error occured while destroying the communications manager! {ex}");
             }
 
+            //We are no longer using our communication manager
             if(communicationLayer != null)
                 communicationLayer.IsInUse = false;
 
+            //Kill the process if we haven't already
             if (engineProcess != null)
             {
                 engineProcess.KillTree();
@@ -823,6 +836,7 @@ namespace UnityWebBrowser.Core
                 engineProcess = null;
             }
 
+            //Dispose of buffers
             lock (resizeLock)
             {
                 if(nextTextureData.IsCreated)
