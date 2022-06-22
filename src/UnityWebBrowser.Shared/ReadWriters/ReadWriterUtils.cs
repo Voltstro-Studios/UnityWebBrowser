@@ -12,7 +12,8 @@ public static class ReadWriterUtils
         readerWriterManager.AddType(new MouseScrollEventTypeReadWriter());
         readerWriterManager.AddType(new ResolutionTypeReadWriter());
         
-        //TODO: Won't need this when we push vector type read writing to VoltRpc
+        //TODO: Won't need this when we push these types to VoltRpc
         readerWriterManager.AddType(new Vector2TypeReadWriter());
+        readerWriterManager.AddType(new GuidTypeReaderWriter());
     }
 }

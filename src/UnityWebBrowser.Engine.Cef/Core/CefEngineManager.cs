@@ -6,6 +6,7 @@ using UnityWebBrowser.Engine.Cef.Browser;
 using UnityWebBrowser.Engine.Shared;
 using UnityWebBrowser.Engine.Shared.Core;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
+using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
@@ -82,7 +83,7 @@ internal class CefEngineManager : IEngine, IDisposable
     ///     Starts CEF
     /// </summary>
     /// <exception cref="Exception"></exception>
-    public void Init(IClient clientActions)
+    public void Init(IClient clientActions, EnginePopupManager popupManager)
     {
         //Do we have a cache or not, if not CEF will run in "incognito" mode.
         string cachePathArgument = null;
@@ -152,7 +153,7 @@ internal class CefEngineManager : IEngine, IDisposable
 
         //Create cef browser
         cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
-            launchArguments.PopupAction,
+            launchArguments.PopupAction, popupManager,
             new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
                 launchArguments.ProxyEnabled), clientActions);
         CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);

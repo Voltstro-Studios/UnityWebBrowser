@@ -1,0 +1,56 @@
+#nullable enable
+using System;
+using System.Collections.Generic;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
+using UnityWebBrowser.Shared.Popups;
+using VoltRpc.Communication;
+
+namespace UnityWebBrowser.Engine.Shared.Popups;
+
+/// <summary>
+///     Manager for popups on the engine side
+/// </summary>
+public class EnginePopupManager
+{
+    private Client? client;
+    private IPopupEngineControls? engineControls;
+
+    private List<EnginePopupInfo> popups;
+
+    public EnginePopupManager()
+    {
+        popups = new List<EnginePopupInfo>();
+    }
+
+    /// <summary>
+    ///     Call when you have a popup
+    /// </summary>
+    /// <param name="enginePopupInfo"></param>
+    public void OnPopup(EnginePopupInfo enginePopupInfo)
+    {
+        popups.Add(enginePopupInfo);
+        if (client is { IsConnected: true })
+            engineControls?.OnPopup(enginePopupInfo.PopupGuid);
+    }
+
+    /// <summary>
+    ///     Call when you want to destroy a popup
+    /// </summary>
+    /// <param name="enginePopupInfo"></param>
+    public void OnPopupDestroy(EnginePopupInfo enginePopupInfo)
+    {
+        popups.Remove(enginePopupInfo);
+        if (client is { IsConnected: true })
+            engineControls?.OnPopupDestroy(enginePopupInfo.PopupGuid);
+    }
+
+    /// <summary>
+    ///     Setup everything for IPC
+    /// </summary>
+    /// <param name="ipcClient"></param>
+    internal void SetIpcClient(Client ipcClient)
+    {
+        client = ipcClient;
+        engineControls = new PopupEngineControls(client);
+    }
+}

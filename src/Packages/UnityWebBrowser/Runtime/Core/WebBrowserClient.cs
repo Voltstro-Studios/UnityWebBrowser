@@ -10,6 +10,7 @@ using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.Communication;
 using UnityWebBrowser.Core.Engines;
+using UnityWebBrowser.Core.Popups;
 using UnityWebBrowser.Events;
 using UnityWebBrowser.Helper;
 using UnityWebBrowser.Logging;
@@ -568,9 +569,9 @@ namespace UnityWebBrowser.Core
         /// </summary>
         public event OnPopup OnPopup;
 
-        internal void InvokeOnPopup(string ur)
+        internal void InvokeOnPopup(WebBrowserPopupInfo popupInfo)
         {
-            OnPopup?.Invoke(ur);
+            OnPopup?.Invoke(popupInfo);
         }
 
         #endregion

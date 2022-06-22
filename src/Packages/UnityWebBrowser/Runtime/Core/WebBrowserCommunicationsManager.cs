@@ -4,10 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
+using UnityWebBrowser.Core.Popups;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Popups;
 using UnityWebBrowser.Shared.Proxy;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
@@ -27,9 +29,11 @@ namespace UnityWebBrowser.Core
         private readonly Client ipcClient;
         private readonly Host ipcHost;
 
-        private readonly IWebBrowserLogger logger;
-        private readonly object threadLock;
+        private readonly WebBrowserPopupService popupService;
 
+        private readonly IWebBrowserLogger logger;
+        
+        private readonly object threadLock;
         private readonly SynchronizationContext unityThread;
 
         public readonly PixelsEventTypeReader pixelsEventTypeReader;
@@ -49,8 +53,11 @@ namespace UnityWebBrowser.Core
             ipcClient = browserClient.communicationLayer.CreateClient();
             ipcHost = browserClient.communicationLayer.CreateHost();
 
+            popupService = new WebBrowserPopupService(browserClient.InvokeOnPopup, logger);
+
             ReadWriterUtils.AddBaseTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService<IClient>(this);
+            ipcHost.AddService<IPopupEngineControls>(popupService);
 
             ReadWriterUtils.AddBaseTypeReadWriters(ipcClient.TypeReaderWriterManager);
 
@@ -221,9 +228,10 @@ namespace UnityWebBrowser.Core
             ExecuteOnUnity(() => client.InvokeLoadStart(url));
         }
 
+        //TODO: Remove
         public void OnPopup(string url)
         {
-            ExecuteOnUnity(() => client.InvokeOnPopup(url));
+            //ExecuteOnUnity(() => client.InvokeOnPopup(url));
         }
 
         public void LoadFinish(string url)

@@ -100,6 +100,12 @@ namespace UnityWebBrowser.Prj
                     webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
                 ImGui.Spacing();
                 ImGui.Separator();
+                
+                ImGui.Text("Popup");
+                if(ImGui.Button("Show Popup"))
+                    webBrowserUIBasic.browserClient.ExecuteJs("open('https://voltstro.dev', 'Voltstro', 'width=600,height=400')");
+                ImGui.Spacing();
+                ImGui.Separator();
 
                 ImGui.Text("Resolution:");
                 ImGui.PushItemWidth(100);

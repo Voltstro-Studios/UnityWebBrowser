@@ -1,8 +1,10 @@
 using System;
+using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using UnityWebBrowser.Engine.Cef.Core;
+using UnityWebBrowser.Engine.Shared.Core.Logging;
+using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
 using Xilium.CefGlue;
-using Xilium.CefGlue.Platform.Windows;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
 
@@ -12,16 +14,17 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 public class UwbCefLifespanHandler : CefLifeSpanHandler
 {
     public event Action<CefBrowser> AfterCreated;
-    public event Action<string> OnPopup;
 
+    private readonly EnginePopupManager popupManager;
     private readonly ProxySettings proxySettings;
     
     private readonly PopupAction popupAction;
 
-    public UwbCefLifespanHandler(PopupAction popupAction, ProxySettings proxySettings)
+    public UwbCefLifespanHandler(PopupAction popupAction, EnginePopupManager enginePopupManager, ProxySettings proxySettings)
     {
         this.proxySettings = proxySettings;
         this.popupAction = popupAction;
+        popupManager = enginePopupManager;
     }
 
     protected override void OnAfterCreated(CefBrowser browser)
@@ -37,36 +40,21 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
         ref bool noJavascriptAccess)
     {
         CefLoggerWrapper.Debug($"Popup: {targetFrameName}({targetUrl})");
-        OnPopup?.Invoke(targetUrl);
 
         switch (popupAction)
         {
             case PopupAction.Ignore:
                 break;
             case PopupAction.OpenExternalWindow:
-                //Create new window info
-                CefWindowInfo newWindow = CefWindowInfo.Create();
-                
-                //Set the window as a popup and parent it to the existing 'window'.
-                newWindow.SetAsPopup(windowInfo.Handle, targetFrameName);
-                
-                //Set sizes and positions
-                if (popupFeatures.X.HasValue)
-                    newWindow.X = popupFeatures.X.Value;
-                if (popupFeatures.Y.HasValue)
-                    newWindow.Y = popupFeatures.Y.Value;
-                if (popupFeatures.Width.HasValue)
-                    newWindow.Width = popupFeatures.Width.Value;
-                if (popupFeatures.Height.HasValue)
-                    newWindow.Height = popupFeatures.Height.Value;
-
-                //Scrollbars
-                if (popupFeatures.ScrollbarsVisible)
-                    newWindow.Style |= WindowStyle.WS_HSCROLL | WindowStyle.WS_VSCROLL;
-
-                //Create a new client for it, and properly create the window
-                UwbCefClientPopup clientPopup = new UwbCefClientPopup(proxySettings);
-                CefBrowserHost.CreateBrowser(newWindow, clientPopup, settings, targetUrl);
+                try
+                {
+                    popupManager.OnPopup(new UwbEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
+                        popupFeatures, proxySettings, popupManager));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Fucked! {ex.Message} {ex.StackTrace}");
+                }
                 break;
             case PopupAction.Redirect:
                 frame.LoadUrl(targetUrl);

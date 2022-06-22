@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
@@ -29,21 +30,20 @@ public class UwbCefClient : CefClient, IDisposable
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
     /// </summary>
-    public UwbCefClient(CefSize size, PopupAction popupAction, ProxySettings proxySettings, IClient clientActions)
+    public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, IClient clientActions)
     {
         Client = clientActions;
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
         renderHandler = new UwbCefRenderHandler(size);
-        lifespanHandler = new UwbCefLifespanHandler(popupAction, proxySettings);
+        lifespanHandler = new UwbCefLifespanHandler(popupAction, popupManager, proxySettings);
         lifespanHandler.AfterCreated += cefBrowser =>
         {
             browser = cefBrowser;
             browserHost = cefBrowser.GetHost();
             mainFrame = cefBrowser.GetMainFrame();
         };
-        lifespanHandler.OnPopup += clientActions.OnPopup;
         displayHandler = new UwbCefDisplayHandler(this);
         requestHandler = new UwbCefRequestHandler(proxySettings);
         contextMenuHandler = new UwbCefContextMenuHandler();

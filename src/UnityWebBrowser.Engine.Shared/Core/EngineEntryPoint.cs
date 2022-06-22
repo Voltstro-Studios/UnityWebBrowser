@@ -4,11 +4,12 @@ using System.IO;
 using System.Threading;
 using UnityWebBrowser.Engine.Shared.Communications;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
+using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Engine.Shared.ReadWriters;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Communications;
 using UnityWebBrowser.Shared.Core;
-using UnityWebBrowser.Shared.ReadWriters;
+using UnityWebBrowser.Shared.Popups;
 using VoltRpc.Communication;
 
 namespace UnityWebBrowser.Engine.Shared.Core;
@@ -25,6 +26,11 @@ public abstract class EngineEntryPoint : IDisposable
     ///     Allows the engine to fire events on the Unity client side
     /// </summary>
     protected ClientActions ClientActions { get; private set; }
+    
+    /// <summary>
+    ///     Call to invoke new popups
+    /// </summary>
+    protected EnginePopupManager PopupManager { get; private set; }
 
     /// <summary>
     ///     Is the <see cref="Client" /> side of the connection connected
@@ -166,9 +172,9 @@ public abstract class EngineEntryPoint : IDisposable
             
             if (ShouldInitLogger(parsedArgs, args))
                 Logger.Init(parsedArgs.LogSeverity);
-
-            //Is debug log enabled or not
+            
             ClientActions = new ClientActions();
+            PopupManager = new EnginePopupManager();
 
             //Run early init
             try
@@ -242,12 +248,15 @@ public abstract class EngineEntryPoint : IDisposable
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClient));
+            ipcClient.AddService(typeof(IPopupEngineControls));
 
             //Connect the server (us) back to Unity
             try
             {
                 ipcClient.Connect();
+                
                 ClientActions.SetIpcClient(ipcClient);
+                PopupManager.SetIpcClient(ipcClient);
             }
             catch (ConnectionFailedException)
             {
