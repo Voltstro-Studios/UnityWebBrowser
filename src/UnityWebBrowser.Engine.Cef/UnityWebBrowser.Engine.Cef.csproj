@@ -78,9 +78,15 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\*.txt" Link="Libs/%(Filename)%(Extension)">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\LICENSE.txt" Link="Libs/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <TargetPath>LICENSE.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\windows64\README.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>README.CEF.txt</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
@@ -130,9 +136,15 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\*.txt" Link="Libs/%(Filename)%(Extension)">
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\LICENSE.txt" Link="Libs/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <TargetPath>LICENSE.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\ThirdParty\Libs\cef\linux64\README.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>README.CEF.txt</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 

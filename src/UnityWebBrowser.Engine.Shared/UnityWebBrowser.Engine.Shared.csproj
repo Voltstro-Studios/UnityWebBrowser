@@ -22,4 +22,10 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="LICENSE.UWB.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

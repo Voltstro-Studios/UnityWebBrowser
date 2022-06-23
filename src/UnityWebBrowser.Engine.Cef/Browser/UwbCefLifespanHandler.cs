@@ -1,7 +1,6 @@
 using System;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using UnityWebBrowser.Engine.Cef.Core;
-using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Popups;
@@ -47,15 +46,8 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
             case PopupAction.Ignore:
                 break;
             case PopupAction.OpenExternalWindow:
-                try
-                {
-                    popupManager.OnPopup(new UwbCefEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
-                        popupFeatures, proxySettings, popupManager));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Fucked! {ex.Message} {ex.StackTrace}");
-                }
+                popupManager.OnPopup(new UwbCefEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
+                    popupFeatures, proxySettings, popupManager));
                 break;
             case PopupAction.Redirect:
                 frame.LoadUrl(targetUrl);
