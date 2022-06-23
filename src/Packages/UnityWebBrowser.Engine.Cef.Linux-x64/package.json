@@ -1,12 +1,12 @@
 {
+  "version": "2.0.0-preview.3-102.0.10",
   "description": "CEF Engine for Unity Web Browser (Linux x64)",
   "unity": "2021.2",
-  "displayName": "Unity Web Browser CEF Engine (Linux x64)",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-102.0.9",
-    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0",
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-102.0.10"
   },
-  "name": "dev.voltstro.unitywebbrowser.engine.cef.linux.x64",
-  "version": "2.0.0-preview.3-102.0.9",
-  "author": "Voltstro"
+  "author": "Voltstro",
+  "displayName": "Unity Web Browser CEF Engine (Linux x64)",
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.linux.x64"
 }
