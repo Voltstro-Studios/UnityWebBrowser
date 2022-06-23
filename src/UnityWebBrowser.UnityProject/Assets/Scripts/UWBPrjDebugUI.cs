@@ -6,6 +6,7 @@ using UImGui;
 using Unity.Profiling;
 using UnityEngine;
 using UnityWebBrowser.Core;
+using UnityWebBrowser.Core.Popups;
 using UnityWebBrowser.Logging;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 
@@ -34,6 +35,8 @@ namespace UnityWebBrowser.Prj
         private List<string> unformattedConsoleItems;
         private List<string> formattedConsoleItems;
 
+        private List<WebBrowserPopupInfo> popups;
+
         private void Start()
         {
             if (webBrowserUIBasic == null)
@@ -42,8 +45,15 @@ namespace UnityWebBrowser.Prj
             const string startMessage = "Debug UI started.";
             unformattedConsoleItems = new List<string> {startMessage};
             formattedConsoleItems = new List<string> {startMessage};
+            popups = new List<WebBrowserPopupInfo>();
             webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog += HandleOutputLogMessage;
             webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += HandleErrorLogMessage;
+
+            webBrowserUIBasic.browserClient.OnPopup += popup =>
+            {
+                popups.Add(popup);
+                popup.OnDestroyed += () => popups.Remove(popup);
+            };
 
             UImGuiUtility.Layout += OnImGuiLayout;
 
@@ -101,9 +111,24 @@ namespace UnityWebBrowser.Prj
                 ImGui.Spacing();
                 ImGui.Separator();
                 
-                ImGui.Text("Popup");
-                if(ImGui.Button("Show Popup"))
-                    webBrowserUIBasic.browserClient.ExecuteJs("open('https://voltstro.dev', 'Voltstro', 'width=600,height=400')");
+                //Popups
+                {
+                    ImGui.Text("Popups");
+                    if(ImGui.Button("Show a Popup"))
+                        webBrowserUIBasic.browserClient.ExecuteJs("open('https://voltstro.dev', 'Voltstro', 'width=600,height=400')");
+                
+                    //Display all of our popups
+                    foreach (WebBrowserPopupInfo popupInfo in popups)
+                    {
+                        ImGui.Text(popupInfo.PopupGuid.ToString());
+                        
+                        if(ImGui.Button("Execute JS"))
+                            popupInfo.ExecuteJs("console.log('Hello world from popup!')");
+                        
+                        if(ImGui.Button("Destroy"))
+                            popupInfo.Dispose();
+                    }
+                }
                 ImGui.Spacing();
                 ImGui.Separator();
 

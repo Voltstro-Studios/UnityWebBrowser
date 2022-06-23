@@ -22,6 +22,22 @@ public class UwbCefClientPopup : CefClient
         requestHandler = new UwbCefRequestHandler(proxySettings);
         lifeSpanHandler = new UwbPopupLifeSpanHandler(onShutdown);
     }
+
+    /// <summary>
+    ///     Closes this <see cref="UwbCefClientPopup"/>
+    /// </summary>
+    public void Close()
+    {
+        lifeSpanHandler.Close();
+    }
+
+    /// <summary>
+    ///     Executes js in this <see cref="UwbCefClientPopup"/>
+    /// </summary>
+    public void ExecuteJs(string js)
+    {
+        lifeSpanHandler.ExecuteJs(js);
+    }
     
     protected override CefRequestHandler GetRequestHandler()
     {

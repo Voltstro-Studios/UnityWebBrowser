@@ -165,7 +165,7 @@ public abstract class EngineEntryPoint : IDisposable
             logPath, logSeverity,
             communicationLayerPath, inLocation, outLocation,
             startDelay);
-        rootCommand.SetHandler((LaunchArguments parsedArgs) =>
+        rootCommand.SetHandler(parsedArgs =>
         {
             if(parsedArgs.StartDelay != 0)
                 Thread.Sleep((int)parsedArgs.StartDelay);
@@ -244,13 +244,14 @@ public abstract class EngineEntryPoint : IDisposable
             //Add type readers
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngine), engine);
+            ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
             ipcHost.StartListening();
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClient));
             ipcClient.AddService(typeof(IPopupEngineControls));
 
-            //Connect the server (us) back to Unity
+            //Connect the engine (us) back to Unity
             try
             {
                 ipcClient.Connect();

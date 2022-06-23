@@ -7,23 +7,32 @@ using UnityWebBrowser.Shared.Popups;
 
 namespace UnityWebBrowser.Core.Popups
 {
-    public class WebBrowserPopupService : IPopupEngineControls
+    internal class WebBrowserPopupService : IPopupEngineControls, IPopupClientControls
     {
-        public WebBrowserPopupService(OnPopup onPopupCreated, IWebBrowserLogger logger)
+        public WebBrowserPopupService(WebBrowserCommunicationsManager communicationsManager)
         {
+            this.communicationsManager = communicationsManager;
             popups = new List<WebBrowserPopupInfo>();
-            this.onPopupCreated = onPopupCreated;
-            this.logger = logger;
+            clientControls = new PopupClientControls(communicationsManager.ipcClient);
+            onPopupCreated = communicationsManager.client.InvokeOnPopup;
+            logger = communicationsManager.logger;
         }
         
         private readonly List<WebBrowserPopupInfo> popups;
         private readonly OnPopup onPopupCreated;
         private readonly IWebBrowserLogger logger;
+        private readonly WebBrowserCommunicationsManager communicationsManager;
+        private readonly PopupClientControls clientControls;
+
+        #region Engine
 
         public void OnPopup(Guid guid)
         {
             logger.Debug($"Got popup {guid}");
-            popups.Add(new WebBrowserPopupInfo(guid));
+            WebBrowserPopupInfo popupInfo = new WebBrowserPopupInfo(guid, this);
+            popups.Add(popupInfo);
+            
+            onPopupCreated.Invoke(popupInfo);
         }
 
         public void OnPopupDestroy(Guid guid)
@@ -33,5 +42,21 @@ namespace UnityWebBrowser.Core.Popups
             popupInfo.DisposeNoSend();
             popups.Remove(popupInfo);
         }
+
+        #endregion
+
+        #region Client
+
+        public void PopupClose(Guid guid)
+        {
+            communicationsManager.ExecuteTask(() => clientControls.PopupClose(guid));
+        }
+
+        public void PopupExecuteJs(Guid guid, string js)
+        {
+            communicationsManager.ExecuteTask(() => clientControls.PopupExecuteJs(guid, js));
+        }
+
+        #endregion
     }
 }

@@ -23,19 +23,20 @@ namespace UnityWebBrowser.Core
     internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
     {
         private static ProfilerMarker sendEventMarker = new("UWB.SendEvent");
-        private readonly WebBrowserClient client;
+        public readonly WebBrowserClient client;
 
         private readonly IEngine engineProxy;
-        private readonly Client ipcClient;
-        private readonly Host ipcHost;
-
+        
         private readonly WebBrowserPopupService popupService;
 
-        private readonly IWebBrowserLogger logger;
+        public readonly IWebBrowserLogger logger;
         
         private readonly object threadLock;
         private readonly SynchronizationContext unityThread;
 
+        private readonly Host ipcHost;
+        public readonly Client ipcClient;
+        
         public readonly PixelsEventTypeReader pixelsEventTypeReader;
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace UnityWebBrowser.Core
             ipcClient = browserClient.communicationLayer.CreateClient();
             ipcHost = browserClient.communicationLayer.CreateHost();
 
-            popupService = new WebBrowserPopupService(browserClient.InvokeOnPopup, logger);
+            popupService = new WebBrowserPopupService(this);
 
             ReadWriterUtils.AddBaseTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService<IClient>(this);
@@ -65,6 +66,7 @@ namespace UnityWebBrowser.Core
             ipcClient.TypeReaderWriterManager.AddType(pixelsEventTypeReader);
             
             ipcClient.AddService<IEngine>();
+            ipcClient.AddService<IPopupClientControls>();
             engineProxy = new EngineProxy(ipcClient);
         }
 
@@ -192,7 +194,7 @@ namespace UnityWebBrowser.Core
             }, null);
         }
 
-        private void ExecuteTask(Action action, [CallerMemberName] string memberName = "")
+        internal void ExecuteTask(Action action, [CallerMemberName] string memberName = "")
         {
             if (!IsConnected)
                 return;

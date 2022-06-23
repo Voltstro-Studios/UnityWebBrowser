@@ -1,22 +1,26 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
-using UnityWebBrowser.Engine.Shared.Core.Logging;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityWebBrowser.Shared.Popups;
 using VoltRpc.Communication;
 
+#nullable enable
 namespace UnityWebBrowser.Engine.Shared.Popups;
 
 /// <summary>
 ///     Manager for popups on the engine side
 /// </summary>
-public class EnginePopupManager
+public class EnginePopupManager : IPopupClientControls
 {
     private Client? client;
     private IPopupEngineControls? engineControls;
 
-    private List<EnginePopupInfo> popups;
+    private readonly List<EnginePopupInfo> popups;
 
+    /// <summary>
+    ///     Creates a new <see cref="EnginePopupManager"/> instance
+    /// </summary>
     public EnginePopupManager()
     {
         popups = new List<EnginePopupInfo>();
@@ -43,7 +47,22 @@ public class EnginePopupManager
         if (client is { IsConnected: true })
             engineControls?.OnPopupDestroy(enginePopupInfo.PopupGuid);
     }
+    
+    /// <inheritdoc />
+    public void PopupClose(Guid guid)
+    {
+        EnginePopupInfo popupInfo = popups.First(x => x.PopupGuid == guid);
+        popups.Remove(popupInfo);
+        _ = Task.Run(popupInfo.Dispose);
+    }
 
+    /// <inheritdoc />
+    public void PopupExecuteJs(Guid guid, string js)
+    {
+        EnginePopupInfo popupInfo = popups.First(x => x.PopupGuid == guid);
+        popupInfo.ExecuteJs(js);
+    }
+    
     /// <summary>
     ///     Setup everything for IPC
     /// </summary>
