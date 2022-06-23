@@ -4,7 +4,7 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters;
 
-public sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent>
+internal sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent>
 {
     public override void Write(BufferedWriter writer, KeyboardEvent keyboardEvent)
     {

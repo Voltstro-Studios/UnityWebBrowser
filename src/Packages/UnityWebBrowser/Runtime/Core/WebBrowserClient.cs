@@ -16,6 +16,7 @@ using UnityWebBrowser.Helper;
 using UnityWebBrowser.Logging;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Popups;
 using Object = UnityEngine.Object;
 using Resolution = UnityWebBrowser.Shared.Resolution;
 

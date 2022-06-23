@@ -5,8 +5,8 @@ namespace UnityWebBrowser.Shared.Core;
 /// <summary>
 ///     Shared interface for events that client has
 /// </summary>
-[GenerateProxy(GeneratedName = "ClientProxy", GeneratedNamespace = "UnityWebBrowser.Shared.Proxy")]
-public interface IClient
+[GenerateProxy(GeneratedName = "ClientControls", GeneratedNamespace = "UnityWebBrowser.Shared.Core")]
+internal interface IClientControls
 {
     /// <summary>
     ///     Tell the client that the URL changed

@@ -10,7 +10,6 @@ using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Popups;
-using UnityWebBrowser.Shared.Proxy;
 using UnityWebBrowser.Shared.ReadWriters;
 using VoltRpc.Communication;
 
@@ -20,14 +19,12 @@ namespace UnityWebBrowser.Core
     ///     Handles the RPC methods and two-way communication between the UWB engine and Unity
     /// </summary>
     [UnityEngine.Scripting.Preserve]
-    internal class WebBrowserCommunicationsManager : IEngine, IClient, IDisposable
+    internal class WebBrowserCommunicationsManager : IEngineControls, IClientControls, IDisposable
     {
         private static ProfilerMarker sendEventMarker = new("UWB.SendEvent");
         public readonly WebBrowserClient client;
 
-        private readonly IEngine engineProxy;
-        
-        private readonly WebBrowserPopupService popupService;
+        private readonly IEngineControls engineProxy;
 
         public readonly IWebBrowserLogger logger;
         
@@ -54,10 +51,10 @@ namespace UnityWebBrowser.Core
             ipcClient = browserClient.communicationLayer.CreateClient();
             ipcHost = browserClient.communicationLayer.CreateHost();
 
-            popupService = new WebBrowserPopupService(this);
+            WebBrowserPopupService popupService = new(this);
 
             ReadWriterUtils.AddBaseTypeReadWriters(ipcHost.TypeReaderWriterManager);
-            ipcHost.AddService<IClient>(this);
+            ipcHost.AddService<IClientControls>(this);
             ipcHost.AddService<IPopupEngineControls>(popupService);
 
             ReadWriterUtils.AddBaseTypeReadWriters(ipcClient.TypeReaderWriterManager);
@@ -65,9 +62,9 @@ namespace UnityWebBrowser.Core
             pixelsEventTypeReader = new PixelsEventTypeReader(browserClient.nextTextureData);
             ipcClient.TypeReaderWriterManager.AddType(pixelsEventTypeReader);
             
-            ipcClient.AddService<IEngine>();
+            ipcClient.AddService<IEngineControls>();
             ipcClient.AddService<IPopupClientControls>();
-            engineProxy = new EngineProxy(ipcClient);
+            engineProxy = new EngineControls(ipcClient);
         }
 
         /// <summary>

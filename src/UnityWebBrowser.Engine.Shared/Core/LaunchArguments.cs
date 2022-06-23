@@ -1,5 +1,6 @@
 using System.IO;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Popups;
 
 namespace UnityWebBrowser.Engine.Shared.Core;
 

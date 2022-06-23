@@ -10,8 +10,8 @@ namespace UnityWebBrowser.Shared.Core;
 ///         Defines what RPC calls the client can call to invoke on the UWB engine
 ///     </para>
 /// </summary>
-[GenerateProxy(GeneratedName = "EngineProxy", GeneratedNamespace = "UnityWebBrowser.Shared.Proxy")]
-public interface IEngine
+[GenerateProxy(GeneratedName = "EngineControls", GeneratedNamespace = "UnityWebBrowser.Shared.Core")]
+public interface IEngineControls
 {
     /// <summary>
     ///     Gets the pixels that will be displayed in a texture

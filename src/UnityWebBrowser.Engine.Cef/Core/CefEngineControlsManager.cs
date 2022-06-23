@@ -17,7 +17,7 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// <summary>
 ///     Manager for CEF
 /// </summary>
-internal class CefEngineManager : IEngine, IDisposable
+internal class CefEngineControlsManager : IEngineControls, IDisposable
 {
     private string[] args;
     private UwbCefApp cefApp;
@@ -27,12 +27,12 @@ internal class CefEngineManager : IEngine, IDisposable
     private LaunchArguments launchArguments;
 
     /// <summary>
-    ///     Creates a new <see cref="CefEngineManager" /> instance
+    ///     Creates a new <see cref="CefEngineControlsManager" /> instance
     /// </summary>
     /// <exception cref="DllNotFoundException"></exception>
     /// <exception cref="CefVersionMismatchException"></exception>
     /// <exception cref="Exception"></exception>
-    public CefEngineManager()
+    public CefEngineControlsManager()
     {
         //Setup CEF
         CefRuntime.Load();
@@ -83,7 +83,7 @@ internal class CefEngineManager : IEngine, IDisposable
     ///     Starts CEF
     /// </summary>
     /// <exception cref="Exception"></exception>
-    public void Init(IClient clientActions, EnginePopupManager popupManager)
+    public void Init(ClientControlsActions clientControlsActions, EnginePopupManager popupManager)
     {
         //Do we have a cache or not, if not CEF will run in "incognito" mode.
         string cachePathArgument = null;
@@ -155,7 +155,7 @@ internal class CefEngineManager : IEngine, IDisposable
         cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
             launchArguments.PopupAction, popupManager,
             new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
-                launchArguments.ProxyEnabled), clientActions);
+                launchArguments.ProxyEnabled), clientControlsActions);
         CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
     }
 
@@ -251,7 +251,7 @@ internal class CefEngineManager : IEngine, IDisposable
 
     #region Destroy
 
-    ~CefEngineManager()
+    ~CefEngineControlsManager()
     {
         ReleaseResources();
     }

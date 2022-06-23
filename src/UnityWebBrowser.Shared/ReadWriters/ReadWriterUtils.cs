@@ -2,7 +2,7 @@
 
 namespace UnityWebBrowser.Shared.ReadWriters;
 
-public static class ReadWriterUtils
+internal static class ReadWriterUtils
 {
     public static void AddBaseTypeReadWriters(TypeReaderWriterManager readerWriterManager)
     {

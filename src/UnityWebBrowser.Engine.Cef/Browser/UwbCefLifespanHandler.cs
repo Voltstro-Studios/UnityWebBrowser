@@ -4,6 +4,7 @@ using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Shared.Core.Logging;
 using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
+using UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -48,7 +49,7 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
             case PopupAction.OpenExternalWindow:
                 try
                 {
-                    popupManager.OnPopup(new UwbEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
+                    popupManager.OnPopup(new UwbCefEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
                         popupFeatures, proxySettings, popupManager));
                 }
                 catch (Exception ex)

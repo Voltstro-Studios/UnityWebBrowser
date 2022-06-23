@@ -1,4 +1,4 @@
-﻿namespace UnityWebBrowser.Shared;
+﻿namespace UnityWebBrowser.Shared.Popups;
 
 /// <summary>
 ///     What to do on a popup

@@ -1,19 +1,18 @@
 ﻿using System;
 using UnityWebBrowser.Shared.Core;
-using UnityWebBrowser.Shared.Proxy;
 using VoltRpc.Communication;
 
 #nullable enable
 namespace UnityWebBrowser.Engine.Shared.Core;
 
 /// <summary>
-///     This is a wrapper around <see cref="IClient" />. It checks if we are connected first before firing an event.
+///     This is a wrapper around <see cref="IClientControls" />. It checks if we are connected first before firing an event.
 ///     <para>The reason why we do the check here is that VoltRpc will throw an exception, rather then not do anything.</para>
 /// </summary>
-public class ClientActions : IClient, IDisposable
+public class ClientControlsActions : IClientControls, IDisposable
 {
     private Client? client;
-    private IClient? clientActions;
+    private IClientControls? clientActions;
 
     public void UrlChange(string url)
     {
@@ -66,10 +65,10 @@ public class ClientActions : IClient, IDisposable
     internal void SetIpcClient(Client ipcClient)
     {
         client = ipcClient ?? throw new NullReferenceException();
-        clientActions = new ClientProxy(client);
+        clientActions = new ClientControls(client);
     }
 
-    ~ClientActions()
+    ~ClientControlsActions()
     {
         ReleaseResources();
     }

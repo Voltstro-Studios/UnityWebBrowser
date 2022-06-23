@@ -3,6 +3,9 @@ using UnityWebBrowser.Engine.Shared.Core;
 
 namespace UnityWebBrowser.Engine.Shared;
 
+/// <summary>
+///     Container for a color
+/// </summary>
 public readonly struct Color
 {
     public byte R { get; }
@@ -14,8 +17,7 @@ public readonly struct Color
     {
         if (hex.Length < 6)
             throw new ArgumentOutOfRangeException(nameof(hex));
-
-
+        
         R = MathHelper.HexToDec(hex.Substring(0, 2));
         G = MathHelper.HexToDec(hex.Substring(2, 2));
         B = MathHelper.HexToDec(hex.Substring(4, 2));

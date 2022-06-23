@@ -25,7 +25,7 @@ public abstract class EngineEntryPoint : IDisposable
     /// <summary>
     ///     Allows the engine to fire events on the Unity client side
     /// </summary>
-    protected ClientActions ClientActions { get; private set; }
+    protected ClientControlsActions ClientControlsActions { get; private set; }
     
     /// <summary>
     ///     Call to invoke new popups
@@ -173,7 +173,7 @@ public abstract class EngineEntryPoint : IDisposable
             if (ShouldInitLogger(parsedArgs, args))
                 Logger.Init(parsedArgs.LogSeverity);
             
-            ClientActions = new ClientActions();
+            ClientControlsActions = new ClientControlsActions();
             PopupManager = new EnginePopupManager();
 
             //Run early init
@@ -210,9 +210,9 @@ public abstract class EngineEntryPoint : IDisposable
     /// <summary>
     ///     Call when you are ready to setup the IPC
     /// </summary>
-    /// <param name="engine"></param>
+    /// <param name="engineControls"></param>
     /// <param name="arguments"></param>
-    protected void SetupIpc(IEngine engine, LaunchArguments arguments)
+    protected void SetupIpc(IEngineControls engineControls, LaunchArguments arguments)
     {
         try
         {
@@ -243,12 +243,12 @@ public abstract class EngineEntryPoint : IDisposable
 
             //Add type readers
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
-            ipcHost.AddService(typeof(IEngine), engine);
+            ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
             ipcHost.StartListening();
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
-            ipcClient.AddService(typeof(IClient));
+            ipcClient.AddService(typeof(IClientControls));
             ipcClient.AddService(typeof(IPopupEngineControls));
 
             //Connect the engine (us) back to Unity
@@ -256,7 +256,7 @@ public abstract class EngineEntryPoint : IDisposable
             {
                 ipcClient.Connect();
                 
-                ClientActions.SetIpcClient(ipcClient);
+                ClientControlsActions.SetIpcClient(ipcClient);
                 PopupManager.SetIpcClient(ipcClient);
             }
             catch (ConnectionFailedException)
@@ -280,7 +280,7 @@ public abstract class EngineEntryPoint : IDisposable
     /// </summary>
     protected void Ready()
     {
-        ClientActions.Ready();
+        ClientControlsActions.Ready();
     }
 
     private void ShutdownAndExitWithError()
@@ -311,7 +311,7 @@ public abstract class EngineEntryPoint : IDisposable
     /// </summary>
     protected virtual void ReleaseResources()
     {
-        ClientActions.Dispose();
+        ClientControlsActions.Dispose();
         ipcHost?.Dispose();
     }
 

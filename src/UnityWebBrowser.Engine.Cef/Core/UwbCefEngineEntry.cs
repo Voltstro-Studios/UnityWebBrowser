@@ -11,7 +11,7 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// </summary>
 public class UwbCefEngineEntry : EngineEntryPoint
 {
-    private CefEngineManager cefEngineManager;
+    private CefEngineControlsManager cefEngineControlsManager;
 
     protected override bool ShouldInitLogger(LaunchArguments launchArguments, string[] args)
     {
@@ -20,15 +20,15 @@ public class UwbCefEngineEntry : EngineEntryPoint
 
     protected override void EarlyInit(LaunchArguments launchArguments, string[] args)
     {
-        cefEngineManager = new CefEngineManager();
-        cefEngineManager.EarlyInit(launchArguments, args);
+        cefEngineControlsManager = new CefEngineControlsManager();
+        cefEngineControlsManager.EarlyInit(launchArguments, args);
     }
 
     protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
     {
-        cefEngineManager.Init(ClientActions, PopupManager);
+        cefEngineControlsManager.Init(ClientControlsActions, PopupManager);
 
-        SetupIpc(cefEngineManager, launchArguments);
+        SetupIpc(cefEngineControlsManager, launchArguments);
         Ready();
 
         //Calling run message loop will cause the main thread to lock (what we want)
@@ -44,7 +44,7 @@ public class UwbCefEngineEntry : EngineEntryPoint
 
     protected override void ReleaseResources()
     {
-        cefEngineManager?.Dispose();
+        cefEngineControlsManager?.Dispose();
         base.ReleaseResources();
     }
 

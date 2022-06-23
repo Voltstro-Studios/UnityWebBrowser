@@ -7,12 +7,25 @@ using Xilium.CefGlue.Platform.Windows;
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Popups;
 
-public class UwbEnginePopupInfo : EnginePopupInfo
+/// <summary>
+///     Cef implementation of <see cref="EnginePopupInfo"/>
+/// </summary>
+public class UwbCefEnginePopupInfo : EnginePopupInfo
 {
     private readonly EnginePopupManager popupManager;
-    private readonly UwbCefClientPopup client;
+    private readonly UwbCefPopupClient popupClient;
     
-    public UwbEnginePopupInfo(CefWindowInfo windowInfo, CefBrowserSettings settings, string targetFrameName, 
+    /// <summary>
+    ///     Creates a new <see cref="UwbCefEnginePopupInfo"/>
+    /// </summary>
+    /// <param name="windowInfo"></param>
+    /// <param name="settings"></param>
+    /// <param name="targetFrameName"></param>
+    /// <param name="targetUrl"></param>
+    /// <param name="popupFeatures"></param>
+    /// <param name="proxySettings"></param>
+    /// <param name="popupManager"></param>
+    public UwbCefEnginePopupInfo(CefWindowInfo windowInfo, CefBrowserSettings settings, string targetFrameName, 
         string targetUrl, CefPopupFeatures popupFeatures, ProxySettings proxySettings, EnginePopupManager popupManager)
     {
         this.popupManager = popupManager;
@@ -38,31 +51,29 @@ public class UwbEnginePopupInfo : EnginePopupInfo
             newWindow.Style |= WindowStyle.WS_HSCROLL | WindowStyle.WS_VSCROLL;
 
         //Create a new client for it, and properly create the window
-        client = new(proxySettings, DisposeNoClose);
-        CefBrowserHost.CreateBrowser(newWindow, client, settings, targetUrl);
+        popupClient = new(proxySettings, DisposeNoClose);
+        CefBrowserHost.CreateBrowser(newWindow, popupClient, settings, targetUrl);
     }
-
+    
     public override void ExecuteJs(string js)
     {
-        client.ExecuteJs(js);
+        popupClient.ExecuteJs(js);
     }
 
     public override void Dispose()
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineManager.PostTask(CefThreadId.UI, Dispose);
+            CefEngineControlsManager.PostTask(CefThreadId.UI, Dispose);
             return;
         }
 
         base.Dispose();
-        client.Close();
+        popupClient.Close();
     }
 
-    public void DisposeNoClose()
+    private void DisposeNoClose()
     {
         popupManager.OnPopupDestroy(this);
     }
-
-    //TODO: Shutdown, ExecuteJs, etc
 }

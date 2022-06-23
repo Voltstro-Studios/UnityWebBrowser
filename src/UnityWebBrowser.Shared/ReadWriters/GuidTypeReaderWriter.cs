@@ -5,7 +5,7 @@ using VoltRpc.Types;
 namespace UnityWebBrowser.Shared.ReadWriters;
 
 //TODO: Merge into VoltRpc
-public class GuidTypeReaderWriter : TypeReadWriter<Guid>
+internal class GuidTypeReaderWriter : TypeReadWriter<Guid>
 {
     public override void Write(BufferedWriter writer, Guid value)
     {

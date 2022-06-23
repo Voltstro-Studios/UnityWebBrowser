@@ -3,7 +3,7 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters;
 
-public class ResolutionTypeReadWriter : TypeReadWriter<Resolution>
+internal class ResolutionTypeReadWriter : TypeReadWriter<Resolution>
 {
     public override void Write(BufferedWriter writer, Resolution resolution)
     {

@@ -25,7 +25,7 @@ public class UwbCefLoadHandler : CefLoadHandler
 
         CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load start: {url}");
 
-        if (frame.IsMain) client.Client.LoadStart(url);
+        if (frame.IsMain) client.ClientControls.LoadStart(url);
     }
 
     protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
@@ -36,7 +36,7 @@ public class UwbCefLoadHandler : CefLoadHandler
 
         CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load end: {url}");
 
-        if (frame.IsMain) client.Client.LoadFinish(url);
+        if (frame.IsMain) client.ClientControls.LoadFinish(url);
     }
 
     protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode,

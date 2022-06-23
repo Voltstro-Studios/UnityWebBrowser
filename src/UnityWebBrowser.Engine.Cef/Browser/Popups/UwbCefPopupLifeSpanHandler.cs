@@ -4,9 +4,16 @@ using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Popups;
 
-public class UwbPopupLifeSpanHandler : CefLifeSpanHandler
+/// <summary>
+///     <see cref="CefLifeSpanHandler"/> for a popup
+/// </summary>
+public class UwbCefPopupLifeSpanHandler : CefLifeSpanHandler
 {
-    public UwbPopupLifeSpanHandler(Action onShutdown)
+    /// <summary>
+    ///     Creates a new <see cref="UwbCefPopupLifeSpanHandler"/> instance
+    /// </summary>
+    /// <param name="onShutdown"></param>
+    public UwbCefPopupLifeSpanHandler(Action onShutdown)
     {
         this.onShutdown = onShutdown;
     }
@@ -19,11 +26,11 @@ public class UwbPopupLifeSpanHandler : CefLifeSpanHandler
     /// </summary>
     public void Close()
     {
-        cefBrowser?.GetHost()?.CloseBrowser();
+        cefBrowser?.GetHost().CloseBrowser();
     }
 
     /// <summary>
-    ///     Executes JS
+    ///     Executes JS in the popup
     /// </summary>
     /// <param name="js"></param>
     public void ExecuteJs(string js)

@@ -4,7 +4,7 @@ using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters;
 
-public sealed class MouseScrollEventTypeReadWriter : TypeReadWriter<MouseScrollEvent>
+internal sealed class MouseScrollEventTypeReadWriter : TypeReadWriter<MouseScrollEvent>
 {
     public override void Write(BufferedWriter writer, MouseScrollEvent obj)
     {

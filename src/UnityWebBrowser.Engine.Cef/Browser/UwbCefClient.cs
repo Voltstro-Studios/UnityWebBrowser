@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Numerics;
+using UnityWebBrowser.Engine.Shared.Core;
 using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
 using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
+using UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -13,7 +15,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// </summary>
 public class UwbCefClient : CefClient, IDisposable
 {
-    public readonly IClient Client;
+    public readonly ClientControlsActions ClientControls;
 
     private readonly UwbCefContextMenuHandler contextMenuHandler;
     private readonly UwbCefDisplayHandler displayHandler;
@@ -30,9 +32,9 @@ public class UwbCefClient : CefClient, IDisposable
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
     /// </summary>
-    public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, IClient clientActions)
+    public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, ClientControlsActions clientControlsActions)
     {
-        Client = clientActions;
+        ClientControls = clientControlsActions;
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
