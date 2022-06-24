@@ -46,9 +46,8 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
             case PopupAction.Ignore:
                 break;
             case PopupAction.OpenExternalWindow:
-                popupManager.OnPopup(new UwbCefEnginePopupInfo(windowInfo, settings, targetFrameName, targetUrl,
-                    popupFeatures, proxySettings, popupManager));
-                break;
+                popupManager.OnPopup(new UwbCefEnginePopupInfo(popupManager, proxySettings, ref client));
+                return false;
             case PopupAction.Redirect:
                 frame.LoadUrl(targetUrl);
                 break;
