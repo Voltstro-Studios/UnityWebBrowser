@@ -3,7 +3,6 @@ using System.Numerics;
 using UnityWebBrowser.Engine.Shared.Core;
 using UnityWebBrowser.Engine.Shared.Popups;
 using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Core;
 using UnityWebBrowser.Shared.Events;
 using UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
@@ -27,7 +26,6 @@ public class UwbCefClient : CefClient, IDisposable
 
     private CefBrowser browser;
     private CefBrowserHost browserHost;
-    private CefFrame mainFrame;
 
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -44,7 +42,6 @@ public class UwbCefClient : CefClient, IDisposable
         {
             browser = cefBrowser;
             browserHost = cefBrowser.GetHost();
-            mainFrame = cefBrowser.GetMainFrame();
         };
         displayHandler = new UwbCefDisplayHandler(this);
         requestHandler = new UwbCefRequestHandler(proxySettings);
@@ -203,7 +200,7 @@ public class UwbCefClient : CefClient, IDisposable
 
     public void LoadUrl(string url)
     {
-        browser.GetMainFrame().LoadUrl(url);
+        browser.GetMainFrame()?.LoadUrl(url);
         //mainFrame.LoadUrl(url);
     }
 
@@ -214,12 +211,12 @@ public class UwbCefClient : CefClient, IDisposable
 
     public void LoadHtml(string html)
     {
-        mainFrame.LoadUrl($"data:text/html,{html}");
+        browser.GetMainFrame()?.LoadUrl($"data:text/html,{html}");
     }
 
     public void ExecuteJs(string js)
     {
-        mainFrame.ExecuteJavaScript(js, "", 0);
+        browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
     }
 
     public void GoBack()

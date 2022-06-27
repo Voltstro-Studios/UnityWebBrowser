@@ -453,6 +453,13 @@ namespace UnityWebBrowser.Core
                 {
                     if (!IsConnected)
                         continue;
+
+                    if (engineProcess.HasExited)
+                    {
+                        logger.Error("It appears that the engine process has quit!");
+                        cancellationToken.Cancel();
+                        return;
+                    }
                     
                     Thread.Sleep(25);
 
