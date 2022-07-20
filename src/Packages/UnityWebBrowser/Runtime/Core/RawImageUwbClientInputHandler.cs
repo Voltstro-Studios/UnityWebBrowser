@@ -23,7 +23,16 @@ namespace UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The input handler to use")]
         public WebBrowserInputHandler inputHandler;
-        
+
+        [Tooltip("Disable the usage of mouse and keyboard")]
+        public bool disableAllControls;
+
+        [Tooltip("Disable the usage of mouse")]
+        public bool disableMouse;
+
+        [Tooltip("Disable the usage of keyboard")]
+        public bool disableKeyboard;
+
         private Coroutine keyboardAndMouseHandlerCoroutine;
         private Vector2 lastSuccessfulMousePositionSent;
 
@@ -89,13 +98,18 @@ namespace UnityWebBrowser.Core
 
             while (Application.isPlaying)
             {
-                if(!browserClient.IsConnected)
+                yield return 0;
+
+                if (!browserClient.IsConnected)
                     continue;
-                
+
+                if(disableAllControls)
+                    continue;
+
                 if (GetMousePosition(out Vector2 pos))
                 {
                     //Mouse position
-                    if (lastSuccessfulMousePositionSent != pos)
+                    if (!disableMouse && lastSuccessfulMousePositionSent != pos)
                     {
                         browserClient.SendMouseMove(pos);
                         lastSuccessfulMousePositionSent = pos;
@@ -105,7 +119,7 @@ namespace UnityWebBrowser.Core
                     float scroll = inputHandler.GetScroll();
                     scroll *= browserClient.BrowserTexture.height;
 
-                    if (scroll != 0)
+                    if (!disableMouse && scroll != 0)
                         browserClient.SendMouseScroll(pos, (int) scroll);
                     
                     //Input
@@ -113,11 +127,9 @@ namespace UnityWebBrowser.Core
                     WindowsKey[] keysUp = inputHandler.GetUpKeys();
                     string inputBuffer = inputHandler.GetFrameInputBuffer();
                     
-                    if(keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
+                    if(!disableKeyboard && (keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0))
                         browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer);
                 }
-                
-                yield return 0;
             }
             
             inputHandler.OnStop();
@@ -125,6 +137,9 @@ namespace UnityWebBrowser.Core
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (disableAllControls || disableMouse)
+                return;
+
             MouseClickType clickType = eventData.button switch
             {
                 PointerEventData.InputButton.Left => MouseClickType.Left,
@@ -139,6 +154,9 @@ namespace UnityWebBrowser.Core
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (disableAllControls || disableMouse)
+                return;
+
             MouseClickType clickType = eventData.button switch
             {
                 PointerEventData.InputButton.Left => MouseClickType.Left,
