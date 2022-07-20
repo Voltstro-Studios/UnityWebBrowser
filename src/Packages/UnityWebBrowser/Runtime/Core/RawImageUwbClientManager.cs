@@ -12,8 +12,12 @@ namespace UnityWebBrowser.Core
     {
         protected RawImage image;
 
-        public RawImage Image { get { return image; } }
-        
+        /// <summary>
+        ///     Get the <see cref="RawImage"/> instance
+        /// </summary>
+        public RawImage Image => image;
+
+
         protected override void OnStart()
         {
             image = GetComponent<RawImage>();
