@@ -11,6 +11,8 @@ namespace UnityWebBrowser.Core
     public abstract class RawImageUwbClientManager : BaseUwbClientManager
     {
         protected RawImage image;
+
+        public RawImage Image { get { return image; } }
         
         protected override void OnStart()
         {
