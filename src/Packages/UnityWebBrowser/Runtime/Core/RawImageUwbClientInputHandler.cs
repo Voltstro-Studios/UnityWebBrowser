@@ -23,7 +23,19 @@ namespace UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The input handler to use")]
         public WebBrowserInputHandler inputHandler;
-        
+
+        /// <summary>
+        ///     Disable usage of mouse
+        /// </summary>
+        [Tooltip("Disable usage of mouse")]
+        public bool disableMouseInputs;
+
+        /// <summary>
+        ///     Disable usage of keyboard
+        /// </summary>
+        [Tooltip("Disable usage of keyboard")]
+        public bool disableKeyboardInputs;
+
         private Coroutine keyboardAndMouseHandlerCoroutine;
         private Vector2 lastSuccessfulMousePositionSent;
 
@@ -89,35 +101,44 @@ namespace UnityWebBrowser.Core
 
             while (Application.isPlaying)
             {
-                if(!browserClient.IsConnected)
+                yield return 0;
+
+                if (!browserClient.IsConnected)
                     continue;
-                
+
+                if (disableMouseInputs && disableKeyboardInputs)
+                    continue;
+
                 if (GetMousePosition(out Vector2 pos))
                 {
-                    //Mouse position
-                    if (lastSuccessfulMousePositionSent != pos)
+                    if (!disableMouseInputs)
                     {
-                        browserClient.SendMouseMove(pos);
-                        lastSuccessfulMousePositionSent = pos;
+                        //Mouse position
+                        if (lastSuccessfulMousePositionSent != pos)
+                        {
+                            browserClient.SendMouseMove(pos);
+                            lastSuccessfulMousePositionSent = pos;
+                        }
+
+                        //Mouse scroll
+                        float scroll = inputHandler.GetScroll();
+                        scroll *= browserClient.BrowserTexture.height;
+
+                        if (scroll != 0)
+                            browserClient.SendMouseScroll(pos, (int) scroll);
                     }
-
-                    //Mouse scroll
-                    float scroll = inputHandler.GetScroll();
-                    scroll *= browserClient.BrowserTexture.height;
-
-                    if (scroll != 0)
-                        browserClient.SendMouseScroll(pos, (int) scroll);
                     
-                    //Input
-                    WindowsKey[] keysDown = inputHandler.GetDownKeys();
-                    WindowsKey[] keysUp = inputHandler.GetUpKeys();
-                    string inputBuffer = inputHandler.GetFrameInputBuffer();
+                    if (!disableKeyboardInputs)
+                    {
+                        //Input
+                        WindowsKey[] keysDown = inputHandler.GetDownKeys();
+                        WindowsKey[] keysUp = inputHandler.GetUpKeys();
+                        string inputBuffer = inputHandler.GetFrameInputBuffer();
                     
-                    if(keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
-                        browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer);
+                        if(keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
+                            browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer);
+                    }
                 }
-                
-                yield return 0;
             }
             
             inputHandler.OnStop();
@@ -125,6 +146,9 @@ namespace UnityWebBrowser.Core
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (disableMouseInputs)
+                return;
+
             MouseClickType clickType = eventData.button switch
             {
                 PointerEventData.InputButton.Left => MouseClickType.Left,
@@ -139,6 +163,9 @@ namespace UnityWebBrowser.Core
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (disableMouseInputs)
+                return;
+
             MouseClickType clickType = eventData.button switch
             {
                 PointerEventData.InputButton.Left => MouseClickType.Left,
