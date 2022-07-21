@@ -124,7 +124,7 @@ namespace UnityWebBrowser.Core
                         float scroll = inputHandler.GetScroll();
                         scroll *= browserClient.BrowserTexture.height;
 
-                        if (!disableMouseInputs && scroll != 0)
+                        if (scroll != 0)
                             browserClient.SendMouseScroll(pos, (int) scroll);
                     }
                     
