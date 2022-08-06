@@ -6,8 +6,8 @@
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "2.0.2",
-    "com.cysharp.unitask": "2.2.5",
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.cysharp.unitask": "2.3.1",
     "org.nuget.voltrpc": "2.0.0"
   },
   "samples": [

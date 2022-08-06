@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.unitask": {
-      "version": "2.2.5",
+      "version": "2.3.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -147,8 +147,8 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.2",
-        "com.cysharp.unitask": "2.2.5",
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.cysharp.unitask": "2.3.1",
         "org.nuget.voltrpc": "2.0.0"
       }
     },
@@ -203,8 +203,8 @@
       }
     },
     "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "5.0.0",
-      "depth": 1,
+      "version": "6.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"

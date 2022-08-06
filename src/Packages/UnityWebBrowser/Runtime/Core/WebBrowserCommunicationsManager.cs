@@ -196,7 +196,7 @@ namespace UnityWebBrowser.Core
             if (!IsConnected)
                 return;
 
-            UniTask.Run(() =>
+            UniTask.RunOnThreadPool(() =>
             {
                 sendEventMarker.Begin();
                 try
@@ -212,6 +212,7 @@ namespace UnityWebBrowser.Core
                 }
 
                 sendEventMarker.End();
+                return UniTask.CompletedTask;
             });
         }
 
