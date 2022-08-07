@@ -173,7 +173,7 @@ namespace UnityWebBrowser.Core
 
         public void Listen()
         {
-            ipcHost.StartListening();
+            ipcHost.StartListeningAsync().ConfigureAwait(false);
         }
 
         private void ExecuteOnUnity(Action action, [CallerMemberName] string memberName = "")

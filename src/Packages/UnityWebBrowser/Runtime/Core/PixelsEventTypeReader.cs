@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using UnityWebBrowser.Shared.Events;
+using VoltRpc.Extension.Memory;
 using VoltRpc.IO;
 using VoltRpc.Types;
 
@@ -31,12 +32,14 @@ namespace UnityWebBrowser.Core
             int size = reader.ReadInt();
             if (size <= 0)
                 return default;
+
+            ReadOnlySpan<byte> data = reader.ReadBytesSpanSlice(size);
+            if (!pixelData.IsCreated || pixelData.Length != size)
+                return default;
             
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                byte data = reader.ReadByte();
-                if(pixelData.IsCreated && pixelData.Length == size)
-                    pixelData[i] = data;
+                pixelData[i] = data[i];
             }
 
             return default;

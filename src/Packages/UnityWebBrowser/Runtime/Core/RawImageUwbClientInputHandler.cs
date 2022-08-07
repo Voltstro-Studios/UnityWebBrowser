@@ -136,7 +136,7 @@ namespace UnityWebBrowser.Core
                         string inputBuffer = inputHandler.GetFrameInputBuffer();
                     
                         if(keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
-                            browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer);
+                            browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer.ToCharArray());
                     }
                 }
             }

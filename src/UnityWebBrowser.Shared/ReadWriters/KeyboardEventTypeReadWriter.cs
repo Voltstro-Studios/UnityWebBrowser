@@ -1,4 +1,5 @@
 ﻿using UnityWebBrowser.Shared.Events;
+using VoltRpc.Extension.Memory;
 using VoltRpc.IO;
 using VoltRpc.Types;
 
@@ -8,7 +9,7 @@ internal sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent
 {
     public override void Write(BufferedWriter writer, KeyboardEvent keyboardEvent)
     {
-        writer.WriteString(keyboardEvent.Chars);
+        WriteChars(writer, keyboardEvent.Chars);
         WriteKeys(writer, keyboardEvent.KeysDown);
         WriteKeys(writer, keyboardEvent.KeysUp);
     }
@@ -17,10 +18,30 @@ internal sealed class KeyboardEventTypeReadWriter : TypeReadWriter<KeyboardEvent
     {
         return new KeyboardEvent
         {
-            Chars = reader.ReadString(),
+            Chars = ReadChars(reader),
             KeysDown = ReadKeys(reader),
             KeysUp = ReadKeys(reader)
         };
+    }
+
+    private void WriteChars(BufferedWriter writer, char[] chars)
+    {
+        writer.WriteInt(chars.Length);
+        for (int i = 0; i < chars.Length; i++)
+        {
+            writer.WriteChar(chars[i]);
+        }
+    }
+
+    private char[] ReadChars(BufferedReader reader)
+    {
+        char[] chars = new char[reader.ReadInt()];
+        for (int i = 0; i < chars.Length; i++)
+        {
+            chars[i] = reader.ReadChar();
+        }
+
+        return chars;
     }
 
     private void WriteKeys(BufferedWriter writer, WindowsKey[] keys)

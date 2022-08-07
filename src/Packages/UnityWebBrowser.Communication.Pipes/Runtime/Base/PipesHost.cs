@@ -36,15 +36,10 @@ namespace UnityWebBrowser.Communication.Pipes.Base
         }
 
         /// <inheritdoc />
-        public override Task StartListening()
+        public override void StartListening()
         {
             CheckDispose();
-            Task.Factory.StartNew(SeverLoop, TaskCreationOptions.LongRunning);
-            return Task.CompletedTask;
-        }
-
-        private void SeverLoop()
-        {
+        
             Logger.Debug("Named Pipes host now listening...");
 
             IsRunning = true;
@@ -64,7 +59,7 @@ namespace UnityWebBrowser.Communication.Pipes.Base
                     Logger.Error($"An error occured while handling incoming pipes connections! {ex}");
                 }
         }
-
+        
         private Task HandleClient(NamedPipeServerStream stream)
         {
             Logger.Debug("Accepted client...");

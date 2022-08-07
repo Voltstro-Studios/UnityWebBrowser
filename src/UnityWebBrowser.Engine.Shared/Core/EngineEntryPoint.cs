@@ -245,7 +245,7 @@ public abstract class EngineEntryPoint : IDisposable
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
-            ipcHost.StartListening();
+            ipcHost.StartListeningAsync().ConfigureAwait(false);
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClientControls));

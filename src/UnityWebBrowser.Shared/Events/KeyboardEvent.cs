@@ -18,5 +18,5 @@ public struct KeyboardEvent
     /// <summary>
     ///     The characters that were pressed this frame
     /// </summary>
-    public string Chars { get; set; }
+    public char[] Chars { get; set; }
 }

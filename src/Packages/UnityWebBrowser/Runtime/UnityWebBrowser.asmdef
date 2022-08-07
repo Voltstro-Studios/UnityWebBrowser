@@ -19,6 +19,7 @@
     "precompiledReferences": [
         "UnityWebBrowser.Shared.dll",
         "VoltRpc.dll",
+        "VoltRpc.Extension.Memory.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
