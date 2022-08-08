@@ -15,7 +15,7 @@
 
     <ItemGroup>
         <PackageReference Include="VoltRpc" Version="2.0.0" />
-        <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.0.1" />
+        <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.1.0" />
     </ItemGroup>
 
     <!-- Create debug symbols since this will be shared with Unity as well -->
