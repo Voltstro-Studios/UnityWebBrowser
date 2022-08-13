@@ -6,6 +6,6 @@
   "description": "Additional requirement for UWB on Unix systems (Linux & MacOS).",
   "author": "Voltstro",
   "dependencies": {
-    "dev.voltstro.unity.mono.unix": "1.0.0"
+    "dev.voltstro.nuget.mono.unix": "1.0.0"
   }
 }

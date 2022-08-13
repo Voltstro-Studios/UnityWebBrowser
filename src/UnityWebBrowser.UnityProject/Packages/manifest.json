@@ -8,8 +8,8 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.toolchain.linux-x86_64": "2.0.2",
     "com.unity.ugui": "1.0.0",
-    "dev.voltstro.unityimgui": "https://github.com/Voltstro-Studios/uimgui.git",
-    "dev.voltstro.unityvoltbuilder": "4.1.1",
+    "dev.voltstro.unityimgui": "5.0.1",
+    "dev.voltstro.unityvoltbuilder": "4.1.2",
     "dev.voltstro.unitywebbrowser": "file:../../Packages/UnityWebBrowser",
     "dev.voltstro.unitywebbrowser.communication.pipes": "file:../../Packages/UnityWebBrowser.Communication.Pipes",
     "dev.voltstro.unitywebbrowser.engine.cef": "file:../../Packages/UnityWebBrowser.Engine.Cef",
@@ -17,7 +17,6 @@
     "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",
     "dev.voltstro.unitywebbrowser.unix-support": "file:../../Packages/UnityWebBrowser.Unix-Support",
-    "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0",
     "com.unity.modules.imgui": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
@@ -28,27 +27,20 @@
   ],
   "scopedRegistries": [
     {
-      "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
-      "scopes": [
-        "org.nuget"
-      ]
-    },
-    {
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
         "com.cysharp.slnmerge",
         "com.cysharp.unitask",
-        "com.neuecc.messagepack",
         "com.openupm"
       ]
     },
     {
-      "name": "Voltstro-Studios UPM",
-      "url": "https://pkgs.dev.azure.com/Voltstro-Studios/UnityPackages/_packaging/UPM/npm/registry/",
+      "name": "Voltstro UPM",
+      "url": "https://upm-pkgs.voltstro.dev",
       "scopes": [
-        "dev.voltstro"
+        "dev.voltstro",
+        "org.nuget"
       ]
     }
   ]

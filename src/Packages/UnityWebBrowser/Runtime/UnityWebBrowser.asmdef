@@ -2,6 +2,7 @@
     "name": "UnityWebBrowser",
     "rootNamespace": "UnityWebBrowser",
     "references": [
+        "VoltstroStudios.NativeArraySpanExtensions",
         "UnityWebBrowser.UnixSupport",
         "Unity.TextMeshPro",
         "Unity.InputSystem",

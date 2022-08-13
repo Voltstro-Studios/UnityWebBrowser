@@ -25,35 +25,28 @@ MonoBehaviour:
     m_Scopes: []
     m_IsDefault: 1
     m_Capabilities: 7
-  - m_Id: scoped:Unity NuGet
-    m_Name: Unity NuGet
-    m_Url: https://unitynuget-registry.azurewebsites.net
-    m_Scopes:
-    - org.nuget
-    m_IsDefault: 0
-    m_Capabilities: 0
   - m_Id: scoped:package.openupm.com
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
     m_Scopes:
     - com.cysharp.slnmerge
     - com.cysharp.unitask
-    - com.neuecc.messagepack
     - com.openupm
     m_IsDefault: 0
     m_Capabilities: 0
-  - m_Id: scoped:Voltstro-Studios UPM
-    m_Name: Voltstro-Studios UPM
-    m_Url: https://pkgs.dev.azure.com/Voltstro-Studios/UnityPackages/_packaging/UPM/npm/registry
+  - m_Id: scoped:Voltstro UPM
+    m_Name: Voltstro UPM
+    m_Url: https://upm-pkgs.voltstro.dev
     m_Scopes:
     - dev.voltstro
+    - org.nuget
     m_IsDefault: 0
     m_Capabilities: 0
-  m_UserSelectedRegistryName: Voltstro-Studios UPM
+  m_UserSelectedRegistryName: Voltstro UPM
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
     m_UserModificationsInstanceId: -826
-    m_OriginalInstanceId: -830
+    m_OriginalInstanceId: -828
   m_LoadAssets: 0
