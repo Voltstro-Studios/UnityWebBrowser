@@ -1,4 +1,5 @@
-﻿using VoltRpc.Types;
+﻿using VoltRpc.Extension.Vectors.Types;
+using VoltRpc.Types;
 
 namespace UnityWebBrowser.Shared.ReadWriters;
 
@@ -11,9 +12,6 @@ internal static class ReadWriterUtils
         readerWriterManager.AddType(new MouseMoveEventTypeReadWriter());
         readerWriterManager.AddType(new MouseScrollEventTypeReadWriter());
         readerWriterManager.AddType(new ResolutionTypeReadWriter());
-        
-        //TODO: Won't need this when we push these types to VoltRpc
-        readerWriterManager.AddType(new Vector2TypeReadWriter());
-        readerWriterManager.AddType(new GuidTypeReaderWriter());
+        readerWriterManager.InstallVectorsExtension();
     }
 }
