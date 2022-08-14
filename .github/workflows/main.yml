@@ -27,10 +27,10 @@ jobs:
 
     #Node modules cache for the UnityWebBrowser.Pages project
     - name: Pages Cache
-      uses: actions/cache@v3.0.2
+      uses: actions/cache@v3.0.7
       with:
         path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
-        key: Node-Cache
+        key: Cache-Pages
 
     #Build pages project
     - name: Build Pages
@@ -46,13 +46,13 @@ jobs:
 
     #Unity's cache
     - name: Unity Cache
-      uses: actions/cache@v3.0.2
+      uses: actions/cache@v3.0.7
       with:
         path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
-        key: Library-Cache
+        key: Cache-Unity
 
     - name: Build Unity
-      uses: game-ci/unity-builder@v2.0.3
+      uses: game-ci/unity-builder@v2.1.0
       env:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
