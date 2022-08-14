@@ -36,6 +36,11 @@ namespace UnityWebBrowser.Core
         {
         }
 
+        private void Update()
+        {
+            browserClient.UpdateFps();
+        }
+
         private void FixedUpdate()
         {
             browserClient.LoadTextureData();

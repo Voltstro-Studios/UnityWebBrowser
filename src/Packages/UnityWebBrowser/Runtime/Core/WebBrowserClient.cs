@@ -165,6 +165,11 @@ namespace UnityWebBrowser.Core
         /// </summary>
         public bool ReadySignalReceived { get; internal set; }
 
+        /// <summary>
+        ///     Internal FPS of pixels communication between Unity and the Engine
+        /// </summary>
+        public int FPS { get; private set; }
+
         #region Log Path
 
         private FileInfo logPath;
@@ -461,7 +466,7 @@ namespace UnityWebBrowser.Core
                         return;
                     }
                     
-                    Thread.Sleep(25);
+                    Thread.Sleep(5);
 
                     if (token.IsCancellationRequested)
                         return;
@@ -480,6 +485,8 @@ namespace UnityWebBrowser.Core
                         }
                     }
                     markerGetPixels.End();
+
+                    frames++;
                 }
                 catch (TaskCanceledException)
                 {
@@ -506,6 +513,28 @@ namespace UnityWebBrowser.Core
             texture.Apply(false);
             markerLoadTextureApply.End();
         }
+
+        #region FPS
+
+        private int frames;
+        private float lastUpdateTime;
+        
+        /// <summary>
+        ///     Updates FPS values
+        ///     <para>Normal usage shouldn't require invoking this</para>
+        /// </summary>
+        public void UpdateFps()
+        {
+            float currentTime = Time.time;
+            if (currentTime - lastUpdateTime > 1)
+            {
+                lastUpdateTime = currentTime;
+                FPS = frames;
+                frames = 0;
+            }
+        }
+
+        #endregion
 
         #endregion
 

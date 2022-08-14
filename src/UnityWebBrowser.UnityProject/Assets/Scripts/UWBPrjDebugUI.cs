@@ -100,7 +100,8 @@ namespace UnityWebBrowser.Prj
             {
                 ImGui.Text("UWB Debug UI");
                 ImGui.Separator();
-                ImGui.Text($"FPS: {fps}");
+                ImGui.Text($"Player FPS: {fps}");
+                ImGui.Text($"UWB FPS: {webBrowserUIBasic.browserClient.FPS}");
                 ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
                 ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
                 
