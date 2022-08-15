@@ -1,11 +1,11 @@
 {
-  "version": "2.0.0-preview.3-102.0.10",
-  "description": "CEF Engine for Unity Web Browser (Windows x64)",
-  "unity": "2021.2",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-102.0.10"
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-104.4.22"
   },
-  "author": "Voltstro",
   "displayName": "Unity Web Browser CEF Engine (Windows x64)",
+  "description": "CEF Engine for Unity Web Browser (Windows x64)",
+  "version": "2.0.0-preview.3-104.4.22",
+  "unity": "2021.2",
+  "author": "Voltstro",
   "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64"
 }
