@@ -1,6 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file at https://github.com/dotnet/winforms/blob/main/LICENSE.TXT for more information.
+// UnityWebBrowser (UWB)
+// Copyright (c) 2021-2022 Voltstro-Studios
+// 
+// This project is under the MIT license. See the LICENSE.md file for more details.
 
 //Taken from: https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/src/System/Windows/Forms/Keys.cs
 

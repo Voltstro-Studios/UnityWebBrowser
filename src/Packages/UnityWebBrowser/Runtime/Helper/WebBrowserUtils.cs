@@ -1,3 +1,8 @@
+// UnityWebBrowser (UWB)
+// Copyright (c) 2021-2022 Voltstro-Studios
+// 
+// This project is under the MIT license. See the LICENSE.md file for more details.
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -96,14 +101,15 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             //There probs something here that could be done better, if you know, send in a PR
             //Based off: http://answers.unity.com/answers/1455168/view.html
 
-            if(graphic.Equals(null))
+            if (graphic.Equals(null))
                 throw new ArgumentNullException(nameof(graphic), "Image cannot be null!");
 
             Camera camera = graphic.canvas.worldCamera;
 
             position = new Vector2();
             RectTransform uiImageObjectRectTransform = graphic.rectTransform;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRectTransform, screenPosition, camera,
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRectTransform, screenPosition,
+                    camera,
                     out Vector2 localCursor)) return false;
 
             Rect uiImageObjectRect = uiImageObjectRectTransform.rect;

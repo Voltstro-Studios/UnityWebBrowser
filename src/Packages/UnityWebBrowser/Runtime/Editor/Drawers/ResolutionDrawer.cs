@@ -1,4 +1,9 @@
-﻿#if UNITY_EDITOR
+﻿// UnityWebBrowser (UWB)
+// Copyright (c) 2021-2022 Voltstro-Studios
+// 
+// This project is under the MIT license. See the LICENSE.md file for more details.
+
+#if UNITY_EDITOR
 
 using UnityEditor;
 using UnityEngine;

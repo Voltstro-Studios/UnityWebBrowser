@@ -1,4 +1,9 @@
-﻿using System;
+﻿// UnityWebBrowser (UWB)
+// Copyright (c) 2021-2022 Voltstro-Studios
+// 
+// This project is under the MIT license. See the LICENSE.md file for more details.
+
+using System;
 using System.Numerics;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;

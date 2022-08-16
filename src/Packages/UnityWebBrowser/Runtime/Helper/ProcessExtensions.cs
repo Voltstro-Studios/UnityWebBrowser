@@ -1,5 +1,7 @@
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See https://github.com/dotnet/extensions/blob/ffb7c20fb22a31ac31d3a836a8455655867e8e16/LICENSE.txt for license information.
+// UnityWebBrowser (UWB)
+// Copyright (c) 2021-2022 Voltstro-Studios
+// 
+// This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
 using System.Collections.Generic;

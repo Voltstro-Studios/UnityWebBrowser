@@ -18,6 +18,7 @@ ProjectSection(SolutionItems) = preProject
 	Imports\NativeDefines.props = Imports\NativeDefines.props
 	Imports\NatvieDefines.targets = Imports\NatvieDefines.targets
 	Imports\Properties.props = Imports\Properties.props
+	.editorconfig = .editorconfig
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltstroStudios.UnityWebBrowser.Engine.Shared", "VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj", "{2AC661BC-6119-49AF-876C-52F756B10E42}"
