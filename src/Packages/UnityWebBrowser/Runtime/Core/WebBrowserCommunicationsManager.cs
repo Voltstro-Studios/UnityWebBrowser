@@ -229,12 +229,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteOnUnity(() => client.InvokeLoadStart(url));
         }
 
-        //TODO: Remove
-        public void OnPopup(string url)
-        {
-            //ExecuteOnUnity(() => client.InvokeOnPopup(url));
-        }
-
         public void LoadFinish(string url)
         {
             ExecuteOnUnity(() => client.InvokeLoadFinish(url));
