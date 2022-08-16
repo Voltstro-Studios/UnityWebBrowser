@@ -1,0 +1,23 @@
+{
+  "name": "VoltstroStudios.UnityWebBrowser.Communication.Pipes",
+  "rootNamespace": "VoltstroStudios.UnityWebBrowser.Communication.Pipes",
+  "references": [
+    "VoltstroStudios.UnityWebBrowser",
+    "VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base"
+  ],
+  "includePlatforms": [
+    "Editor",
+    "WindowsStandalone64"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "VoltRpc.dll",
+    "VoltstroStudios.UnityWebBrowser.Shared.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

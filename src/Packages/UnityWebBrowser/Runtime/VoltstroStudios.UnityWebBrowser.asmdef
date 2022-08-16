@@ -1,0 +1,41 @@
+{
+  "name": "VoltstroStudios.UnityWebBrowser",
+  "rootNamespace": "VoltstroStudios.UnityWebBrowser",
+  "references": [
+    "VoltstroStudios.NativeArraySpanExtensions",
+    "VoltstroStudios.UnityWebBrowser.UnixSupport",
+    "Unity.TextMeshPro",
+    "Unity.InputSystem",
+    "UniTask"
+  ],
+  "includePlatforms": [
+    "Editor",
+    "LinuxStandalone64",
+    "macOSStandalone",
+    "WindowsStandalone64"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "VoltstroStudios.UnityWebBrowser.Shared.dll",
+    "VoltRpc.dll",
+    "VoltRpc.Extension.Memory.dll",
+    "Newtonsoft.Json.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.textmeshpro",
+      "expression": "3.0",
+      "define": "TMP_ENABLED"
+    },
+    {
+      "name": "dev.voltstro.unitywebbrowser.unix-support",
+      "expression": "1",
+      "define": "UNIX_SUPPORT"
+    }
+  ],
+  "noEngineReferences": false
+}

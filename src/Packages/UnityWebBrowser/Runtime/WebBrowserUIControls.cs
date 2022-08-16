@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityWebBrowser.Core;
+using VoltstroStudios.UnityWebBrowser.Core;
 
-namespace UnityWebBrowser
+namespace VoltstroStudios.UnityWebBrowser
 {
     /// <summary>
     ///     Included UI controller for UWB.

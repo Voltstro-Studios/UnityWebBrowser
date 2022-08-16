@@ -1,7 +1,7 @@
 using System;
 using UnityWebBrowser.Engine.Cef.Core;
-using UnityWebBrowser.Engine.Shared.Core;
-using UnityWebBrowser.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;

@@ -1,9 +1,9 @@
 using System;
 using Newtonsoft.Json;
 using UnityEngine.Scripting;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Logging
+namespace VoltstroStudios.UnityWebBrowser.Logging
 {
     [Preserve]
     internal class JsonLogSeverityConverter : JsonConverter

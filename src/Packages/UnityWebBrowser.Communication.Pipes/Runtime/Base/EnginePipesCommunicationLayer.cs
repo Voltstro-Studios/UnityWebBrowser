@@ -1,7 +1,7 @@
-using UnityWebBrowser.Shared.Communications;
 using VoltRpc.Communication;
+using VoltstroStudios.UnityWebBrowser.Shared.Communications;
 
-namespace UnityWebBrowser.Communication.Pipes.Base
+namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base
 {
     public class EnginePipesCommunicationLayer : ICommunicationLayer
     {

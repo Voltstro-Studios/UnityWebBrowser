@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using VoltRpc.Communication;
 using VoltRpc.Logging;
 
-namespace UnityWebBrowser.Communication.Pipes.Base
+namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base
 {
     /// <summary>
     ///     <see cref="Host" /> using named pipes
@@ -39,7 +39,7 @@ namespace UnityWebBrowser.Communication.Pipes.Base
         public override void StartListening()
         {
             CheckDispose();
-        
+
             Logger.Debug("Named Pipes host now listening...");
 
             IsRunning = true;
@@ -59,7 +59,7 @@ namespace UnityWebBrowser.Communication.Pipes.Base
                     Logger.Error($"An error occured while handling incoming pipes connections! {ex}");
                 }
         }
-        
+
         private Task HandleClient(NamedPipeServerStream stream)
         {
             Logger.Debug("Accepted client...");

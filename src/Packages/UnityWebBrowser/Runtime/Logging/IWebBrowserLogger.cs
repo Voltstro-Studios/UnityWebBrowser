@@ -1,4 +1,4 @@
-﻿namespace UnityWebBrowser.Logging
+﻿namespace VoltstroStudios.UnityWebBrowser.Logging
 {
     /// <summary>
     ///     Interface for the web browser's logger.

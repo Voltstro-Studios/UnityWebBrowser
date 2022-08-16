@@ -3,7 +3,7 @@
 using System.IO;
 using Mono.Unix;
 
-namespace UnityWebBrowser.UnixSupport
+namespace VoltstroStudios.UnityWebBrowser.UnixSupport
 {
     /// <summary>
     ///     Unix support file permissions
@@ -21,9 +21,9 @@ namespace UnityWebBrowser.UnixSupport
             if (!fileInfo.Exists)
                 throw new FileNotFoundException("File was not found!", fileLocation);
 
-            if (fileInfo.FileAccessPermissions.HasFlag(FileAccessPermissions.UserReadWriteExecute)) 
+            if (fileInfo.FileAccessPermissions.HasFlag(FileAccessPermissions.UserReadWriteExecute))
                 return false;
-        
+
             fileInfo.FileAccessPermissions |=
                 fileInfo.FileAccessPermissions | FileAccessPermissions.UserReadWriteExecute;
             fileInfo.Refresh();

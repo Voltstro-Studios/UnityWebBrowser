@@ -1,27 +1,26 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityWebBrowser.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 
-namespace UnityWebBrowser.Editor
+namespace VoltstroStudios.UnityWebBrowser.Editor
 {
     public static class EditorHelper
     {
-        public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
+        public static List<T> FindAssetsByType<T>() where T : Object
         {
-            List<T> assets = new List<T>();
+            List<T> assets = new();
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-            for( int i = 0; i < guids.Length; i++ )
+            for (int i = 0; i < guids.Length; i++)
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
-                T asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
-                if( asset != null )
-                {
-                    assets.Add(asset);
-                }
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
+                T asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+                if (asset != null) assets.Add(asset);
             }
+
             return assets;
         }
 

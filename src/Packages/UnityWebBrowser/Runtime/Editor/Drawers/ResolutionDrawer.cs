@@ -2,9 +2,9 @@
 
 using UnityEditor;
 using UnityEngine;
-using Resolution = UnityWebBrowser.Shared.Resolution;
+using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
 
-namespace UnityWebBrowser.Editor.Drawers
+namespace VoltstroStudios.UnityWebBrowser.Editor.Drawers
 {
     [CustomPropertyDrawer(typeof(Resolution))]
     internal class ResolutionDrawer : PropertyDrawer

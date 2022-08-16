@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UnityWebBrowser.Tests.Editor
+namespace VoltstroStudios.UnityWebBrowser.Tests.Editor
 {
     public class EditorHelperFindAssetTestAsset : ScriptableObject
     {

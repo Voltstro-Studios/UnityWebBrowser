@@ -8,19 +8,19 @@ using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
-using UnityWebBrowser.Communication;
-using UnityWebBrowser.Core.Engines;
-using UnityWebBrowser.Core.Popups;
-using UnityWebBrowser.Events;
-using UnityWebBrowser.Helper;
-using UnityWebBrowser.Logging;
-using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Communication;
+using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Core.Popups;
+using VoltstroStudios.UnityWebBrowser.Events;
+using VoltstroStudios.UnityWebBrowser.Helper;
+using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Object = UnityEngine.Object;
-using Resolution = UnityWebBrowser.Shared.Resolution;
+using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
     ///     The main object responsible for UWB.
@@ -42,7 +42,7 @@ namespace UnityWebBrowser.Core
 
         internal static ProfilerMarker markerGetPixels = new("UWB.GetPixels");
         internal static ProfilerMarker markerGetPixelsRpc = new("UWB.GetPixels.RPC");
-        
+
         internal static ProfilerMarker markerLoadTextureApply = new("UWB.LoadTexture.Apply");
 
         #endregion
@@ -112,8 +112,7 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     How to handle popups
         /// </summary>
-        [Tooltip("How to handle popups")]
-        public PopupAction popupAction;
+        [Tooltip("How to handle popups")] public PopupAction popupAction;
 
         /// <summary>
         ///     Proxy Settings
@@ -158,8 +157,8 @@ namespace UnityWebBrowser.Core
         /// <summary>
         ///     Are we connected to the UW engine process
         /// </summary>
-        public bool IsConnected => communicationsManager is {IsConnected: true};
-        
+        public bool IsConnected => communicationsManager is { IsConnected: true };
+
         /// <summary>
         ///     The UWB engine has signaled that it is ready
         /// </summary>
@@ -225,7 +224,7 @@ namespace UnityWebBrowser.Core
         #region Logger
 
         public ProcessLogHandler processLogHandler;
-        
+
         /// <summary>
         ///     Internal usage of <see cref="IWebBrowserLogger" />
         /// </summary>
@@ -273,7 +272,7 @@ namespace UnityWebBrowser.Core
             communicationLayer.IsInUse = true;
 
             //Setup texture
-            BrowserTexture = new Texture2D((int) resolution.Width, (int) resolution.Height, TextureFormat.BGRA32, false,
+            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false,
                 false);
             WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
 
@@ -328,14 +327,14 @@ namespace UnityWebBrowser.Core
                 cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
                 argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
             }
-            
+
             //Popups
             argsBuilder.AppendArgument("popup-action", popupAction, true);
 
             //Setup web RTC
             if (webRtc)
                 argsBuilder.AppendArgument("web-rtc", webRtc);
-            
+
             argsBuilder.AppendArgument("local-storage", localStorage);
 
             //Setup remote debugging
@@ -349,7 +348,7 @@ namespace UnityWebBrowser.Core
 
             if (!string.IsNullOrWhiteSpace(proxySettings.Password))
                 argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
-            
+
             //Make sure not to include this, its for testing
 #if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 
             //argsBuilder.AppendArgument("start-delay", 2000);
@@ -361,13 +360,13 @@ namespace UnityWebBrowser.Core
             //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
-            
+
             cancellationToken = new CancellationTokenSource();
 
             //Start the engine process
             UniTask.Create(() => StartEngineProcess(arguments)).ContinueWith(WaitForEngineReadyTask).Forget();
         }
-        
+
         #region Starting
 
         private UniTask StartEngineProcess(string engineProcessArguments)
@@ -383,7 +382,7 @@ namespace UnityWebBrowser.Core
                 logger.Error($"An error occured while setting up the engine process! {ex}");
                 throw;
             }
-            
+
             return UniTask.CompletedTask;
         }
 
@@ -465,12 +464,12 @@ namespace UnityWebBrowser.Core
                         cancellationToken.Cancel();
                         return;
                     }
-                    
+
                     Thread.Sleep(5);
 
                     if (token.IsCancellationRequested)
                         return;
-                    
+
                     markerGetPixels.Begin();
                     {
                         lock (resizeLock)
@@ -480,7 +479,7 @@ namespace UnityWebBrowser.Core
                                 communicationsManager.GetPixels();
                             }
                             markerGetPixelsRpc.End();
-                        
+
                             textureData.CopyFrom(nextTextureData);
                         }
                     }
@@ -508,7 +507,7 @@ namespace UnityWebBrowser.Core
                 return;
 
             Texture2D texture = BrowserTexture;
- 
+
             markerLoadTextureApply.Begin();
             texture.Apply(false);
             markerLoadTextureApply.End();
@@ -518,7 +517,7 @@ namespace UnityWebBrowser.Core
 
         private int frames;
         private float lastUpdateTime;
-        
+
         /// <summary>
         ///     Updates FPS values
         ///     <para>Normal usage shouldn't require invoking this</para>
@@ -600,7 +599,7 @@ namespace UnityWebBrowser.Core
         {
             OnFullscreen?.Invoke(fullscreen);
         }
-        
+
         /// <summary>
         ///     Invoked when the browser gets a popup
         /// </summary>
@@ -643,8 +642,8 @@ namespace UnityWebBrowser.Core
 
             communicationsManager.SendMouseMoveEvent(new MouseMoveEvent
             {
-                MouseX = (int) mousePos.x,
-                MouseY = (int) mousePos.y
+                MouseX = (int)mousePos.x,
+                MouseY = (int)mousePos.y
             });
         }
 
@@ -662,8 +661,8 @@ namespace UnityWebBrowser.Core
 
             communicationsManager.SendMouseClickEvent(new MouseClickEvent
             {
-                MouseX = (int) mousePos.x,
-                MouseY = (int) mousePos.y,
+                MouseX = (int)mousePos.x,
+                MouseY = (int)mousePos.y,
                 MouseClickCount = clickCount,
                 MouseClickType = clickType,
                 MouseEventType = eventType
@@ -681,8 +680,8 @@ namespace UnityWebBrowser.Core
 
             communicationsManager.SendMouseScrollEvent(new MouseScrollEvent
             {
-                MouseX = (int) mousePos.x,
-                MouseY = (int) mousePos.y,
+                MouseX = (int)mousePos.x,
+                MouseY = (int)mousePos.y,
                 MouseScroll = mouseScroll
             });
         }
@@ -697,16 +696,16 @@ namespace UnityWebBrowser.Core
 
             communicationsManager.LoadUrl(url);
         }
-        
+
         /// <summary>
         ///     Gets the mouse scroll position
         ///     <para>THIS IS INVOKED ON THE THREAD THAT IS CALLING THIS AND IS BLOCKING</para>
         /// </summary>
-        /// <returns>Returns the mouse scroll position as a <see cref="Vector2"/></returns>
+        /// <returns>Returns the mouse scroll position as a <see cref="Vector2" /></returns>
         public Vector2 GetScrollPosition()
         {
             CheckIfIsReadyAndConnected();
-            
+
             //Gotta convert it to a Unity vector2
             System.Numerics.Vector2 position = communicationsManager.GetScrollPosition();
             return new Vector2(position.X, position.Y);
@@ -776,10 +775,10 @@ namespace UnityWebBrowser.Core
 
             lock (resizeLock)
             {
-                BrowserTexture.Reinitialize((int) newResolution.Width, (int) newResolution.Height);
+                BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
                 textureData = BrowserTexture.GetRawTextureData<byte>();
                 communicationsManager.Resize(newResolution);
-            
+
                 nextTextureData.Dispose();
                 nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
                 communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
@@ -835,7 +834,7 @@ namespace UnityWebBrowser.Core
             logger.Debug("UWB shutdown...");
 
             cancellationToken?.Cancel();
-            
+
             //Destroy textures
             if (BrowserTexture != null)
                 Object.Destroy(BrowserTexture);
@@ -862,7 +861,7 @@ namespace UnityWebBrowser.Core
             }
 
             //We are no longer using our communication manager
-            if(communicationLayer != null)
+            if (communicationLayer != null)
                 communicationLayer.IsInUse = false;
 
             //Kill the process if we haven't already
@@ -877,7 +876,7 @@ namespace UnityWebBrowser.Core
             //Dispose of buffers
             lock (resizeLock)
             {
-                if(nextTextureData.IsCreated)
+                if (nextTextureData.IsCreated)
                     nextTextureData.Dispose();
             }
         }

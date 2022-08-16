@@ -2,42 +2,86 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityWebBrowser.Helper;
-using UnityWebBrowser.Input;
-using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Helper;
+using VoltstroStudios.UnityWebBrowser.Input;
+using VoltstroStudios.UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared.Events;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
-    ///     Input handler for <see cref="RawImageUwbClientManager"/>.
+    ///     Input handler for <see cref="RawImageUwbClientManager" />.
     /// </summary>
-    public abstract class RawImageUwbClientInputHandler : RawImageUwbClientManager, 
-        IPointerEnterHandler, 
-        IPointerExitHandler, 
+    public abstract class RawImageUwbClientInputHandler : RawImageUwbClientManager,
+        IPointerEnterHandler,
+        IPointerExitHandler,
         IPointerDownHandler,
         IPointerUpHandler
     {
         /// <summary>
-        ///     The <see cref="WebBrowserInputHandler"/> to use
+        ///     The <see cref="WebBrowserInputHandler" /> to use
         /// </summary>
-        [Tooltip("The input handler to use")]
-        public WebBrowserInputHandler inputHandler;
+        [Tooltip("The input handler to use")] public WebBrowserInputHandler inputHandler;
 
         /// <summary>
         ///     Disable usage of mouse
         /// </summary>
-        [Tooltip("Disable usage of mouse")]
-        public bool disableMouseInputs;
+        [Tooltip("Disable usage of mouse")] public bool disableMouseInputs;
 
         /// <summary>
         ///     Disable usage of keyboard
         /// </summary>
-        [Tooltip("Disable usage of keyboard")]
-        public bool disableKeyboardInputs;
+        [Tooltip("Disable usage of keyboard")] public bool disableKeyboardInputs;
 
         private Coroutine keyboardAndMouseHandlerCoroutine;
         private Vector2 lastSuccessfulMousePositionSent;
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (disableMouseInputs)
+                return;
+
+            MouseClickType clickType = eventData.button switch
+            {
+                PointerEventData.InputButton.Left => MouseClickType.Left,
+                PointerEventData.InputButton.Right => MouseClickType.Right,
+                PointerEventData.InputButton.Middle => MouseClickType.Middle,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            if (GetMousePosition(out Vector2 pos))
+                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Down);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (browserClient is { IsConnected: false })
+                return;
+
+            keyboardAndMouseHandlerCoroutine = StartCoroutine(KeyboardAndMouseHandler());
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            StopKeyboardAndMouseHandler();
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (disableMouseInputs)
+                return;
+
+            MouseClickType clickType = eventData.button switch
+            {
+                PointerEventData.InputButton.Left => MouseClickType.Left,
+                PointerEventData.InputButton.Right => MouseClickType.Right,
+                PointerEventData.InputButton.Middle => MouseClickType.Middle,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            if (GetMousePosition(out Vector2 pos))
+                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Up);
+        }
 
         protected override void OnStart()
         {
@@ -51,7 +95,7 @@ namespace UnityWebBrowser.Core
             base.OnDestroyed();
             StopKeyboardAndMouseHandler();
         }
-        
+
         /// <summary>
         ///     Gets the current mouse position on the image
         /// </summary>
@@ -73,22 +117,9 @@ namespace UnityWebBrowser.Core
             return false;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (browserClient is {IsConnected: false})
-                return;
-
-            keyboardAndMouseHandlerCoroutine = StartCoroutine(KeyboardAndMouseHandler());
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            StopKeyboardAndMouseHandler();
-        }
-
         private void StopKeyboardAndMouseHandler()
         {
-            if(keyboardAndMouseHandlerCoroutine != null)
+            if (keyboardAndMouseHandlerCoroutine != null)
             {
                 StopCoroutine(keyboardAndMouseHandlerCoroutine);
                 inputHandler.OnStop();
@@ -125,57 +156,23 @@ namespace UnityWebBrowser.Core
                         scroll *= browserClient.BrowserTexture.height;
 
                         if (scroll != 0)
-                            browserClient.SendMouseScroll(pos, (int) scroll);
+                            browserClient.SendMouseScroll(pos, (int)scroll);
                     }
-                    
+
                     if (!disableKeyboardInputs)
                     {
                         //Input
                         WindowsKey[] keysDown = inputHandler.GetDownKeys();
                         WindowsKey[] keysUp = inputHandler.GetUpKeys();
                         string inputBuffer = inputHandler.GetFrameInputBuffer();
-                    
-                        if(keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
+
+                        if (keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
                             browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer.ToCharArray());
                     }
                 }
             }
-            
+
             inputHandler.OnStop();
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (disableMouseInputs)
-                return;
-
-            MouseClickType clickType = eventData.button switch
-            {
-                PointerEventData.InputButton.Left => MouseClickType.Left,
-                PointerEventData.InputButton.Right => MouseClickType.Right,
-                PointerEventData.InputButton.Middle => MouseClickType.Middle,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Down);
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            if (disableMouseInputs)
-                return;
-
-            MouseClickType clickType = eventData.button switch
-            {
-                PointerEventData.InputButton.Left => MouseClickType.Left,
-                PointerEventData.InputButton.Right => MouseClickType.Right,
-                PointerEventData.InputButton.Middle => MouseClickType.Middle,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Up);
         }
     }
 }

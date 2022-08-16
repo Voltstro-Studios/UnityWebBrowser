@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("2.0.0")]
 [assembly: AssemblyFileVersion("2.0.0")]
 
-[assembly: InternalsVisibleTo("UnityWebBrowser.Prj")]
-[assembly: InternalsVisibleTo("UnityWebBrowser.Editor")]
-[assembly: InternalsVisibleTo("UnityWebBrowser.Tests")]
+[assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Prj")]
+[assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Editor")]
+[assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Tests")]

@@ -4,37 +4,38 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.Profiling;
-using UnityWebBrowser.Core.Popups;
-using UnityWebBrowser.Logging;
-using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Core;
-using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Popups;
-using UnityWebBrowser.Shared.ReadWriters;
+using UnityEngine.Scripting;
 using VoltRpc.Communication;
+using VoltstroStudios.UnityWebBrowser.Core.Popups;
+using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Shared.ReadWriters;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
     ///     Handles the RPC methods and two-way communication between the UWB engine and Unity
     /// </summary>
-    [UnityEngine.Scripting.Preserve]
+    [Preserve]
     internal class WebBrowserCommunicationsManager : IEngineControls, IClientControls, IDisposable
     {
         private static ProfilerMarker sendEventMarker = new("UWB.SendEvent");
         public readonly WebBrowserClient client;
 
         private readonly IEngineControls engineProxy;
-
-        public readonly IWebBrowserLogger logger;
-        
-        private readonly object threadLock;
-        private readonly SynchronizationContext unityThread;
+        public readonly Client ipcClient;
 
         private readonly Host ipcHost;
-        public readonly Client ipcClient;
-        
+
+        public readonly IWebBrowserLogger logger;
+
         public readonly PixelsEventTypeReader pixelsEventTypeReader;
+
+        private readonly object threadLock;
+        private readonly SynchronizationContext unityThread;
 
         /// <summary>
         ///     Creates a new <see cref="WebBrowserCommunicationsManager" /> instance
@@ -61,7 +62,7 @@ namespace UnityWebBrowser.Core
 
             pixelsEventTypeReader = new PixelsEventTypeReader(browserClient.nextTextureData);
             ipcClient.TypeReaderWriterManager.AddType(pixelsEventTypeReader);
-            
+
             ipcClient.AddService<IEngineControls>();
             ipcClient.AddService<IPopupClientControls>();
             engineProxy = new EngineControls(ipcClient);

@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
-    ///     Implementation of <see cref="BaseUwbClientManager"/> for rendering to a <see cref="RawImage"/>
+    ///     Implementation of <see cref="BaseUwbClientManager" /> for rendering to a <see cref="RawImage" />
     /// </summary>
     [RequireComponent(typeof(RawImage))]
     public abstract class RawImageUwbClientManager : BaseUwbClientManager
@@ -13,7 +13,7 @@ namespace UnityWebBrowser.Core
         protected RawImage image;
 
         /// <summary>
-        ///     Get the <see cref="RawImage"/> instance
+        ///     Get the <see cref="RawImage" /> instance
         /// </summary>
         public RawImage Image => image;
 

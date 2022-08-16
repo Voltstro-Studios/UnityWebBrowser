@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityWebBrowser.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 
-namespace UnityWebBrowser.Core.Engines
+namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 {
     public abstract class Engine : ScriptableObject
     {
@@ -12,7 +12,7 @@ namespace UnityWebBrowser.Core.Engines
 #if UNITY_EDITOR
         public abstract string EngineFilesNotFoundError { get; }
         public abstract IEnumerable<EnginePlatformFiles> EngineFiles { get; }
-        
+
         [Serializable]
         public struct EnginePlatformFiles
         {

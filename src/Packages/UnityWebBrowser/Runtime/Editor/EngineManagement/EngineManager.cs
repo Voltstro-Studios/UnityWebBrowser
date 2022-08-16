@@ -3,10 +3,10 @@
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityWebBrowser.Core.Engines;
-using UnityWebBrowser.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 
-namespace UnityWebBrowser.Editor.EngineManagement
+namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
 {
     public static class EngineManager
     {
@@ -22,19 +22,24 @@ namespace UnityWebBrowser.Editor.EngineManagement
             return Path.GetFullPath(files.engineFileLocation);
         }
 
-        public static string GetEngineDirectory(Engine engine) =>
-            GetEngineDirectory(engine, GetCurrentEditorPlatform());
-        
+        public static string GetEngineDirectory(Engine engine)
+        {
+            return GetEngineDirectory(engine, GetCurrentEditorPlatform());
+        }
+
         public static string GetEngineProcessFullPath(Engine engine, Platform platform)
         {
             string appPath = $"{GetEngineDirectory(engine, platform)}{engine.GetEngineExecutableName()}";
             if (platform == Platform.Windows64)
                 appPath += ".exe";
-            
+
             return Path.GetFullPath(appPath);
         }
-        
-        public static string GetEngineProcessFullPath(Engine engine) => GetEngineProcessFullPath(engine, GetCurrentEditorPlatform());
+
+        public static string GetEngineProcessFullPath(Engine engine)
+        {
+            return GetEngineProcessFullPath(engine, GetCurrentEditorPlatform());
+        }
 
         public static Platform GetCurrentEditorPlatform()
         {
@@ -46,7 +51,7 @@ namespace UnityWebBrowser.Editor.EngineManagement
             Platform platform = Platform.MacOS;
 #else
 #error Unsupported platform!
-            
+
 #endif
 
             return platform;

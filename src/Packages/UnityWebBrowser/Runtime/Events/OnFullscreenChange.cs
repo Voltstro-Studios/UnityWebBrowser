@@ -1,4 +1,4 @@
-﻿namespace UnityWebBrowser.Events
+﻿namespace VoltstroStudios.UnityWebBrowser.Events
 {
     public delegate void OnFullscreenChange(bool fullscreen);
 }

@@ -1,9 +1,9 @@
 using System;
 
-namespace UnityWebBrowser
+namespace VoltstroStudios.UnityWebBrowser
 {
     /// <summary>
-    ///     An <see cref="Exception"/> related to when you are trying to do something when the engine is not running
+    ///     An <see cref="Exception" /> related to when you are trying to do something when the engine is not running
     /// </summary>
     public sealed class UwbIsNotConnectedException : Exception
     {

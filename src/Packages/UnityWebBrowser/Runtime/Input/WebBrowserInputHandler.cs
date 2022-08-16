@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Input
+namespace VoltstroStudios.UnityWebBrowser.Input
 {
     /// <summary>
     ///     Abstraction layer for getting input
@@ -15,13 +15,13 @@ namespace UnityWebBrowser.Input
         /// </summary>
         /// <returns></returns>
         public abstract float GetScroll();
-        
+
         /// <summary>
-        ///     Get the current cursor position on the screen as a <see cref="Vector2"/>
+        ///     Get the current cursor position on the screen as a <see cref="Vector2" />
         /// </summary>
         /// <returns></returns>
         public abstract Vector2 GetCursorPos();
-        
+
         #endregion
 
         #region Input
@@ -29,15 +29,15 @@ namespace UnityWebBrowser.Input
         /// <summary>
         ///     Get all keys that are down this frame
         /// </summary>
-        /// <returns>Returns an array of <see cref="WindowsKey"/> that are up</returns>
+        /// <returns>Returns an array of <see cref="WindowsKey" /> that are up</returns>
         public abstract WindowsKey[] GetDownKeys();
-        
+
         /// <summary>
         ///     Get all keys that are up this frame
         /// </summary>
-        /// <returns>Returns an array of <see cref="WindowsKey"/> that are down</returns>
+        /// <returns>Returns an array of <see cref="WindowsKey" /> that are down</returns>
         public abstract WindowsKey[] GetUpKeys();
-        
+
         /// <summary>
         ///     Gets the input buffer for this frame
         /// </summary>
@@ -52,12 +52,12 @@ namespace UnityWebBrowser.Input
         ///     Called when inputs are started
         /// </summary>
         public abstract void OnStart();
-        
+
         /// <summary>
         ///     Called when inputs are stopped
         /// </summary>
         public abstract void OnStop();
-        
+
         #endregion
     }
 }

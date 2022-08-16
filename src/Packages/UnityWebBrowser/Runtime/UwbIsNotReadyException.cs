@@ -1,9 +1,9 @@
 using System;
 
-namespace UnityWebBrowser
+namespace VoltstroStudios.UnityWebBrowser
 {
     /// <summary>
-    ///     An <see cref="Exception"/> when UWB is not ready
+    ///     An <see cref="Exception" /> when UWB is not ready
     /// </summary>
     public sealed class UwbIsNotReadyException : Exception
     {

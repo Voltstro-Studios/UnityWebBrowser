@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityWebBrowser.Events;
-using UnityWebBrowser.Logging;
-using UnityWebBrowser.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Events;
+using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 
-namespace UnityWebBrowser.Core.Popups
+namespace VoltstroStudios.UnityWebBrowser.Core.Popups
 {
     internal class WebBrowserPopupService : IPopupEngineControls, IPopupClientControls
     {
+        private readonly PopupClientControls clientControls;
+        private readonly WebBrowserCommunicationsManager communicationsManager;
+        private readonly IWebBrowserLogger logger;
+        private readonly OnPopup onPopupCreated;
+
+        private readonly List<WebBrowserPopupInfo> popups;
+
         public WebBrowserPopupService(WebBrowserCommunicationsManager communicationsManager)
         {
             this.communicationsManager = communicationsManager;
@@ -17,21 +24,15 @@ namespace UnityWebBrowser.Core.Popups
             onPopupCreated = communicationsManager.client.InvokeOnPopup;
             logger = communicationsManager.logger;
         }
-        
-        private readonly List<WebBrowserPopupInfo> popups;
-        private readonly OnPopup onPopupCreated;
-        private readonly IWebBrowserLogger logger;
-        private readonly WebBrowserCommunicationsManager communicationsManager;
-        private readonly PopupClientControls clientControls;
 
         #region Engine
 
         public void OnPopup(Guid guid)
         {
             logger.Debug($"Got popup {guid}");
-            WebBrowserPopupInfo popupInfo = new WebBrowserPopupInfo(guid, this);
+            WebBrowserPopupInfo popupInfo = new(guid, this);
             popups.Add(popupInfo);
-            
+
             onPopupCreated.Invoke(popupInfo);
         }
 

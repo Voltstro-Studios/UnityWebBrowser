@@ -1,6 +1,6 @@
-﻿using UnityWebBrowser.Core.Popups;
+﻿using VoltstroStudios.UnityWebBrowser.Core.Popups;
 
-namespace UnityWebBrowser.Events
+namespace VoltstroStudios.UnityWebBrowser.Events
 {
     public delegate void OnPopup(WebBrowserPopupInfo popupInfo);
 }

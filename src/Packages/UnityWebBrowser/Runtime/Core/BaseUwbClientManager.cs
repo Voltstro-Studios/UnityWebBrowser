@@ -1,15 +1,15 @@
 using System;
 using UnityEngine;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
     ///     Base for all other systems that want to build custom rendering with UWB.
     ///     <para>Provides controls that can be used with Unity events (such as OnClick).</para>
-    ///     <para>For other controls and events, use the <see cref="browserClient"/>.</para>
+    ///     <para>For other controls and events, use the <see cref="browserClient" />.</para>
     ///     <para>
     ///         For those who want to implement this base, DO NOT USE <c>Start()</c>, <c>FixedUpdate</c> or <c>OnDestroy</c>,
-    ///         instead override <see cref="OnStart"/>, <see cref="OnFixedUpdate"/> and <see cref="OnDestroyed"/>.
+    ///         instead override <see cref="OnStart" />, <see cref="OnFixedUpdate" /> and <see cref="OnDestroyed" />.
     ///     </para>
     /// </summary>
     [DisallowMultipleComponent]
@@ -20,20 +20,13 @@ namespace UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The browser client, what handles the communication between the UWB engine and Unity")]
         public WebBrowserClient browserClient = new();
-        
+
         private void Start()
         {
             //Start the browser client
             browserClient.Init();
-            
-            OnStart();
-        }
 
-        /// <summary>
-        ///     Override this instead of using <see cref="Start"/>
-        /// </summary>
-        protected virtual void OnStart()
-        {
+            OnStart();
         }
 
         private void Update()
@@ -47,13 +40,6 @@ namespace UnityWebBrowser.Core
             OnFixedUpdate();
         }
 
-        /// <summary>
-        ///     Override this instead of using <see cref="FixedUpdate"/>
-        /// </summary>
-        protected virtual void OnFixedUpdate()
-        {
-        }
-
         private void OnDestroy()
         {
             browserClient.Dispose();
@@ -61,7 +47,21 @@ namespace UnityWebBrowser.Core
         }
 
         /// <summary>
-        ///     Override this instead of using <see cref="OnDestroy"/>
+        ///     Override this instead of using <see cref="Start" />
+        /// </summary>
+        protected virtual void OnStart()
+        {
+        }
+
+        /// <summary>
+        ///     Override this instead of using <see cref="FixedUpdate" />
+        /// </summary>
+        protected virtual void OnFixedUpdate()
+        {
+        }
+
+        /// <summary>
+        ///     Override this instead of using <see cref="OnDestroy" />
         /// </summary>
         protected virtual void OnDestroyed()
         {
@@ -73,13 +73,19 @@ namespace UnityWebBrowser.Core
         ///     Makes the browser go back a page
         /// </summary>
         /// <exception cref="UwbIsNotConnectedException"></exception>
-        public void GoBack() => browserClient.GoBack();
+        public void GoBack()
+        {
+            browserClient.GoBack();
+        }
 
         /// <summary>
         ///     Make the browser go forward a page
         /// </summary>
         /// <exception cref="UwbIsNotConnectedException"></exception>
-        public void GoForward() => browserClient.GoForward();
+        public void GoForward()
+        {
+            browserClient.GoForward();
+        }
 
         /// <summary>
         ///     Makes the browser go to a url
@@ -91,7 +97,7 @@ namespace UnityWebBrowser.Core
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
-            
+
             browserClient.LoadUrl(url);
         }
 
@@ -99,7 +105,10 @@ namespace UnityWebBrowser.Core
         ///     Refreshes the browser
         /// </summary>
         /// <exception cref="UwbIsNotConnectedException"></exception>
-        public void Refresh() => browserClient.Refresh();
+        public void Refresh()
+        {
+            browserClient.Refresh();
+        }
 
         /// <summary>
         ///     Loads HTML code
@@ -111,7 +120,7 @@ namespace UnityWebBrowser.Core
         {
             if (string.IsNullOrWhiteSpace(html))
                 throw new ArgumentNullException(nameof(html));
-            
+
             browserClient.LoadHtml(html);
         }
 
@@ -125,7 +134,7 @@ namespace UnityWebBrowser.Core
         {
             if (string.IsNullOrWhiteSpace(js))
                 throw new ArgumentNullException(nameof(js));
-            
+
             browserClient.ExecuteJs(js);
         }
 

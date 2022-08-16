@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Numerics;
-using UnityWebBrowser.Engine.Shared.Core;
-using UnityWebBrowser.Engine.Shared.Popups;
-using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Events;
-using UnityWebBrowser.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -138,7 +138,7 @@ public class UwbCefClient : CefClient, IDisposable
     }
 
     /// <summary>
-    ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseMoveEvent" />
+    ///     Process a <see cref="VoltstroStudios.UnityWebBrowser.Shared.Events.MouseMoveEvent" />
     /// </summary>
     /// <param name="mouseEvent"></param>
     public void ProcessMouseMoveEvent(MouseMoveEvent mouseEvent)
@@ -151,7 +151,7 @@ public class UwbCefClient : CefClient, IDisposable
     }
 
     /// <summary>
-    ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseClickEvent" />
+    ///     Process a <see cref="VoltstroStudios.UnityWebBrowser.Shared.Events.MouseClickEvent" />
     /// </summary>
     /// <param name="mouseClickEvent"></param>
     public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
@@ -166,7 +166,7 @@ public class UwbCefClient : CefClient, IDisposable
     }
 
     /// <summary>
-    ///     Process a <see cref="UnityWebBrowser.Shared.Events.MouseScrollEvent" />
+    ///     Process a <see cref="VoltstroStudios.UnityWebBrowser.Shared.Events.MouseScrollEvent" />
     /// </summary>
     /// <param name="mouseScrollEvent"></param>
     public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)

@@ -1,12 +1,9 @@
 using System;
 using UnityEngine;
-using UnityWebBrowser.Shared;
-
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Input
+namespace VoltstroStudios.UnityWebBrowser.Input
 {
     /// <summary>
     ///     Helper class for inputs

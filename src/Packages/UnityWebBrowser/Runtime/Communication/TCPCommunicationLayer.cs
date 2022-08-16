@@ -3,10 +3,10 @@ using UnityEngine;
 using VoltRpc.Communication;
 using VoltRpc.Communication.TCP;
 
-namespace UnityWebBrowser.Communication
+namespace VoltstroStudios.UnityWebBrowser.Communication
 {
     /// <summary>
-    ///     In-Built TCP layer that uses VoltRpc's <see cref="TCPClient"/> and <see cref="TCPHost"/>
+    ///     In-Built TCP layer that uses VoltRpc's <see cref="TCPClient" /> and <see cref="TCPHost" />
     /// </summary>
     [CreateAssetMenu(fileName = "TCP Communication Layer", menuName = "UWB/TCP Communication Layer")]
     public sealed class TCPCommunicationLayer : CommunicationLayer

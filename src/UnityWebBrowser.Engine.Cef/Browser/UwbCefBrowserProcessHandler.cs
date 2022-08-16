@@ -1,6 +1,6 @@
 using System;
 using UnityWebBrowser.Engine.Cef.Browser.Schemes;
-using UnityWebBrowser.Engine.Shared.Pages;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Pages;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;

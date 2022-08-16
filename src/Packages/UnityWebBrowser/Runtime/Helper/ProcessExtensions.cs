@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace UnityWebBrowser.Helper
+namespace VoltstroStudios.UnityWebBrowser.Helper
 {
     internal static class ProcessExtensions
     {
@@ -85,7 +85,7 @@ namespace UnityWebBrowser.Helper
             Process process = Process.Start(startInfo);
 
             stdout = null;
-            if (process.WaitForExit((int) timeout.TotalMilliseconds))
+            if (process.WaitForExit((int)timeout.TotalMilliseconds))
                 stdout = process.StandardOutput.ReadToEnd();
             else
                 process.Kill();

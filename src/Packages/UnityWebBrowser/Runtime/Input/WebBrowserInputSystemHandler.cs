@@ -5,25 +5,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Input
+namespace VoltstroStudios.UnityWebBrowser.Input
 {
     [CreateAssetMenu(fileName = "Input System Handler", menuName = "UWB/Inputs/Input System Handler")]
     public sealed class WebBrowserInputSystemHandler : WebBrowserInputHandler
     {
-        [Header("Scroll Input")]
-        public InputAction scrollInput;
+        [Header("Scroll Input")] public InputAction scrollInput;
 
         public float scrollValue = 0.2f;
 
-        [Header("Pointer Position")]
-        public InputAction pointPosition;
+        [Header("Pointer Position")] public InputAction pointPosition;
 
-        private Keyboard keyboard;
-        private string inputBuffer = string.Empty;
         private readonly List<WindowsKey> keysDown = new();
         private readonly List<WindowsKey> keysUp = new();
+        private string inputBuffer = string.Empty;
+
+        private Keyboard keyboard;
 
         public override float GetScroll()
         {
@@ -45,7 +44,6 @@ namespace UnityWebBrowser.Input
         {
             keysDown.Clear();
             foreach (KeyControl key in keyboard.allKeys)
-            {
                 try
                 {
                     if (key.wasPressedThisFrame)
@@ -55,7 +53,6 @@ namespace UnityWebBrowser.Input
                 {
                     //Safe to ignore
                 }
-            }
 
             return keysDown.ToArray();
         }
@@ -64,7 +61,6 @@ namespace UnityWebBrowser.Input
         {
             keysUp.Clear();
             foreach (KeyControl key in keyboard.allKeys)
-            {
                 try
                 {
                     if (key.wasReleasedThisFrame)
@@ -74,7 +70,6 @@ namespace UnityWebBrowser.Input
                 {
                     //Safe to ignore
                 }
-            }
 
             return keysUp.ToArray();
         }
@@ -94,7 +89,7 @@ namespace UnityWebBrowser.Input
             keyboard = Keyboard.current;
             keyboard.onTextInput += OnTextEnter;
             inputBuffer = string.Empty;
-            
+
             keysDown.Clear();
             keysUp.Clear();
         }

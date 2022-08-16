@@ -3,9 +3,9 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityWebBrowser.Core;
+using VoltstroStudios.UnityWebBrowser.Core;
 
-namespace UnityWebBrowser
+namespace VoltstroStudios.UnityWebBrowser
 {
     /// <summary>
     ///     Included UI controller for UWB (For TMP).
@@ -37,12 +37,12 @@ namespace UnityWebBrowser
             webBrowserUi.browserClient.OnUrlChanged += OnUrlChanged;
             inputField.text = webBrowserUi.browserClient.initialUrl;
         }
-        
+
         private void OnDestroy()
         {
             webBrowserUi.browserClient.OnUrlChanged -= OnUrlChanged;
         }
-        
+
         private void OnUrlChanged(string url)
         {
             inputField.text = url;

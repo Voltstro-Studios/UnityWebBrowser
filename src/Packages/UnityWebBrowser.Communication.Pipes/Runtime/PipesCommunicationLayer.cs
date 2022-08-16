@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityWebBrowser.Communication.Pipes.Base;
 using VoltRpc.Communication;
+using VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base;
 
-namespace UnityWebBrowser.Communication.Pipes
+namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes
 {
     /// <summary>
-    ///     <see cref="CommunicationLayer"/> using <see cref="PipesHost"/> and <see cref="PipesClient"/>
+    ///     <see cref="CommunicationLayer" /> using <see cref="PipesHost" /> and <see cref="PipesClient" />
     /// </summary>
     [CreateAssetMenu(fileName = "Pipes Communication Layer", menuName = "UWB/Pipes Communication Layer")]
     public sealed class PipesCommunicationLayer : CommunicationLayer
@@ -14,7 +14,7 @@ namespace UnityWebBrowser.Communication.Pipes
         ///     What pipe name to communicate in
         /// </summary>
         public string inPipeName = "UnityWebBrowserIn";
-        
+
         /// <summary>
         ///     What pipe name to communicate out
         /// </summary>

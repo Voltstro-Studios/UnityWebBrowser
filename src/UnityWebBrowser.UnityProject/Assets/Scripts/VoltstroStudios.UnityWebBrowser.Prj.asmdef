@@ -1,0 +1,19 @@
+{
+  "name": "VoltstroStudios.UnityWebBrowser.Prj",
+  "rootNamespace": "VoltstroStudios.UnityWebBrowser.Prj",
+  "references": [
+    "UnityImGui",
+    "VoltstroStudios.UnityWebBrowser"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "VoltstroStudios.UnityWebBrowser.Shared.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

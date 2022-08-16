@@ -2,10 +2,10 @@ using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using UnityEngine.Scripting;
-using UnityWebBrowser.Core;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Core;
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Logging
+namespace VoltstroStudios.UnityWebBrowser.Logging
 {
     /// <summary>
     ///     Handles UWB logs
@@ -15,23 +15,23 @@ namespace UnityWebBrowser.Logging
     {
         private readonly IWebBrowserLogger logger;
 
-        public event Action<string> OnProcessOutputLog;
-
-        public event Action<string> OnProcessErrorLog; 
-
         internal ProcessLogHandler(WebBrowserClient client)
         {
             logger = client.logger;
         }
 
+        public event Action<string> OnProcessOutputLog;
+
+        public event Action<string> OnProcessErrorLog;
+
         internal void HandleErrorProcessLog(object sender, DataReceivedEventArgs e)
         {
-            if(e.Data == null)
+            if (e.Data == null)
                 return;
-            
+
             OnProcessErrorLog?.Invoke(e.Data);
         }
-        
+
         internal void HandleOutputProcessLog(object sender, DataReceivedEventArgs e)
         {
             if (e.Data == null)
@@ -58,7 +58,7 @@ namespace UnityWebBrowser.Logging
             {
                 logger.Error($"An error occured with processing a log event from the UWB engine! {ex}");
             }
-            
+
             OnProcessOutputLog?.Invoke(e.Data);
         }
 

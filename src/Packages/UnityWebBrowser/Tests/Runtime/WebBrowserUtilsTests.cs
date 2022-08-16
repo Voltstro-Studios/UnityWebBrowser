@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using UnityEngine;
-using UnityWebBrowser.Helper;
+using VoltstroStudios.UnityWebBrowser.Helper;
 
-namespace UnityWebBrowser.Tests
+namespace VoltstroStudios.UnityWebBrowser.Tests
 {
     public class WebBrowserUtilsTests
     {
@@ -13,7 +13,7 @@ namespace UnityWebBrowser.Tests
             string hex = WebBrowserUtils.ColorToHex(color);
             StringAssert.AreEqualIgnoringCase("000000ff", hex);
         }
-        
+
         [Test]
         public void ColorToHexRedTest()
         {

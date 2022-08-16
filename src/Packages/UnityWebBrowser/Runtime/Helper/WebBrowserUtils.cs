@@ -7,14 +7,14 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
-using UnityWebBrowser.Core.Engines;
-using UnityWebBrowser.Logging;
-
+using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.UnixSupport;
 #if UNITY_EDITOR
-using UnityWebBrowser.Editor.EngineManagement;
+using VoltstroStudios.UnityWebBrowser.Editor.EngineManagement;
 #endif
 
-namespace UnityWebBrowser.Helper
+namespace VoltstroStudios.UnityWebBrowser.Helper
 {
     /// <summary>
     ///     Provides Utils to be used by the web browser
@@ -36,14 +36,13 @@ namespace UnityWebBrowser.Helper
 			return Application.dataPath;
 #endif
         }
-        
+
         /// <summary>
         ///     Gets the folder that the UWB process application lives in
         /// </summary>
         /// <returns></returns>
         public static string GetBrowserEnginePath(Engine engine)
         {
-            
             //Editor
 #if UNITY_EDITOR
             return EngineManager.GetEngineDirectory(engine);
@@ -127,7 +126,7 @@ namespace UnityWebBrowser.Helper
         }
 
         /// <summary>
-        ///     Creates a <see cref="Process"/> for an engine
+        ///     Creates a <see cref="Process" /> for an engine
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="engine"></param>
@@ -135,20 +134,21 @@ namespace UnityWebBrowser.Helper
         /// <param name="onLogEvent"></param>
         /// <param name="onErrorLogEvent"></param>
         /// <returns></returns>
-        internal static Process CreateEngineProcess(IWebBrowserLogger logger, Engine engine, string arguments, 
+        internal static Process CreateEngineProcess(IWebBrowserLogger logger, Engine engine, string arguments,
             DataReceivedEventHandler onLogEvent, DataReceivedEventHandler onErrorLogEvent)
         {
             string engineFullProcessPath = GetBrowserEngineProcessPath(engine);
             string engineDirectory = GetBrowserEnginePath(engine);
-            
+
             logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
             logger.Debug($"Arguments: '{arguments}'");
-            
+
 #if UNIX_SUPPORT && (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
-            if(UnixSupport.PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))
-                logger.Warn("UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
+            if (PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))
+                logger.Warn(
+                    "UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
 #endif
-            
+
             Process process = new()
             {
                 StartInfo = new ProcessStartInfo(engineFullProcessPath, arguments)
@@ -188,19 +188,20 @@ namespace UnityWebBrowser.Helper
         }
 
         /// <summary>
-        ///     Copies a <see cref="ReadOnlyMemory{T}"/> to a <see cref="NativeArray{T}"/>
+        ///     Copies a <see cref="ReadOnlyMemory{T}" /> to a <see cref="NativeArray{T}" />
         /// </summary>
         /// <param name="copyFrom"></param>
         /// <param name="copyTo"></param>
         /// <param name="token"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void CopySpanToNativeArray<T>(ReadOnlySpan<T> copyFrom, NativeArray<T> copyTo, CancellationToken token) where T : struct
+        internal static void CopySpanToNativeArray<T>(ReadOnlySpan<T> copyFrom, NativeArray<T> copyTo,
+            CancellationToken token) where T : struct
         {
             for (int i = 0; i < copyFrom.Length; i++)
             {
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                     return;
-                
+
                 copyTo[i] = copyFrom[i];
             }
         }

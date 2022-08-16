@@ -1,4 +1,4 @@
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;

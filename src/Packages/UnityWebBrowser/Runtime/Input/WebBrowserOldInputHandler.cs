@@ -1,32 +1,33 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared;
 
-namespace UnityWebBrowser.Input
+namespace VoltstroStudios.UnityWebBrowser.Input
 {
     /// <summary>
-    ///     Input handler using Unity's old <see cref="UnityEngine.Input"/>
+    ///     Input handler using Unity's old <see cref="UnityEngine.Input" />
     /// </summary>
     [CreateAssetMenu(fileName = "Old Input Handler", menuName = "UWB/Inputs/Old Input Handler")]
     public sealed class WebBrowserOldInputHandler : WebBrowserInputHandler
     {
+        private static readonly KeyCode[] Keymap = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+
         /// <summary>
         ///     The name of the axis for the scroll
         /// </summary>
         [Tooltip("The name of the axis for the scroll")]
         public string scrollAxisName = "Mouse ScrollWheel";
-        
+
         /// <summary>
         ///     How much sensitivity for the scroll
         /// </summary>
         [Tooltip("How much sensitivity for the scroll")]
         public float scrollSensitivity = 2.0f;
-        
-        private static readonly KeyCode[] Keymap = (KeyCode[]) Enum.GetValues(typeof(KeyCode));
+
         private readonly List<WindowsKey> keysDown = new();
         private readonly List<WindowsKey> keysUp = new();
-        
+
         public override float GetScroll()
         {
             return UnityEngine.Input.GetAxis(scrollAxisName) * scrollSensitivity;
@@ -40,16 +41,17 @@ namespace UnityWebBrowser.Input
         public override WindowsKey[] GetDownKeys()
         {
             keysDown.Clear();
-            
+
             foreach (KeyCode key in Keymap)
             {
                 //Why are mouse buttons considered key codes???
-                if (key is KeyCode.Mouse0 or KeyCode.Mouse1 or KeyCode.Mouse2 or KeyCode.Mouse3 or KeyCode.Mouse4 or KeyCode.Mouse5 or KeyCode.Mouse6)
+                if (key is KeyCode.Mouse0 or KeyCode.Mouse1 or KeyCode.Mouse2 or KeyCode.Mouse3 or KeyCode.Mouse4
+                    or KeyCode.Mouse5 or KeyCode.Mouse6)
                     continue;
 
                 try
-                { 
-                    if(UnityEngine.Input.GetKeyDown(key))
+                {
+                    if (UnityEngine.Input.GetKeyDown(key))
                         keysDown.Add(key.UnityKeyCodeToWindowKey());
                 }
                 catch (ArgumentOutOfRangeException)
@@ -64,11 +66,12 @@ namespace UnityWebBrowser.Input
         public override WindowsKey[] GetUpKeys()
         {
             keysUp.Clear();
-            
+
             foreach (KeyCode key in Keymap)
             {
                 //Why are mouse buttons considered key codes???
-                if (key is KeyCode.Mouse0 or KeyCode.Mouse1 or KeyCode.Mouse2 or KeyCode.Mouse3 or KeyCode.Mouse4 or KeyCode.Mouse5 or KeyCode.Mouse6)
+                if (key is KeyCode.Mouse0 or KeyCode.Mouse1 or KeyCode.Mouse2 or KeyCode.Mouse3 or KeyCode.Mouse4
+                    or KeyCode.Mouse5 or KeyCode.Mouse6)
                     continue;
 
                 try

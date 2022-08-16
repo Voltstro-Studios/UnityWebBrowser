@@ -1,0 +1,25 @@
+{
+  "name": "VoltstroStudios.UnityWebBrowser.Tests",
+  "rootNamespace": "VoltstroStudios.UnityWebBrowser.Tests",
+  "references": [
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner",
+    "VoltstroStudios.UnityWebBrowser",
+    "UniTask",
+    "UniTask.Linq"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll",
+    "VoltstroStudios.UnityWebBrowser.Shared.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

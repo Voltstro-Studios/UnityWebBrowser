@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UnityWebBrowser.Core
+namespace VoltstroStudios.UnityWebBrowser.Core
 {
     /// <summary>
     ///     Creates a <see cref="string" />

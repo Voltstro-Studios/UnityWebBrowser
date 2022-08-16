@@ -1,9 +1,10 @@
 using System;
 
-namespace UnityWebBrowser
+namespace VoltstroStudios.UnityWebBrowser
 {
     /// <summary>
-    ///     An <see cref="Exception"/> related to when you are trying to change something that cannot be changed when the engine is already running
+    ///     An <see cref="Exception" /> related to when you are trying to change something that cannot be changed when the
+    ///     engine is already running
     /// </summary>
     public sealed class UwbIsConnectedException : Exception
     {

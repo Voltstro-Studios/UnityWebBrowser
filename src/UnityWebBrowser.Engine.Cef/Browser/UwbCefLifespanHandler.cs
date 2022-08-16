@@ -1,9 +1,9 @@
 using System;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using UnityWebBrowser.Engine.Cef.Core;
-using UnityWebBrowser.Engine.Shared.Popups;
-using UnityWebBrowser.Shared;
-using UnityWebBrowser.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
+using VoltstroStudios.UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;

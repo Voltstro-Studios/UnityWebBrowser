@@ -1,7 +1,7 @@
 using System.IO.Pipes;
 using VoltRpc.Communication;
 
-namespace UnityWebBrowser.Communication.Pipes.Base
+namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base
 {
     /// <summary>
     ///     <see cref="Client" /> using named pipes
