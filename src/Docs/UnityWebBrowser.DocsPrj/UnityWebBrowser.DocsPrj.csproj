@@ -4,17 +4,30 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>9</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>UnityWebBrowser</AssemblyName>
+        <AssemblyName>VoltstroStudios.UnityWebBrowser</AssemblyName>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Configurations>Debug</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;UNITY_STANDALONE</DefineConstants>
+      <DefineConstants>TRACE;UNITY_STANDALONE;UWB_DOCS</DefineConstants>
       <DocumentationFile>bin\Debug\netstandard2.1\UnityWebBrowser.xml</DocumentationFile>
     </PropertyGroup>
+    
+    <!-- We need to get a path to Unity's binaries -->
+    <PropertyGroup Condition="'$(UWB_UNITY_BINS_PATH)'==''">
+        <UnityBinaryPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\</UnityBinaryPath>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(UWB_UNITY_BINS_PATH)'!=''">
+        <UnityBinaryPath>$(UWB_UNITY_BINS_PATH)</UnityBinaryPath>
+    </PropertyGroup>
 
+    <Target Name="Debug" BeforeTargets="Build">
+        <Message Importance="normal" Text="Unity bins $(UnityBinaryPath)" />
+    </Target>
+    
     <ItemGroup>
       <Compile Include="..\..\Packages\UnityWebBrowser\Runtime\**\*.cs">
         <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -22,361 +35,36 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\AssemblyInfo.cs.meta">
-        <Link>Runtime\AssemblyInfo.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Communication.meta">
-        <Link>Runtime\Communication.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Communication\CommunicationLayer.cs.meta">
-        <Link>Runtime\Communication\CommunicationLayer.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Communication\TCPCommunicationLayer.cs.meta">
-        <Link>Runtime\Communication\TCPCommunicationLayer.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core.meta">
-        <Link>Runtime\Core.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\BaseUwbClientManager.cs.meta">
-        <Link>Runtime\Core\BaseUwbClientManager.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\Engines.meta">
-        <Link>Runtime\Core\Engines.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\Engines\Engine.cs.meta">
-        <Link>Runtime\Core\Engines\Engine.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\Engines\EngineConfiguration.cs.meta">
-        <Link>Runtime\Core\Engines\EngineConfiguration.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\FullscreenHandler.cs.meta">
-        <Link>Runtime\Core\FullscreenHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\RawImageUwbClientInputHandler.cs.meta">
-        <Link>Runtime\Core\RawImageUwbClientInputHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\RawImageUwbClientManager.cs.meta">
-        <Link>Runtime\Core\RawImageUwbClientManager.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\WebBrowserArgsBuilder.cs.meta">
-        <Link>Runtime\Core\WebBrowserArgsBuilder.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\WebBrowserClient.cs.meta">
-        <Link>Runtime\Core\WebBrowserClient.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Core\WebBrowserCommunicationsManager.cs.meta">
-        <Link>Runtime\Core\WebBrowserCommunicationsManager.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Editor.meta">
-        <Link>Runtime\Editor.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events.meta">
-        <Link>Runtime\Events.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnFullscreenChange.cs.meta">
-        <Link>Runtime\Events\OnFullscreenChange.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnLoadFinish.cs.meta">
-        <Link>Runtime\Events\OnLoadFinish.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnLoadingProgressChange.cs.meta">
-        <Link>Runtime\Events\OnLoadingProgressChange.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnLoadStart.cs.meta">
-        <Link>Runtime\Events\OnLoadStart.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnTitleChange.cs.meta">
-        <Link>Runtime\Events\OnTitleChange.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Events\OnUrlChange.cs.meta">
-        <Link>Runtime\Events\OnUrlChange.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Helper.meta">
-        <Link>Runtime\Helper.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Helper\ProcessExtensions.cs.meta">
-        <Link>Runtime\Helper\ProcessExtensions.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Helper\WebBrowserUtils.cs.meta">
-        <Link>Runtime\Helper\WebBrowserUtils.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Input.meta">
-        <Link>Runtime\Input.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Input\WebBrowserInputHandler.cs.meta">
-        <Link>Runtime\Input\WebBrowserInputHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Input\WebBrowserInputManager.cs.meta">
-        <Link>Runtime\Input\WebBrowserInputManager.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Input\WebBrowserInputSystemHandler.cs.meta">
-        <Link>Runtime\Input\WebBrowserInputSystemHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Input\WebBrowserOldInputHandler.cs.meta">
-        <Link>Runtime\Input\WebBrowserOldInputHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging.meta">
-        <Link>Runtime\Logging.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging\DefaultUnityWebBrowserLogger.cs.meta">
-        <Link>Runtime\Logging\DefaultUnityWebBrowserLogger.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging\IWebBrowserLogger.cs.meta">
-        <Link>Runtime\Logging\IWebBrowserLogger.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging\JsonLogSeverityConverter.cs.meta">
-        <Link>Runtime\Logging\JsonLogSeverityConverter.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging\JsonLogStructure.cs.meta">
-        <Link>Runtime\Logging\JsonLogStructure.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Logging\ProcessLogHandler.cs.meta">
-        <Link>Runtime\Logging\ProcessLogHandler.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Removed.meta">
-        <Link>Runtime\Removed.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\Removed\WebBrowserUI.cs.meta">
-        <Link>Runtime\Removed\WebBrowserUI.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\UnityWebBrowser.asmdef">
-        <Link>Runtime\UnityWebBrowser.asmdef</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\UnityWebBrowser.asmdef.meta">
-        <Link>Runtime\UnityWebBrowser.asmdef.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserIsConnectedException.cs.meta">
-        <Link>Runtime\WebBrowserIsConnectedException.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserIsNotConnectedException.cs.meta">
-        <Link>Runtime\WebBrowserIsNotConnectedException.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserUIBasic.cs.meta">
-        <Link>Runtime\WebBrowserUIBasic.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserUIControls.cs.meta">
-        <Link>Runtime\WebBrowserUIControls.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserUIControlsTMP.cs.meta">
-        <Link>Runtime\WebBrowserUIControlsTMP.cs.meta</Link>
-      </Content>
-      <Content Include="..\..\Packages\UnityWebBrowser\Runtime\WebBrowserUIFull.cs.meta">
-        <Link>Runtime\WebBrowserUIFull.cs.meta</Link>
-      </Content>
+      <Content Include="..\..\Packages\**\*.cs" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\UnityWebBrowser.Shared\UnityWebBrowser.Shared.csproj" />
+      <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <Reference Include="UniTask">
+        <HintPath>$(UnityBinaryPath)UniTask.dll</HintPath>
       </Reference>
-      <Reference Include="UniTask, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UniTask.dll</HintPath>
+      <Reference Include="Unity.InputSystem">
+        <HintPath>$(UnityBinaryPath)Unity.InputSystem.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.dll</HintPath>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>$(UnityBinaryPath)UnityEngine.CoreModule.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
+      <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>$(UnityBinaryPath)UnityEngine.InputLegacyModule.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>$(UnityBinaryPath)UnityEngine.UI.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
+      <Reference Include="UnityEngine.UIModule">
+        <HintPath>$(UnityBinaryPath)UnityEngine.UIModule.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ClothModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClusterInputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.DirectorModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.GameCenterModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.GIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.GIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.GridModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.HotReloadModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.InputModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ProfilerModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SpriteMaskModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SpriteShapeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.StreamingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.StreamingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.SubstanceModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TextCoreFontEngineModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TextCoreTextEngineModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TilemapModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.TLSModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UaaLAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UaaLAnalyticsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UI.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UIElementsNativeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UIElementsNativeModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UmbraModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UNETModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityCurlModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityCurlModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityTestProtocolModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.VFXModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.VideoModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VirtualTexturingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.VirtualTexturingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.VRModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.WindModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\UnityWebBrowser.UnityProject\Builds\UnityWebBrowser-Quick\UnityWebBrowser_Data\Managed\UnityEngine.XRModule.dll</HintPath>
-      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
 </Project>

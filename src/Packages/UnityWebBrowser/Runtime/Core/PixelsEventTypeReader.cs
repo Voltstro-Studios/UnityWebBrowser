@@ -8,8 +8,12 @@ using Unity.Collections;
 using VoltRpc.Extension.Memory;
 using VoltRpc.IO;
 using VoltRpc.Types;
-using VoltstroStudios.NativeArraySpanExtensions;
+
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
+
+#if !UWB_DOCS
+using VoltstroStudios.NativeArraySpanExtensions;
+#endif
 
 namespace VoltstroStudios.UnityWebBrowser.Core
 {
@@ -34,6 +38,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         public override PixelsEvent Read(BufferedReader reader)
         {
+#if !UWB_DOCS
             //Read the size first
             int size = reader.ReadInt();
             if (size <= 0)
@@ -45,6 +50,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
             pixelData.CopyFrom(data);
 
+#endif
             return default;
         }
     }

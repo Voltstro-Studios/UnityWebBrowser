@@ -14,7 +14,9 @@ using UnityEngine.Scripting;
 using UnityEngine.UI;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
 using VoltstroStudios.UnityWebBrowser.Logging;
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
 using VoltstroStudios.UnityWebBrowser.UnixSupport;
+#endif
 #if UNITY_EDITOR
 using VoltstroStudios.UnityWebBrowser.Editor.EngineManagement;
 #endif
