@@ -212,6 +212,13 @@
         "dev.voltstro.nuget.mono.unix": "1.0.0"
       }
     },
+    "org.nuget.microsoft.unity.analyzers": {
+      "version": "1.14.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://upm-pkgs.voltstro.dev"
+    },
     "org.nuget.system.buffers": {
       "version": "4.5.1",
       "depth": 3,

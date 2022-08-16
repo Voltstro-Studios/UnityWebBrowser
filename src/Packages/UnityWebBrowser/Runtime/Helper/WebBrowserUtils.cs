@@ -96,22 +96,23 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             //There probs something here that could be done better, if you know, send in a PR
             //Based off: http://answers.unity.com/answers/1455168/view.html
 
-            if (graphic == null)
+            if(graphic.Equals(null))
                 throw new ArgumentNullException(nameof(graphic), "Image cannot be null!");
 
             Camera camera = graphic.canvas.worldCamera;
 
             position = new Vector2();
-            RectTransform uiImageObjectRect = graphic.rectTransform;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRect, screenPosition, camera,
+            RectTransform uiImageObjectRectTransform = graphic.rectTransform;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRectTransform, screenPosition, camera,
                     out Vector2 localCursor)) return false;
 
-            Vector2 ptPivotCancelledLocation = new(localCursor.x - uiImageObjectRect.rect.x,
-                localCursor.y - uiImageObjectRect.rect.y);
+            Rect uiImageObjectRect = uiImageObjectRectTransform.rect;
+            Vector2 ptPivotCancelledLocation = new(localCursor.x - uiImageObjectRect.x,
+                localCursor.y - uiImageObjectRect.y);
             Vector2 ptLocationRelativeToImageInScreenCoordinates =
                 new(ptPivotCancelledLocation.x, ptPivotCancelledLocation.y);
-            position.x = ptLocationRelativeToImageInScreenCoordinates.x / uiImageObjectRect.rect.width;
-            position.y = -(ptLocationRelativeToImageInScreenCoordinates.y / uiImageObjectRect.rect.height) + 1;
+            position.x = ptLocationRelativeToImageInScreenCoordinates.x / uiImageObjectRect.width;
+            position.y = -(ptLocationRelativeToImageInScreenCoordinates.y / uiImageObjectRect.height) + 1;
 
             return true;
         }

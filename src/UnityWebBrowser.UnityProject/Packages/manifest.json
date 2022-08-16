@@ -17,6 +17,7 @@
     "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-x64",
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "file:../../Packages/UnityWebBrowser.Engine.Cef.Win-x64",
     "dev.voltstro.unitywebbrowser.unix-support": "file:../../Packages/UnityWebBrowser.Unix-Support",
+    "org.nuget.microsoft.unity.analyzers": "1.14.0",
     "com.unity.modules.imgui": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
