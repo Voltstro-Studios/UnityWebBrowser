@@ -28,20 +28,12 @@
   ],
   "scopedRegistries": [
     {
-      "name": "package.openupm.com",
-      "url": "https://package.openupm.com",
-      "scopes": [
-        "com.cysharp.slnmerge",
-        "com.cysharp.unitask",
-        "com.openupm"
-      ]
-    },
-    {
       "name": "Voltstro UPM",
       "url": "https://upm-pkgs.voltstro.dev",
       "scopes": [
         "dev.voltstro",
-        "org.nuget"
+        "org.nuget",
+        "com.cysharp.unitask"
       ]
     }
   ]

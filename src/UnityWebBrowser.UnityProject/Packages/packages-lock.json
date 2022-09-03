@@ -5,7 +5,7 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",

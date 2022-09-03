@@ -5,8 +5,10 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using VoltstroStudios.UnityWebBrowser.Shared;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace VoltstroStudios.UnityWebBrowser.Input
 {

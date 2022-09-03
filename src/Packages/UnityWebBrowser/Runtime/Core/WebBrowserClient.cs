@@ -255,6 +255,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         private NativeArray<byte> textureData;
         internal NativeArray<byte> nextTextureData;
 
+        internal WebBrowserClient()
+        {
+        }
+
         /// <summary>
         ///     Inits the browser client
         /// </summary>

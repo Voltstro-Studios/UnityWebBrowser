@@ -12,7 +12,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <DefineConstants>TRACE;UNITY_STANDALONE;UWB_DOCS</DefineConstants>
-      <DocumentationFile>bin\Debug\netstandard2.1\UnityWebBrowser.xml</DocumentationFile>
+      <DocumentationFile>bin\Debug\netstandard2.1\VoltstroStudios.UnityWebBrowser.xml</DocumentationFile>
     </PropertyGroup>
     
     <!-- We need to get a path to Unity's binaries -->

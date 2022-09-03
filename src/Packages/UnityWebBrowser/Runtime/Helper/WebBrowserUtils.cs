@@ -3,6 +3,13 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+//Defines
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+#define UWB_NEED_UNIX
+#elif !UNITY_EDITOR_WIN && !UNITY_STANDALONE_WIN && !UNIX_SUPPORT
+#error Need UNIX support package!
+#endif
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +21,7 @@ using UnityEngine.Scripting;
 using UnityEngine.UI;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
 using VoltstroStudios.UnityWebBrowser.Logging;
-#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+#if UWB_NEED_UNIX
 using VoltstroStudios.UnityWebBrowser.UnixSupport;
 #endif
 #if UNITY_EDITOR
@@ -152,7 +159,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
             logger.Debug($"Arguments: '{arguments}'");
 
-#if UNIX_SUPPORT && (UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX)
+#if UWB_NEED_UNIX
             if (PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))
                 logger.Warn(
                     "UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
