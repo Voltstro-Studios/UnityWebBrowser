@@ -8,8 +8,8 @@ UWB is a package that allows displaying and interacting with the web from within
 
 The docs are divided into two sections.
 
-- User - Docs containing information on **using** UWB.
-- Developers - Docs containing information on **developing/contributing to** UWB.
+- [User](articles/user/Setup.md) - Docs containing information on **using** UWB.
+- [Developers](articles/dev/Dev-Guide.md) - Docs containing information on **developing/contributing to** UWB.
 
 If you are just starting, then checkout the [setup section](articles/user/Setup.md).
 

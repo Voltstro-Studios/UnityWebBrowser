@@ -21,10 +21,10 @@ items:
 - name: Developer
   items:
     - name: Developer Guide
-      href: articles/dev/dev-guide.md
+      href: articles/dev/Dev-Guide.md
     - name: Setup
-      href: articles/dev/setup.md
+      href: articles/dev/Setup.md
     - name: How Things Work
-      href: articles/dev/how-things-work.md
+      href: articles/dev/How-Things-Work.md
     - name: Project Layout
-      href: articles/dev/project-layout.md
+      href: articles/dev/Project-Layout.md
