@@ -51,13 +51,9 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
                 else if (logStructure.Level == LogSeverity.Warn)
                     logger.Warn(logStructure.Message);
                 else if (logStructure.Level == LogSeverity.Error)
-                    logger.Error(logStructure.Message);
-                else if (logStructure.Level == LogSeverity.Error && logStructure.Exception != null)
-                    logger.Error($"{logStructure.Exception}\n{logStructure.Exception}");
+                    logger.Error($"{logStructure.Message}\n{logStructure.Exception}");
                 else if (logStructure.Level == LogSeverity.Fatal)
-                    logger.Error(logStructure.Message);
-                else if (logStructure.Level == LogSeverity.Fatal && logStructure.Exception != null)
-                    logger.Error(logStructure.Message);
+                    logger.Error($"{logStructure.Message}\n{logStructure.Exception}");
             }
             catch (Exception ex)
             {

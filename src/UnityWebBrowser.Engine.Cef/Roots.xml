@@ -8,5 +8,6 @@
     <assembly fullname="System.Runtime">
         <type fullname="System.Threading.Tasks.TaskFactory" preserve="all"/>
     </assembly>
+    <assembly fullname="Serilog.Formatting.Compact" preserve="all" />
     <assembly fullname="mscorlib" preserve="all"/>
 </linker>

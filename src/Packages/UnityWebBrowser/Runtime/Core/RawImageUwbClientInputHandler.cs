@@ -139,7 +139,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 yield return 0;
 
-                if (!browserClient.IsConnected)
+                if (!browserClient.ReadySignalReceived || !browserClient.IsConnected 
+                                                       || browserClient.HasDisposed)
                     continue;
 
                 if (disableMouseInputs && disableKeyboardInputs)

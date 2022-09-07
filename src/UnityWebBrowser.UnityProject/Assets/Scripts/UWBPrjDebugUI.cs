@@ -103,72 +103,79 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         {
             ImGui.Begin("UWB Debug UI");
             {
-                ImGui.Text("UWB Debug UI");
-                ImGui.Separator();
-                ImGui.Text($"Player FPS: {fps}");
-                ImGui.Text($"UWB FPS: {webBrowserUIBasic.browserClient.FPS}");
-                ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
-                ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
-
-                webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
-                ImGui.Text($"Mouse Position: {mousePos}");
-                if (ImGui.Button("Get Scroll Position"))
-                    webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
-                ImGui.Spacing();
-                ImGui.Separator();
-
-                //Popups
+                if (!webBrowserUIBasic.browserClient.ReadySignalReceived || webBrowserUIBasic.browserClient.HasDisposed)
                 {
-                    ImGui.Text("Popups");
-                    if (ImGui.Button("Show a Popup"))
-                        webBrowserUIBasic.browserClient.ExecuteJs(
-                            "open('https://voltstro.dev', 'Voltstro', 'width=600,height=400')");
-
-                    //Display all of our popups
-                    foreach (WebBrowserPopupInfo popupInfo in popups)
-                    {
-                        ImGui.Text(popupInfo.PopupGuid.ToString());
-
-                        if (ImGui.Button("Execute JS"))
-                            popupInfo.ExecuteJs("console.log('Hello world from popup!')");
-
-                        if (ImGui.Button("Destroy"))
-                            popupInfo.Dispose();
-                    }
+                    ImGui.Text("UWB is not ready...");
                 }
-                ImGui.Spacing();
-                ImGui.Separator();
-
-                ImGui.Text("Resolution:");
-                ImGui.PushItemWidth(100);
-                ImGui.ListBox("", ref selectedIndex, resolutionsText, resolutionsText.Length);
-                ImGui.PopItemWidth();
-
-                ImGui.Spacing();
-                ImGui.Separator();
-                ImGui.Text("UWB Console");
-                ImGui.Checkbox("Format UWB JSON Messages", ref formatMessages);
-
-                float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
-                ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
+                else
                 {
-                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
+                    ImGui.Text("UWB Debug UI");
+                    ImGui.Separator();
+                    ImGui.Text($"Player FPS: {fps}");
+                    ImGui.Text($"UWB FPS: {webBrowserUIBasic.browserClient.FPS}");
+                    ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
+                    ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
+                    
+                    webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
+                    ImGui.Text($"Mouse Position: {mousePos}");
+                    if (ImGui.Button("Get Scroll Position"))
+                        webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
+                    ImGui.Spacing();
+                    ImGui.Separator();
+
+                    //Popups
                     {
-                        if (formatMessages)
-                            for (int i = 0; i < formattedConsoleItems.Count; i++)
-                                ImGui.TextUnformatted(formattedConsoleItems[i]);
-                        else
-                            for (int i = 0; i < unformattedConsoleItems.Count; i++)
-                                ImGui.TextUnformatted(unformattedConsoleItems[i]);
-                    }
-                    ImGui.PopStyleVar();
-                }
-                ImGui.EndChild();
+                        ImGui.Text("Popups");
+                        if (ImGui.Button("Show a Popup"))
+                            webBrowserUIBasic.browserClient.ExecuteJs(
+                                "open('https://voltstro.dev', 'Voltstro', 'width=600,height=400')");
 
-                if (ImGui.Button("Clear"))
-                {
-                    formattedConsoleItems.Clear();
-                    unformattedConsoleItems.Clear();
+                        //Display all of our popups
+                        foreach (WebBrowserPopupInfo popupInfo in popups)
+                        {
+                            ImGui.Text(popupInfo.PopupGuid.ToString());
+
+                            if (ImGui.Button("Execute JS"))
+                                popupInfo.ExecuteJs("console.log('Hello world from popup!')");
+
+                            if (ImGui.Button("Destroy"))
+                                popupInfo.Dispose();
+                        }
+                    }
+                    ImGui.Spacing();
+                    ImGui.Separator();
+
+                    ImGui.Text("Resolution:");
+                    ImGui.PushItemWidth(100);
+                    ImGui.ListBox("", ref selectedIndex, resolutionsText, resolutionsText.Length);
+                    ImGui.PopItemWidth();
+
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    ImGui.Text("UWB Console");
+                    ImGui.Checkbox("Format UWB JSON Messages", ref formatMessages);
+
+                    float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
+                    ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
+                    {
+                        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
+                        {
+                            if (formatMessages)
+                                for (int i = 0; i < formattedConsoleItems.Count; i++)
+                                    ImGui.TextUnformatted(formattedConsoleItems[i]);
+                            else
+                                for (int i = 0; i < unformattedConsoleItems.Count; i++)
+                                    ImGui.TextUnformatted(unformattedConsoleItems[i]);
+                        }
+                        ImGui.PopStyleVar();
+                    }
+                    ImGui.EndChild();
+
+                    if (ImGui.Button("Clear"))
+                    {
+                        formattedConsoleItems.Clear();
+                        unformattedConsoleItems.Clear();
+                    }
                 }
             }
             ImGui.End();
