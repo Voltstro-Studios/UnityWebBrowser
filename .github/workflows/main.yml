@@ -1,21 +1,18 @@
 name: Build
 
 on:
-  push:
-    branches: [ master ]
+  push
 
 jobs:
-  # In Azure DevOps they have 'templates', where you could define your tasks to share in a seperate yml file,
-  # however, GitHub actions doesn't seem to have that, so it makes maintaining this shit.
-  
-  build:
-    name: 'Build'
+  #This job builds the Unity project
+  build-unity:
+    name: 'Build-Unity'
     runs-on: ubuntu-20.04
-
     steps:
+
+    #Restore
     - uses: actions/checkout@v2
       with:
-        submodules: 'recursive'
         lfs: false
         path: 'UnityWebBrowserSource/'
 
@@ -25,32 +22,20 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    #Node modules cache for the UnityWebBrowser.Pages project
-    - name: Pages Cache
-      uses: actions/cache@v3.0.7
-      with:
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
-        key: Cache-Pages
-
-    #Build pages project
-    - name: Build Pages
+    #Build shared
+    - name: Build Shared
       shell: pwsh
-      run: '& ./build-pages.ps1'
+      run: '& ./publish-shared.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
         
-    #Build everything that is outside of Unity
-    - name: Build Externals
-      shell: pwsh
-      run: '& ./setup-all.ps1'
-      working-directory: UnityWebBrowserSource/src/
-
-    #Unity's cache
+    #Restore Unity's cache
     - name: Unity Cache
-      uses: actions/cache@v3.0.7
+      uses: actions/cache@v3
       with:
         path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
         key: Cache-Unity
 
+    #Build the Unity project
     - name: Build Unity
       uses: game-ci/unity-builder@v2.1.0
       env:
@@ -63,3 +48,28 @@ jobs:
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
         versioning: Tag
         androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
+
+  # Builds the 'Pages' project
+  build-pages:
+    name: 'Build-Pages'
+      runs-on: ubuntu-20.04
+      steps:
+
+      #Checkout
+      - uses: actions/checkout@v2
+        with:
+          lfs: false
+          path: 'UnityWebBrowserSource/'
+
+      #Restore the cache for pages
+      - name: Pages Cache
+        uses: actions/cache@v3
+        with:
+          path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
+          key: Cache-Pages
+
+      #Build Pages
+      - name: Build Pages
+        shell: pwsh
+        run: '& ./build-pages.ps1'
+        working-directory: UnityWebBrowserSource/src/DevScripts/
