@@ -73,3 +73,46 @@ jobs:
       shell: pwsh
       run: '& ./build-pages.ps1'
       working-directory: UnityWebBrowserSource/src/DevScripts/
+
+  #Builds the CEF Engine
+  build-engine-cef:
+    name: 'Build-Engine-Cef'
+    runs-on: ubuntu-20.04
+    steps:
+
+    #Checkout
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+        submodules: 'recursive'
+        path: 'UnityWebBrowserSource/'
+
+    #Setup the Environment
+    - uses: actions/setup-dotnet@v2
+      name: Setup .NET
+      with:
+        dotnet-version: '6.0.x'
+
+    #Download CEF (Linux)
+    - name: Download CEF (Linux)
+      shell: pwsh
+      run: '& ./download-cef-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
+
+    #Download CEF (Windows)
+    - name: Download CEF (Windows)
+      shell: pwsh
+      run: '& ./download-cef-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
+
+    #Build CEF Engine (Linux)
+    - name: Build CEF Engine (Linux)
+      shell: pwsh
+      run: '& ./publish-cef-engine-linux.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
+
+    #Build CEF Engine (Linux)
+    - name: Build CEF Engine (Windows)
+      shell: pwsh
+      run: '& ./publish-cef-engine-windows.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
