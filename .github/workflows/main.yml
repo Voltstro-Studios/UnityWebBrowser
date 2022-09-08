@@ -52,24 +52,24 @@ jobs:
   # Builds the 'Pages' project
   build-pages:
     name: 'Build-Pages'
-      runs-on: ubuntu-20.04
-      steps:
+    runs-on: ubuntu-20.04
+    steps:
 
-      #Checkout
-      - uses: actions/checkout@v2
-        with:
-          lfs: false
-          path: 'UnityWebBrowserSource/'
+    #Checkout
+    - uses: actions/checkout@v2
+      with:
+        lfs: false
+        path: 'UnityWebBrowserSource/'
 
-      #Restore the cache for pages
-      - name: Pages Cache
-        uses: actions/cache@v3
-        with:
-          path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
-          key: Cache-Pages
+    #Restore the cache for pages
+    - name: Pages Cache
+      uses: actions/cache@v3
+      with:
+        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
+        key: Cache-Pages
 
-      #Build Pages
-      - name: Build Pages
-        shell: pwsh
-        run: '& ./build-pages.ps1'
-        working-directory: UnityWebBrowserSource/src/DevScripts/
+    #Build Pages
+    - name: Build Pages
+      shell: pwsh
+      run: '& ./build-pages.ps1'
+      working-directory: UnityWebBrowserSource/src/DevScripts/
