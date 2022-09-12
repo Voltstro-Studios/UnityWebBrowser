@@ -54,8 +54,8 @@ jobs:
     - name: Upload Build
       uses: actions/upload-artifact@v3
       with:
-        name: 'UWBBuild'
-        path: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds/'
+        name: 'UWBLibs'
+        path: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds/StandaloneLinux64/StandaloneLinux64_Data/Managed/'
 
   # Builds the 'Pages' project
   build-pages:
