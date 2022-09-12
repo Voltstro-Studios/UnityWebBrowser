@@ -15,6 +15,7 @@
       "../src/Docs/UnityWebBrowser.DocsPrj/bin/Debug/netstandard2.1/VoltstroStudios.UnityWebBrowser.dll"
     ]
   },
+  "exclude": ["README.md", "VoltDocsBuilder.json", ".gitignore", "obj/**/*", "_site/**/*"],
   "xref": [
     "https://docs.microsoft.com/en-us/dotnet/.xrefmap.json",
     "https://projects.voltstro.dev/VoltRpc/.xrefmap.json",

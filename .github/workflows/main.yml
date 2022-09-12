@@ -49,6 +49,14 @@ jobs:
         versioning: Tag
         androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
 
+    #Upload the build as an artifact
+    #Please note that the builds do not provide everything!
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'UWBBuild'
+          path: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds/'
+
   # Builds the 'Pages' project
   build-pages:
     name: 'Build-Pages'
