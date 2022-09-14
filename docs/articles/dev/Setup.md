@@ -60,6 +60,24 @@ Depending on your system, and your download speeds, this script could take upto 
 
 You can now open up the `src/UnityWebBrowser.UnityProject` project with Unity.
 
+## Editor Tools
+
+Once in Unity, you can open the provided `UWB` scene provided in the project. By default, this scene is setup to have basic browser controls/window.
+
+When running the project in this scene, a provided 'UWB Debug UI' will be available.
+
+> [!NOTE]
+> By default this is "hidden", you can open the UI via the small panel at the top of the player's window.
+> ![Panel](~/assets/images/articles/dev/setup/panel.webp)
+
+The 'UWB Debug UI' provided has some useful stats and controls that you may want to use.
+
+![Debug UI](~/assets/images/articles/dev/setup/debug-ui.webp)
+
+If you need to, extra controls can be added by modifying the `Assets/Scripts/UWBPrjDebugUI.cs` script.
+
+(In the future we hope to develop more editor tools to make life easier.)
+
 ## Dev Scripts
 
 There a many dev scripts in the `src/DevScripts` directory. The main ones that you will most likely use are:
