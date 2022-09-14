@@ -11,8 +11,8 @@
   },
   "dotnet": {
     "assemblies": [
-      "../src/Docs/UnityWebBrowser.DocsPrj/bin/Debug/netstandard2.1/VoltstroStudios.UnityWebBrowser.Shared.dll",
-      "../src/Docs/UnityWebBrowser.DocsPrj/bin/Debug/netstandard2.1/VoltstroStudios.UnityWebBrowser.dll"
+      "obj/Libs/VoltstroStudios.UnityWebBrowser.Shared.dll",
+      "obj/Libs/VoltstroStudios.UnityWebBrowser.dll"
     ]
   },
   "exclude": ["README.md", "VoltDocsBuilder.json", ".gitignore", "obj/**/*", "_site/**/*"],
