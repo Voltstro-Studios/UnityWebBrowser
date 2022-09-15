@@ -16,7 +16,7 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Core;
 ///     </para>
 /// </summary>
 [GenerateProxy(GeneratedName = "EngineControls", GeneratedNamespace = "VoltstroStudios.UnityWebBrowser.Shared.Core")]
-public interface IEngineControls
+internal interface IEngineControls
 {
     /// <summary>
     ///     Gets the pixels that will be displayed in a texture

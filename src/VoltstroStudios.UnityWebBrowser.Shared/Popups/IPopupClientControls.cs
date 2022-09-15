@@ -12,7 +12,7 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Popups;
 ///     Interface for popup controls from a client
 /// </summary>
 [GenerateProxy(GeneratedName = "PopupClientControls", GeneratedNamespace = "VoltstroStudios.UnityWebBrowser.Shared.Popups")]
-public interface IPopupClientControls
+internal interface IPopupClientControls
 {
     /// <summary>
     ///     Closes a popup

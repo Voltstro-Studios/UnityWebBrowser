@@ -5,6 +5,8 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("UnityWebBrowser.Engine.Cef")]
+
 [assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser")]
 [assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Engine.Shared")]
 [assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Tests")]

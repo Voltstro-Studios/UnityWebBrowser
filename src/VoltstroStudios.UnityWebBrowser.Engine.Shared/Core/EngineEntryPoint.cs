@@ -217,7 +217,7 @@ public abstract class EngineEntryPoint : IDisposable
     /// </summary>
     /// <param name="engineControls"></param>
     /// <param name="arguments"></param>
-    protected void SetupIpc(IEngineControls engineControls, LaunchArguments arguments)
+    internal void SetupIpc(IEngineControls engineControls, LaunchArguments arguments)
     {
         try
         {

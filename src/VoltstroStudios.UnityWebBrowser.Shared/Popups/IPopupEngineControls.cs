@@ -12,7 +12,7 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Popups;
 ///     Interface for controls of popup from the engine's POV
 /// </summary>
 [GenerateProxy(GeneratedName = "PopupEngineControls", GeneratedNamespace = "VoltstroStudios.UnityWebBrowser.Shared.Popups")]
-public interface IPopupEngineControls
+internal interface IPopupEngineControls
 {
     /// <summary>
     ///     Called when a popup is created
