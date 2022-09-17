@@ -3,10 +3,7 @@
     "PreActions": [
         {
             "Program": "pwsh",
-            "Arguments": "docs/setup.ps1",
-            "EnvironmentalVariablesMapping": {
-                "UWB_GH_TOKEN": "VOLTPRJ_GH_ARTIFACTS"
-            }
+            "Arguments": "src/VoltstroStudios.UnityWebBrowser.DocsPrj/build.ps1"
         }
     ]
 } 
