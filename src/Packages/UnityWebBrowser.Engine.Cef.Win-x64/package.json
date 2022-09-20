@@ -7,5 +7,8 @@
   "version": "2.0.0-preview.3-104.4.22",
   "unity": "2021.2",
   "author": "Voltstro",
-  "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64"
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64",
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md"
 }

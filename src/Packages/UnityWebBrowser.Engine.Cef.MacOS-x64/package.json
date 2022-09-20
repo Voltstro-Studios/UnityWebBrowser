@@ -4,6 +4,9 @@
   "author": "Voltstro",
   "name": "dev.voltstro.unitywebbrowser.engine.cef.macos.x64",
   "displayName": "Unity Web Browser CEF Engine (MacOS x64)",
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "dependencies": {
     "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6",
     "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"

@@ -7,5 +7,9 @@
   "author": "Voltstro",
   "dependencies": {
     "dev.voltstro.unitywebbrowser": "2.0.0"
-  }
+  },
+  "hideInEditor": false,
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md"
 }

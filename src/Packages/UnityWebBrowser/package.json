@@ -5,6 +5,10 @@
   "unity": "2021.2",
   "description": "Functional web browser in Unity without any issues or hassle.",
   "author": "Voltstro",
+  "hideInEditor": false,
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "dependencies": {
     "dev.voltstro.nativearrayspanextensions": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.0.2",
