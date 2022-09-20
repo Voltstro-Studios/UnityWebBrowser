@@ -4,10 +4,15 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 //Defines
-#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
-#define UWB_NEED_UNIX
-#elif !UNITY_EDITOR_WIN && !UNITY_STANDALONE_WIN && !UNIX_SUPPORT && !UWB_DOCS
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX && !UWB_DOCS
+
+//We need the Unix support package installed on UNIX systems
+#if !UNIX_SUPPORT
 #error Need UNIX support package!
+#else
+#define UWB_NEED_UNIX
+#endif
+
 #endif
 
 using System;
@@ -119,7 +124,8 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             RectTransform uiImageObjectRectTransform = graphic.rectTransform;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(uiImageObjectRectTransform, screenPosition,
                     camera,
-                    out Vector2 localCursor)) return false;
+                    out Vector2 localCursor))
+                return false;
 
             Rect uiImageObjectRect = uiImageObjectRectTransform.rect;
             Vector2 ptPivotCancelledLocation = new(localCursor.x - uiImageObjectRect.x,
