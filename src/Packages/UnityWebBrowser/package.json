@@ -9,7 +9,7 @@
     "dev.voltstro.nativearrayspanextensions": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.cysharp.unitask": "2.3.1",
-    "org.nuget.voltrpc": "3.0.0",
+    "org.nuget.voltrpc": "3.1.0",
     "org.nuget.voltrpc.extension.memory": "1.1.0",
     "org.nuget.voltrpc.extension.vectors": "1.1.0"
   },
