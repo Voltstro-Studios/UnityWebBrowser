@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="VoltRpc" Version="3.0.0" />
+        <PackageReference Include="VoltRpc" Version="3.1.0" />
         <PackageReference Include="VoltRpc.Extension.Memory" Version="1.1.0" />
         <PackageReference Include="VoltRpc.Extension.Vectors" Version="1.1.0" />
         <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.1.0" />
