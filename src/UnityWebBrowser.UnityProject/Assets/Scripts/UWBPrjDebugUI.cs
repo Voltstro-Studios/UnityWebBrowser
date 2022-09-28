@@ -22,6 +22,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         public WebBrowserUIBasic webBrowserUIBasic;
         public Resolution[] resolutions;
         public float refreshRate = 1f;
+        public bool hide;
         private ProfilerRecorder applyTextureMarker;
         private double applyTextureTime;
 
@@ -101,6 +102,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
 
         private void OnImGuiLayout(UImGui.UImGui uImGui)
         {
+            if(hide)
+                return;
+            
             ImGui.Begin("UWB Debug UI");
             {
                 if (!webBrowserUIBasic.browserClient.ReadySignalReceived || webBrowserUIBasic.browserClient.HasDisposed)
