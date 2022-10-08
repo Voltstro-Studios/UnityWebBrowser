@@ -54,10 +54,23 @@ For learning how to setup UWB repo for development, use the [developer guide art
 <details>
   <summary>Click to expand!</summary>
 
-![Screenshot 1](media/Screenshot-Editor1.png)
-![Screenshot 2](media/Screenshot-Editor2.png)
-![Screenshot 3](media/Screenshot-Editor3.png)
-![Screenshot 4](media/Screenshot-InPlayer.png)
+### [Editor] Google
+
+![Google Screenshot](media/Editor1.webp)
+
+### [Editor] YouTube
+
+![YouTube Screenshot](media/Editor2.webp)
+
+### [Editor] Reddit Old
+
+(Note: New Reddit works fine as well!)
+
+![Old Reddit Screenshot](media/Editor3.webp)
+
+### [Player] Voltstro's Website
+
+![Voltstro](media/Player1.webp)
 
 </details>
 
