@@ -1,6 +1,6 @@
 name: Issue Report
 description: File an issue report related to UWB. This should ONLY be used for issues (such as bugs or something broken)!
-title: "[Issue]: "
+title: "[Issue] "
 labels: ["issue"]
 body:
   - type: markdown
@@ -8,6 +8,7 @@ body:
       value: |
         Hello, and thank you for reporting an issue with Unity Web Browser (UWB)!
         When filling out the information below, please try to provide as much details as you can, the more you provide, the more likely we can help and fix something.
+  
   - type: dropdown
     id: platform
     attributes:
@@ -19,6 +20,7 @@ body:
         - Other
     validations:
       required: true
+  
   - type: dropdown
     id: architecture
     attributes:
@@ -29,23 +31,26 @@ body:
         - Other
     validations:
       required: true
+  
   - type: dropdown
     id: version
     attributes:
       label: What version of UWB are you using?
       options:
-        - Git Repo
-        - Preview GitLab Package
-        - Stable (1.6.3) GitLab Package
+        - Latest VoltstroUPM Release
+        - Github Master Branch
+        - Other (Please provide)
     validations:
       required: true
+  
   - type: input
     id: unity-version
     attributes:
       label: What Unity version are you running?
-      placeholder: 2021.2.7f1
+      placeholder: 2021.3.11f1
     validations:
       required: true
+  
   - type: textarea
     id: issue-describe
     attributes:
@@ -54,6 +59,7 @@ body:
       placeholder: Please provide a description on the issue
     validations:
       required: true
+  
   - type: textarea
     id: reproducible-steps
     attributes:
@@ -67,6 +73,7 @@ body:
 3. Boom! Issue."
     validations:
       required: true
+  
   - type: textarea
     id: additional-info
     attributes:

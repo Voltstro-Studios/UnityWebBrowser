@@ -14,9 +14,8 @@ This project is capable of using any desired web engine you want, however for no
 ## Features
 
 - Easy Installation with UPM
-- Great Performance
 - Multi-Platform Desktop Support
-- API to Interact with the Engine
+- API to interact with the web engine
 - Extendable
 - 100% Open-Source
 
@@ -44,6 +43,16 @@ For a more in-depth installation guide, check out the [setup article](https://pr
 For further documentation, see [UWB's project site](https://projects.voltstro.dev/UnityWebBrowser/articles/).
 
 The project site covers information such as Engines, Platform support, advance setup, plus more.
+
+## Issues/Features Requests/Questions (Support)
+
+With issues, please use the [GitHub issue tracker](https://github.com/Voltstro-Studios/UnityWebBrowser/issues).
+
+With feature requests and questions, please use [GitHub Discussions](https://github.com/Voltstro-Studios/UnityWebBrowser/discussions).
+
+Before opening a new issue/discussion, make sure someone else hasn't already asked.
+
+PLEASE DO NOT USE DISCORD FOR SUPPORT!
 
 ## Contributing
 
