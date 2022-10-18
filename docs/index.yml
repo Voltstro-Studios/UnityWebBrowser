@@ -8,22 +8,19 @@ hero:
     href: Articles.md
 
 highlights:
-- title: Easy Installation
+- title: Easy installation with UPM
   content: |
     Add the custom registry to your Unity project, and then install like any other Unity package.
-- title: Great Performance
-  content: |
-    UWB runs the engine process outside of Unity, and handles communication on separate threads.
 - title: Multi-Platform Desktop Support
   content: |
     Supports Windows and Linux Natively
-- title: API to Interact with the Engine
+- title: API to interact with the web engine
   content: |
-    Provided UWB API allows for easily interacting with the Engine.
+    The provided UWB API allows for easily interacting with the engine
 - title: Extendable
   content: |
-    UWB 2.0 was designed to be easily extended, allowing rendering to anything that takes a Texture2D, and as
-    well as be able to handle any type of input.
+    UWB 2.0 was designed to be easily extended, such as allowing rendering to anything that takes a Texture2D, 
+    or handling custom input solutions
 - title: 100% Open-Source
   content: |
-    The entire code base for UWB is open-source under the MIT license.
+    The entire code base for UWB is open-source under the MIT license

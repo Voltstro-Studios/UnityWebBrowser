@@ -1,15 +1,15 @@
 {
-  "name": "dev.voltstro.unitywebbrowser.engine.cef",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
   "unity": "2021.3",
   "displayName": "Unity Web Browser CEF Engine",
-  "version": "2.0.0-preview.3-106.1.0",
+  "version": "2.0.0-106.1.0",
   "description": "CEF Engine for Unity Web Browser",
   "dependencies": {
     "dev.voltstro.unitywebbrowser": "2.0.0"
   },
-  "author": "Voltstro",
+  "name": "dev.voltstro.unitywebbrowser.engine.cef",
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
-  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "author": "Voltstro",
   "hideInEditor": false,
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/"
 }

@@ -4,3 +4,5 @@ items:
   href: Articles.md
 - name: API Reference
   href: api/Index.md
+- name: Changelog
+  href: changelog/
