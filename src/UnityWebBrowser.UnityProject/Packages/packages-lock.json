@@ -183,8 +183,8 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.unix-support": "1.0.0",
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-104.4.22"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-106.1.0",
+        "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": {
@@ -201,7 +201,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-104.4.22"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-106.1.0"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {
