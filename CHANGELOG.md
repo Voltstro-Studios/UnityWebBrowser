@@ -4,27 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2022-10-18
 
 ### Added
-
 - Added UNIX Support package
 - Added Popup Handling
 - Added disableAllControls, disableMouse and disableKeyboard
+- Added project site (https://projects.voltstro.dev/UnityWebBrowser/)
 
 ### Changed
-
+- Updated CEF to 106.1.0
 - Updated VoltRpc
 - Use UniTask
+- All base UWB components (other then custom input ones) are now built using `BaseUwbClientManager`
+- Updated packages
+    - Base packages includes URLs for changelog and docs
 - Improved disposing
 - Improved performance massively
 - Improved copying of files to output
 - Improved readying
+- Improved engine logging
+- Improved copying of engine files at build
 - Better IsReady & IsConnected checks
 - Changed namespace to have `VoltstroStudios.` at the start
 - Changed Engine config stuff
 - Changed input handling
+    - Inputs are handled by a scriptable object
 - Changed events to be structs
+- Changed the way the background colour was set
+
+(Not every change in this version is listed here, there are so many)
 
 ## [2.0.0-preview.3] - 2021-11-20
 
