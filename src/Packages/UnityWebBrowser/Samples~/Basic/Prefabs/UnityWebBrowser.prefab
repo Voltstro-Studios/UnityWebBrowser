@@ -1115,6 +1115,8 @@ MonoBehaviour:
     javascript: 1
     cache: 1
     webRtc: 0
+    localStorage: 1
+    popupAction: 0
     proxySettings:
       Username: 
       Password: 
@@ -1124,8 +1126,9 @@ MonoBehaviour:
     communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc, type: 2}
     engineStartupTimeout: 7000
     logSeverity: 1
-    performanceMode: 0
   inputHandler: {fileID: 11400000, guid: 776a2236bf720e5cbb6ca38016918dd0, type: 2}
+  disableMouseInputs: 0
+  disableKeyboardInputs: 0
 --- !u!114 &2090336616946191105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,7 +1343,7 @@ Canvas:
   m_GameObject: {fileID: 7454210984458747666}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
