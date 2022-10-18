@@ -25,7 +25,6 @@
   "exclude": ["README.md", "VoltDocsBuilder.json", ".gitignore", "obj/**/*", "_site/**/*"],
   "xref": [
     "https://docs.microsoft.com/en-us/dotnet/.xrefmap.json",
-    "https://projects.voltstro.dev/VoltRpc/.xrefmap.json",
     "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/2021.3/xrefmap.yml",
     "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/pkgs/com.unity.ugui@1.0/xrefmap.yml"
   ]
