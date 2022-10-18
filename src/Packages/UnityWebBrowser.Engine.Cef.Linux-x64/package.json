@@ -1,15 +1,15 @@
 {
-  "dependencies": {
-    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0",
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-104.4.22"
-  },
-  "displayName": "Unity Web Browser CEF Engine (Linux x64)",
-  "description": "CEF Engine for Unity Web Browser (Linux x64)",
-  "version": "2.0.0-preview.3-104.4.22",
-  "unity": "2021.2",
-  "author": "Voltstro",
   "name": "dev.voltstro.unitywebbrowser.engine.cef.linux.x64",
-  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "unity": "2021.2",
+  "displayName": "Unity Web Browser CEF Engine (Linux x64)",
+  "version": "2.0.0-preview.3-106.1.0",
+  "description": "CEF Engine for Unity Web Browser (Linux x64)",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-106.1.0",
+    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+  },
+  "author": "Voltstro",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
-  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md"
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/"
 }
