@@ -56,7 +56,7 @@ PLEASE DO NOT USE DISCORD FOR SUPPORT!
 
 ## Contributing
 
-For learning how to setup UWB repo for development, use the [developer guide article](https://projects.voltstro.dev/UnityWebBrowser/articles/dev/dev-guide/).
+For learning how to setup UWB repo for development, please see the [developer guide article](https://projects.voltstro.dev/UnityWebBrowser/articles/dev/dev-guide/) on the project's site.
 
 ## Screenshots
 
