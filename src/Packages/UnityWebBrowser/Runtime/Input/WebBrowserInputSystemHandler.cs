@@ -14,6 +14,9 @@ using VoltstroStudios.UnityWebBrowser.Shared;
 
 namespace VoltstroStudios.UnityWebBrowser.Input
 {
+    /// <summary>
+    ///     Input handler using Unity's new input system
+    /// </summary>
     [CreateAssetMenu(fileName = "Input System Handler", menuName = "UWB/Inputs/Input System Handler")]
     public sealed class WebBrowserInputSystemHandler : WebBrowserInputHandler
     {
@@ -88,13 +91,18 @@ namespace VoltstroStudios.UnityWebBrowser.Input
 
         public override void OnStart()
         {
+            keyboard = Keyboard.current;
+            
+            //Don't bother initializing some stuff if we can't get a keyboard
+            if (keyboard != null)
+            {
+                keyboard.onTextInput += OnTextEnter;
+                inputBuffer = string.Empty;
+            }
+            
             scrollInput.Enable();
             pointPosition.Enable();
-
-            keyboard = Keyboard.current;
-            keyboard.onTextInput += OnTextEnter;
-            inputBuffer = string.Empty;
-
+            
             keysDown.Clear();
             keysUp.Clear();
         }
@@ -106,11 +114,15 @@ namespace VoltstroStudios.UnityWebBrowser.Input
 
         public override void OnStop()
         {
-            keyboard.onTextInput -= OnTextEnter;
+            //Keyboard might actually already be destroyed by now
+            if (keyboard != null)
+            {
+                keyboard.onTextInput -= OnTextEnter;
+                keyboard = null;
+            }
+            
             scrollInput.Disable();
             pointPosition.Disable();
-
-            keyboard = null;
         }
     }
 }
