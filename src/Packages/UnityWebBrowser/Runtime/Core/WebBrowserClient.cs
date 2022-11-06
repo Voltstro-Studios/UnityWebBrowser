@@ -249,7 +249,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
-        private CancellationTokenSource cancellationToken;
+        private CancellationTokenSource cancellationSource;
 
         private object resizeLock;
         private NativeArray<byte> textureData;
@@ -370,10 +370,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
 
-            cancellationToken = new CancellationTokenSource();
+            cancellationSource = new CancellationTokenSource();
 
             //Start the engine process
-            UniTask.Create(() => StartEngineProcess(arguments)).ContinueWith(WaitForEngineReadyTask).Forget();
+            UniTask.Create(() => 
+                 StartEngineProcess(arguments))
+                .ContinueWith(() => WaitForEngineReadyTask(cancellationSource.Token))
+                .Forget();
         }
 
         #region Starting
@@ -398,11 +401,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <summary>
         ///     Will wait for <see cref="ReadySignalReceived" /> to be true
         /// </summary>
-        internal async UniTask WaitForEngineReadyTask()
+        internal async UniTask WaitForEngineReadyTask(CancellationToken cancellationToken)
         {
             try
             {
-                await UniTask.WaitUntil(() => ReadySignalReceived)
+                //Wait until we get a ready signal, or timeout
+                await UniTask.WaitUntil(() => 
+                        ReadySignalReceived, cancellationToken: cancellationToken)
                     .Timeout(TimeSpan.FromMilliseconds(engineStartupTimeout));
             }
             catch (TimeoutException)
@@ -414,6 +419,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 {
                     Dispose();
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                //Token probs got canceled
             }
             catch (Exception ex)
             {
@@ -460,7 +469,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         internal void PixelDataLoop()
         {
-            CancellationToken token = cancellationToken.Token;
+            CancellationToken token = cancellationSource.Token;
             while (!token.IsCancellationRequested)
                 try
                 {
@@ -470,7 +479,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                     if (engineProcess.HasExited)
                     {
                         logger.Error("It appears that the engine process has quit!");
-                        cancellationToken.Cancel();
+                        cancellationSource.Cancel();
                         return;
                     }
 
@@ -842,7 +851,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             HasDisposed = true;
             logger.Debug("UWB shutdown...");
 
-            cancellationToken?.Cancel();
+            cancellationSource?.Cancel();
 
             //Destroy textures
             if (BrowserTexture != null)

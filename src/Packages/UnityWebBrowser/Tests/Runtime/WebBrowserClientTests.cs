@@ -24,7 +24,7 @@ namespace VoltstroStudios.UnityWebBrowser.Tests
                 LogAssert.Expect(LogType.Log, "[Web Browser]: UWB shutdown...");
 
                 WebBrowserClient client = new();
-                await client.WaitForEngineReadyTask();
+                await client.WaitForEngineReadyTask(default);
 
                 Assert.That(client.HasDisposed);
             });
