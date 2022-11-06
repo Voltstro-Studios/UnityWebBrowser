@@ -30,7 +30,7 @@
     <!-- Xml file for Unity's code stripper -->
     <ItemGroup>
         <EmbeddedResource Include="link.xml">
-            <LogicalName>UnityWebBrowser.Shared.xml</LogicalName>
+            <LogicalName>VoltstroStudios.UnityWebBrowser.Shared.xml</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
 

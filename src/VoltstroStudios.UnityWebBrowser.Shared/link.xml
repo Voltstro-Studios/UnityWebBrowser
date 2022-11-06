@@ -1,8 +1,9 @@
 <linker>
-    <assembly fullname="UnityWebBrowser.Shared">
-        <type fullname="UnityWebBrowser.Shared.Core.IClient" preserve="all"/>
-        <type fullname="UnityWebBrowser.Shared.Core.IEngine" preserve="all"/>
-        <type fullname="UnityWebBrowser.Shared.Proxy.ClientProxy" preserve="all"/>
-        <type fullname="UnityWebBrowser.Shared.Proxy.EngineProxy" preserve="all"/>
+    <assembly fullname="VoltstroStudios.UnityWebBrowser.Shared">
+        <type fullname="VoltstroStudios.UnityWebBrowser.Shared.Core.IClientControls" preserve="all"/>
+        <type fullname="VoltstroStudios.UnityWebBrowser.Shared.Core.IEngineControls" preserve="all"/>
+        <type fullname="VoltstroStudios.UnityWebBrowser.Shared.Core.ClientControls" preserve="all"/>
+        <type fullname="VoltstroStudios.UnityWebBrowser.Shared.Core.EngineControls" preserve="all"/>
+        <type fullname="VoltstroStudios.UnityWebBrowser.Shared.Popups.*" preserve="all"/>
     </assembly>
 </linker>

@@ -57,7 +57,7 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
             }
             catch (Exception ex)
             {
-                logger.Error($"An error occured with processing a log event from the UWB engine! {ex}");
+                logger.Error($"An error occured with processing a log event from the UWB engine!\n\nRaw Log Message:\n{e.Data}\n\nException:\n{ex}");
             }
 
             OnProcessOutputLog?.Invoke(e.Data);
