@@ -1,14 +1,22 @@
 {
-  "author": "Voltstro",
-  "description": "CEF Engine for Unity Web Browser (Windows x64)",
-  "displayName": "Unity Web Browser CEF Engine (Windows x64)",
-  "dependencies": {
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-106.1.1"
+  "author": {
+    "name": "Voltstro",
+    "email": "me@voltstro.dev",
+    "url": "https://voltstro.dev"
   },
-  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
-  "version": "2.0.0-106.1.1",
+  "displayName": "Unity Web Browser CEF Engine (Windows x64)",
+  "description": "CEF Engine for Unity Web Browser (Windows x64)",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "repository": {
+    "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git",
+    "type": "git"
+  },
+  "version": "2.0.1-106.1.1",
   "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64",
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-106.1.1"
+  },
   "unity": "2021.2"
 }

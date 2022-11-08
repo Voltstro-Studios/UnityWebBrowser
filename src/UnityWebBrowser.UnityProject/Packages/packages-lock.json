@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.unitask": {
-      "version": "2.3.1",
+      "version": "2.3.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -156,7 +156,7 @@
       "dependencies": {
         "dev.voltstro.nativearrayspanextensions": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.cysharp.unitask": "2.3.1",
+        "com.cysharp.unitask": "2.3.3",
         "org.nuget.voltrpc": "3.1.0",
         "org.nuget.voltrpc.extension.memory": "1.1.0",
         "org.nuget.voltrpc.extension.vectors": "1.1.0"
@@ -183,7 +183,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-106.1.1",
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-106.1.1",
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
@@ -201,7 +201,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-106.1.1"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-106.1.1"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {
