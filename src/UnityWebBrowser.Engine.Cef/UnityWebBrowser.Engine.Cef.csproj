@@ -39,7 +39,7 @@
         <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
         <ProjectReference Include="..\VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj" />
         <ProjectReference Include="..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj" />
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.10" PrivateAssets="all" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.1.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
