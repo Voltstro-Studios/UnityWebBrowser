@@ -25,7 +25,8 @@ MonoBehaviour:
     m_Scopes: []
     m_IsDefault: 1
     m_Capabilities: 7
-  - m_Id: scoped:Voltstro UPM
+    m_ConfigSource: 0
+  - m_Id: scoped:project:Voltstro UPM
     m_Name: Voltstro UPM
     m_Url: https://upm-pkgs.voltstro.dev
     m_Scopes:
@@ -34,6 +35,7 @@ MonoBehaviour:
     - com.cysharp.unitask
     m_IsDefault: 0
     m_Capabilities: 0
+    m_ConfigSource: 4
   m_UserSelectedRegistryName: Voltstro UPM
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
