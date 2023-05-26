@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Voltstro-Studios")]
 [assembly: AssemblyProduct("Unity Web Browser Unix Support")]
-[assembly: AssemblyCopyright("Copyright (c) 2021-2022 Voltstro-Studios")]
+[assembly: AssemblyCopyright("Copyright (c) 2021-2023 Voltstro-Studios")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
