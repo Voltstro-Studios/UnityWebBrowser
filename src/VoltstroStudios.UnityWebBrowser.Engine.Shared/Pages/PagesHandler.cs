@@ -18,7 +18,7 @@ public static class PagesHandler
     public static Stream GetAboutPageCode()
     {
         Stream stream =
-            EngineSharedAssembly.GetManifestResourceStream("UnityWebBrowser.Engine.Shared.Pages.About.html");
+            EngineSharedAssembly.GetManifestResourceStream("VoltstroStudios.UnityWebBrowser.Engine.Shared.Pages.About.html");
         return stream;
     }
 }
