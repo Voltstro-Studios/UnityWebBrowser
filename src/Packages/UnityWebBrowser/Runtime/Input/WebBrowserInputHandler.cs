@@ -63,6 +63,16 @@ namespace VoltstroStudios.UnityWebBrowser.Input
         /// </summary>
         public abstract void OnStop();
 
+        /// <summary>
+        ///     Called when IME needs to be enabled
+        /// </summary>
+        public abstract void EnableIme(Vector2 location);
+
+        /// <summary>
+        ///     Called when IME is no longer needed
+        /// </summary>
+        public abstract void DisableIme();
+
         #endregion
     }
 }

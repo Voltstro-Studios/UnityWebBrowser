@@ -93,6 +93,21 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             base.OnStart();
             if (inputHandler == null)
                 throw new NullReferenceException("The input handler is null! You need to assign it in the editor!");
+            
+            browserClient.OnInputFocus += OnClientInput;
+        }
+
+        private void OnClientInput(bool focused)
+        {
+            if (focused)
+            {
+                if (!GetMousePosition(out Vector2 pos)) return;
+                pos.x /= 1.5f;
+                inputHandler.EnableIme(pos);
+                return;
+            }
+            
+            inputHandler.DisableIme();
         }
 
         protected override void OnDestroyed()

@@ -7,6 +7,8 @@ using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security;
+using UnityWebBrowser.Engine.Cef.Core;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -19,16 +21,19 @@ public class UwbCefRenderHandler : CefRenderHandler
     private readonly object pixelsLock;
     private CefSize cefSize;
     private byte[] pixels;
+
+    private readonly ClientControlsActions clientControls;
     
     /// <summary>
     ///     Tracked mouse scroll position
     /// </summary>
     public Vector2 MouseScrollPosition { get; private set; }
 
-    public UwbCefRenderHandler(CefSize size)
+    public UwbCefRenderHandler(UwbCefClient client, CefSize size)
     {
         pixelsLock = new object();
         Resize(size);
+        clientControls = client.ClientControls;
     }
 
     public byte[] Pixels
@@ -113,5 +118,11 @@ public class UwbCefRenderHandler : CefRenderHandler
     protected override void OnImeCompositionRangeChanged(CefBrowser browser, CefRange selectedRange,
         CefRectangle[] characterBounds)
     {
+    }
+
+    protected override void OnVirtualKeyboardRequested(CefBrowser browser, CefTextInputMode inputMode)
+    {
+        CefLoggerWrapper.Debug($"Input mode changed to: {inputMode}");
+        clientControls.InputFocusChange(inputMode == CefTextInputMode.Default);
     }
 }

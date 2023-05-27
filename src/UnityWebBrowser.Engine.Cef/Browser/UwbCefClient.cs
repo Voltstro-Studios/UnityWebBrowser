@@ -41,7 +41,7 @@ public class UwbCefClient : CefClient, IDisposable
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
-        renderHandler = new UwbCefRenderHandler(size);
+        renderHandler = new UwbCefRenderHandler(this, size);
         lifespanHandler = new UwbCefLifespanHandler(popupAction, popupManager, proxySettings);
         lifespanHandler.AfterCreated += cefBrowser =>
         {

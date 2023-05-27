@@ -31,6 +31,7 @@ namespace VoltstroStudios.UnityWebBrowser.Input
         private string inputBuffer = string.Empty;
 
         private Keyboard keyboard;
+        private IMECompositionMode compositionMode;
 
         public override float GetScroll()
         {
@@ -123,6 +124,33 @@ namespace VoltstroStudios.UnityWebBrowser.Input
             
             scrollInput.Disable();
             pointPosition.Disable();
+        }
+
+        public override void EnableIme(Vector2 location)
+        {
+            //Appears we still have to set UnityEngine.Input.imeCompositionMode?
+            compositionMode = UnityEngine.Input.imeCompositionMode;
+            UnityEngine.Input.imeCompositionMode = IMECompositionMode.On;
+            
+            keyboard.SetIMEEnabled(true);
+            keyboard.SetIMECursorPosition(location);
+        }
+
+        public override void DisableIme()
+        {
+            UnityEngine.Input.imeCompositionMode = compositionMode;
+            switch (compositionMode)
+            {
+                case IMECompositionMode.Auto:
+                case IMECompositionMode.On:
+                    keyboard.SetIMEEnabled(true);
+                    break;
+                case IMECompositionMode.Off:
+                    keyboard.SetIMEEnabled(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

@@ -628,6 +628,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             OnPopup?.Invoke(popupInfo);
         }
 
+        public event OnInputFocus OnInputFocus;
+
+        internal void InvokeOnInputFocus(bool focused)
+        {
+            OnInputFocus?.Invoke(focused);
+        }
+
         #endregion
 
         #region Browser Controls

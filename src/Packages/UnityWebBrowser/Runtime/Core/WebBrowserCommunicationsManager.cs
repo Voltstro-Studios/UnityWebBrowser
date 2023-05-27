@@ -254,6 +254,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteOnUnity(() => client.InvokeFullscreen(fullScreen));
         }
 
+        public void InputFocusChange(bool focused)
+        {
+            ExecuteOnUnity(() => client.InvokeOnInputFocus(focused));
+        }
+
         public void Ready()
         {
             client.EngineReady().Forget();

@@ -50,6 +50,12 @@ internal interface IClientControls
     public void Fullscreen(bool fullScreen);
 
     /// <summary>
+    ///     The input's focus has changed
+    /// </summary>
+    /// <param name="focused"></param>
+    public void InputFocusChange(bool focused);
+
+    /// <summary>
     ///     Tell the client that we are ready
     /// </summary>
     public void Ready();

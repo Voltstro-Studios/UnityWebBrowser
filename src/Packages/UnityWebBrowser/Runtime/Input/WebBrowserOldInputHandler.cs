@@ -33,6 +33,8 @@ namespace VoltstroStudios.UnityWebBrowser.Input
         private readonly List<WindowsKey> keysDown = new();
         private readonly List<WindowsKey> keysUp = new();
 
+        private IMECompositionMode compositionMode;
+
         public override float GetScroll()
         {
             return UnityEngine.Input.GetAxis(scrollAxisName) * scrollSensitivity;
@@ -106,6 +108,18 @@ namespace VoltstroStudios.UnityWebBrowser.Input
 
         public override void OnStop()
         {
+        }
+
+        public override void EnableIme(Vector2 location)
+        {
+            compositionMode = UnityEngine.Input.imeCompositionMode;
+            UnityEngine.Input.imeCompositionMode = IMECompositionMode.On;
+            UnityEngine.Input.compositionCursorPos = location;
+        }
+
+        public override void DisableIme()
+        {
+            UnityEngine.Input.imeCompositionMode = compositionMode;
         }
     }
 }

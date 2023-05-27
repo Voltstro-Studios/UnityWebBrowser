@@ -55,6 +55,12 @@ public class ClientControlsActions : IClientControls, IDisposable
             clientActions?.Fullscreen(fullScreen);
     }
 
+    public void InputFocusChange(bool focused)
+    {
+        if (client is {IsConnected: true})
+            clientActions?.InputFocusChange(focused);
+    }
+
     public void Ready()
     {
         if (client is {IsConnected: true})
