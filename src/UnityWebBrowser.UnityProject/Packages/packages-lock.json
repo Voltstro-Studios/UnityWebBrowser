@@ -183,7 +183,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-106.1.1",
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-113.3.1",
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
@@ -201,7 +201,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-106.1.1"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.1-113.3.1"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {

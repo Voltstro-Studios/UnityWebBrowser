@@ -249,7 +249,7 @@ public class StreamCefResourceHandler : CefResourceHandler
         return true;
     }
 
-    protected override bool Read(IntPtr dataOut, int bytesToRead, out int bytesRead, CefResourceReadCallback callback)
+    protected override bool Read(Stream dataStream, int bytesToRead, out int bytesRead, CefResourceReadCallback callback)
     {
         CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Read() called.");
         bytesRead = 0;
@@ -268,15 +268,8 @@ public class StreamCefResourceHandler : CefResourceHandler
 
         // To indicate response completion set bytesRead to 0 and return false
         if (bytesRead == 0) return false;
-
-        using (CefSafeBuffer safeBuffer = new CefSafeBuffer(dataOut, (ulong) bytesRead))
-        using (UnmanagedMemoryStream dataOutStream =
-               new UnmanagedMemoryStream(safeBuffer, 0, bytesRead, FileAccess.Write))
-        {
-            //We need to use bytesRead instead of tempbuffer.Length otherwise
-            //garbage from the previous copy would be written to dataOut
-            dataOutStream.Write(tempBuffer, 0, bytesRead);
-        }
+        
+        dataStream.Write(tempBuffer, 0, bytesRead);
 
         return bytesRead > 0;
     }
