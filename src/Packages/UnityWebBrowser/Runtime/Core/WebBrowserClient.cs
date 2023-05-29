@@ -414,7 +414,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 logger.Error(engineProcess.HasExited
                     ? $"The engine did not get ready within engine startup timeout! The engine process is not even running! Exit code: {engineProcess.ExitCode}."
-                    : "The engine did not get ready within engine startup timeout!");
+                    : "The engine did not get ready within engine startup timeout! Try increasing your 'Engine Startup Timeout' time. If you continue to have this error, see issue report #166 on GitHub.");
                 await using (UniTask.ReturnToMainThread())
                 {
                     Dispose();
