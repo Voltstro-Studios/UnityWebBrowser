@@ -15,7 +15,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.21",
+      "version": "3.0.22",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -213,7 +213,7 @@
       }
     },
     "org.nuget.microsoft.unity.analyzers": {
-      "version": "1.16.1",
+      "version": "1.17.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
