@@ -47,7 +47,6 @@ jobs:
         targetPlatform: StandaloneLinux64
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
         versioning: Tag
-        androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
 
   # Builds the 'Pages' project
   build-pages:

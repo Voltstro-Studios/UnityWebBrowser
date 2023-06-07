@@ -26,6 +26,11 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             if (report.summary.result is BuildResult.Failed or BuildResult.Cancelled)
                 return;
 
+#if UWB_ENGINE_PRJ //For CI reasons
+            if(Application.isBatchMode)
+                return;
+#endif
+
             BuildTarget buildTarget = report.summary.platform;
             Platform buildPlatform = buildTarget.UnityBuildTargetToPlatform();
 
