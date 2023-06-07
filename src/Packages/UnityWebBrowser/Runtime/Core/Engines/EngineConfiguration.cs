@@ -35,6 +35,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 #if UWB_ENGINE_PRJ
         public void OnValidate()
         {
+            if(Application.isBatchMode) //CI
+                return;
+            
             foreach (EnginePlatformFiles engineFile in engineFiles)
             {
                 string path = EngineManager.GetEngineProcessFullPath(this, engineFile.platform);
