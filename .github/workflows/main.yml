@@ -11,9 +11,8 @@ jobs:
     steps:
 
     #Restore
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        lfs: false
         path: 'UnityWebBrowserSource/'
 
     #Setup the Environment
@@ -55,9 +54,8 @@ jobs:
     steps:
 
     #Checkout
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        lfs: false
         path: 'UnityWebBrowserSource/'
 
     #Restore the cache for pages
@@ -80,9 +78,9 @@ jobs:
     steps:
 
     #Checkout
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        lfs: false
+        fetch-depth: 0
         submodules: 'recursive'
         path: 'UnityWebBrowserSource/'
 
