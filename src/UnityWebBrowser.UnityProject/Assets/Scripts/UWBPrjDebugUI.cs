@@ -43,6 +43,8 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         private float timer;
         private List<string> unformattedConsoleItems;
 
+        private string inputUrl;
+
         private void Start()
         {
             if (webBrowserUIBasic == null)
@@ -59,6 +61,11 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             {
                 popups.Add(popup);
                 popup.OnDestroyed += () => popups.Remove(popup);
+            };
+
+            webBrowserUIBasic.browserClient.OnUrlChanged += url =>
+            {
+                inputUrl = url;
             };
 
             UImGuiUtility.Layout += OnImGuiLayout;
@@ -113,6 +120,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                 }
                 else
                 {
+                    //Basic details
                     ImGui.Text("UWB Debug UI");
                     ImGui.Separator();
                     ImGui.Text($"Player FPS: {fps}");
@@ -120,10 +128,21 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
                     ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
                     
+                    //Mouse position
                     webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
                     ImGui.Text($"Mouse Position: {mousePos}");
                     if (ImGui.Button("Get Scroll Position"))
                         webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    
+                    //URL
+                    if (ImGui.InputText("URL", ref inputUrl, 1000))
+                        inputUrl = inputUrl;
+                    ImGui.SameLine();
+                    if(ImGui.Button("Go"))
+                        webBrowserUIBasic.NavigateUrl(inputUrl);
+                    
                     ImGui.Spacing();
                     ImGui.Separator();
 
