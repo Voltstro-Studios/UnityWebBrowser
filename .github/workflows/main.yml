@@ -19,7 +19,7 @@ jobs:
     - uses: actions/setup-dotnet@v2
       name: Setup .NET
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     #Build shared
     - name: Build Shared
@@ -94,7 +94,7 @@ jobs:
     - uses: actions/setup-dotnet@v2
       name: Setup .NET
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     #Download CEF (Linux)
     - name: Download CEF (Linux)

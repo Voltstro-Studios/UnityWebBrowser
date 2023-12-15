@@ -3,7 +3,7 @@
     <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <IsTrimmable>false</IsTrimmable>
     </PropertyGroup>
 
