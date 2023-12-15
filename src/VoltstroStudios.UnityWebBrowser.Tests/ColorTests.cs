@@ -14,59 +14,59 @@ public class ColorTests
     public void ColorBlackTest()
     {
         Color color = new("00000000");
-        Assert.AreEqual(0, color.R);
-        Assert.AreEqual(0, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(0, color.A);
+        Assert.That(color.R, Is.EqualTo(0));
+        Assert.That(color.G, Is.EqualTo(0));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(0));
     }
 
     [Test]
     public void ColorBlackNoAlphaTest()
     {
         Color color = new("000000");
-        Assert.AreEqual(0, color.R);
-        Assert.AreEqual(0, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(255, color.A);
+        Assert.That(color.R, Is.EqualTo(0));
+        Assert.That(color.G, Is.EqualTo(0));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(255));
     }
 
     [Test]
     public void ColorBlackSolidTest()
     {
         Color color = new("000000FF");
-        Assert.AreEqual(0, color.R);
-        Assert.AreEqual(0, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(255, color.A);
+        Assert.That(color.R, Is.EqualTo(0));
+        Assert.That(color.G, Is.EqualTo(0));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(255));
     }
 
     [Test]
     public void ColorRedTest()
     {
         Color color = new("ff000000");
-        Assert.AreEqual(255, color.R);
-        Assert.AreEqual(0, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(0, color.A);
+        Assert.That(color.R, Is.EqualTo(255));
+        Assert.That(color.G, Is.EqualTo(0));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(0));
     }
 
     [Test]
     public void ColorRedSolidTest()
     {
         Color color = new("ff0000ff");
-        Assert.AreEqual(255, color.R);
-        Assert.AreEqual(0, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(255, color.A);
+        Assert.That(color.R, Is.EqualTo(255));
+        Assert.That(color.G, Is.EqualTo(0));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(255));
     }
 
     [Test]
     public void ColorYellowTest()
     {
         Color color = new("faff00");
-        Assert.AreEqual(250, color.R);
-        Assert.AreEqual(255, color.G);
-        Assert.AreEqual(0, color.B);
-        Assert.AreEqual(255, color.A);
+        Assert.That(color.R, Is.EqualTo(250));
+        Assert.That(color.G, Is.EqualTo(255));
+        Assert.That(color.B, Is.EqualTo(0));
+        Assert.That(color.A, Is.EqualTo(255));
     }
 }

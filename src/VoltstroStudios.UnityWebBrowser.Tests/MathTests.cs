@@ -14,13 +14,13 @@ public class MathTests
     public void HexByteTest()
     {
         byte result = MathHelper.HexToDec("FF");
-        Assert.AreEqual(255, result);
+        Assert.That(result, Is.EqualTo(255));
     }
 
     [Test]
     public void HexByte15Test()
     {
         byte result = MathHelper.HexToDec("0F");
-        Assert.AreEqual(15, result);
+        Assert.That(result, Is.EqualTo(15));
     }
 }
