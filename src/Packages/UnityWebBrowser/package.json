@@ -20,7 +20,7 @@
   "dependencies": {
     "dev.voltstro.nativearrayspanextensions": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.cysharp.unitask": "2.3.3",
+    "com.cysharp.unitask": "2.5.0",
     "org.nuget.voltrpc": "3.1.0",
     "org.nuget.voltrpc.extension.memory": "1.1.0",
     "org.nuget.voltrpc.extension.vectors": "1.1.0"

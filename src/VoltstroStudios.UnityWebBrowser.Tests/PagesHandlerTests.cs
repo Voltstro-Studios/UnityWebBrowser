@@ -15,6 +15,6 @@ public class PagesHandlerTests
     public void GetAboutPageTest()
     {
         Stream stream = PagesHandler.GetAboutPageCode();
-        Assert.NotNull(stream);
+        Assert.That(stream, Is.Not.Null);
     }
 }
