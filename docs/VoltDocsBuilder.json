@@ -1,9 +1,0 @@
-{
-    "DocsType": "DocFx",
-    "PreActions": [
-        {
-            "Program": "pwsh",
-            "Arguments": "src/VoltstroStudios.UnityWebBrowser.DocsPrj/build.ps1"
-        }
-    ]
-} 
