@@ -93,6 +93,11 @@ internal interface IEngineControls
     public void ExecuteJs(string js);
 
     /// <summary>
+    ///     Open chrome dev tools
+    /// </summary>
+    public void OpenDevTools();
+
+    /// <summary>
     ///     Tells the UWB engine to resize
     /// </summary>
     /// <param name="resolution"></param>

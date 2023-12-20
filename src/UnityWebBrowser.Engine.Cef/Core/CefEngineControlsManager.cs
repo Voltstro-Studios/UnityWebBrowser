@@ -247,6 +247,11 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         cefClient.ExecuteJs(js);
     }
 
+    public void OpenDevTools()
+    {
+        cefClient.OpenDevTools();
+    }
+
     public void Resize(Resolution resolution)
     {
         cefClient.Resize(resolution);

@@ -5,7 +5,9 @@
 
 using System;
 using System.Numerics;
+using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
@@ -29,8 +31,15 @@ public class UwbCefClient : CefClient, IDisposable
     private readonly UwbCefRenderHandler renderHandler;
     private readonly UwbCefRequestHandler requestHandler;
 
+    private readonly ProxySettings proxySettings;
+
     private CefBrowser browser;
     private CefBrowserHost browserHost;
+
+    //Dev Tools
+    private CefWindowInfo devToolsWindowInfo;
+    private UwbCefPopupClient devToolsClient;
+    private CefBrowserSettings devToolsBrowserSettings;
 
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -38,6 +47,8 @@ public class UwbCefClient : CefClient, IDisposable
     public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, ClientControlsActions clientControlsActions)
     {
         ClientControls = clientControlsActions;
+
+        this.proxySettings = proxySettings;
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
@@ -206,7 +217,6 @@ public class UwbCefClient : CefClient, IDisposable
     public void LoadUrl(string url)
     {
         browser.GetMainFrame()?.LoadUrl(url);
-        //mainFrame.LoadUrl(url);
     }
 
     public Vector2 GetMouseScrollPosition()
@@ -222,6 +232,30 @@ public class UwbCefClient : CefClient, IDisposable
     public void ExecuteJs(string js)
     {
         browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
+    }
+
+    public void OpenDevTools()
+    {
+        try
+        {
+            if (devToolsWindowInfo == null)
+            {
+                devToolsWindowInfo = CefWindowInfo.Create();
+                devToolsClient = new UwbCefPopupClient(proxySettings, () =>
+                {
+                    devToolsWindowInfo = null;
+                    devToolsClient = null;
+                    devToolsBrowserSettings = null;
+                });
+                devToolsBrowserSettings = new CefBrowserSettings();
+            }
+
+            browserHost.ShowDevTools(devToolsWindowInfo, devToolsClient, devToolsBrowserSettings, new CefPoint());
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "An error occured while trying to open the dev tools!");
+        }
     }
 
     public void GoBack()

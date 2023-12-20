@@ -136,6 +136,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     ImGui.Spacing();
                     ImGui.Separator();
                     
+                    if(ImGui.Button("Open DevTools"))
+                        webBrowserUIBasic.browserClient.OpenDevTools();
+                    
                     //URL
                     if (ImGui.InputText("URL", ref inputUrl, 1000))
                         inputUrl = inputUrl;

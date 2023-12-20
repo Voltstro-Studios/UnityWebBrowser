@@ -789,6 +789,16 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         }
 
         /// <summary>
+        ///     Shows dev tools
+        /// </summary>
+        public void OpenDevTools()
+        {
+            CheckIfIsReadyAndConnected();
+            
+            communicationsManager.OpenDevTools();
+        }
+
+        /// <summary>
         ///     Resizes the screen.
         /// </summary>
         /// <param name="newResolution"></param>

@@ -167,6 +167,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteTask(() => engineProxy.ExecuteJs(js));
         }
 
+        public void OpenDevTools()
+        {
+            ExecuteTask(() => engineProxy.OpenDevTools());
+        }
+
         public void Resize(Resolution resolution)
         {
             ExecuteTask(() => engineProxy.Resize(resolution));
