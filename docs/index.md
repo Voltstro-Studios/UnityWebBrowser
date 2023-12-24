@@ -5,7 +5,7 @@
             <p>A Unity package that allows displaying and interacting with the web from within Unity.</p>
         </div>
         <div class="actions">
-            <a href="articles/index.html" class="btn btn-primary btn-lg">
+            <a href="articles/" class="btn btn-primary btn-lg">
                 Get Started
             </a>
         </div>
