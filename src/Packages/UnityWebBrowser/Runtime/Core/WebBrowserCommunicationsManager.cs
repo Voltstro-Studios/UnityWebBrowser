@@ -167,6 +167,22 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteTask(() => engineProxy.ExecuteJs(js));
         }
 
+        public void SetZoomLevel(double zoomLevel)
+        {
+            ExecuteTask(() => engineProxy.SetZoomLevel(zoomLevel));
+        }
+
+        public double GetZoomLevel()
+        {
+            using (sendEventMarker.Auto())
+            {
+                lock (threadLock)
+                {
+                    return engineProxy.GetZoomLevel();
+                }
+            }
+        }
+
         public void OpenDevTools()
         {
             ExecuteTask(() => engineProxy.OpenDevTools());
@@ -263,7 +279,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             ExecuteOnUnity(() => client.InvokeOnInputFocus(focused));
         }
-
+        
         public void Ready()
         {
             client.EngineReady().Forget();

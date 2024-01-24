@@ -247,6 +247,16 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         cefClient.ExecuteJs(js);
     }
 
+    public void SetZoomLevel(double zoomLevel)
+    {
+        cefClient.SetZoomLevel(zoomLevel);
+    }
+
+    public double GetZoomLevel()
+    {
+        return cefClient.GetZoomLevel();
+    }
+
     public void OpenDevTools()
     {
         cefClient.OpenDevTools();

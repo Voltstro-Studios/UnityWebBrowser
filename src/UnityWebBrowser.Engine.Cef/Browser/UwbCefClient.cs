@@ -234,6 +234,16 @@ public class UwbCefClient : CefClient, IDisposable
         browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
     }
 
+    public void SetZoomLevel(double zoomLevel)
+    {
+        browserHost.SetZoomLevel(zoomLevel);
+    }
+
+    public double GetZoomLevel()
+    {
+        return browserHost.GetZoomLevel();
+    }
+
     public void OpenDevTools()
     {
         try

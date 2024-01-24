@@ -44,6 +44,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         private List<string> unformattedConsoleItems;
 
         private string inputUrl;
+        private double zoomLevel = double.MinValue;
 
         private void Start()
         {
@@ -131,15 +132,38 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     //Mouse position
                     webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
                     ImGui.Text($"Mouse Position: {mousePos}");
-                    if (ImGui.Button("Get Scroll Position"))
-                        webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
                     ImGui.Spacing();
                     ImGui.Separator();
+                    
+                    if (ImGui.Button("Get Scroll Position"))
+                        webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
+                    
+                    ImGui.SameLine();
                     
                     if(ImGui.Button("Open DevTools"))
                         webBrowserUIBasic.browserClient.OpenDevTools();
                     
+                    ImGui.SameLine();
+
+                    ImGui.Text("Zoom Percent");
+                    ImGui.SameLine();
+                    
+                    //Get zoom level when ready
+                    if (zoomLevel <= 0 && webBrowserUIBasic.browserClient.IsConnected)
+                        zoomLevel = webBrowserUIBasic.browserClient.GetZoomLevel();
+                    
+                    if (ImGui.InputDouble("Zoom", ref zoomLevel))
+                    {
+                        zoomLevel = Math.Clamp(zoomLevel, 0.1, double.MaxValue);
+                        webBrowserUIBasic.browserClient.SetZoomLevelPercent(zoomLevel);
+                    }
+                        
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    
                     //URL
+                    ImGui.Text("URL");
+                    ImGui.SameLine();
                     if (ImGui.InputText("URL", ref inputUrl, 1000))
                         inputUrl = inputUrl;
                     ImGui.SameLine();

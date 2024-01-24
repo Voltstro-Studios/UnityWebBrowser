@@ -789,6 +789,46 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         }
 
         /// <summary>
+        ///     Sets zoom level based off a percentage
+        /// </summary>
+        /// <param name="percent"></param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if percent is 0 or less</exception>
+        public void SetZoomLevelPercent(double percent)
+        {
+            if (percent <= 0)
+                throw new ArgumentOutOfRangeException(nameof(percent),
+                    "Percent must be larger then 0. To reset, use SetZoomLevel(0).");
+            
+            //Logic from:
+            //https://magpcss.org/ceforum/viewtopic.php?t=11491
+            double scale = 1.2 * percent;
+            double zoomLevel = Math.Log(scale);
+            SetZoomLevel(zoomLevel);
+        }
+
+        /// <summary>
+        ///     Set browser's zoom level. Use 0.0 to reset.
+        /// </summary>
+        /// <param name="zoomLevel"></param>
+        public void SetZoomLevel(double zoomLevel)
+        {
+            CheckIfIsReadyAndConnected();
+            
+            communicationsManager.SetZoomLevel(zoomLevel);
+        }
+        
+        /// <summary>
+        ///     Get's browser's zoom level
+        /// </summary>
+        /// <returns></returns>
+        public double GetZoomLevel()
+        {
+            CheckIfIsReadyAndConnected();
+
+            return communicationsManager.GetZoomLevel();
+        }
+
+        /// <summary>
         ///     Shows dev tools
         /// </summary>
         public void OpenDevTools()
