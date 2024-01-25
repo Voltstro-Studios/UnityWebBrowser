@@ -3,7 +3,6 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-using VoltRpc.Extension.Vectors.Types;
 using VoltRpc.Types;
 
 namespace VoltstroStudios.UnityWebBrowser.Shared.ReadWriters;
@@ -17,6 +16,5 @@ internal static class ReadWriterUtils
         readerWriterManager.AddType(new MouseMoveEventTypeReadWriter());
         readerWriterManager.AddType(new MouseScrollEventTypeReadWriter());
         readerWriterManager.AddType(new ResolutionTypeReadWriter());
-        readerWriterManager.InstallVectorsExtension();
     }
 }

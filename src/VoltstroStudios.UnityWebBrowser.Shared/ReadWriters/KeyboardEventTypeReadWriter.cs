@@ -3,7 +3,6 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-using VoltRpc.Extension.Memory;
 using VoltRpc.IO;
 using VoltRpc.Types;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;

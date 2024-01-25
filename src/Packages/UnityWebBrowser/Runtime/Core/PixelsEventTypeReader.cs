@@ -5,7 +5,6 @@
 
 using System;
 using Unity.Collections;
-using VoltRpc.Extension.Memory;
 using VoltRpc.IO;
 using VoltRpc.Types;
 

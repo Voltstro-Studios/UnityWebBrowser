@@ -157,9 +157,7 @@
         "dev.voltstro.nativearrayspanextensions": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.cysharp.unitask": "2.5.0",
-        "org.nuget.voltrpc": "3.1.0",
-        "org.nuget.voltrpc.extension.memory": "1.1.0",
-        "org.nuget.voltrpc.extension.vectors": "1.1.0"
+        "org.nuget.voltrpc": "3.2.0"
       }
     },
     "dev.voltstro.unitywebbrowser.communication.pipes": {
@@ -219,31 +217,6 @@
       "dependencies": {},
       "url": "https://upm-pkgs.voltstro.dev"
     },
-    "org.nuget.system.buffers": {
-      "version": "4.5.1",
-      "depth": 3,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
-    "org.nuget.system.memory": {
-      "version": "4.5.4",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.buffers": "4.5.1",
-        "org.nuget.system.numerics.vectors": "4.4.0",
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
-    "org.nuget.system.numerics.vectors": {
-      "version": "4.5.0",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
     "org.nuget.system.runtime.compilerservices.unsafe": {
       "version": "6.0.0",
       "depth": 1,
@@ -252,30 +225,10 @@
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.voltrpc": {
-      "version": "3.1.0",
+      "version": "3.2.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
-    "org.nuget.voltrpc.extension.memory": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.voltrpc": "3.0.0",
-        "org.nuget.system.memory": "4.5.4"
-      },
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
-    "org.nuget.voltrpc.extension.vectors": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.voltrpc": "3.0.0",
-        "org.nuget.system.numerics.vectors": "4.5.0"
-      },
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.modules.imgui": {
