@@ -45,7 +45,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         private static RuntimePlatform[] supportedPlatforms = new[]
         {
             RuntimePlatform.WindowsPlayer,
-            //RuntimePlatform.WindowsEditor,
+            RuntimePlatform.WindowsEditor,
             RuntimePlatform.LinuxPlayer,
             RuntimePlatform.LinuxEditor,
             RuntimePlatform.OSXEditor
