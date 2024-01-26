@@ -9,10 +9,26 @@
         "UniTask"
     ],
     "includePlatforms": [
+        "Android",
         "Editor",
+        "EmbeddedLinux",
+        "GameCoreScarlett",
+        "GameCoreXboxOne",
+        "iOS",
         "LinuxStandalone64",
+        "CloudRendering",
+        "Lumin",
         "macOSStandalone",
-        "WindowsStandalone64"
+        "PS4",
+        "PS5",
+        "Stadia",
+        "Switch",
+        "tvOS",
+        "WSA",
+        "WebGL",
+        "WindowsStandalone32",
+        "WindowsStandalone64",
+        "XboxOne"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

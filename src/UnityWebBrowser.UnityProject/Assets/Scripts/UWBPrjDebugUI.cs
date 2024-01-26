@@ -55,6 +55,10 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             unformattedConsoleItems = new List<string> { startMessage };
             formattedConsoleItems = new List<string> { startMessage };
             popups = new List<WebBrowserPopupInfo>();
+            
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
+            
             webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog += HandleOutputLogMessage;
             webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += HandleErrorLogMessage;
 
@@ -90,6 +94,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
 
         private void Update()
         {
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
+            
             fps = (int)(1f / Time.unscaledDeltaTime);
 
             if (!(Time.unscaledTime > timer)) return;
@@ -103,6 +110,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         private void OnDestroy()
         {
             UImGuiUtility.Layout -= OnImGuiLayout;
+            
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
 
             getPixelsMarker.Dispose();
             applyTextureMarker.Dispose();
@@ -111,6 +121,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         private void OnImGuiLayout(UImGui.UImGui uImGui)
         {
             if(hide)
+                return;
+            
+            if(webBrowserUIBasic.browserClient.HasDisposed)
                 return;
             
             ImGui.Begin("UWB Debug UI");

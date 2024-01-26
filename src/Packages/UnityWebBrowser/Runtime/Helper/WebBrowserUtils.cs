@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Collections;
@@ -41,6 +42,15 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
     [Preserve]
     public static class WebBrowserUtils
     {
+        private static RuntimePlatform[] supportedPlatforms = new[]
+        {
+            RuntimePlatform.WindowsPlayer,
+            //RuntimePlatform.WindowsEditor,
+            RuntimePlatform.LinuxPlayer,
+            RuntimePlatform.LinuxEditor,
+            RuntimePlatform.OSXEditor
+        };
+        
         /// <summary>
         ///     Gets the main directory where logs and cache may be stored
         /// </summary>
@@ -71,6 +81,8 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             return Path.GetFullPath($"{Application.dataPath}/Resources/Data/UWB/");
 #elif UNITY_STANDALONE
 		    return Path.GetFullPath($"{Application.dataPath}/UWB/");
+#else       //Unsupported platform, UWB shouldn't run anyway
+            return null;
 #endif
         }
 
@@ -136,6 +148,15 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             position.y = -(ptLocationRelativeToImageInScreenCoordinates.y / uiImageObjectRect.height) + 1;
 
             return true;
+        }
+        
+        /// <summary>
+        ///     Checks if UWB is running on a supported platform
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsRunningOnSupportedPlatform()
+        {
+            return supportedPlatforms.Any(x => x == UnityEngine.Device.Application.platform);
         }
 
         /// <summary>
@@ -207,25 +228,6 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
 
             texture.SetPixels32(colors);
             texture.Apply();
-        }
-
-        /// <summary>
-        ///     Copies a <see cref="ReadOnlyMemory{T}" /> to a <see cref="NativeArray{T}" />
-        /// </summary>
-        /// <param name="copyFrom"></param>
-        /// <param name="copyTo"></param>
-        /// <param name="token"></param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void CopySpanToNativeArray<T>(ReadOnlySpan<T> copyFrom, NativeArray<T> copyTo,
-            CancellationToken token) where T : struct
-        {
-            for (int i = 0; i < copyFrom.Length; i++)
-            {
-                if (token.IsCancellationRequested)
-                    return;
-
-                copyTo[i] = copyFrom[i];
-            }
         }
     }
 }

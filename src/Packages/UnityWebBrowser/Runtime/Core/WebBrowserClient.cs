@@ -265,6 +265,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <exception cref="FileNotFoundException"></exception>
         internal void Init()
         {
+            if (!WebBrowserUtils.IsRunningOnSupportedPlatform())
+            {
+                logger.Warn("UWB is not supported on the current runtime platform! Not running.");
+                Dispose();
+                return;
+            }
+            
             //Get the path to the UWB process we are using and make sure it exists
             string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
             logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
@@ -949,6 +956,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
 
             //Dispose of buffers
+            if (resizeLock == null)
+                return;
+            
             lock (resizeLock)
             {
                 if (nextTextureData.IsCreated)
