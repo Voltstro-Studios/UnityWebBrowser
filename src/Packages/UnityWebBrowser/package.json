@@ -18,9 +18,9 @@
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "dependencies": {
-    "dev.voltstro.nativearrayspanextensions": "1.0.0",
+    "dev.voltstro.nativearrayspanextensions": "1.0.1",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.cysharp.unitask": "2.5.0",
+    "com.cysharp.unitask": "2.5.3",
     "org.nuget.voltrpc": "3.2.0"
   },
   "samples": [

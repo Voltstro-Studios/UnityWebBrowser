@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.unitask": {
-      "version": "2.5.0",
+      "version": "2.5.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -40,7 +40,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.5.1",
+      "version": "1.7.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -90,7 +90,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -118,7 +118,7 @@
       }
     },
     "dev.voltstro.nativearrayspanextensions": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -154,9 +154,9 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.nativearrayspanextensions": "1.0.0",
+        "dev.voltstro.nativearrayspanextensions": "1.0.1",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.cysharp.unitask": "2.5.0",
+        "com.cysharp.unitask": "2.5.3",
         "org.nuget.voltrpc": "3.2.0"
       }
     },
