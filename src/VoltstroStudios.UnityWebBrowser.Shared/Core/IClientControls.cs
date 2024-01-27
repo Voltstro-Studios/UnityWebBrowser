@@ -59,4 +59,10 @@ internal interface IClientControls
     ///     Tell the client that we are ready
     /// </summary>
     public void Ready();
+
+    /// <summary>
+    ///     Executes a registered method
+    /// </summary>
+    /// <param name="method"></param>
+    public void ExecuteJsMethod(string method);
 }

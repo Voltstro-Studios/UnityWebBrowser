@@ -67,6 +67,12 @@ public class ClientControlsActions : IClientControls, IDisposable
             clientActions?.Ready();
     }
 
+    public void ExecuteJsMethod(string method)
+    {
+        if (client is {IsConnected: true})
+            clientActions?.ExecuteJsMethod(method);
+    }
+
     public void Dispose()
     {
         ReleaseResources();

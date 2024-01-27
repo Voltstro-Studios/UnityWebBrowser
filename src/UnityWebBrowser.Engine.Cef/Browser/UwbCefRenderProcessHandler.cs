@@ -3,6 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+using UnityWebBrowser.Engine.Cef.Browser.Js;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -21,5 +22,8 @@ public class UwbCefRenderProcessHandler : CefRenderProcessHandler
 
         CefV8Value cefVersion = CefV8Value.CreateString(CefRuntime.ChromeVersion);
         v8Object.SetValue("webEngineVersion", cefVersion);
+
+        CefV8Value executeMethod = CefV8Value.CreateFunction("uwbExecuteMethod", new UwbCefJsMethodHandler());
+        v8Object.SetValue("uwbExecuteMethod", executeMethod);
     }
 }

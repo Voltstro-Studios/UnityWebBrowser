@@ -285,6 +285,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             client.EngineReady().Forget();
         }
 
+        public void ExecuteJsMethod(string method)
+        {
+            ExecuteOnUnity(() => client.InvokeJsMethod(method));
+        }
+
         #endregion
     }
 }

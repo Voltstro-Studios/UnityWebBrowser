@@ -881,6 +881,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #endregion
 
+        #region JS Methods
+
+        internal void InvokeJsMethod(string methodName)
+        {
+            logger.Debug(methodName);
+        }
+
+        #endregion
+
         #region Destroying
 
 #if !UNITY_EDITOR

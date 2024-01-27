@@ -3,6 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+using UnityWebBrowser.Engine.Cef.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
@@ -11,14 +12,14 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     <see cref="CefApp" /> for CefBrowserProcess
 /// </summary>
-public class UwbCefApp : CefApp
+internal class UwbCefApp : CefApp
 {
     private readonly bool mediaStreamingEnabled;
     private readonly bool noProxyServer;
-
+    
     private UwbCefBrowserProcessHandler browserProcessHandler;
 
-    public UwbCefApp(LaunchArguments launchArguments)
+    internal UwbCefApp(LaunchArguments launchArguments)
     {
         mediaStreamingEnabled = launchArguments.WebRtc;
         noProxyServer = !launchArguments.ProxyEnabled;

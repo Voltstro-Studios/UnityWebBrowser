@@ -5,6 +5,7 @@
 
 using System;
 using System.Numerics;
+using UnityWebBrowser.Engine.Cef.Browser.Js;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
@@ -289,6 +290,23 @@ public class UwbCefClient : CefClient, IDisposable
     {
         renderHandler.Resize(new CefSize((int) resolution.Width, (int) resolution.Height));
         browserHost.WasResized();
+    }
+
+    #endregion
+
+    #region JS
+    
+    protected override bool OnProcessMessageReceived(CefBrowser browser, CefFrame frame, CefProcessId sourceProcess,
+        CefProcessMessage message)
+    {
+        if (message.Name.StartsWith(UwbCefJsMethodHandler.UwbCefMessagePrefix))
+        {
+            string functionName = message.Name[UwbCefJsMethodHandler.UwbCefMessagePrefix.Length..];
+            ClientControls.ExecuteJsMethod(functionName);
+            Logger.Info(functionName);
+        }
+
+        return false;
     }
 
     #endregion
