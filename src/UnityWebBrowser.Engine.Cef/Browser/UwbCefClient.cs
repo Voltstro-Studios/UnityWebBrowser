@@ -4,8 +4,10 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using UnityWebBrowser.Engine.Cef.Browser.Js;
+using UnityWebBrowser.Engine.Cef.Browser.Messages;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
@@ -63,6 +65,12 @@ public class UwbCefClient : CefClient, IDisposable
         displayHandler = new UwbCefDisplayHandler(this);
         requestHandler = new UwbCefRequestHandler(proxySettings);
         contextMenuHandler = new UwbCefContextMenuHandler();
+
+        //Create message types
+        messageTypes = new Dictionary<string, IMessageBase>
+        {
+            [ExecuteJsMethodMessage.ExecuteJsMethodName] = new ExecuteJsMethodMessage(clientControlsActions)
+        };
     }
 
     /// <summary>
@@ -294,18 +302,36 @@ public class UwbCefClient : CefClient, IDisposable
 
     #endregion
 
-    #region JS
+    #region Messages
+
+    private readonly Dictionary<string, IMessageBase> messageTypes;
     
     protected override bool OnProcessMessageReceived(CefBrowser browser, CefFrame frame, CefProcessId sourceProcess,
         CefProcessMessage message)
     {
-        if (message.Name.StartsWith(UwbCefJsMethodHandler.UwbCefMessagePrefix))
+        try
         {
-            string functionName = message.Name[UwbCefJsMethodHandler.UwbCefMessagePrefix.Length..];
-            ClientControls.ExecuteJsMethod(functionName);
-            Logger.Info(functionName);
-        }
+            int index = message.Name.IndexOf(": ", StringComparison.Ordinal);
+            if (index == 0)
+                return false;
 
+            string messageType = message.Name[..index];
+            string messageValue = message.Name[(index + 2)..];
+
+            foreach (KeyValuePair<string, IMessageBase> messageBase in messageTypes)
+            {
+                if (messageBase.Key == messageType)
+                {
+                    object value = messageBase.Value.Deserialize(messageValue);
+                    messageBase.Value.Execute(value);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Error handling message received!");
+        }
+        
         return false;
     }
 

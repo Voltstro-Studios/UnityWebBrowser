@@ -9,8 +9,6 @@ namespace UnityWebBrowser.Engine.Cef.Browser.Js;
 
 internal class UwbCefJsMethodHandler : CefV8Handler
 {
-    public const string UwbCefMessagePrefix = "UWBEXECUTEMETHODJS: ";
-    
     protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
     {
         if (name == "uwbExecuteMethod" && arguments.Length > 0)
@@ -26,9 +24,11 @@ internal class UwbCefJsMethodHandler : CefV8Handler
 
             string functionName = nameArgument.GetStringValue();
             
-            //Send IPC message to browser process to execute message
-            CefBrowser browser = CefV8Context.GetCurrentContext().GetBrowser();
-            browser!.GetMainFrame()!.SendProcessMessage(CefProcessId.Browser, CefProcessMessage.Create($"{UwbCefMessagePrefix}{functionName}"));
+            //TODO: Arguments
+
+            //Create message
+            ExecuteJsMethodMessage message = new(functionName);
+            message.SendMessage();
             
             returnValue = CefV8Value.CreateBool(true);
             exception = null;
