@@ -4,8 +4,11 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -883,10 +886,44 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         #endregion
 
         #region JS Methods
+        
+        public struct JsMethodInfo
+        {
+            public MethodInfo Method { get; set; }
+            public object Target { get; set; }
+        }
+        
+        private Dictionary<string, JsMethodInfo> jsMethod = new Dictionary<string, JsMethodInfo>();
 
+        public void RegisterJsMethod(string name, Action method)
+        {
+            //method.Method
+            jsMethod.Add(name, new JsMethodInfo
+            {
+                Method = method.GetMethodInfo(),
+                Target = method.Target
+            });
+        }
+        
         internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
             logger.Debug(executeJsMethod.MethodName);
+
+            KeyValuePair<string, JsMethodInfo> foundMethod = jsMethod.FirstOrDefault(x => x.Key == executeJsMethod.MethodName);
+            if (foundMethod.Key == null)
+            {
+                //Error
+                logger.Error($"Engine tried executing JS method '{executeJsMethod.MethodName}'! Which has not been registered!");
+            }
+
+            try
+            {
+                foundMethod.Value.Method.Invoke(foundMethod.Value.Target, null);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error executing JS method! {ex}");
+            }
         }
 
         #endregion
