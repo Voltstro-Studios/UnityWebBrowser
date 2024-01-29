@@ -16,5 +16,6 @@ internal static class ReadWriterUtils
         readerWriterManager.AddType(new MouseMoveEventTypeReadWriter());
         readerWriterManager.AddType(new MouseScrollEventTypeReadWriter());
         readerWriterManager.AddType(new ResolutionTypeReadWriter());
+        readerWriterManager.AddType(new ExecuteJsMethodTypeReadWriter());
     }
 }

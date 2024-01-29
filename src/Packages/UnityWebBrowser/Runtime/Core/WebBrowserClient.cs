@@ -21,6 +21,7 @@ using VoltstroStudios.UnityWebBrowser.Helper;
 using VoltstroStudios.UnityWebBrowser.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Object = UnityEngine.Object;
 using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
@@ -883,9 +884,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #region JS Methods
 
-        internal void InvokeJsMethod(string methodName)
+        internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
-            logger.Debug(methodName);
+            logger.Debug(executeJsMethod.MethodName);
         }
 
         #endregion

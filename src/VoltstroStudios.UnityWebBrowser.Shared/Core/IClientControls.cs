@@ -4,6 +4,7 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using VoltRpc.Proxy;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 namespace VoltstroStudios.UnityWebBrowser.Shared.Core;
 
@@ -63,6 +64,6 @@ internal interface IClientControls
     /// <summary>
     ///     Executes a registered method
     /// </summary>
-    /// <param name="method"></param>
-    public void ExecuteJsMethod(string method);
+    /// <param name="executeJsMethod"></param>
+    public void ExecuteJsMethod(ExecuteJsMethod executeJsMethod);
 }

@@ -317,6 +317,8 @@ public class UwbCefClient : CefClient, IDisposable
 
             string messageType = message.Name[..index];
             string messageValue = message.Name[(index + 2)..];
+            
+            Logger.Debug($"Received message of type {messageType}: {messageValue}");
 
             foreach (KeyValuePair<string, IMessageBase> messageBase in messageTypes)
             {

@@ -16,6 +16,7 @@ using VoltstroStudios.UnityWebBrowser.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared.ReadWriters;
 
@@ -285,9 +286,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             client.EngineReady().Forget();
         }
 
-        public void ExecuteJsMethod(string method)
+        public void ExecuteJsMethod(ExecuteJsMethod executeJsMethod)
         {
-            ExecuteOnUnity(() => client.InvokeJsMethod(method));
+            ExecuteOnUnity(() => client.InvokeJsMethod(executeJsMethod));
         }
 
         #endregion

@@ -6,6 +6,7 @@
 using System;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltRpc.Communication;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 #nullable enable
 namespace VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
@@ -67,10 +68,10 @@ public class ClientControlsActions : IClientControls, IDisposable
             clientActions?.Ready();
     }
 
-    public void ExecuteJsMethod(string method)
+    public void ExecuteJsMethod(ExecuteJsMethod executeJsMethod)
     {
         if (client is {IsConnected: true})
-            clientActions?.ExecuteJsMethod(method);
+            clientActions?.ExecuteJsMethod(executeJsMethod);
     }
 
     public void Dispose()
