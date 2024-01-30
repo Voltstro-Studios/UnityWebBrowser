@@ -4,11 +4,8 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +15,7 @@ using Unity.Profiling;
 using UnityEngine;
 using VoltstroStudios.UnityWebBrowser.Communication;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Core.Js;
 using VoltstroStudios.UnityWebBrowser.Core.Popups;
 using VoltstroStudios.UnityWebBrowser.Events;
 using VoltstroStudios.UnityWebBrowser.Helper;
@@ -253,6 +251,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
+        private JsMethodManager jsMethodManager;
         private CancellationTokenSource cancellationSource;
 
         private object resizeLock;
@@ -381,7 +380,18 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
 
+            jsMethodManager = new JsMethodManager();
+
             cancellationSource = new CancellationTokenSource();
+
+            try
+            {
+                OnClientInitialized?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error invoking OnClientInitialized! {ex}");
+            }
 
             //Start the engine process
             UniTask.Create(() => 
@@ -567,6 +577,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         #endregion
 
         #region Browser Events
+
+        public event OnClientInitialized OnClientInitialized;
 
         /// <summary>
         ///     Invoked when the url changes
@@ -887,43 +899,44 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #region JS Methods
         
-        public struct JsMethodInfo
-        {
-            public MethodInfo Method { get; set; }
-            public object Target { get; set; }
-        }
-        
-        private Dictionary<string, JsMethodInfo> jsMethod = new Dictionary<string, JsMethodInfo>();
-
         public void RegisterJsMethod(string name, Action method)
         {
-            //method.Method
-            jsMethod.Add(name, new JsMethodInfo
-            {
-                Method = method.GetMethodInfo(),
-                Target = method.Target
-            });
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
         }
+        
+        public void RegisterJsMethod<T>(string name, Action<T> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        public void RegisterJsMethod<T1, T2>(string name, Action<T1, T2> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        public void RegisterJsMethod<T1, T2, T3>(string name, Action<T1, T2, T3> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
         
         internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
             logger.Debug(executeJsMethod.MethodName);
 
-            KeyValuePair<string, JsMethodInfo> foundMethod = jsMethod.FirstOrDefault(x => x.Key == executeJsMethod.MethodName);
-            if (foundMethod.Key == null)
-            {
-                //Error
-                logger.Error($"Engine tried executing JS method '{executeJsMethod.MethodName}'! Which has not been registered!");
-            }
-
-            try
-            {
-                foundMethod.Value.Method.Invoke(foundMethod.Value.Target, null);
-            }
-            catch (Exception ex)
-            {
-                logger.Error($"Error executing JS method! {ex}");
-            }
+            jsMethodManager.InvokeJsMethod(executeJsMethod);
         }
 
         #endregion
