@@ -13,7 +13,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         [SerializeField]
         private WebBrowserUIBasic uiBasic;
         
-        public void Start()
+        public void Awake()
         {
             uiBasic.browserClient.OnClientInitialized += BrowserClientOnOnClientInitialized;
         }
@@ -25,6 +25,8 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             uiBasic.browserClient.RegisterJsMethod<int, string>("TestIntString", TestMethodIntString);
             uiBasic.browserClient.RegisterJsMethod<string>("TestString", TestMethodString);
             uiBasic.browserClient.RegisterJsMethod<DateTime>("TestDate", TestMethodDate);
+            uiBasic.browserClient.RegisterJsMethod<TestClass>("TestObject", TestMethodObject);
+            uiBasic.browserClient.RegisterJsMethod<TestClassChild>("TestObjectChild", TestMethodObjectChild);
         }
 
         private void TestMethod()
@@ -51,5 +53,27 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         {
             Debug.Log($"Hello from test method! Value was {value}.");
         }
+
+        private void TestMethodObject(TestClass test)
+        { 
+            Debug.Log($"Hello from test method! Value on TestClass was {test.Test}.");   
+        }
+
+        private void TestMethodObjectChild(TestClassChild test)
+        {
+            Debug.Log($"Hello from test method! Value on TestClassChild was {test.What}, TestClass was {test.Test.Test}.");
+        }
+    }
+
+    public class TestClass
+    {
+        public string Test { get; set; }
+    }
+
+    public class TestClassChild
+    {
+        public string What { get; set; }
+        
+        public TestClass Test { get; set; }
     }
 }

@@ -27,9 +27,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             [typeof(string)] = JsValueType.String,
             [typeof(DateTime)] = JsValueType.Date
         };
-        
-        private readonly Dictionary<string, JsMethodInfo> jsMethod = new();
-        
+
+        internal Dictionary<string, JsMethodInfo> JsMethods { get; } = new();
+
         /// <summary>
         ///     Registers a method to be able to be invoked by JS
         /// </summary>
@@ -41,30 +41,39 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
             
-            if (jsMethod.ContainsKey(name))
+            if (JsMethods.ContainsKey(name))
                 throw new ArgumentException($"A method of the name {name} is already registered!", nameof(name));
             
             ParameterInfo[] methodParameters = methodInfo.GetParameters();
 
-            JsValue[]? argumentTypes = null;
+            CustomPropertyTypeInfo[]? argumentTypes = null;
             if (methodParameters.Length > 0)
             {
-                argumentTypes = new JsValue[methodParameters.Length];
+                argumentTypes = new CustomPropertyTypeInfo[methodParameters.Length];
                 for (int i = 0; i < methodParameters.Length; i++)
                 {
                     Type type = methodParameters[i].ParameterType;
                     KeyValuePair<Type, JsValueType> typeMatch = typeMatching.FirstOrDefault(x => x.Key == type);
 
                     JsValueType valueType = typeMatch.Key == null ? JsValueType.Object : typeMatch.Value;
-                    argumentTypes[i] = new JsValue
+                    
+                    //Have to "process" the type
+                    CustomTypeInfo? customTypeInfo = null;
+                    if (valueType == JsValueType.Object)
                     {
-                        Type = valueType
+                        customTypeInfo = CreateCustomTypeInfoForType(type);
+                    }
+                    
+                    argumentTypes[i] = new CustomPropertyTypeInfo
+                    {
+                        ValueType = valueType,
+                        CustomTypeInfo = customTypeInfo
                     };
                 }
             }
             
             //method.Method
-            jsMethod.Add(name, new JsMethodInfo
+            JsMethods.Add(name, new JsMethodInfo
             {
                 Method = methodInfo,
                 Arguments = argumentTypes,
@@ -80,11 +89,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
         public void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
             //Get registered method first
-            (string? methodName, JsMethodInfo foundMethodInfo) = jsMethod.FirstOrDefault(x => x.Key == executeJsMethod.MethodName);
+            (string? methodName, JsMethodInfo foundMethodInfo) = JsMethods.FirstOrDefault(x => x.Key == executeJsMethod.MethodName);
             if (methodName == null)
                 throw new MethodNotFoundException($"Browser tried executing the method '{methodName}', which has not been registered!");
 
-            JsValue[]? foundMethodArguments = foundMethodInfo.Arguments;
+            CustomPropertyTypeInfo[]? foundMethodArguments = foundMethodInfo.Arguments;
             int foundMethodArgumentsLength = foundMethodArguments?.Length ?? 0;
             int passedInMethodArgumentLength = executeJsMethod.Arguments.Length;
 
@@ -100,23 +109,109 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
                 for (int i = 0; i < foundMethodArgumentsLength; i++)
                 {
                     JsValue executedArgument = executeJsMethod.Arguments[i];
-                    JsValue matchingArgument = foundMethodArguments![i];
+                    CustomPropertyTypeInfo matchingArgument = foundMethodArguments![i];
 
-                    if (executedArgument.Type != matchingArgument.Type)
-                        throw new InvalidArgumentsException($"Invalid argument type! Was excepting '{matchingArgument.Type}', but got type of '{executedArgument.Type}'!");
+                    if (executedArgument.Type != matchingArgument.ValueType)
+                        throw new InvalidArgumentsException($"Invalid argument type! Was excepting '{matchingArgument.ValueType}', but got type of '{executedArgument.Type}'!");
 
-                    arguments[i] = executedArgument.Value;
+                    object argumentValue = executedArgument.Value;
+                    if (matchingArgument.CustomTypeInfo != null)
+                    {
+                        JsObjectHolder objectHolder = (JsObjectHolder)executedArgument.Value;
+                        if(objectHolder.Keys.Length != matchingArgument.CustomTypeInfo.TypeProperties.Length)
+                            throw new InvalidArgumentsException($"Passed in argument object keys count does not match what is excepted!");
+
+                        argumentValue = CreateObjectFromObjectHolder(objectHolder, matchingArgument.CustomTypeInfo);
+                    }
+
+                    arguments[i] = argumentValue;
                 }
             }
 
             //Invoke method
             foundMethodInfo.Method.Invoke(foundMethodInfo.Target, arguments);
         }
+
+        private static object CreateObjectFromObjectHolder(JsObjectHolder objectHolder, CustomTypeInfo customTypeInfo)
+        {
+            object argumentValue = Activator.CreateInstance(customTypeInfo.RootType);
+            foreach (CustomPropertyTypeInfo customPropertyTypeInfo in customTypeInfo.TypeProperties)
+            {
+                JsObjectValue? matchedKey = objectHolder.Keys.FirstOrDefault(x => x.KeyName == customPropertyTypeInfo.PropertyName);
+                if (matchedKey == null)
+                    throw new InvalidArgumentsException($"Passed in argument object key names does not match what is excepted!");
+
+                if (matchedKey.Value.Type != customPropertyTypeInfo.ValueType)
+                    throw new InvalidArgumentsException(
+                        "Passed in argument object types does not match what is excepted!");
+
+                object propertyValue = matchedKey.Value.Value;
+                if (matchedKey.Value.Type == JsValueType.Object)
+                {
+                    propertyValue = CreateObjectFromObjectHolder((JsObjectHolder)matchedKey.Value.Value,
+                        customPropertyTypeInfo.CustomTypeInfo!);
+                }
+                            
+                customTypeInfo.RootType.GetProperty(customPropertyTypeInfo.PropertyName)!.SetValue(argumentValue, propertyValue);
+            }
+
+            return argumentValue;
+        }
+
+        private CustomTypeInfo CreateCustomTypeInfoForType(Type type)
+        {
+            //Get all properties
+            PropertyInfo[] properties = type.GetProperties();
+            CustomPropertyTypeInfo[] propertyTypeInfos = new CustomPropertyTypeInfo[properties.Length];
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                //Find type's matching JsValueType
+                PropertyInfo property = properties[i];
+                Type propertyType = property.PropertyType;
+                KeyValuePair<Type, JsValueType> propertyTypeMatch = typeMatching.FirstOrDefault(x => x.Key == propertyType);
+                JsValueType propertyValueType = propertyTypeMatch.Key == null ? JsValueType.Object : propertyTypeMatch.Value;
+
+                //This is an object type, which we need some more info on
+                CustomTypeInfo? objectPropertyTypeInfo = null;
+                if (propertyValueType == JsValueType.Object)
+                    objectPropertyTypeInfo = CreateCustomTypeInfoForType(propertyType);
+
+                propertyTypeInfos[i] = new CustomPropertyTypeInfo
+                {
+                    ValueType = propertyValueType,
+                    CustomTypeInfo = objectPropertyTypeInfo,
+                    PropertyName = property.Name
+                };
+            }
+
+            return new CustomTypeInfo
+            {
+                RootType = type,
+                TypeProperties = propertyTypeInfos
+            };
+        }
         
-        private struct JsMethodInfo
+        public class CustomPropertyTypeInfo
+        {
+            public JsValueType ValueType { get; set; }
+            
+            public string PropertyName { get; set; }
+            
+            public CustomTypeInfo? CustomTypeInfo { get; set; }
+        }
+        
+        public class CustomTypeInfo
+        {
+            public Type RootType { get; set; }
+
+            public CustomPropertyTypeInfo[] TypeProperties { get; set; }
+        }
+        
+        public struct JsMethodInfo
         {
             public MethodInfo Method { get; set; }
-            public JsValue[]? Arguments { get; set; }
+            public CustomPropertyTypeInfo[]? Arguments { get; set; }
             public object Target { get; set; }
         }
     }
