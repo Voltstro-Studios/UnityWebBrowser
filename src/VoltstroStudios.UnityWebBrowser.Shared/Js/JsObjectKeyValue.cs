@@ -5,8 +5,18 @@
 
 namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 
-public class JsObjectValue
+/// <summary>
+///     
+/// </summary>
+public class JsObjectKeyValue
 {
-    public string KeyName { get; set; }
+    /// <summary>
+    ///     Key
+    /// </summary>
+    public string Key { get; set; }
+    
+    /// <summary>
+    ///     Value of the key
+    /// </summary>
     public JsValue Value { get; set; }
 }

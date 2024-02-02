@@ -4,7 +4,6 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using UnityWebBrowser.Engine.Cef.Browser.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Js;
@@ -20,7 +19,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser.Messages;
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(DateTime))]
 [JsonSerializable(typeof(JsObjectHolder))]
-[JsonSerializable(typeof(JsObjectValue[]))]
+[JsonSerializable(typeof(JsObjectKeyValue[]))]
 [JsonSerializable(typeof(JsValue[]))]
 internal partial class SourceGenerationContext : JsonSerializerContext
 {

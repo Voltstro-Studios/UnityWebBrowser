@@ -9,11 +9,16 @@ using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Js;
 
+/// <summary>
+///     <see cref="CefV8Handler"/> for uwbExecuteMethod
+/// </summary>
 internal class UwbCefJsMethodHandler : CefV8Handler
 {
+    public const string ExecuteJsMethodsFunctionName = "ExecuteJsMethod";
+    
     protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
     {
-        if (name == "uwbExecuteMethod" && arguments.Length > 0)
+        if (name == ExecuteJsMethodsFunctionName && arguments.Length > 0)
         {
             //Get name of the function
             CefV8Value nameArgument = arguments[0];
@@ -82,18 +87,19 @@ internal class UwbCefJsMethodHandler : CefV8Handler
         {
             //Custom object
             string[] keys = cefValue.GetKeys();
-            JsObjectValue[] values = new JsObjectValue[keys.Length];
+            JsObjectKeyValue[] values = new JsObjectKeyValue[keys.Length];
             for (int i = 0; i < keys.Length; i++)
             {
                 string key = keys[i];
-                values[i] = new JsObjectValue
+                values[i] = new JsObjectKeyValue
                 {
-                    KeyName = key,
+                    Key = key,
                     Value = ReadCefValueToJsValue(cefValue.GetValue(key))
                 };
             }
             
-            JsObjectHolder objectHolder = new JsObjectHolder
+            //Custom objects are held by a JsObjectHolder
+            JsObjectHolder objectHolder = new()
             {
                 Keys = values
             };
@@ -128,6 +134,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
         }
         else if (cefValue.IsDate)
         {
+            //TODO: Fix
             CefBaseTime time = cefValue.GetDateValue();
             DateTime dateTime = DateTime.FromFileTime(time.Ticks);
 

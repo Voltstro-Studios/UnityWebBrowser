@@ -60,9 +60,9 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
                 {
                     JsObjectHolder objectHolder = (JsObjectHolder)jsValue.Value;
                     writer.WriteInt(objectHolder.Keys.Length);
-                    foreach (JsObjectValue jsObjectValue in objectHolder.Keys)
+                    foreach (JsObjectKeyValue jsObjectValue in objectHolder.Keys)
                     {
-                        writer.WriteString(jsObjectValue.KeyName);
+                        writer.WriteString(jsObjectValue.Key);
                         WriteJsValue(writer, jsObjectValue.Value);
                     }
                 }
@@ -111,13 +111,13 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
             case JsValueType.Object:
                 int objectHolderSize = reader.ReadInt();
 
-                JsObjectValue[] values = new JsObjectValue[objectHolderSize];
+                JsObjectKeyValue[] values = new JsObjectKeyValue[objectHolderSize];
                 for (int i = 0; i < objectHolderSize; i++)
                 {
                     string keyName = reader.ReadString();
-                    values[i] = new JsObjectValue
+                    values[i] = new JsObjectKeyValue
                     {
-                        KeyName = keyName,
+                        Key = keyName,
                         Value = ReadJsValue(reader)
                     };
                 }

@@ -5,12 +5,11 @@
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Messages;
 
+/// <summary>
+///     Base interface for <see cref="MessageBase{T}"/>
+/// </summary>
 public interface IMessageBase
 {
-    public string MessageName { get; }
-    
-    public string Serialize(object obj);
-
     public object Deserialize(string value);
     
     public void Execute(object value);

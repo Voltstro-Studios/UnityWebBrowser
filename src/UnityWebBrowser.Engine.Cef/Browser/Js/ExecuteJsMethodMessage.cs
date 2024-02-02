@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using UnityWebBrowser.Engine.Cef.Browser.Messages;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Js;
@@ -38,7 +37,7 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
         Arguments = arguments;
     }
 
-    public override void Execute(ExecuteJsMethodMessage value)
+    protected override void Execute(ExecuteJsMethodMessage value)
     {
         ExecuteJsMethod executeJsMethod = new ExecuteJsMethod
         {
@@ -58,22 +57,29 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
         clientControlsActions.ExecuteJsMethod(executeJsMethod);
     }
     
-    private JsValue JsonElementToJsValue(JsValue jsValue, JsonElement element)
+    /// <summary>
+    ///     Converts a <see cref="JsonElement"/> to a <see cref="JsValue"/>
+    /// </summary>
+    /// <param name="jsValue"></param>
+    /// <param name="element"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private static JsValue JsonElementToJsValue(JsValue jsValue, JsonElement element)
     {
         switch(jsValue.Type)
         {
             case JsValueType.Null:
                 break;
             case JsValueType.Object:
+                //Objects use type JsObjectHolder
                 JsObjectHolder objectHolder =
                     (JsObjectHolder) element.Deserialize(typeof(JsObjectHolder), SourceGenerationContext.Default)!;
-                for (int i = 0; i < objectHolder.Keys.Length; i++)
+                foreach (JsObjectKeyValue jsKey in objectHolder.Keys)
                 {
-                    JsValue value = objectHolder.Keys[i].Value;
+                    JsValue value = jsKey.Value;
                     if (value.Value is JsonElement objectElement)
-                        objectHolder.Keys[i].Value = JsonElementToJsValue(value, objectElement);
+                        jsKey.Value = JsonElementToJsValue(value, objectElement);
                 }
-
                 jsValue.Value = objectHolder;
                 break;
             case JsValueType.Bool:

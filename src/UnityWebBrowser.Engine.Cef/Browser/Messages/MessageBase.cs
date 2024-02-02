@@ -41,5 +41,5 @@ public abstract class MessageBase<T> : IMessageBase
         browser!.GetMainFrame()!.SendProcessMessage(CefProcessId.Browser, CefProcessMessage.Create($"{MessageName}: {Serialize(this)}"));
     }
 
-    public abstract void Execute(T value);
+    protected abstract void Execute(T value);
 }
