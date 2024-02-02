@@ -137,7 +137,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             object argumentValue = Activator.CreateInstance(customTypeInfo.RootType);
             foreach (CustomPropertyTypeInfo customPropertyTypeInfo in customTypeInfo.TypeProperties)
             {
-                JsObjectValue? matchedKey = objectHolder.Keys.FirstOrDefault(x => x.KeyName == customPropertyTypeInfo.PropertyName);
+                JsObjectKeyValue? matchedKey = objectHolder.Keys.FirstOrDefault(x => x.Key == customPropertyTypeInfo.PropertyName);
                 if (matchedKey == null)
                     throw new InvalidArgumentsException($"Passed in argument object key names does not match what is excepted!");
 

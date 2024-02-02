@@ -134,11 +134,32 @@ internal class UwbCefJsMethodHandler : CefV8Handler
         }
         else if (cefValue.IsDate)
         {
-            //TODO: Fix
             CefBaseTime time = cefValue.GetDateValue();
-            DateTime dateTime = DateTime.FromFileTime(time.Ticks);
+            
+            //Time logic from CefSharp:
+            //https://github.com/cefsharp/CefSharp/blob/bbe7260fe8d0fa4507cf0e36dea36ffe63b35f91/CefSharp/Internals/BaseTimeConverter.cs
+            const long maxFileTime = 2650467743999999999;
+            const long fileTimeOffset = 504911232000000000;
 
-            value = dateTime;
+            long fileTime = time.Ticks * 10;
+
+            if (fileTime > maxFileTime)
+            {
+                value = DateTime.MaxValue;
+            }
+            else
+            {
+                if (fileTime < 0)
+                {
+                    long universalTicks = fileTime + fileTimeOffset;
+                    value = universalTicks <= 0 ? DateTime.MinValue : new DateTime(universalTicks, DateTimeKind.Utc);
+                }
+                else
+                {
+                    value = DateTime.FromFileTimeUtc(fileTime);
+                }
+            }
+            
             type = JsValueType.Date;
         }
         

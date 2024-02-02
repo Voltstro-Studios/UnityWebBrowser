@@ -143,7 +143,7 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
                 value = reader.ReadDouble();
                 break;
             case JsValueType.Date:
-                value = new DateTime(reader.ReadLong());
+                value = new DateTime(reader.ReadLong(), DateTimeKind.Utc);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

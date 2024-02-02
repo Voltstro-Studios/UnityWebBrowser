@@ -51,7 +51,8 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         
         private void TestMethodDate(DateTime value)
         {
-            Debug.Log($"Hello from test method! Value was {value}.");
+            DateTime localTime = value.ToLocalTime();
+            Debug.Log($"Hello from test method! Value in UTC time was {value:yyyy-MM-dd HH:mm:ss zzzz}. Value in local time was {localTime:yyyy-MM-dd HH:mm:ss zzzz}.");
         }
 
         private void TestMethodObject(TestClass test)
