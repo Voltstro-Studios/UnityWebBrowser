@@ -40,7 +40,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
                     CefV8Value argument = arguments[i];
                     jsValues[i - 1] = ReadCefValueToJsValue(argument);
                 }
-                
+
                 //Create message
                 ExecuteJsMethodMessage message = new(functionName, jsValues);
                 message.SendMessage();
@@ -48,6 +48,12 @@ internal class UwbCefJsMethodHandler : CefV8Handler
                 returnValue = CefV8Value.CreateBool(true);
                 exception = null;
 
+                return true;
+            }
+            catch (InvalidValueTypeException ex)
+            {
+                returnValue = null;
+                exception = ex.Message;
                 return true;
             }
             catch (Exception ex)
@@ -69,13 +75,11 @@ internal class UwbCefJsMethodHandler : CefV8Handler
         object value = null;
         JsValueType type = JsValueType.Null;
         
+        //Ensure value is not a promise, function, array buffer.
+        //TODO: Support arrays?
         if (cefValue.IsPromise || cefValue.IsFunction || cefValue.IsArrayBuffer || cefValue.IsArray)
         {
-            //returnValue = null;
-            //exception = "Argument cannot be a promise or function!";
-            //return true;
-            //TODO: Custom exception to filter
-            throw new Exception("Argument cannot be a promise, function, an array or an array buffer!");
+            throw new InvalidValueTypeException("Value cannot be a promise, function, an array or an array buffer!");
         }
         
         if (cefValue.IsNull || cefValue.IsUndefined)
@@ -168,5 +172,12 @@ internal class UwbCefJsMethodHandler : CefV8Handler
             Value = value,
             Type = type
         };
+    }
+
+    private class InvalidValueTypeException : Exception
+    {
+        public InvalidValueTypeException(string message) : base(message)
+        {
+        }
     }
 }
