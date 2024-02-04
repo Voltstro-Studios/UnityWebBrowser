@@ -111,11 +111,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
                     JsValue executedArgument = executeJsMethod.Arguments[i];
                     CustomPropertyTypeInfo matchingArgument = foundMethodArguments![i];
 
-                    if (executedArgument.Type != matchingArgument.ValueType)
+                    if(!(matchingArgument.ValueType == JsValueType.Object && executedArgument.Type == JsValueType.Null)
+                       && executedArgument.Type != matchingArgument.ValueType)
                         throw new InvalidArgumentsException($"Invalid argument type! Was excepting '{matchingArgument.ValueType}', but got type of '{executedArgument.Type}'!");
 
                     object argumentValue = executedArgument.Value;
-                    if (matchingArgument.CustomTypeInfo != null)
+                    if (matchingArgument.CustomTypeInfo != null && executedArgument.Type == JsValueType.Object)
                     {
                         JsObjectHolder objectHolder = (JsObjectHolder)executedArgument.Value;
                         if(objectHolder.Keys.Length != matchingArgument.CustomTypeInfo.TypeProperties.Length)

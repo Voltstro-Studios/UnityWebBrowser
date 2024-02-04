@@ -6,6 +6,7 @@
 using System;
 using UnityEngine;
 
+#nullable enable
 namespace VoltstroStudios.UnityWebBrowser.Prj
 {
     public class UWBPrjDemo : MonoBehaviour
@@ -55,14 +56,14 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             Debug.Log($"Hello from test method! Value in UTC time was {value:yyyy-MM-dd HH:mm:ss zzzz}. Value in local time was {localTime:yyyy-MM-dd HH:mm:ss zzzz}.");
         }
 
-        private void TestMethodObject(TestClass test)
+        private void TestMethodObject(TestClass? test)
         { 
-            Debug.Log($"Hello from test method! Value on TestClass was {test.Test}.");   
+            Debug.Log($"Hello from test method! Value on TestClass was {test?.Test}.");   
         }
 
-        private void TestMethodObjectChild(TestClassChild test)
+        private void TestMethodObjectChild(TestClassChild? test)
         {
-            Debug.Log($"Hello from test method! Value on TestClassChild was {test.What}, TestClass was {test.Test.Test}.");
+            Debug.Log($"Hello from test method! Value on TestClassChild was {test?.What}, TestClass was {test?.Test?.Test}.");
         }
     }
 
@@ -75,6 +76,6 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
     {
         public string What { get; set; }
         
-        public TestClass Test { get; set; }
+        public TestClass? Test { get; set; }
     }
 }
