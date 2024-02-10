@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using UnityWebBrowser.Engine.Cef.Browser.Js;
 using UnityWebBrowser.Engine.Cef.Browser.Messages;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
@@ -87,12 +88,10 @@ public class UwbCefClient : CefClient, IDisposable
     ///     Gets the pixel data of the CEF window
     /// </summary>
     /// <returns></returns>
-    public byte[] GetPixels()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ReadOnlyMemory<byte> GetPixels()
     {
-        if (browserHost == null)
-            return Array.Empty<byte>();
-
-        return renderHandler.Pixels;
+        return browserHost == null ? Array.Empty<byte>() : renderHandler.Pixels;
     }
 
     protected override CefLoadHandler GetLoadHandler()
