@@ -40,11 +40,7 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
             values[i] = ReadJsValue(reader);
         }
 
-        return new ExecuteJsMethod
-        {
-            MethodName = methodName,
-            Arguments = values
-        };
+        return new ExecuteJsMethod(methodName, values);
     }
 
     private static void WriteJsValue(BufferedWriter writer, JsValue jsValue)
@@ -115,17 +111,10 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
                 for (int i = 0; i < objectHolderSize; i++)
                 {
                     string keyName = reader.ReadString();
-                    values[i] = new JsObjectKeyValue
-                    {
-                        Key = keyName,
-                        Value = ReadJsValue(reader)
-                    };
+                    values[i] = new JsObjectKeyValue(keyName, ReadJsValue(reader));
                 }
-                
-                value = new JsObjectHolder
-                {
-                    Keys = values
-                };
+
+                value = new JsObjectHolder(values);
                 break;
             case JsValueType.Int:
                 value = reader.ReadInt();
@@ -149,10 +138,6 @@ internal sealed class ExecuteJsMethodTypeReadWriter : TypeReadWriter<ExecuteJsMe
                 throw new ArgumentOutOfRangeException();
         }
 
-        return new JsValue
-        {
-            Type = type,
-            Value = value
-        };
+        return new JsValue(type, value);
     }
 }

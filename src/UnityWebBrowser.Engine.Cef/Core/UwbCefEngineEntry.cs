@@ -14,7 +14,7 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// <summary>
 ///     <see cref="EngineEntryPoint" /> for the Cef engine
 /// </summary>
-public class UwbCefEngineEntry : EngineEntryPoint
+internal class UwbCefEngineEntry : EngineEntryPoint
 {
     private CefEngineControlsManager cefEngineControlsManager;
 

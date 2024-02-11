@@ -17,7 +17,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     <see cref="CefRenderHandler" /> implementation
 /// </summary>
-public class UwbCefRenderHandler : CefRenderHandler
+internal class UwbCefRenderHandler : CefRenderHandler
 {
     private CefSize cefSize;
 

@@ -12,7 +12,7 @@ using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 namespace UnityWebBrowser.Engine.Cef.Browser.Js;
 
-public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
+internal class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
 {
     public const string ExecuteJsMethodName = "UWBEXECUTEJSMETHOD";
     
@@ -39,11 +39,7 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
 
     protected override void Execute(ExecuteJsMethodMessage value)
     {
-        ExecuteJsMethod executeJsMethod = new ExecuteJsMethod
-        {
-            MethodName = value.MethodName,
-            Arguments = value.Arguments
-        };
+        ExecuteJsMethod executeJsMethod = new ExecuteJsMethod(value.MethodName, value.Arguments);
 
         //Since JSValue.Value is an object, System.Text.Json will deserialize as a JsonElement
         //Pain in the ass, but we can fix it
@@ -51,7 +47,10 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
         {
             JsValue argument = value.Arguments[i];
             if (argument.Value is JsonElement element)
-                value.Arguments[i] = JsonElementToJsValue(argument, element);
+            {
+                JsonElementToJsValue(ref argument, element);
+                value.Arguments[i] = argument;
+            }
         }
 
         clientControlsActions.ExecuteJsMethod(executeJsMethod);
@@ -64,7 +63,7 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
     /// <param name="element"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private static JsValue JsonElementToJsValue(JsValue jsValue, JsonElement element)
+    private static void JsonElementToJsValue(ref JsValue jsValue, JsonElement element)
     {
         switch(jsValue.Type)
         {
@@ -78,7 +77,10 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
                 {
                     JsValue value = jsKey.Value;
                     if (value.Value is JsonElement objectElement)
-                        jsKey.Value = JsonElementToJsValue(value, objectElement);
+                    {
+                        JsonElementToJsValue(ref value, objectElement);
+                        jsKey.Value = value;
+                    }
                 }
                 jsValue.Value = objectHolder;
                 break;
@@ -103,8 +105,6 @@ public class ExecuteJsMethodMessage : MessageBase<ExecuteJsMethodMessage>
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-        return jsValue;
     }
 
     #region Message

@@ -271,10 +271,24 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             public CustomTypeInfo? TypeInfo { get; set; }
         }
         
+        /// <summary>
+        ///     Contains info a method that can be invoked by JS
+        /// </summary>
         internal struct JsMethodInfo
         {
+            /// <summary>
+            ///     The <see cref="MethodInfo"/> of the method
+            /// </summary>
             public MethodInfo Method { get; set; }
+            
+            /// <summary>
+            ///     Details on the arguments (if any)
+            /// </summary>
             public MethodArgument[]? Arguments { get; set; }
+            
+            /// <summary>
+            ///     The object 
+            /// </summary>
             public object Target { get; set; }
         }
     }

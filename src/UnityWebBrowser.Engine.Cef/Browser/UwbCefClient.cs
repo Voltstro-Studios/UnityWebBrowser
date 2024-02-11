@@ -23,7 +23,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     Offscreen CEF
 /// </summary>
-public class UwbCefClient : CefClient, IDisposable
+internal class UwbCefClient : CefClient, IDisposable
 {
     public readonly ClientControlsActions ClientControls;
 

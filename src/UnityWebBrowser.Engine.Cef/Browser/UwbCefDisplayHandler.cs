@@ -14,7 +14,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     <see cref="CefDisplayHandler" /> implementation
 /// </summary>
-public class UwbCefDisplayHandler : CefDisplayHandler
+internal class UwbCefDisplayHandler : CefDisplayHandler
 {
     private readonly ClientControlsActions clientControls;
 

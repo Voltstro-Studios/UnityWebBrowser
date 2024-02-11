@@ -8,8 +8,14 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 /// <summary>
 ///     A value from JS
 /// </summary>
-public class JsValue
+internal class JsValue
 {
+    public JsValue(JsValueType type, object value)
+    {
+        Type = type;
+        Value = value;
+    }
+    
     /// <summary>
     ///     What <see cref="JsValueType"/> this value is
     /// </summary>

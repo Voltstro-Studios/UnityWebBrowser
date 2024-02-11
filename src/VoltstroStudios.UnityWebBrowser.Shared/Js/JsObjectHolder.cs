@@ -8,8 +8,13 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 /// <summary>
 ///     Holds <see cref="JsObjectKeyValue"/> to be able to build out a type
 /// </summary>
-public class JsObjectHolder
+internal class JsObjectHolder
 {
+    public JsObjectHolder(JsObjectKeyValue[] keys)
+    {
+        Keys = keys;
+    }
+    
     /// <summary>
     ///     All the keys and values a JS object has
     /// </summary>

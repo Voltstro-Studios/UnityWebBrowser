@@ -95,18 +95,11 @@ internal class UwbCefJsMethodHandler : CefV8Handler
             for (int i = 0; i < keys.Length; i++)
             {
                 string key = keys[i];
-                values[i] = new JsObjectKeyValue
-                {
-                    Key = key,
-                    Value = ReadCefValueToJsValue(cefValue.GetValue(key))
-                };
+                values[i] = new JsObjectKeyValue(key, ReadCefValueToJsValue(cefValue.GetValue(key)));
             }
             
             //Custom objects are held by a JsObjectHolder
-            JsObjectHolder objectHolder = new()
-            {
-                Keys = values
-            };
+            JsObjectHolder objectHolder = new(values);
 
             value = objectHolder;
             type = JsValueType.Object;
@@ -166,12 +159,8 @@ internal class UwbCefJsMethodHandler : CefV8Handler
             
             type = JsValueType.Date;
         }
-        
-        return new JsValue
-        {
-            Value = value,
-            Type = type
-        };
+
+        return new JsValue(type, value);
     }
 
     private class InvalidValueTypeException : Exception

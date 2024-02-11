@@ -8,8 +8,14 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 /// <summary>
 ///     
 /// </summary>
-public class JsObjectKeyValue
+internal class JsObjectKeyValue
 {
+    public JsObjectKeyValue(string key, JsValue value)
+    {
+        Key = key;
+        Value = value;
+    }
+    
     /// <summary>
     ///     Key
     /// </summary>

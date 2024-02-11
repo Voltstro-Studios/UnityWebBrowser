@@ -10,7 +10,7 @@ namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 /// <summary>
 ///     What data type a JS value is
 /// </summary>
-public enum JsValueType : byte
+internal enum JsValueType : byte
 {
     /// <summary>
     ///     Null/Undefined

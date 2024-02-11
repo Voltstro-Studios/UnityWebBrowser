@@ -22,7 +22,7 @@ namespace VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 /// <summary>
 ///     Handles entry stuff for browser engines
 /// </summary>
-public abstract class EngineEntryPoint : IDisposable
+internal abstract class EngineEntryPoint : IDisposable
 {
     private Client ipcClient;
     private Host ipcHost;

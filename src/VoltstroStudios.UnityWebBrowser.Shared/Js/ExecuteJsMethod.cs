@@ -5,8 +5,14 @@
 
 namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 
-public struct ExecuteJsMethod
+internal struct ExecuteJsMethod
 {
+    public ExecuteJsMethod(string methodName, JsValue[] arguments)
+    {
+        MethodName = methodName;
+        Arguments = arguments;
+    }
+    
     public string MethodName { get; set; }
     
     public JsValue[] Arguments { get; set; }
