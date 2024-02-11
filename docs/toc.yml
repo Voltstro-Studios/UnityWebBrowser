@@ -1,30 +1,6 @@
-items:
-- name: Welcome
-  href: Articles.md
-
-- name: FAQ
-  href: articles/FAQ.md
-
-- name: User
-  items:
-    - name: Setup
-      href: articles/user/Setup.md
-    - name: Packages
-      href: articles/user/Packages.md
-    - name: Usage
-      href: articles/user/Usage.md
-    - name: Engines
-      href: articles/user/Engines.md
-    - name: Logging
-      href: articles/user/Logging.md
-
-- name: Developer
-  items:
-    - name: Developer Guide
-      href: articles/dev/Dev-Guide.md
-    - name: Setup
-      href: articles/dev/Setup.md
-    - name: How Things Work
-      href: articles/dev/How-Things-Work.md
-    - name: Project Layout
-      href: articles/dev/Project-Layout.md
+- name: Articles
+  href: articles/
+- name: API Documentation
+  href: api/
+- name: Changelog
+  href: CHANGELOG.html
