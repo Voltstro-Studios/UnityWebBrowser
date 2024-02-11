@@ -1,9 +1,14 @@
 import './style.css'
 
+interface UWB {
+    EngineVersion: string;
+    EngineName: string;
+    bEngineVersion: string;
+}
+
 declare global {
+
     interface Window {
-        uwbEngineVersion: string;
-        webEngineName: string;
-        webEngineVersion: string;
+        uwb: UWB;
     }
 }
