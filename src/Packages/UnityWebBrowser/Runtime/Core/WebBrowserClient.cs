@@ -901,6 +901,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #region JS Methods
         
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void RegisterJsMethod(string name, Action method)
         {
             if(method == null)
@@ -909,6 +915,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
         }
         
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void RegisterJsMethod<T>(string name, Action<T> method)
         {
             if(method == null)
@@ -917,6 +929,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
         }
         
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void RegisterJsMethod<T1, T2>(string name, Action<T1, T2> method)
         {
             if(method == null)
@@ -925,6 +943,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
         }
         
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void RegisterJsMethod<T1, T2, T3>(string name, Action<T1, T2, T3> method)
         {
             if(method == null)
@@ -933,6 +957,47 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
         }
         
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4, T5>(string name, Action<T1, T2, T3, T4, T5> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4, T5, T6>(string name, Action<T1, T2, T3, T4, T5, T6> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
         
         internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
