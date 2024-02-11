@@ -137,6 +137,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
+        
+        /// <summary>
+        ///     Manager for JS methods
+        /// </summary>
+        public JsMethodManager jsMethodManager = new();
 
         /// <summary>
         ///     The <see cref="CommunicationLayer" /> to use
@@ -251,7 +256,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private Process engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
-        private JsMethodManager jsMethodManager;
         private CancellationTokenSource cancellationSource;
 
         private object resizeLock;
@@ -379,8 +383,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
-
-            jsMethodManager = new JsMethodManager();
 
             cancellationSource = new CancellationTokenSource();
 

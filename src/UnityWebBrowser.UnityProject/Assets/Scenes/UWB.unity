@@ -317,6 +317,10 @@ PrefabInstance:
       propertyPath: browserClient.logSeverity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.jsMethodManager.jsMethodsEnable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
       value: UnityWebBrowser

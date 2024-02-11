@@ -51,15 +51,15 @@ namespace VoltstroStudios.UnityWebBrowser.Tests
             Assert.That(jsMethodInfo.Method, Is.EqualTo(action.Method));
             Assert.That(jsMethodInfo.Arguments, Is.Not.Null);
             
-            JsMethodManager.CustomPropertyTypeInfo argument = jsMethodInfo.Arguments[0];
+            JsMethodManager.MethodArgument argument = jsMethodInfo.Arguments[0];
             Assert.That(argument.ValueType, Is.EqualTo(JsValueType.Object));
-            Assert.That(argument.CustomTypeInfo, Is.Not.Null);
-            Assert.That(argument.CustomTypeInfo.RootType, Is.EqualTo(typeof(TestObject)));
-            Assert.That(argument.CustomTypeInfo.TypeProperties.Length, Is.EqualTo(1));
+            Assert.That(argument.TypeInfo, Is.Not.Null);
+            Assert.That(argument.TypeInfo.Value.RootType, Is.EqualTo(typeof(TestObject)));
+            Assert.That(argument.TypeInfo.Value.TypeProperties.Length, Is.EqualTo(1));
 
-            JsMethodManager.CustomPropertyTypeInfo typeProperties = argument.CustomTypeInfo.TypeProperties[0];
+            JsMethodManager.CustomPropertyTypeInfo typeProperties = argument.TypeInfo.Value.TypeProperties[0];
             Assert.That(typeProperties.ValueType, Is.EqualTo(JsValueType.String));
-            Assert.That(typeProperties.CustomTypeInfo, Is.Null);
+            Assert.That(typeProperties.TypeInfo, Is.Null);
             Assert.That(typeProperties.PropertyName, Is.EqualTo("Test"));
         }
         
