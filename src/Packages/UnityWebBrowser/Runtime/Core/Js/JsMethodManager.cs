@@ -119,7 +119,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             //Get registered method first
             (string? methodName, JsMethodInfo foundMethodInfo) = JsMethods.FirstOrDefault(x => x.Key == executeJsMethod.MethodName);
             if (methodName == null)
-                throw new MethodNotFoundException($"Browser tried executing the method '{methodName}', which has not been registered!");
+                throw new MethodNotFoundException($"Browser tried executing the method '{executeJsMethod.MethodName}', which has not been registered!");
 
             MethodArgument[]? foundMethodArguments = foundMethodInfo.Arguments;
             int foundMethodArgumentsLength = foundMethodArguments?.Length ?? 0;
