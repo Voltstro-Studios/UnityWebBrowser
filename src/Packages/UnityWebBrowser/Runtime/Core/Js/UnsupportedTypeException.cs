@@ -8,11 +8,11 @@ using System;
 namespace VoltstroStudios.UnityWebBrowser.Core.Js
 {
     /// <summary>
-    ///     An <see cref="Exception"/> related to when arguments have some form of mismatch
+    ///     An <see cref="Exception"/> to when a provided <see cref="Type"/> is unsupported
     /// </summary>
-    public sealed class InvalidArgumentsException : Exception
+    public sealed class UnsupportedTypeException : Exception
     {
-        internal InvalidArgumentsException(string message) : base(message)
+        internal UnsupportedTypeException(string message) : base(message)
         {
         }
     }

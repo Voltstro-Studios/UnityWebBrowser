@@ -5,6 +5,9 @@
 
 namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 
+/// <summary>
+///     Main details on a method that JS wants to execute
+/// </summary>
 internal struct ExecuteJsMethod
 {
     public ExecuteJsMethod(string methodName, JsValue[] arguments)
@@ -13,7 +16,13 @@ internal struct ExecuteJsMethod
         Arguments = arguments;
     }
     
+    /// <summary>
+    ///     The name of the method
+    /// </summary>
     public string MethodName { get; set; }
     
+    /// <summary>
+    ///     All arguments of the method
+    /// </summary>
     public JsValue[] Arguments { get; set; }
 }

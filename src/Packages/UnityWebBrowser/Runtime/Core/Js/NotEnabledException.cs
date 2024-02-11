@@ -7,9 +7,12 @@ using System;
 
 namespace VoltstroStudios.UnityWebBrowser.Core.Js
 {
+    /// <summary>
+    ///     An <see cref="Exception"/> related to when JS Methods are disabled
+    /// </summary>
     public sealed class NotEnabledException : Exception
     {
-        public NotEnabledException(string message) : base(message)
+        internal NotEnabledException(string message) : base(message)
         {
         }
     }

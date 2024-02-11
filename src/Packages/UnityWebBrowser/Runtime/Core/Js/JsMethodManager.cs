@@ -41,9 +41,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
         /// <summary>
         ///     Registers a method to be able to be invoked by JS
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="methodInfo"></param>
-        /// <param name="target"></param>
+        /// <param name="name">Name of the method</param>
+        /// <param name="methodInfo">The <see cref="MethodInfo"/> of the method</param>
+        /// <param name="target">Target <see cref="object"/> that the method lives on</param>
+        /// <exception cref="NotEnabledException">Thrown if <see cref="jsMethodsEnable"/> is false</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <see cref="name"/>, <see cref="methodInfo"/> or <see cref="target"/> are null or empty</exception>
+        /// <exception cref="ArgumentException">Thrown if the name has already been used</exception>
+        /// <exception cref="UnsupportedTypeException">Thrown if the method returns anything other then void</exception>
         public void RegisterJsMethod(string name, MethodInfo methodInfo, object target)
         {
             if (!jsMethodsEnable)
@@ -52,9 +56,18 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
             
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
+
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
+
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
             
             if (JsMethods.ContainsKey(name))
                 throw new ArgumentException($"A method of the name {name} is already registered!", nameof(name));
+
+            if (methodInfo.ReturnType != typeof(void))
+                throw new UnsupportedTypeException("The provided method must return void!");
             
             ParameterInfo[] methodParameters = methodInfo.GetParameters();
 
@@ -65,6 +78,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
                 for (int i = 0; i < methodParameters.Length; i++)
                 {
                     Type type = methodParameters[i].ParameterType;
+                    if (type.IsArray)
+                        throw new UnsupportedTypeException("Parameters cannot be an array type!");
+                    
                     KeyValuePair<Type, JsValueType> typeMatch = typeMatching.FirstOrDefault(x => x.Key == type);
 
                     JsValueType valueType = typeMatch.Key == null ? JsValueType.Object : typeMatch.Value;
@@ -184,6 +200,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
                 //Find type's matching JsValueType
                 PropertyInfo property = properties[i];
                 Type propertyType = property.PropertyType;
+                
+                if (propertyType.IsArray)
+                    throw new UnsupportedTypeException("Parameters cannot be an array type!");
+                
                 KeyValuePair<Type, JsValueType> propertyTypeMatch = typeMatching.FirstOrDefault(x => x.Key == propertyType);
                 JsValueType propertyValueType = propertyTypeMatch.Key == null ? JsValueType.Object : propertyTypeMatch.Value;
 

@@ -6,7 +6,7 @@
 namespace VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 /// <summary>
-///     
+///     Contains info of an object's key
 /// </summary>
 internal class JsObjectKeyValue
 {
