@@ -14,12 +14,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         [SerializeField]
         private WebBrowserUIBasic uiBasic;
         
-        public void Awake()
-        {
-            uiBasic.browserClient.OnClientInitialized += BrowserClientOnOnClientInitialized;
-        }
-
-        private void BrowserClientOnOnClientInitialized()
+        public void Start()
         {
             uiBasic.browserClient.RegisterJsMethod("Test", TestMethod);
             uiBasic.browserClient.RegisterJsMethod<int>("TestInt", TestMethodInt);

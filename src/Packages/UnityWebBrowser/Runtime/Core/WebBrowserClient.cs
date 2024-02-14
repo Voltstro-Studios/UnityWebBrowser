@@ -1001,8 +1001,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         
         internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
         {
-            logger.Debug(executeJsMethod.MethodName);
-
             jsMethodManager.InvokeJsMethod(executeJsMethod);
         }
 

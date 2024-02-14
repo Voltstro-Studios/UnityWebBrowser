@@ -16,6 +16,8 @@
       href: user/Engines.md
     - name: Logging
       href: user/Logging.md
+    - name: JavaScript
+      href: user/javascript.md
 
 - name: Developer
   items:
