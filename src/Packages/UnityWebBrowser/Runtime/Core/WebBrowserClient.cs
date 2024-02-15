@@ -141,6 +141,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <summary>
         ///     Manager for JS methods
         /// </summary>
+        [Tooltip("Manager for JS methods")]
         public JsMethodManager jsMethodManager = new();
 
         /// <summary>

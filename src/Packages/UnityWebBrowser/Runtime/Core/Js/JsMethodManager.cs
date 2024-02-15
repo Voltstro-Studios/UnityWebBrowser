@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 using UnityEngine.Scripting;
 using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
@@ -24,6 +25,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Js
         /// <summary>
         ///     Enables/Disables JS Methods
         /// </summary>
+        [Tooltip("Enables/Disables JS Methods")]
         public bool jsMethodsEnable;
         
         private readonly Dictionary<Type, JsValueType> typeMatching = new()
