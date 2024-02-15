@@ -8,7 +8,7 @@ These prerequisites are **mandatory** to compile UWB.
 
 ```
 Unity 2021.3.x
-.NET 6 SDK
+.NET 8 SDK
 PowerShell (formally PowerShell Core)*
 Git
 ```
@@ -56,7 +56,7 @@ Once in PowerShell, go to the `src/` directory, and run the `setup-all.ps1` scri
 ./setup-all.ps1
 ```
 
-Depending on your system, and your download speeds, this script could take upto a minute or longer. You only need to run this once.
+Depending on your system, and your download speeds, this script could take upto a minute or even longer. You only need to run the setup script once.
 
 You can now open up the `src/UnityWebBrowser.UnityProject` project with Unity.
 
@@ -77,6 +77,14 @@ The 'UWB Debug UI' provided has some useful stats and controls that you may want
 If you need to, extra controls can be added by modifying the `Assets/Scripts/UWBPrjDebugUI.cs` script.
 
 (In the future we hope to develop more editor tools to make life easier.)
+
+## Core/Unity Packages Dev Work
+
+Simple open C# project in Unity with your preferred IDE. You should be able to edit the UWB's packages from the same solution that Unity generates. Remember that Unity packages are contained in `src/Packages/`.
+
+## Engine/Shared Project Dev Work
+
+You can open `src/UnityWebBrowser.sln` with your preferred IDE. The rest of the external projects are contained within this solution, including the shared project and engine projects.
 
 ## Dev Scripts
 

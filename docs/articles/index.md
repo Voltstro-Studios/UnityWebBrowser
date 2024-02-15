@@ -36,3 +36,7 @@ Here are our socials, please don't use these for support!
 [![Twitter Follow](https://img.shields.io/twitter/follow/Voltstro?style=social)](https://twitter.com/Voltstro)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/VoltstroStudios?style=social)](https://twitter.com/VoltstroStudios)
+
+## Legal Disclaimer
+
+These materials are not sponsored by or affiliated with Unity Technologies or its affiliates. “Unity” is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
