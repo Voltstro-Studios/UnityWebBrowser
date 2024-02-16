@@ -469,7 +469,16 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
-                //_ = Task.Run(PixelDataLoop);
+
+                try
+                {
+                    OnClientConnected?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    //This shouldn't ever happen
+                    logger.Warn($"An error occured invoking OnClientConnected! {ex}");
+                }
 
                 Thread pixelDataLoopThread = new(PixelDataLoop)
                 {
@@ -581,7 +590,17 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #region Browser Events
 
+        /// <summary>
+        ///     Invoked when this <see cref="WebBrowserClient"/> initalizes.
+        ///
+        ///     <para>Initialized does not mean that the engine is ready, for that, use <see cref="OnClientConnected"/></para>
+        /// </summary>
         public event OnClientInitialized OnClientInitialized;
+
+        /// <summary>
+        ///     Invoked when this <see cref="WebBrowserClient"/> connects to the engine
+        /// </summary>
+        public event OnClientConnected OnClientConnected;
 
         /// <summary>
         ///     Invoked when the url changes
