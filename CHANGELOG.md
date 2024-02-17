@@ -12,12 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - This doesn't mean that UWB will run on them!
 - Added set/get zoom level
 - Added open dev tools
+- Added 'JS Methods'. A way of invoking .NET methods from JS.
+- Added `OnClientInitialized` event
+- Added `OnClientConnected` event
 
 ### Changed
 
 - Bump deps
 - Updated CEF to 120.1.8
 - Upgrade Engine to .NET 8
+- CEF Engine buffer improvements
 
 ### Fixed
 
