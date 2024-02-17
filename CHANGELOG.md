@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump deps
-- Updated CEF to 120.1.8
+- Updated CEF to 121.3.13
 - Upgrade Engine to .NET 8
 - CEF Engine buffer improvements
 
