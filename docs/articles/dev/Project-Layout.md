@@ -18,7 +18,7 @@ src/
       - UnityWebBrowser/
       - *Other UPM packages*/
   - ThirdParty/
-  - UnityWebBrowser.Pages
+  - UnityWebBrowser.Pages/
   - UnityWebBrowser.Engine.*/
   - UnityWebBrowser.UnityProject/
   - VoltstroStudios.*/
@@ -59,4 +59,4 @@ NodeJs/Yarn project that used to build out HTML that engines use for internal pa
 
 ### UnityWebBrowser.Engine.Cef
 
-UWB's CEF Engine. .NET project that is built out as an application. In publish mode it will build anything .NET into a single file.
+UWB's CEF Engine. .NET project that is built out as an application. In publish mode it will build the app into a single file.

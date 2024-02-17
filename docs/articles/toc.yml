@@ -18,6 +18,8 @@
       href: user/Logging.md
     - name: JavaScript
       href: user/javascript.md
+    - name: Client Events
+      href: user/events.md
 
 - name: Developer
   items:

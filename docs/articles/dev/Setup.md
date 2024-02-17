@@ -80,7 +80,7 @@ If you need to, extra controls can be added by modifying the `Assets/Scripts/UWB
 
 ## Core/Unity Packages Dev Work
 
-Simple open C# project in Unity with your preferred IDE. You should be able to edit the UWB's packages from the same solution that Unity generates. Remember that Unity packages are contained in `src/Packages/`.
+Open Unity's C# project with your preferred IDE. You should be able to edit UWB's packages from the same solution that Unity generates. Remember that UWB's packages are located in `src/Packages/`.
 
 ## Engine/Shared Project Dev Work
 

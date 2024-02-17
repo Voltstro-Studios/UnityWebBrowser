@@ -470,14 +470,18 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
 
-                try
+                //Fire OnClientConnected on main thread
+                await using (UniTask.ReturnToMainThread())
                 {
-                    OnClientConnected?.Invoke();
-                }
-                catch (Exception ex)
-                {
-                    //This shouldn't ever happen
-                    logger.Warn($"An error occured invoking OnClientConnected! {ex}");
+                    try
+                    {
+                        OnClientConnected?.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        //This shouldn't ever happen
+                        logger.Warn($"An error occured invoking OnClientConnected! {ex}");
+                    }
                 }
 
                 Thread pixelDataLoopThread = new(PixelDataLoop)
