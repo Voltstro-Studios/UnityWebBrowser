@@ -4,7 +4,7 @@ Alright, lets get to actually using UWB.
 
 ## Platform Support
 
-UWB aims to support all desktop platforms (Windows, Linux, MacOS). The core currently does support all desktop platforms, however you will have to factor in what engine you want to use. Each engine has their own different platform support. See the [engine page](Engines.md) for each engine's platform support.
+UWB aims to support all desktop platforms (Windows, Linux, MacOS). The core currently does support all desktop platforms, however you will have to factor in what engine you want to use. Each engine has their own different platform support. See the [engine page](engines.md) for each engine's platform support.
 
 > [!WARNING]
 > UWB does **NOT** support [IL2CPP](https://docs.unity3d.com/Manual/IL2CPP.html). This is because UWB requires launching a separate process, which uses System.Diagnostics.Process API that [IL2CPP doesn't support](https://docs.unity3d.com/2021.3/Documentation/Manual/ScriptingRestrictions.html).

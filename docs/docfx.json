@@ -66,10 +66,8 @@
             }
         ],
         "xref": [
+            "https://github.com/dotnet/docfx/raw/main/.xrefmap.json",
             "https://normanderwan.github.io/UnityXrefMaps/2021.3/xrefmap.yml"
-        ],
-        "xrefService": [
-            "https://xref.docs.microsoft.com/query?uid={uid}"
         ],
         "dest": "_site"
     }

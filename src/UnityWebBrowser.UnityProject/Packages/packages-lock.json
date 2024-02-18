@@ -132,13 +132,12 @@
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unityimgui": {
-      "version": "5.0.1",
+      "version": "file:dev.voltstro.unityimgui",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0"
-      },
-      "url": "https://upm-pkgs.voltstro.dev"
+      }
     },
     "dev.voltstro.unityvoltbuilder": {
       "version": "4.1.2",

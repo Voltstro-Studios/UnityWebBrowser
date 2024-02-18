@@ -25,7 +25,7 @@ To setup the registry with your project, [see here](https://github.com/Voltstro/
 
 ### UniTask
 
-> [!NOTE]
+> [!TIP]
 > You are not already using UniTask, you can [skip this part](#installation).
 
 The reason why we need to add the additional `com.cysharp.unitask` scope to VoltstroUPM is because UWB depends on [UniTask](https://github.com/Cysharp/UniTask). VoltstroUPM does provide a mirror copy (from OpenUPM) of UniTask,
@@ -41,8 +41,8 @@ Once you have your registries setup, you can install the packages via UPM GUI.
 
 ![Packages](~/assets/images/articles/user/setup/Packages.webp)
 
-You will need the core "Unity Web Browser" package (`dev.voltstro.unitywebbrowser`). An engine package (and it's engine native package) is also required. For more details on what engines are available and their packages, see the [engines section](Engines.md).
+You will need the core "Unity Web Browser" package (`dev.voltstro.unitywebbrowser`). An engine package (and it's engine native package) is also required. For more details on what engines are available and their packages, see the [engines section](engines.md).
 
-For more information on the different packages, see the [packages section](Packages.md).
+For more information on the different packages, see the [packages section](packages.md).
 
-Once you are ready, you can move onto the [usage section](Usage.md).
+Once you are ready, you can move onto the [usage section](usage.md).

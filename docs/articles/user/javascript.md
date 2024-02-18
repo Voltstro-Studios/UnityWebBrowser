@@ -10,7 +10,7 @@ browserClient.ExecuteJs("console.log('Hello World');");
 
 Which will result in the log message being logged out:
 
-![Log](/assets/images/articles/user/javascript/hello-world-log.webp)
+![Log](~/assets/images/articles/user/javascript/hello-world-log.webp)
 
 ## JS Methods
 
@@ -78,7 +78,7 @@ There are a few requirements of your target method that you want to call.
 
 By default, JS methods are entirely disabled. You can enable it by setting <xref:VoltstroStudios.UnityWebBrowser.Core.Js.JsMethodManager.jsMethodsEnable> to `true`. You can do this in the Unity editor UI.
 
-![Enable JS Methods](/assets/images/articles/user/javascript/enable-js-methods.webp)
+![Enable JS Methods](~/assets/images/articles/user/javascript/enable-js-methods.webp)
 
 ### Registering Methods
 
@@ -133,7 +133,7 @@ public class UWBPrjDemo : MonoBehaviour
 }
 ```
 
-> [!NOTE]
+> [!TIP]
 > By default, RegisterJsMethod can work up to 6 arguments. If you need more arguments simply just use an object.
 >
 > If you cannot use an object for some reason, you can use the low-level <xref:VoltstroStudios.UnityWebBrowser.Core.Js.JsMethodManager.RegisterJsMethod(System.String,System.Reflection.MethodInfo,System.Object)> method instead.
@@ -151,4 +151,4 @@ uwb.ExecuteJsMethod('TestObject', {Test: 'Hello World!'});
 uwb.ExecuteJsMethod('TestObjectChild', {Test: {Test: 'Hello World!'}, What: 'Voltstro Woz Here'});
 ```
 
-![Results](/assets/images/articles/user/javascript/executed-results.webp)
+![Results](~/assets/images/articles/user/javascript/executed-results.webp)

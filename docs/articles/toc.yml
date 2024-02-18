@@ -2,20 +2,20 @@
   href: index.md
 
 - name: FAQ
-  href: FAQ.md
+  href: faq.md
 
 - name: User
   items:
     - name: Setup
-      href: user/Setup.md
+      href: user/setup.md
     - name: Packages
-      href: user/Packages.md
+      href: user/packages.md
     - name: Usage
-      href: user/Usage.md
+      href: user/usage.md
     - name: Engines
-      href: user/Engines.md
+      href: user/engines.md
     - name: Logging
-      href: user/Logging.md
+      href: user/logging.md
     - name: JavaScript
       href: user/javascript.md
     - name: Client Events
@@ -24,10 +24,10 @@
 - name: Developer
   items:
     - name: Developer Guide
-      href: dev/Dev-Guide.md
+      href: dev/dev-guide.md
     - name: Setup
-      href: dev/Setup.md
+      href: dev/setup.md
     - name: How Things Work
-      href: dev/How-Things-Work.md
+      href: dev/how-things-work.md
     - name: Project Layout
-      href: dev/Project-Layout.md
+      href: dev/project-layout.md

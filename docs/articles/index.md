@@ -8,14 +8,14 @@ UWB is a package that allows displaying and interacting with the web from within
 
 The docs are divided into two sections.
 
-- [User](user/Setup.md) - Docs containing information on **using** UWB.
-- [Developers](dev/Dev-Guide.md) - Docs containing information on **developing/contributing to** UWB.
+- [User](user/setup.md) - Docs containing information on **using** UWB.
+- [Developers](dev/dev-guide.md) - Docs containing information on **developing/contributing to** UWB.
 
-If you are just starting, then checkout the [setup section](user/Setup.md).
+If you are just starting, then checkout the [setup section](user/setup.md).
 
 ## Support
 
-If you need support, PLEASE CHECK both [GitHub issues](https://github.com/Voltstro-Studios/UnityWebBrowser/issues) and [discussions](https://github.com/Voltstro-Studios/UnityWebBrowser/discussions), to see if someone else has already asked your question, or already had your issue, AND check the [FAQ](FAQ.md)!
+If you need support, PLEASE CHECK both [GitHub issues](https://github.com/Voltstro-Studios/UnityWebBrowser/issues) and [discussions](https://github.com/Voltstro-Studios/UnityWebBrowser/discussions), to see if someone else has already asked your question, or already had your issue, AND check the [FAQ](faq.md)!
 
 ### Issues
 
