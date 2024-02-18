@@ -132,12 +132,13 @@
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unityimgui": {
-      "version": "file:dev.voltstro.unityimgui",
+      "version": "5.0.1",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0"
-      }
+      },
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unityvoltbuilder": {
       "version": "4.1.2",
@@ -180,7 +181,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.2-121.3.13",
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.0-121.3.13",
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
@@ -198,7 +199,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.2-121.3.13"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.0-121.3.13"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {
