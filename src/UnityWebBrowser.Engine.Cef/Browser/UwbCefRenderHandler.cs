@@ -5,6 +5,7 @@
 
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using UnityWebBrowser.Engine.Cef.Core;
@@ -16,11 +17,14 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     <see cref="CefRenderHandler" /> implementation
 /// </summary>
-public class UwbCefRenderHandler : CefRenderHandler
+internal class UwbCefRenderHandler : CefRenderHandler
 {
-    private readonly object pixelsLock;
     private CefSize cefSize;
-    private byte[] pixels;
+
+    private readonly object pixelsLock;
+    private Memory<byte> userPixelsBuffer;
+    private byte[] pixelsBuffer;
+    private int pixelsLength;
 
     private readonly ClientControlsActions clientControls;
     
@@ -35,27 +39,32 @@ public class UwbCefRenderHandler : CefRenderHandler
         Resize(size);
         clientControls = client.ClientControls;
     }
-
-    public byte[] Pixels
+    
+    public ReadOnlyMemory<byte> Pixels
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
             lock (pixelsLock)
             {
-                byte[] pixelsCopyBuffer = new byte[pixels.Length];
-                Array.Copy(pixels, pixelsCopyBuffer, pixels.Length);
-                return pixelsCopyBuffer;
+                pixelsBuffer.CopyTo(userPixelsBuffer);
             }
+
+            return userPixelsBuffer;
         }
     }
 
     public void Resize(CefSize size)
     {
+        pixelsLength = size.Width * size.Height * 4;
+        
         lock (pixelsLock)
         {
-            pixels = new byte[size.Width * size.Height * 4];
-            cefSize = size;
+            pixelsBuffer = new byte[pixelsLength];
+            userPixelsBuffer = new Memory<byte>(new byte[pixelsLength]);
         }
+        
+        cefSize = size;
     }
 
     protected override CefAccessibilityHandler GetAccessibilityHandler()
@@ -88,12 +97,16 @@ public class UwbCefRenderHandler : CefRenderHandler
         IntPtr buffer, int width,
         int height)
     {
-        if (browser != null)
-            //Copy our pixel buffer to our pixels
-            lock (pixelsLock)
-            {
-                Marshal.Copy(buffer, pixels, 0, pixels.Length);
-            }
+        //Ensure buffer sizes are the same
+        int myBufferSize = width * height * 4;
+        if(myBufferSize != pixelsLength)
+            return;
+        
+        //Copy our pixel buffer to our pixels
+        lock (pixelsLock)
+        {
+            Marshal.Copy(buffer, pixelsBuffer, 0, pixelsLength);
+        }
     }
 
     protected override bool GetScreenInfo(CefBrowser browser, CefScreenInfo screenInfo)

@@ -5,22 +5,21 @@ on:
 
 jobs:
   #This job builds the Unity project
-  build-unity:
-    name: 'Build-Unity'
-    runs-on: ubuntu-20.04
+  build-core:
+    name: 'Build-UWB-Core'
+    runs-on: ubuntu-22.04
     steps:
 
     #Restore
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        lfs: false
         path: 'UnityWebBrowserSource/'
 
     #Setup the Environment
     - uses: actions/setup-dotnet@v2
       name: Setup .NET
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     #Build shared
     - name: Build Shared
@@ -36,8 +35,8 @@ jobs:
         key: Cache-Unity
 
     #Build the Unity project
-    - name: Build Unity
-      uses: game-ci/unity-builder@v2.2.0
+    - name: Build Unity Project
+      uses: game-ci/unity-builder@v4
       env:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -47,43 +46,47 @@ jobs:
         targetPlatform: StandaloneLinux64
         buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
         versioning: Tag
-        androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
 
-  # Builds the 'Pages' project
-  build-pages:
-    name: 'Build-Pages'
-    runs-on: ubuntu-20.04
-    steps:
-
-    #Checkout
-    - uses: actions/checkout@v2
-      with:
-        lfs: false
-        path: 'UnityWebBrowserSource/'
-
-    #Restore the cache for pages
-    - name: Pages Cache
-      uses: actions/cache@v3
-      with:
-        path: UnityWebBrowserSource/src/UnityWebBrowser.Pages/node_modules
-        key: Cache-Pages
-
-    #Build Pages
-    - name: Build Pages
+    #Create an output directory for artifacts
+    - name: Create Artifacts Staging Directory
       shell: pwsh
-      run: '& ./build-pages.ps1'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
+      run: mkdir ~/UWBStaging/
+
+    #Pack UWB Core
+    - name: Pack Core Package
+      shell: pwsh
+      run: npm pack --pack-destination ~/UWBStaging/
+      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser
+
+    #Pack UWB Communication Pipes
+    - name: Pack Communication Pipes Package
+      shell: pwsh
+      run: npm pack --pack-destination ~/UWBStaging/
+      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser.Communication.Pipes
+
+    #Pack UWB UNIX Support
+    - name: Pack Unix Support Package
+      shell: pwsh
+      run: npm pack --pack-destination ~/UWBStaging/
+      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser.Unix-Support
+
+    # Upload Packed Packages
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: UWB-Core
+        path: ~/UWBStaging/*.tgz
 
   #Builds the CEF Engine
   build-engine-cef:
     name: 'Build-Engine-Cef'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
     #Checkout
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        lfs: false
+        fetch-depth: 0
         submodules: 'recursive'
         path: 'UnityWebBrowserSource/'
 
@@ -91,7 +94,7 @@ jobs:
     - uses: actions/setup-dotnet@v2
       name: Setup .NET
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '8.0.x'
 
     #Download CEF (Linux)
     - name: Download CEF (Linux)

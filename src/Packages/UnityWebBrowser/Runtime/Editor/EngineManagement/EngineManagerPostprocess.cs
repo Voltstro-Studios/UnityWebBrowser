@@ -5,6 +5,7 @@
 
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,8 +27,22 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             if (report.summary.result is BuildResult.Failed or BuildResult.Cancelled)
                 return;
 
+#if UWB_ENGINE_PRJ //For CI reasons
+            if(Application.isBatchMode)
+                return;
+#endif
+
             BuildTarget buildTarget = report.summary.platform;
-            Platform buildPlatform = buildTarget.UnityBuildTargetToPlatform();
+            Platform buildPlatform;
+            try
+            {
+                buildPlatform = buildTarget.UnityBuildTargetToPlatform();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Debug.LogWarning("UWB engine will not be copied! Unsupported platform.");
+                return;
+            }
 
             string buildFullOutputPath = report.summary.outputPath;
             string buildAppName = Path.GetFileNameWithoutExtension(buildFullOutputPath);

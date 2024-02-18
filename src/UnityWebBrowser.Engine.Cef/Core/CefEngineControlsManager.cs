@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using UnityWebBrowser.Engine.Cef.Browser;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
@@ -171,6 +172,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
 
     #region Engine Actions
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public PixelsEvent GetPixels()
     {
         return new PixelsEvent
@@ -245,6 +247,21 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     public void ExecuteJs(string js)
     {
         cefClient.ExecuteJs(js);
+    }
+
+    public void SetZoomLevel(double zoomLevel)
+    {
+        cefClient.SetZoomLevel(zoomLevel);
+    }
+
+    public double GetZoomLevel()
+    {
+        return cefClient.GetZoomLevel();
+    }
+
+    public void OpenDevTools()
+    {
+        cefClient.OpenDevTools();
     }
 
     public void Resize(Resolution resolution)

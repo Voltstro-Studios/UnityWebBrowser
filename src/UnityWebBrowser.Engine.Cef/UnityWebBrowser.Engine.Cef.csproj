@@ -5,12 +5,12 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ApplicationIcon>chromium-logo.ico</ApplicationIcon>
         <Description>External process to handel rendering with CEF</Description>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-        <Version>2.0.2-113.3.1</Version>
+        <Version>2.1.0-121.3.13</Version>
         <DefineConstants>BROWSER_PROCESS</DefineConstants>
     </PropertyGroup>
 
@@ -39,7 +39,10 @@
         <ProjectReference Include="..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
         <ProjectReference Include="..\VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj" />
         <ProjectReference Include="..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj" />
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.2.15" PrivateAssets="all" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

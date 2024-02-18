@@ -1,0 +1,4 @@
+apiRules:
+- exclude:
+    uidRegex: ^VoltstroStudios\.UnityWebBrowser\.Tests.*$
+    type: Namespace

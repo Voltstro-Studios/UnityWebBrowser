@@ -1,31 +1,74 @@
+ 
 {
-  "template": "https://gitlab.com/Voltstro-Studios/doctools/volt-docfxv3-theme-package",
-  "defaultLocale": "en-au",
-  "hostName": "projects.voltstro.dev",
-  "basePath": "UnityWebBrowser",
-  "globalMetadata": {
-    "_appTitle": "Unity Web Browser",
-    "_appFooter": "Copyright (c) 2021-2022 Voltstro-Studios<br>These materials are not sponsored by or affiliated with Unity Technologies or its affiliates.<br>“Unity” is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.",
-    "_appFooterIcon": "assets/images/vs-icon.png",
-    "menu_path": "menu.yml"
-  },
-  "dotnet": {
-    "assemblies": [
-      "../src/VoltstroStudios.UnityWebBrowser.DocsPrj/UnityWebBrowser.DocsPrj/bin/Debug/netstandard2.1/VoltstroStudios.UnityWebBrowser.Shared.dll",
-      "../src/VoltstroStudios.UnityWebBrowser.DocsPrj/UnityWebBrowser.DocsPrj/bin/Debug/netstandard2.1/VoltstroStudios.UnityWebBrowser.dll"
-    ]
-  },
-  "files": [
-    "**",
-    "../CHANGELOG.md"
-  ],
-  "additionalFiles": [
-    "../CHANGELOG.md"
-  ],
-  "exclude": ["README.md", "VoltDocsBuilder.json", ".gitignore", "obj/**/*", "_site/**/*"],
-  "xref": [
-    "https://docs.microsoft.com/en-us/dotnet/.xrefmap.json",
-    "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/2021.3/xrefmap.yml",
-    "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/pkgs/com.unity.ugui@1.0/xrefmap.yml"
-  ]
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src": "../src/Packages/UnityWebBrowser",
+                    "files": [
+                        "**/*.cs"
+                    ]
+                },
+                {
+                    "src": "../src/VoltstroStudios.UnityWebBrowser.Shared",
+                    "files": [
+                        "VoltstroStudios.UnityWebBrowser.Shared.csproj"
+                    ]
+                }
+            ],
+            "globalNamespaceId": "Global",
+            "filter": "filterConfig.yml",
+            "dest": "api",
+            "allowCompilationErrors": true
+        }
+    ],
+    "build": {
+        "globalMetadata": {
+            "_appTitle": "UnityWebBrowser",
+            "_appFooter": "UnityWebBrowser"
+        },
+        "content": [
+            {
+                "files": [
+                    "toc.yml",
+                    "index.md",
+                    "articles.md"
+                ]
+            },
+            {
+                "src": "../",
+                "files": [
+                    "CHANGELOG.md"
+                ]
+            },
+            {
+                "src": "api",
+                "files": [
+                    "*.yml",
+                    "*.md"
+                ],
+                "dest": "api"
+            },
+            {
+                "src": "articles",
+                "files": [
+                    "toc.yml",
+                    "**/*.md"
+                ],
+                "dest": "articles"
+            }
+        ],
+        "resource": [
+            {
+                "files": [
+                    "assets/**/*"
+                ]
+            }
+        ],
+        "xref": [
+            "https://github.com/dotnet/docfx/raw/main/.xrefmap.json",
+            "https://normanderwan.github.io/UnityXrefMaps/2021.3/xrefmap.yml"
+        ],
+        "dest": "_site"
+    }
 }

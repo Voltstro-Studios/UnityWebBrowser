@@ -6,6 +6,7 @@
 using System;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltRpc.Communication;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
 #nullable enable
 namespace VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
@@ -14,7 +15,7 @@ namespace VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 ///     This is a wrapper around <see cref="IClientControls" />. It checks if we are connected first before firing an event.
 ///     <para>The reason why we do the check here is that VoltRpc will throw an exception, rather then not do anything.</para>
 /// </summary>
-public class ClientControlsActions : IClientControls, IDisposable
+internal class ClientControlsActions : IClientControls, IDisposable
 {
     private Client? client;
     private IClientControls? clientActions;
@@ -65,6 +66,12 @@ public class ClientControlsActions : IClientControls, IDisposable
     {
         if (client is {IsConnected: true})
             clientActions?.Ready();
+    }
+
+    public void ExecuteJsMethod(ExecuteJsMethod executeJsMethod)
+    {
+        if (client is {IsConnected: true})
+            clientActions?.ExecuteJsMethod(executeJsMethod);
     }
 
     public void Dispose()

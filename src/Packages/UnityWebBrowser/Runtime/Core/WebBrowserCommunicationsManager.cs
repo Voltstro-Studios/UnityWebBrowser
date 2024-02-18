@@ -16,6 +16,7 @@ using VoltstroStudios.UnityWebBrowser.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared.ReadWriters;
 
@@ -167,6 +168,27 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteTask(() => engineProxy.ExecuteJs(js));
         }
 
+        public void SetZoomLevel(double zoomLevel)
+        {
+            ExecuteTask(() => engineProxy.SetZoomLevel(zoomLevel));
+        }
+
+        public double GetZoomLevel()
+        {
+            using (sendEventMarker.Auto())
+            {
+                lock (threadLock)
+                {
+                    return engineProxy.GetZoomLevel();
+                }
+            }
+        }
+
+        public void OpenDevTools()
+        {
+            ExecuteTask(() => engineProxy.OpenDevTools());
+        }
+
         public void Resize(Resolution resolution)
         {
             ExecuteTask(() => engineProxy.Resize(resolution));
@@ -258,10 +280,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             ExecuteOnUnity(() => client.InvokeOnInputFocus(focused));
         }
-
+        
         public void Ready()
         {
             client.EngineReady().Forget();
+        }
+
+        public void ExecuteJsMethod(ExecuteJsMethod executeJsMethod)
+        {
+            ExecuteOnUnity(() => client.InvokeJsMethod(executeJsMethod));
         }
 
         #endregion

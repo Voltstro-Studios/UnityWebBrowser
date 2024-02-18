@@ -91,6 +91,23 @@ internal interface IEngineControls
     /// </summary>
     /// <param name="js"></param>
     public void ExecuteJs(string js);
+    
+    /// <summary>
+    ///     Sets the engine's zoom level
+    /// </summary>
+    /// <param name="zoomLevel"></param>
+    public void SetZoomLevel(double zoomLevel);
+
+    /// <summary>
+    ///     Returns the engine's current Zoom level
+    /// </summary>
+    /// <returns></returns>
+    public double GetZoomLevel();
+
+    /// <summary>
+    ///     Open chrome dev tools
+    /// </summary>
+    public void OpenDevTools();
 
     /// <summary>
     ///     Tells the UWB engine to resize

@@ -4,8 +4,14 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using UnityWebBrowser.Engine.Cef.Browser.Js;
+using UnityWebBrowser.Engine.Cef.Browser.Messages;
+using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
+using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
@@ -17,7 +23,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 /// <summary>
 ///     Offscreen CEF
 /// </summary>
-public class UwbCefClient : CefClient, IDisposable
+internal class UwbCefClient : CefClient, IDisposable
 {
     public readonly ClientControlsActions ClientControls;
 
@@ -29,8 +35,15 @@ public class UwbCefClient : CefClient, IDisposable
     private readonly UwbCefRenderHandler renderHandler;
     private readonly UwbCefRequestHandler requestHandler;
 
+    private readonly ProxySettings proxySettings;
+
     private CefBrowser browser;
     private CefBrowserHost browserHost;
+
+    //Dev Tools
+    private CefWindowInfo devToolsWindowInfo;
+    private UwbCefPopupClient devToolsClient;
+    private CefBrowserSettings devToolsBrowserSettings;
 
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -38,6 +51,8 @@ public class UwbCefClient : CefClient, IDisposable
     public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, ClientControlsActions clientControlsActions)
     {
         ClientControls = clientControlsActions;
+
+        this.proxySettings = proxySettings;
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
@@ -51,6 +66,12 @@ public class UwbCefClient : CefClient, IDisposable
         displayHandler = new UwbCefDisplayHandler(this);
         requestHandler = new UwbCefRequestHandler(proxySettings);
         contextMenuHandler = new UwbCefContextMenuHandler();
+
+        //Create message types
+        messageTypes = new Dictionary<string, IMessageBase>
+        {
+            [ExecuteJsMethodMessage.ExecuteJsMethodName] = new ExecuteJsMethodMessage(clientControlsActions)
+        };
     }
 
     /// <summary>
@@ -67,12 +88,10 @@ public class UwbCefClient : CefClient, IDisposable
     ///     Gets the pixel data of the CEF window
     /// </summary>
     /// <returns></returns>
-    public byte[] GetPixels()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ReadOnlyMemory<byte> GetPixels()
     {
-        if (browserHost == null)
-            return Array.Empty<byte>();
-
-        return renderHandler.Pixels;
+        return browserHost == null ? Array.Empty<byte>() : renderHandler.Pixels;
     }
 
     protected override CefLoadHandler GetLoadHandler()
@@ -206,7 +225,6 @@ public class UwbCefClient : CefClient, IDisposable
     public void LoadUrl(string url)
     {
         browser.GetMainFrame()?.LoadUrl(url);
-        //mainFrame.LoadUrl(url);
     }
 
     public Vector2 GetMouseScrollPosition()
@@ -222,6 +240,40 @@ public class UwbCefClient : CefClient, IDisposable
     public void ExecuteJs(string js)
     {
         browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
+    }
+
+    public void SetZoomLevel(double zoomLevel)
+    {
+        browserHost.SetZoomLevel(zoomLevel);
+    }
+
+    public double GetZoomLevel()
+    {
+        return browserHost.GetZoomLevel();
+    }
+
+    public void OpenDevTools()
+    {
+        try
+        {
+            if (devToolsWindowInfo == null)
+            {
+                devToolsWindowInfo = CefWindowInfo.Create();
+                devToolsClient = new UwbCefPopupClient(proxySettings, () =>
+                {
+                    devToolsWindowInfo = null;
+                    devToolsClient = null;
+                    devToolsBrowserSettings = null;
+                });
+                devToolsBrowserSettings = new CefBrowserSettings();
+            }
+
+            browserHost.ShowDevTools(devToolsWindowInfo, devToolsClient, devToolsBrowserSettings, new CefPoint());
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "An error occured while trying to open the dev tools!");
+        }
     }
 
     public void GoBack()
@@ -245,6 +297,43 @@ public class UwbCefClient : CefClient, IDisposable
     {
         renderHandler.Resize(new CefSize((int) resolution.Width, (int) resolution.Height));
         browserHost.WasResized();
+    }
+
+    #endregion
+
+    #region Messages
+
+    private readonly Dictionary<string, IMessageBase> messageTypes;
+    
+    protected override bool OnProcessMessageReceived(CefBrowser browser, CefFrame frame, CefProcessId sourceProcess,
+        CefProcessMessage message)
+    {
+        try
+        {
+            int index = message.Name.IndexOf(": ", StringComparison.Ordinal);
+            if (index == 0)
+                return false;
+
+            string messageType = message.Name[..index];
+            string messageValue = message.Name[(index + 2)..];
+            
+            Logger.Debug($"Received message of type {messageType}: {messageValue}");
+
+            foreach (KeyValuePair<string, IMessageBase> messageBase in messageTypes)
+            {
+                if (messageBase.Key == messageType)
+                {
+                    object value = messageBase.Value.Deserialize(messageValue);
+                    messageBase.Value.Execute(value);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Error handling message received!");
+        }
+        
+        return false;
     }
 
     #endregion

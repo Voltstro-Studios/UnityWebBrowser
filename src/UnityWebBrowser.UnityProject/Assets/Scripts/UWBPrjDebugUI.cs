@@ -17,33 +17,59 @@ using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
 
 namespace VoltstroStudios.UnityWebBrowser.Prj
 {
-    public class UWBPrjDebugUI : MonoBehaviour
+    public sealed class UWBPrjDebugUI : MonoBehaviour
     {
+        /// <summary>
+        ///     Reference to <see cref="WebBrowserUIBasic"/>
+        /// </summary>
         public WebBrowserUIBasic webBrowserUIBasic;
+        
+        /// <summary>
+        ///     Debug resolution selections
+        /// </summary>
         public Resolution[] resolutions;
+        
+        /// <summary>
+        ///     How often to update FPS
+        /// </summary>
         public float refreshRate = 1f;
+        
+        /// <summary>
+        ///     Hide the ImGui Window
+        /// </summary>
         public bool hide;
-        private ProfilerRecorder applyTextureMarker;
-        private double applyTextureTime;
 
-        private bool formatMessages = true;
-        private List<string> formattedConsoleItems;
-        private int fps;
-
+        private bool hasInitialized;
+        private bool hasConnected;
+        
+        //Fps/Data tracking
         private ProfilerRecorder getPixelsMarker;
-
+        private ProfilerRecorder applyTextureMarker;
+        private int fps;
+        private float nextUpdateTime;
+        private double applyTextureTime;
         private double getPixelsTime;
-        private int lastSelectedIndex;
 
+        //Popups
         private List<WebBrowserPopupInfo> popups;
 
+        //Resolutions
         private string[] resolutionsText;
-        private int selectedIndex;
-
-        private float timer;
+        private int selectedResolutionIndex;
+        private int lastSelectedResolutionsIndex;
+        
+        //Console messages
+        private bool formatMessages = true;
+        private List<string> formattedConsoleItems;
         private List<string> unformattedConsoleItems;
 
-        private void Start()
+        //URL
+        private string inputUrl;
+        
+        //Zoom
+        private double zoomLevel = double.MinValue;
+
+        private void Awake()
         {
             if (webBrowserUIBasic == null)
                 throw new ArgumentNullException(nameof(webBrowserUIBasic), "Web browser UI is unassigned!");
@@ -52,20 +78,31 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             unformattedConsoleItems = new List<string> { startMessage };
             formattedConsoleItems = new List<string> { startMessage };
             popups = new List<WebBrowserPopupInfo>();
-            webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog += HandleOutputLogMessage;
-            webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += HandleErrorLogMessage;
-
-            webBrowserUIBasic.browserClient.OnPopup += popup =>
-            {
-                popups.Add(popup);
-                popup.OnDestroyed += () => popups.Remove(popup);
-            };
+            inputUrl = string.Empty;
+            
+            //Backup, probs shouldn't happen this early
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
+            
+            webBrowserUIBasic.browserClient.OnClientInitialized += OnClientInitialized;
+            webBrowserUIBasic.browserClient.OnClientConnected += OnClientConnected;
 
             UImGuiUtility.Layout += OnImGuiLayout;
+        }
 
+        private void OnClientInitialized()
+        {
+            Debug.Log("BrowserClient initialized...");
+            
+            webBrowserUIBasic.browserClient.OnUrlChanged += url =>
+            {
+                inputUrl = url;
+            };
+            
             getPixelsMarker = ProfilerRecorder.StartNew(WebBrowserClient.markerGetPixels, 15);
             applyTextureMarker = ProfilerRecorder.StartNew(WebBrowserClient.markerLoadTextureApply, 15);
 
+            //Calculate resolution texts
             resolutionsText = new string[resolutions.Length];
             for (int i = 0; i < resolutions.Length; i++)
             {
@@ -75,26 +112,50 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                 if (!resolution.Equals(webBrowserUIBasic.browserClient.Resolution))
                     continue;
 
-                selectedIndex = i;
-                lastSelectedIndex = i;
+                selectedResolutionIndex = i;
+                lastSelectedResolutionsIndex = i;
             }
+            
+            //Popup Events
+            webBrowserUIBasic.browserClient.OnPopup += popup =>
+            {
+                popups.Add(popup);
+                popup.OnDestroyed += () => popups.Remove(popup);
+            };
+
+            hasInitialized = true;
+        }
+        
+        private void OnClientConnected()
+        {
+            Debug.Log("BrowserClient connected!");
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessOutputLog += HandleOutputLogMessage;
+            webBrowserUIBasic.browserClient.processLogHandler.OnProcessErrorLog += HandleErrorLogMessage;
+            
+            hasConnected = true;
         }
 
         private void Update()
         {
+            if(webBrowserUIBasic.browserClient.HasDisposed || !hasConnected)
+                return;
+            
             fps = (int)(1f / Time.unscaledDeltaTime);
 
-            if (!(Time.unscaledTime > timer)) return;
+            if (!(Time.unscaledTime > nextUpdateTime)) return;
 
             getPixelsTime = GetRecorderFrameTimeAverage(getPixelsMarker) * 1e-6f;
             applyTextureTime = GetRecorderFrameTimeAverage(applyTextureMarker) * 1e-6f;
 
-            timer = Time.unscaledTime + refreshRate;
+            nextUpdateTime = Time.unscaledTime + refreshRate;
         }
 
         private void OnDestroy()
         {
             UImGuiUtility.Layout -= OnImGuiLayout;
+            
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
 
             getPixelsMarker.Dispose();
             applyTextureMarker.Dispose();
@@ -105,14 +166,23 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             if(hide)
                 return;
             
+            if(webBrowserUIBasic.browserClient.HasDisposed)
+                return;
+            
             ImGui.Begin("UWB Debug UI");
             {
-                if (!webBrowserUIBasic.browserClient.ReadySignalReceived || webBrowserUIBasic.browserClient.HasDisposed)
+                if (!hasInitialized)
                 {
-                    ImGui.Text("UWB is not ready...");
+                    ImGui.Text("UWB is still initializing...");
+                }
+                
+                else if (!hasConnected)
+                {
+                    ImGui.Text("Waiting for UWB to connect to engine...");
                 }
                 else
                 {
+                    //Basic details
                     ImGui.Text("UWB Debug UI");
                     ImGui.Separator();
                     ImGui.Text($"Player FPS: {fps}");
@@ -120,10 +190,46 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     ImGui.Text($"Get Texture Pixels: {getPixelsTime:F1}ms");
                     ImGui.Text($"Texture Apply Time: {applyTextureTime:F1}ms");
                     
-                    webBrowserUIBasic.GetMousePosition(out Vector2 mousePos);
-                    ImGui.Text($"Mouse Position: {mousePos}");
-                    if (ImGui.Button("Get Scroll Position"))
-                        webBrowserUIBasic.browserClient.logger?.Debug(webBrowserUIBasic.browserClient.GetScrollPosition());
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    
+                    //Buttons for getting details
+                    {
+                        if (ImGui.Button("Get Scroll Pos"))
+                            Debug.Log(webBrowserUIBasic.browserClient.GetScrollPosition());
+                        
+                        ImGui.SameLine();
+                        
+                        if(ImGui.Button("Open DevTools"))
+                            webBrowserUIBasic.browserClient.OpenDevTools();
+                        
+                        ImGui.SameLine();
+                        
+                        ImGui.Text("Zoom Percent");
+                        ImGui.SameLine();
+                        
+                        //Get zoom level when ready
+                        if (zoomLevel <= 0 && webBrowserUIBasic.browserClient.IsConnected)
+                            zoomLevel = webBrowserUIBasic.browserClient.GetZoomLevel();
+                    
+                        if (ImGui.InputDouble("##zoom", ref zoomLevel))
+                        {
+                            zoomLevel = Math.Clamp(zoomLevel, 0.1, double.MaxValue);
+                            webBrowserUIBasic.browserClient.SetZoomLevelPercent(zoomLevel);
+                        }
+                    }
+                        
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    
+                    //URL
+                    ImGui.Text("URL");
+                    ImGui.SameLine();
+                    ImGui.InputText("##url", ref inputUrl, 1000);
+                    ImGui.SameLine();
+                    if(ImGui.Button("Go"))
+                        webBrowserUIBasic.NavigateUrl(inputUrl);
+                    
                     ImGui.Spacing();
                     ImGui.Separator();
 
@@ -149,45 +255,50 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     ImGui.Spacing();
                     ImGui.Separator();
 
+                    //Resolution selection
                     ImGui.Text("Resolution:");
                     ImGui.PushItemWidth(100);
-                    ImGui.ListBox("", ref selectedIndex, resolutionsText, resolutionsText.Length);
+                    ImGui.ListBox("", ref selectedResolutionIndex, resolutionsText, resolutionsText.Length);
                     ImGui.PopItemWidth();
 
-                    ImGui.Spacing();
-                    ImGui.Separator();
-                    ImGui.Text("UWB Console");
-                    ImGui.Checkbox("Format UWB JSON Messages", ref formatMessages);
-
-                    float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
-                    ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
+                    //Console
                     {
-                        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
+                        ImGui.Spacing();
+                        ImGui.Separator();
+                        ImGui.Text("UWB Console");
+                        ImGui.Checkbox("Format UWB JSON Messages", ref formatMessages);
+
+                        float footerHeight = ImGui.GetStyle().ItemSpacing.y + ImGui.GetFrameHeightWithSpacing();
+                        ImGui.BeginChild("Console", new Vector2(0, -footerHeight), false, ImGuiWindowFlags.HorizontalScrollbar);
                         {
-                            if (formatMessages)
-                                for (int i = 0; i < formattedConsoleItems.Count; i++)
-                                    ImGui.TextUnformatted(formattedConsoleItems[i]);
-                            else
-                                for (int i = 0; i < unformattedConsoleItems.Count; i++)
-                                    ImGui.TextUnformatted(unformattedConsoleItems[i]);
+                            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 1));
+                            {
+                                if (formatMessages)
+                                    for (int i = 0; i < formattedConsoleItems.Count; i++)
+                                        ImGui.TextUnformatted(formattedConsoleItems[i]);
+                                else
+                                    for (int i = 0; i < unformattedConsoleItems.Count; i++)
+                                        ImGui.TextUnformatted(unformattedConsoleItems[i]);
+                            }
+                            ImGui.PopStyleVar();
                         }
-                        ImGui.PopStyleVar();
-                    }
-                    ImGui.EndChild();
+                        ImGui.EndChild();
 
-                    if (ImGui.Button("Clear"))
-                    {
-                        formattedConsoleItems.Clear();
-                        unformattedConsoleItems.Clear();
+                        if (ImGui.Button("Clear"))
+                        {
+                            formattedConsoleItems.Clear();
+                            unformattedConsoleItems.Clear();
+                        }
                     }
                 }
             }
             ImGui.End();
 
-            if (selectedIndex != lastSelectedIndex)
+            //Update resolution if it changed
+            if (selectedResolutionIndex != lastSelectedResolutionsIndex)
             {
-                webBrowserUIBasic.browserClient.Resolution = resolutions[selectedIndex];
-                lastSelectedIndex = selectedIndex;
+                webBrowserUIBasic.browserClient.Resolution = resolutions[selectedResolutionIndex];
+                lastSelectedResolutionsIndex = selectedResolutionIndex;
             }
         }
 

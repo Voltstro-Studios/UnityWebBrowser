@@ -15,12 +15,14 @@ using Unity.Profiling;
 using UnityEngine;
 using VoltstroStudios.UnityWebBrowser.Communication;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Core.Js;
 using VoltstroStudios.UnityWebBrowser.Core.Popups;
 using VoltstroStudios.UnityWebBrowser.Events;
 using VoltstroStudios.UnityWebBrowser.Helper;
 using VoltstroStudios.UnityWebBrowser.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
+using VoltstroStudios.UnityWebBrowser.Shared.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Object = UnityEngine.Object;
 using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
@@ -135,6 +137,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
+        
+        /// <summary>
+        ///     Manager for JS methods
+        /// </summary>
+        [Tooltip("Manager for JS methods")]
+        public JsMethodManager jsMethodManager = new();
 
         /// <summary>
         ///     The <see cref="CommunicationLayer" /> to use
@@ -265,6 +273,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <exception cref="FileNotFoundException"></exception>
         internal void Init()
         {
+            if (!WebBrowserUtils.IsRunningOnSupportedPlatform())
+            {
+                logger.Warn("UWB is not supported on the current runtime platform! Not running.");
+                Dispose();
+                return;
+            }
+            
             //Get the path to the UWB process we are using and make sure it exists
             string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
             logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
@@ -372,6 +387,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
             cancellationSource = new CancellationTokenSource();
 
+            try
+            {
+                OnClientInitialized?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Error invoking OnClientInitialized! {ex}");
+            }
+
             //Start the engine process
             UniTask.Create(() => 
                  StartEngineProcess(arguments))
@@ -445,7 +469,20 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 logger.Debug("UWB startup success, connecting...");
                 communicationsManager.Connect();
-                //_ = Task.Run(PixelDataLoop);
+
+                //Fire OnClientConnected on main thread
+                await using (UniTask.ReturnToMainThread())
+                {
+                    try
+                    {
+                        OnClientConnected?.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        //This shouldn't ever happen
+                        logger.Warn($"An error occured invoking OnClientConnected! {ex}");
+                    }
+                }
 
                 Thread pixelDataLoopThread = new(PixelDataLoop)
                 {
@@ -556,6 +593,18 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         #endregion
 
         #region Browser Events
+
+        /// <summary>
+        ///     Invoked when this <see cref="WebBrowserClient"/> initalizes.
+        ///
+        ///     <para>Initialized does not mean that the engine is ready, for that, use <see cref="OnClientConnected"/></para>
+        /// </summary>
+        public event OnClientInitialized OnClientInitialized;
+
+        /// <summary>
+        ///     Invoked when this <see cref="WebBrowserClient"/> connects to the engine
+        /// </summary>
+        public event OnClientConnected OnClientConnected;
 
         /// <summary>
         ///     Invoked when the url changes
@@ -789,6 +838,56 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         }
 
         /// <summary>
+        ///     Sets zoom level based off a percentage
+        /// </summary>
+        /// <param name="percent"></param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if percent is 0 or less</exception>
+        public void SetZoomLevelPercent(double percent)
+        {
+            if (percent <= 0)
+                throw new ArgumentOutOfRangeException(nameof(percent),
+                    "Percent must be larger then 0. To reset, use SetZoomLevel(0).");
+            
+            //Logic from:
+            //https://magpcss.org/ceforum/viewtopic.php?t=11491
+            double scale = 1.2 * percent;
+            double zoomLevel = Math.Log(scale);
+            SetZoomLevel(zoomLevel);
+        }
+
+        /// <summary>
+        ///     Set browser's zoom level. Use 0.0 to reset.
+        /// </summary>
+        /// <param name="zoomLevel"></param>
+        public void SetZoomLevel(double zoomLevel)
+        {
+            CheckIfIsReadyAndConnected();
+            
+            communicationsManager.SetZoomLevel(zoomLevel);
+        }
+        
+        /// <summary>
+        ///     Get's browser's zoom level
+        /// </summary>
+        /// <returns></returns>
+        public double GetZoomLevel()
+        {
+            CheckIfIsReadyAndConnected();
+
+            return communicationsManager.GetZoomLevel();
+        }
+
+        /// <summary>
+        ///     Shows dev tools
+        /// </summary>
+        public void OpenDevTools()
+        {
+            CheckIfIsReadyAndConnected();
+            
+            communicationsManager.OpenDevTools();
+        }
+
+        /// <summary>
         ///     Resizes the screen.
         /// </summary>
         /// <param name="newResolution"></param>
@@ -820,6 +919,113 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
             if (!IsConnected)
                 throw new UwbIsNotConnectedException("UWB is not currently connected!");
+        }
+
+        #endregion
+
+        #region JS Methods
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod(string name, Action method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T>(string name, Action<T> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2>(string name, Action<T1, T2> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3>(string name, Action<T1, T2, T3> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4, T5>(string name, Action<T1, T2, T3, T4, T5> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        /// <summary>
+        ///     Registers a method with <see cref="JsMethodManager"/>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void RegisterJsMethod<T1, T2, T3, T4, T5, T6>(string name, Action<T1, T2, T3, T4, T5, T6> method)
+        {
+            if(method == null)
+                throw new ArgumentNullException(nameof(method));
+            
+            jsMethodManager.RegisterJsMethod(name, method.Method, method.Target);
+        }
+        
+        internal void InvokeJsMethod(ExecuteJsMethod executeJsMethod)
+        {
+            jsMethodManager.InvokeJsMethod(executeJsMethod);
         }
 
         #endregion
@@ -899,6 +1105,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
 
             //Dispose of buffers
+            if (resizeLock == null)
+                return;
+            
             lock (resizeLock)
             {
                 if (nextTextureData.IsCreated)
