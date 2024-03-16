@@ -7,6 +7,7 @@ using System;
 using System.CommandLine;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Communications;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
@@ -232,18 +233,23 @@ internal abstract class EngineEntryPoint : IDisposable
     {
         try
         {
+            Logger.Debug($"{Logger.BaseLoggingTag}: SetupIcp.");
+            
             ICommunicationLayer communicationLayer;
             if (arguments.CommunicationLayerPath == null)
             {
                 //Use TCP
                 Logger.Debug($"{Logger.BaseLoggingTag}: No communication layer provided, using default TCP...");
                 communicationLayer = new TCPCommunicationLayer();
+                Logger.Debug($"{Logger.BaseLoggingTag}: Created default TCP communication layer.");
             }
             else
             {
                 communicationLayer = CommunicationLayerLoader.GetCommunicationLayerFromAssembly(
                     arguments.CommunicationLayerPath.FullName);
             }
+            
+            Logger.Debug($"{Logger.BaseLoggingTag}: Created communication layer of type '{communicationLayer.GetType().FullName}'...");
 
             try
             {
@@ -256,21 +262,42 @@ internal abstract class EngineEntryPoint : IDisposable
                 ShutdownAndExitWithError();
                 return;
             }
+            
+            Logger.Debug($"{Logger.BaseLoggingTag}: Created host and client from communication layer.");
 
             //Add type readers
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
-            ipcHost.StartListeningAsync().ConfigureAwait(false);
+            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on host.");
+            
+            Task.Run(() =>
+            {
+                try
+                {
+                    ipcHost.StartListening();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured listening on host!");
+                    ShutdownAndExitWithError();
+                }
+            });
+            
+            Logger.Debug($"{Logger.BaseLoggingTag}: Host has started listening.");
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClientControls));
             ipcClient.AddService(typeof(IPopupEngineControls));
+            
+            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on client.");
 
             //Connect the engine (us) back to Unity
             try
             {
                 ipcClient.Connect();
+                
+                Logger.Debug($"{Logger.BaseLoggingTag}: Client has connected back to Unity.");
                 
                 ClientControlsActions.SetIpcClient(ipcClient);
                 PopupManager.SetIpcClient(ipcClient);

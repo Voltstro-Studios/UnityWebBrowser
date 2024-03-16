@@ -201,7 +201,21 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         public void Listen()
         {
-            ipcHost.StartListeningAsync().ConfigureAwait(false);
+            UniTask.RunOnThreadPool(async () =>
+            {
+                
+                try
+                {
+                    ipcHost.StartListening();
+                }
+                catch (Exception)
+                {
+                    await using (UniTask.ReturnToMainThread())
+                    {
+                        throw;
+                    }
+                }
+            });
         }
 
         private void ExecuteOnUnity(Action action, [CallerMemberName] string memberName = "")
