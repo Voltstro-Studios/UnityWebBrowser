@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="../Imports/NativeDefines.props" />
     <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
@@ -30,5 +31,7 @@
     <ItemGroup>
       <ProjectReference Include="..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj" />
     </ItemGroup>
+
+    <Import Project="../Imports/NatvieDefines.targets" />
 
 </Project>
