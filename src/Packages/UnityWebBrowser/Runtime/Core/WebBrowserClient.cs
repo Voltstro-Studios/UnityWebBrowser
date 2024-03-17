@@ -176,6 +176,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         ///     The UWB engine has signaled that it is ready
         /// </summary>
         public bool ReadySignalReceived { get; internal set; }
+        
+        /// <summary>
+        ///     Has UWB initialized
+        /// </summary>
+        public bool HasInitialized { get; internal set; }
 
         /// <summary>
         ///     Internal FPS of pixels communication between Unity and the Engine
@@ -384,9 +389,14 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             //Setup communication manager
             communicationsManager = new WebBrowserCommunicationsManager(this);
             communicationsManager.Listen();
-
-            cancellationSource = new CancellationTokenSource();
-
+            
+#if UNITY_EDITOR
+            //Install reload events handler
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
+#endif
+            
+            //Mark has initialized and invoke event
+            HasInitialized = true;
             try
             {
                 OnClientInitialized?.Invoke();
@@ -395,6 +405,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 logger.Error($"Error invoking OnClientInitialized! {ex}");
             }
+            
+            cancellationSource = new CancellationTokenSource();
 
             //Start the engine process
             UniTask.Create(() => 
@@ -1032,6 +1044,17 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         #endregion
 
         #region Destroying
+
+#if UNITY_EDITOR
+        private void OnBeforeAssemblyReload()
+        {
+            if (HasInitialized)
+            {
+                logger.Warn("UWB is shutting down due to incoming domain reload. UWB does not support domain reloading while running.");
+                Dispose();
+            }
+        }
+#endif
 
 #if !UNITY_EDITOR
         ~WebBrowserClient()
