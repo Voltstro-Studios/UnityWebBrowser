@@ -387,7 +387,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             string arguments = argsBuilder.ToString();
 
             //Setup communication manager
-            communicationsManager = new WebBrowserCommunicationsManager(this);
+            cancellationSource = new CancellationTokenSource();
+            communicationsManager = new WebBrowserCommunicationsManager(this, cancellationSource);
             communicationsManager.Listen();
             
 #if UNITY_EDITOR
@@ -405,8 +406,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             {
                 logger.Error($"Error invoking OnClientInitialized! {ex}");
             }
-            
-            cancellationSource = new CancellationTokenSource();
 
             //Start the engine process
             UniTask.Create(() => 
