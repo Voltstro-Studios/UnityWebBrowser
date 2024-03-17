@@ -3,6 +3,8 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+#if UNITY_STANDALONE_WIN
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -163,3 +165,5 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines.Process
         #endregion
     }
 }
+
+#endif
