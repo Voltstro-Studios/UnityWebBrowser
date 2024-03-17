@@ -255,7 +255,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #endregion
 
-        private Process engineProcess;
+        private EngineProcess engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationSource;
 
@@ -409,9 +409,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             try
             {
+                //TODO: Move process log handler to engine process class
                 processLogHandler = new ProcessLogHandler(this);
-                engineProcess = WebBrowserUtils.CreateEngineProcess(logger, engine, engineProcessArguments,
-                    processLogHandler.HandleOutputProcessLog, processLogHandler.HandleErrorProcessLog);
+                engineProcess = new EngineProcess(engine, logger);
+                engineProcess.StartProcess(engineProcessArguments, processLogHandler.HandleOutputProcessLog, processLogHandler.HandleErrorProcessLog);
             }
             catch (Exception ex)
             {
@@ -1098,8 +1099,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             //Kill the process if we haven't already
             if (engineProcess != null)
             {
-                engineProcess.KillTree();
-
+                if (!engineProcess.HasExited)
+                    engineProcess.KillProcess();
+                    
                 engineProcess.Dispose();
                 engineProcess = null;
             }
