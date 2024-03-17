@@ -1048,7 +1048,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 #if UNITY_EDITOR
         private void OnBeforeAssemblyReload()
         {
-            if (HasInitialized)
+            if (HasInitialized && !HasDisposed)
             {
                 logger.Warn("UWB is shutting down due to incoming domain reload. UWB does not support domain reloading while running.");
                 Dispose();
@@ -1128,6 +1128,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 engineProcess.Dispose();
                 engineProcess = null;
             }
+            
+#if UNITY_EDITOR
+            //Install reload events handler
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
+#endif
 
             //Dispose of buffers
             if (resizeLock == null)

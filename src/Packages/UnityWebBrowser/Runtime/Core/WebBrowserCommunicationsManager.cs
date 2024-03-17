@@ -203,7 +203,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             UniTask.RunOnThreadPool(async () =>
             {
-                
                 try
                 {
                     ipcHost.StartListening();

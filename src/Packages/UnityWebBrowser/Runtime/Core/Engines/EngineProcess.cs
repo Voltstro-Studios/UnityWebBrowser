@@ -30,7 +30,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 #if UNITY_STANDALONE_WIN
             processHandle = new WindowProcess();
 #elif UNITY_STANDALONE_LINUX
-            processHandle = new LinuxProcess();
+            processHandle = new LinuxProcess(logger);
 #endif
             
             this.engine = engine;
