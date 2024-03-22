@@ -3,7 +3,7 @@
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
   "description": "CEF Engine for Unity Web Browser",
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
-  "version": "2.1.0-121.3.13",
+  "version": "2.1.1-122.1.13",
   "author": {
     "email": "me@voltstro.dev",
     "url": "https://voltstro.dev",
@@ -11,7 +11,7 @@
   },
   "unity": "2021.3",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser": "2.0.2"
+    "dev.voltstro.unitywebbrowser": "2.1.1"
   },
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "repository": {

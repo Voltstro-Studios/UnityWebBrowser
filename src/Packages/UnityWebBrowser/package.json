@@ -1,7 +1,7 @@
 {
   "name": "dev.voltstro.unitywebbrowser",
   "displayName": "Unity Web Browser",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "unity": "2021.3",
   "description": "Unity Web Browser (UWB) is a Unity package that allows displaying and interacting with the web from within Unity.",
   "author": {
@@ -26,8 +26,13 @@
   "samples": [
     {
       "displayName": "Basic",
-      "description": "Basic browser window prefab",
+      "description": "Basic set of prefabs for UWB.",
       "path": "Samples~/Basic"
+    },
+    {
+      "displayName": "Runtime Example",
+      "description": "Basic script example of creating everything for UWB at runtime dynamically",
+      "path": "Samples~/Runtime"
     }
   ]
 }
