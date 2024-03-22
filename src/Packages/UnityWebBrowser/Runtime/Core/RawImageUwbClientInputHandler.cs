@@ -45,6 +45,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             if (disableMouseInputs)
                 return;
+            
+            if (browserClient is { IsConnected: false })
+                return;
 
             MouseClickType clickType = eventData.button switch
             {
@@ -75,6 +78,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             if (disableMouseInputs)
                 return;
+            
+            if (browserClient is { IsConnected: false })
+                return;
 
             MouseClickType clickType = eventData.button switch
             {
@@ -99,6 +105,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private void OnClientInput(bool focused)
         {
+            if (browserClient is { IsConnected: false })
+                return;
+            
             if (focused)
             {
                 if (!GetMousePosition(out Vector2 pos)) return;
