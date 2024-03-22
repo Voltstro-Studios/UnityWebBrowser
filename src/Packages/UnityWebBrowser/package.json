@@ -26,8 +26,13 @@
   "samples": [
     {
       "displayName": "Basic",
-      "description": "Basic browser window prefab",
+      "description": "Basic set of prefabs for UWB.",
       "path": "Samples~/Basic"
+    },
+    {
+      "displayName": "Runtime Example",
+      "description": "Basic script example of creating everything for UWB at runtime dynamically",
+      "path": "Samples~/Runtime"
     }
   ]
 }
