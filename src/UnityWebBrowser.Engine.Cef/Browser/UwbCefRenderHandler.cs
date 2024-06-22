@@ -28,6 +28,9 @@ internal class UwbCefRenderHandler : CefRenderHandler
 
     private readonly ClientControlsActions clientControls;
     
+    private int viewWidth;
+    private int viewHeight;
+    
     /// <summary>
     ///     Tracked mouse scroll position
     /// </summary>
@@ -92,30 +95,118 @@ internal class UwbCefRenderHandler : CefRenderHandler
         rect = new CefRectangle(0, 0, cefSize.Width, cefSize.Height);
     }
 
-    [SecurityCritical]
-    protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects,
-        IntPtr buffer, int width,
-        int height)
+    #region Popups
+
+    //Popups are widgets, like the select element
+
+    private int popupDataBufferSize;
+    private byte[] popupDataBuffer;
+    
+    private bool showPopup;
+
+    private int popupX;
+    private int popupY;
+    
+    private int popupWidth;
+    private int popupHeight;
+    
+    protected override void OnPopupSize(CefBrowser browser, CefRectangle rect)
     {
+        rect = GetPopupRectInWebView(rect);
+        
+        int popupDataLength = rect.Width * rect.Height * 4;
+        if (popupDataBufferSize == popupDataLength || !showPopup)
+            return;
+        
+        popupDataBuffer = new byte[popupDataLength];
+        popupDataBufferSize = popupDataLength;
+
+        popupWidth = rect.Width * 4;
+        popupHeight = rect.Height * 4;
+        popupX = rect.X * 4;
+            
+        popupY = rect.Y * 4;
+    }
+
+    private CefRectangle GetPopupRectInWebView(CefRectangle rc)
+    {
+        // if x or y are negative, move them to 0.
+        if (rc.X < 0)
+            rc.X = 0;
+
+        if (rc.Y < 0)
+            rc.Y = 0;
+        
+        // if popup goes outside the view, try to reposition origin
+        if (rc.X + rc.Width > viewWidth)
+            rc.X = viewWidth - rc.Width;
+        if (rc.Y + rc.Height > viewHeight)
+            rc.Y = viewHeight - rc.Height;
+        
+        // if x or y became negative, move them to 0 again.
+        if (rc.X < 0)
+            rc.X = 0;
+        if (rc.Y < 0)
+            rc.Y = 0;
+
+        return rc;
+    }
+
+    protected override void OnPopupShow(CefBrowser browser, bool show)
+    {
+        showPopup = show;
+    }
+
+    #endregion
+
+    [SecurityCritical]
+    protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects, IntPtr buffer, int width, int height)
+    {
+        if (type == CefPaintElementType.Popup && showPopup)
+        {
+            Marshal.Copy(buffer, popupDataBuffer, 0, popupDataBufferSize);
+            DrawPopupToMainBuffer();
+            return;
+        }
+        
         //Ensure buffer sizes are the same
         int myBufferSize = width * height * 4;
         if(myBufferSize != pixelsLength)
             return;
+
+        viewHeight = height;
+        viewWidth = width;
         
         //Copy our pixel buffer to our pixels
         lock (pixelsLock)
         {
             Marshal.Copy(buffer, pixelsBuffer, 0, pixelsLength);
+
+            //Redraw popup if one is ment to be showing
+            if (showPopup)
+                DrawPopupToMainBuffer();
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void DrawPopupToMainBuffer()
+    {
+        int popupDataIndex = 0;
+        int startIndex = popupX + (popupY * viewWidth);
+        
+        for (int y = startIndex; y < popupHeight * viewWidth + startIndex; y += 4 * viewWidth)
+        {
+            for (int x = 0; x < popupWidth; x++)
+            {
+                pixelsBuffer[y + x] = popupDataBuffer[popupDataIndex];
+                popupDataIndex++;
+            }
         }
     }
 
     protected override bool GetScreenInfo(CefBrowser browser, CefScreenInfo screenInfo)
     {
         return false;
-    }
-
-    protected override void OnPopupSize(CefBrowser browser, CefRectangle rect)
-    {
     }
 
     protected override void OnAcceleratedPaint(CefBrowser browser, CefPaintElementType type,
