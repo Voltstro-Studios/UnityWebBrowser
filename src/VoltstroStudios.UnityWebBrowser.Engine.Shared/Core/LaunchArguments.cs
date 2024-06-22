@@ -53,6 +53,11 @@ public class LaunchArguments
     ///     The port to use for remote debugging
     /// </summary>
     public int RemoteDebugging { get; init; }
+    
+    /// <summary>
+    ///     Remote debugging allowed origins
+    /// </summary>
+    public string[] RemoteDebuggingAllowedOrigins { get; init; }
 
     /// <summary>
     ///     The <see cref="Color" /> to use for the background

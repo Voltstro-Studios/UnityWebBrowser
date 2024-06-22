@@ -137,6 +137,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
+
+        /// <summary>
+        ///     Origins that are allowed to access remote debugging when <see cref="remoteDebugging"/> is enabled
+        /// </summary>
+        [Tooltip("Origins that are allowed to access remote debugging when remoteDeubgging is enabled")]
+        public string[] remoteDebuggingAllowedOrigins = new[] { "http://127.0.0.1:9022" };
         
         /// <summary>
         ///     Manager for JS methods
@@ -368,7 +374,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
             //Setup remote debugging
             if (remoteDebugging)
+            {
                 argsBuilder.AppendArgument("remote-debugging", remoteDebuggingPort);
+                argsBuilder.AppendArgument("remote-debugging-allowed-origins", string.Join(",", remoteDebuggingAllowedOrigins));
+            }
 
             //Setup proxy
             argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);

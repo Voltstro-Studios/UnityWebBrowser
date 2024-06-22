@@ -109,6 +109,9 @@ internal abstract class EngineEntryPoint : IDisposable
         Option<int> remoteDebugging = new("-remote-debugging",
             () => 0,
             "If the engine has remote debugging, what port to use (0 for disable)");
+        Option<string[]> remoteDebuggingAllowedOrigins = new("-remote-debugging-allowed-origins",
+                        () => new []{"http://127.0.0.1:9022"},
+                "Allowed origins for remote debugging.");
         Option<FileInfo> cachePath = new("-cache-path",
             () => null,
             "The path to the cache (null for no cache)");
@@ -160,7 +163,7 @@ internal abstract class EngineEntryPoint : IDisposable
         {
             initialUrl,
             width, height,
-            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
+            javaScript, webRtc, localStorage, remoteDebugging, remoteDebuggingAllowedOrigins, cachePath, popupAction,
             backgroundColor,
             proxyServer, proxyUsername, proxyPassword,
             logPath, logSeverity,
@@ -175,12 +178,24 @@ internal abstract class EngineEntryPoint : IDisposable
         //The new version of System.CommandLine is very boiler platey
         LaunchArgumentsBinder launchArgumentBinder = new(
             initialUrl,
-            width, height,
-            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
+            width,
+            height,
+            javaScript,
+            webRtc,
+            localStorage,
+            remoteDebugging,
+            remoteDebuggingAllowedOrigins,
+            cachePath,
+            popupAction,
             backgroundColor,
-            proxyServer, proxyUsername, proxyPassword,
-            logPath, logSeverity,
-            communicationLayerPath, inLocation, outLocation,
+            proxyServer,
+            proxyUsername,
+            proxyPassword,
+            logPath,
+            logSeverity,
+            communicationLayerPath,
+            inLocation,
+            outLocation,
             startDelay);
         rootCommand.SetHandler(parsedArgs =>
         {
