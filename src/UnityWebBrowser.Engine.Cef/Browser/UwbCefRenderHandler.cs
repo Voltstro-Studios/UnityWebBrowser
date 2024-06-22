@@ -112,6 +112,8 @@ internal class UwbCefRenderHandler : CefRenderHandler
     
     protected override void OnPopupSize(CefBrowser browser, CefRectangle rect)
     {
+        rect = GetPopupRectInWebView(rect);
+        
         int popupDataLength = rect.Width * rect.Height * 4;
         if (popupDataBufferSize == popupDataLength || !showPopup)
             return;
@@ -121,9 +123,33 @@ internal class UwbCefRenderHandler : CefRenderHandler
 
         popupWidth = rect.Width * 4;
         popupHeight = rect.Height * 4;
-        popupX = rect.X;
+        popupX = rect.X * 4;
             
-        popupY = rect.Y;
+        popupY = rect.Y * 4;
+    }
+
+    private CefRectangle GetPopupRectInWebView(CefRectangle rc)
+    {
+        // if x or y are negative, move them to 0.
+        if (rc.X < 0)
+            rc.X = 0;
+
+        if (rc.Y < 0)
+            rc.Y = 0;
+        
+        // if popup goes outside the view, try to reposition origin
+        if (rc.X + rc.Width > viewWidth)
+            rc.X = viewWidth - rc.Width;
+        if (rc.Y + rc.Height > viewHeight)
+            rc.Y = viewHeight - rc.Height;
+        
+        // if x or y became negative, move them to 0 again.
+        if (rc.X < 0)
+            rc.X = 0;
+        if (rc.Y < 0)
+            rc.Y = 0;
+
+        return rc;
     }
 
     protected override void OnPopupShow(CefBrowser browser, bool show)
@@ -166,7 +192,9 @@ internal class UwbCefRenderHandler : CefRenderHandler
     private void DrawPopupToMainBuffer()
     {
         int popupDataIndex = 0;
-        for (int y = 0; y < popupHeight * viewWidth; y += 4 * viewWidth)
+        int startIndex = popupX + (popupY * viewWidth);
+        
+        for (int y = startIndex; y < popupHeight * viewWidth + startIndex; y += 4 * viewWidth)
         {
             for (int x = 0; x < popupWidth; x++)
             {
