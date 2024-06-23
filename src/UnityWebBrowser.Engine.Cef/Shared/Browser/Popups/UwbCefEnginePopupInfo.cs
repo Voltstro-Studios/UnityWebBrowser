@@ -42,7 +42,7 @@ public class UwbCefEnginePopupInfo : EnginePopupInfo
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, Dispose);
+            CefActionTask.PostTask(CefThreadId.UI, Dispose);
             return;
         }
 

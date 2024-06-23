@@ -28,7 +28,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Debug(message));
+            CefActionTask.PostTask(CefThreadId.UI, () => Debug(message));
             return;
         }
 
@@ -44,7 +44,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Debug(message, values));
+            CefActionTask.PostTask(CefThreadId.UI, () => Debug(message, values));
             return;
         }
 
@@ -63,7 +63,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Info(message));
+            CefActionTask.PostTask(CefThreadId.UI, () => Info(message));
             return;
         }
 
@@ -79,7 +79,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Info(message, values));
+            CefActionTask.PostTask(CefThreadId.UI, () => Info(message, values));
             return;
         }
 
@@ -98,7 +98,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Warn(message));
+            CefActionTask.PostTask(CefThreadId.UI, () => Warn(message));
             return;
         }
 
@@ -114,7 +114,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Warn(message, values));
+            CefActionTask.PostTask(CefThreadId.UI, () => Warn(message, values));
             return;
         }
 
@@ -133,7 +133,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Error(message));
+            CefActionTask.PostTask(CefThreadId.UI, () => Error(message));
             return;
         }
 
@@ -149,7 +149,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Error(message, values));
+            CefActionTask.PostTask(CefThreadId.UI, () => Error(message, values));
             return;
         }
 
@@ -165,7 +165,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Error(exception, message));
+            CefActionTask.PostTask(CefThreadId.UI, () => Error(exception, message));
             return;
         }
 
@@ -182,7 +182,7 @@ public static class CefLoggerWrapper
     {
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            CefEngineControlsManager.PostTask(CefThreadId.UI, () => Error(exception, message, values));
+            CefActionTask.PostTask(CefThreadId.UI, () => Error(exception, message, values));
             return;
         }
 

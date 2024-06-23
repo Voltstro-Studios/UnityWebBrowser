@@ -66,23 +66,6 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         //Set up CEF args and the CEF app
         cefMainArgs = new CefMainArgs(argv);
         cefApp = new UwbCefApp(launchArguments);
-
-        //Run our sub-processes
-        int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
-        if (exitCode != -1)
-        {
-            CefLoggerWrapper.Debug("Sub-Process exit: {ExitCode}", exitCode);
-            Environment.Exit(exitCode);
-            return;
-        }
-
-        //Backup
-        if (argv.Any(arg => arg.StartsWith("--type=")))
-        {
-            CefLoggerWrapper.Error("Invalid process type!");
-            Environment.Exit(-2);
-            throw new Exception("Invalid process type!");
-        }
     }
 
     /// <summary>
@@ -121,12 +104,9 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
             PersistSessionCookies = true,
             PersistUserPreferences = true,
-#if LINUX || MACOS
-            //On Linux we need to tell CEF where everything is, this will assume that the working directory is where everything is!
             ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
             LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
-            BrowserSubprocessPath = Environment.ProcessPath
-#endif
+            BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, "UnityWebBrowser.Engine.Cef.SubProcess.exe")
         };
 
         //Init CEF
@@ -165,11 +145,6 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
     }
 
-    public static void PostTask(CefThreadId threadId, Action action)
-    {
-        CefRuntime.PostTask(threadId, new CefActionTask(action));
-    }
-
     #region Engine Actions
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -186,7 +161,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         //We can only quit the message loop on the UI (main) thread
         if (!CefRuntime.CurrentlyOn(CefThreadId.UI))
         {
-            PostTask(CefThreadId.UI, Shutdown);
+            CefActionTask.PostTask(CefThreadId.UI, Shutdown);
             return;
         }
 

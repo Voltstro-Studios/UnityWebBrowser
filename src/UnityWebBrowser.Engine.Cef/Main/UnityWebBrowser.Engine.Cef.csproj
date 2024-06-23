@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="../../Imports/NativeDefines.props" />
+    <Import Project="../../Imports/Properties.props" />
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ApplicationIcon>../Shared/chromium-logo.ico</ApplicationIcon>
+        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutDir>../bin/$(Configuration)/</OutDir>
+        <PublishDir>../bin/$(Configuration)/publish/$(RuntimeIdentifier)</PublishDir>
+
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <PublishSelfContained>true</PublishSelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
+        <DebuggerSupport>false</DebuggerSupport>
+        <UseSystemResourceKeys>true</UseSystemResourceKeys>
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\Shared\UnityWebBrowser.Engine.Cef.Shared.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
+        <!-- Prevents XML and PDB files being copied -->
+        <AllowedReferenceRelatedFileExtensions>
+            .allowedextension
+        </AllowedReferenceRelatedFileExtensions>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
+        <SelfContained>true</SelfContained>
+    </PropertyGroup>
+
+    <Import Project="../../Imports/NatvieDefines.targets" />
+</Project>
