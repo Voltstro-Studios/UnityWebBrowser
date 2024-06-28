@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Browser.Js;
 using UnityWebBrowser.Engine.Cef.Browser.Messages;
 using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
@@ -35,6 +35,8 @@ internal class UwbCefClient : CefClient, IDisposable
     private readonly UwbCefRenderHandler renderHandler;
     private readonly UwbCefRequestHandler requestHandler;
 
+    private readonly ILogger mainLogger;
+
     private readonly ProxySettings proxySettings;
 
     private CefBrowser browser;
@@ -48,11 +50,20 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
     /// </summary>
-    public UwbCefClient(CefSize size, PopupAction popupAction, EnginePopupManager popupManager, ProxySettings proxySettings, ClientControlsActions clientControlsActions)
+    public UwbCefClient(
+        CefSize size,
+        PopupAction popupAction,
+        EnginePopupManager popupManager,
+        ProxySettings proxySettings,
+        ClientControlsActions clientControlsActions,
+        ILogger mainLogger,
+        ILogger browserConsoleLogger)
     {
         ClientControls = clientControlsActions;
 
         this.proxySettings = proxySettings;
+
+        this.mainLogger = mainLogger;
 
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
@@ -63,7 +74,7 @@ internal class UwbCefClient : CefClient, IDisposable
             browser = cefBrowser;
             browserHost = cefBrowser.GetHost();
         };
-        displayHandler = new UwbCefDisplayHandler(this);
+        displayHandler = new UwbCefDisplayHandler(this, mainLogger, browserConsoleLogger);
         requestHandler = new UwbCefRequestHandler(proxySettings);
         contextMenuHandler = new UwbCefContextMenuHandler();
 
@@ -272,7 +283,7 @@ internal class UwbCefClient : CefClient, IDisposable
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, "An error occured while trying to open the dev tools!");
+            mainLogger.LogError(ex, $"An error occured while trying to open the dev tools!");
         }
     }
 
@@ -317,7 +328,7 @@ internal class UwbCefClient : CefClient, IDisposable
             string messageType = message.Name[..index];
             string messageValue = message.Name[(index + 2)..];
             
-            Logger.Debug($"Received message of type {messageType}: {messageValue}");
+            mainLogger.LogDebug($"Received message of type {messageType}: {messageValue}");
 
             foreach (KeyValuePair<string, IMessageBase> messageBase in messageTypes)
             {
@@ -330,7 +341,7 @@ internal class UwbCefClient : CefClient, IDisposable
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, "Error handling message received!");
+            mainLogger.LogError(ex, $"Error handling message received!");
         }
         
         return false;

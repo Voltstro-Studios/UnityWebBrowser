@@ -36,15 +36,6 @@ public static class Program
 
             //Run our sub-processes
             subProcessExitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
-            
-            /*
-            if (exitCode != -1)
-            {
-                CefLoggerWrapper.Debug("Sub-Process exit: {ExitCode}", exitCode);
-                Environment.Exit(exitCode);
-                return;
-            }
-            */
         });
 
         return subProcessExitCode;

@@ -12,7 +12,7 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
     /// </summary>
     public sealed class DefaultUnityWebBrowserLogger : IWebBrowserLogger
     {
-        private const string LoggingTag = "[Web Browser]";
+        private const string LoggingTag = "[UWB]";
 
         private readonly ILogger logger;
 

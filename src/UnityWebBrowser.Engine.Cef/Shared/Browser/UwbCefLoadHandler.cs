@@ -28,7 +28,7 @@ public class UwbCefLoadHandler : CefLoadHandler
         if (ignoredLoadUrls.Contains(url))
             return;
 
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load start: {url}");
+        CefLoggerWrapper.Debug($"Load start: {url}");
 
         if (frame.IsMain) client.ClientControls.LoadStart(url);
     }
@@ -39,7 +39,7 @@ public class UwbCefLoadHandler : CefLoadHandler
         if (ignoredLoadUrls.Contains(url))
             return;
 
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Load end: {url}");
+        CefLoggerWrapper.Debug($"Load end: {url}");
 
         if (frame.IsMain) client.ClientControls.LoadFinish(url);
     }
@@ -48,7 +48,7 @@ public class UwbCefLoadHandler : CefLoadHandler
         string errorText, string failedUrl)
     {
         CefLoggerWrapper.Error(
-            $"{CefLoggerWrapper.ConsoleMessageTag} An error occurred while trying to load '{failedUrl}'! Error details: {errorText} (Code: {errorCode})");
+            $"An error occurred while trying to load '{failedUrl}'! Error details: {errorText} (Code: {errorCode})");
 
         if (errorCode is CefErrorCode.Aborted
             or CefErrorCode.BLOCKED_BY_RESPONSE

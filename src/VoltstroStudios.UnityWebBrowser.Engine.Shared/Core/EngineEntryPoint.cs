@@ -6,12 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared.Communications;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using VoltRpc.Communication;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Communications;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.ReadWriters;
 
@@ -40,18 +40,6 @@ internal abstract class EngineEntryPoint : IDisposable
     protected EnginePopupManager PopupManager { get; private set; }
 
     /// <summary>
-    ///     Is the <see cref="Client" /> side of the connection connected
-    /// </summary>
-    protected bool IsConnected => ipcClient.IsConnected;
-
-    protected abstract bool ShouldInitLogger(LaunchArguments launchArguments, string[] args);
-
-    /// <summary>
-    ///     Do your early init stuff here
-    /// </summary>
-    protected abstract void EarlyInit(LaunchArguments launchArguments, string[] args);
-
-    /// <summary>
     ///     Called when the arguments are parsed.
     ///     <para>Remember to lock if you don't want to immediately exit</para>
     /// </summary>
@@ -63,6 +51,12 @@ internal abstract class EngineEntryPoint : IDisposable
     ///     </para>
     /// </param>
     protected abstract void EntryPoint(LaunchArguments launchArguments, string[] args);
+
+    /// <summary>
+    ///     <see cref="LoggerManager"/> for creating <see cref="ILogger{TCategoryName}"/>s
+    /// </summary>
+    protected LoggerManager LoggerManagerFactory;
+    private ILogger engineLogger;
 
     /// <summary>
     ///     Call this in your engine's Program.Main method.
@@ -81,40 +75,25 @@ internal abstract class EngineEntryPoint : IDisposable
         LaunchArgumentsParser launchArgumentsParser = new();
         return launchArgumentsParser.Run(args, parsedArgs =>
         {
-            if(parsedArgs.StartDelay != 0)
-                Thread.Sleep((int)parsedArgs.StartDelay);
-            
-            if (ShouldInitLogger(parsedArgs, args))
-                Logger.Init(parsedArgs.LogSeverity);
-            
-            ClientControlsActions = new ClientControlsActions();
-            PopupManager = new EnginePopupManager();
-
-            //Run early init
             try
             {
-                EarlyInit(parsedArgs, args);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in early init!");
-                ShutdownAndExitWithError();
-                return;
-            }
-
-            //Run the entry point
-            try
-            {
+                //Start logging services
+                LoggerManagerFactory = new LoggerManager(parsedArgs.LogSeverity);
+                engineLogger = LoggerManagerFactory.CreateLogger("Engine");
+            
+                if(parsedArgs.StartDelay != 0)
+                    Thread.Sleep((int)parsedArgs.StartDelay);
+            
+                ClientControlsActions = new ClientControlsActions();
+                PopupManager = new EnginePopupManager();
+                
                 EntryPoint(parsedArgs, args);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in the entry point!");
+                engineLogger.LogCritical(ex, $"Uncaught exception occured in the entry point!");
                 ShutdownAndExitWithError();
-                return;
             }
-
-            Logger.Shutdown();
         });
     }
 
@@ -127,9 +106,12 @@ internal abstract class EngineEntryPoint : IDisposable
     {
         try
         {
-            Logger.Debug($"{Logger.BaseLoggingTag}: SetupIcp.");
+            //Logger.Debug($"{Logger.BaseLoggingTag}: SetupIcp.");
+            engineLogger.LogDebug($"SetupUp");
             
-            ICommunicationLayer communicationLayer;
+            ICommunicationLayer communicationLayer = new TCPCommunicationLayer();
+            
+            /*
             if (arguments.CommunicationLayerPath == null)
             {
                 //Use TCP
@@ -142,8 +124,9 @@ internal abstract class EngineEntryPoint : IDisposable
                 communicationLayer = CommunicationLayerLoader.GetCommunicationLayerFromAssembly(
                     arguments.CommunicationLayerPath.FullName);
             }
+            */
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Created communication layer of type '{communicationLayer.GetType().FullName}'...");
+            engineLogger.LogDebug($"Created communication layer of type '{communicationLayer.GetType().FullName}'...");
 
             try
             {
@@ -152,18 +135,18 @@ internal abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured setting up the communication layer!");
+                engineLogger.LogCritical(ex, $"An error occured setting up the communication layer!");
                 ShutdownAndExitWithError();
                 return;
             }
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Created host and client from communication layer.");
+            engineLogger.LogDebug($"Created host and client from communication layer.");
 
             //Add type readers
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
-            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on host.");
+            engineLogger.LogDebug($"Installed services on host.");
             
             Task.Run(() =>
             {
@@ -173,42 +156,41 @@ internal abstract class EngineEntryPoint : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured listening on host!");
+                    engineLogger.LogError(ex, $"An error occured listening on host!");
                     ShutdownAndExitWithError();
                 }
             });
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Host has started listening.");
+            engineLogger.LogDebug($"Host has started listening.");
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClientControls));
             ipcClient.AddService(typeof(IPopupEngineControls));
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on client.");
+            engineLogger.LogDebug($"Installed services on client.");
 
             //Connect the engine (us) back to Unity
             try
             {
                 ipcClient.Connect();
                 
-                Logger.Debug($"{Logger.BaseLoggingTag}: Client has connected back to Unity.");
+                engineLogger.LogDebug($"Client has connected back to Unity.");
                 
                 ClientControlsActions.SetIpcClient(ipcClient);
                 PopupManager.SetIpcClient(ipcClient);
             }
             catch (ConnectionFailedException)
             {
-                Logger.Error(
-                    $"{Logger.BaseLoggingTag}: The engine failed to connect back to the Unity client! Client events will not fire!");
+                engineLogger.LogWarning($"The engine failed to connect back to the Unity client! Client events will not fire!");
                 ipcClient.Dispose();
                 ipcClient = null;
             }
 
-            Logger.Debug($"{Logger.BaseLoggingTag}: IPC Setup done.");
+            engineLogger.LogDebug($"IPC Setup done.");
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, $"{Logger.BaseLoggingTag}: Error setting up IPC!");
+            engineLogger.LogCritical(ex, $"Error setting up IPC!");
         }
     }
 
@@ -223,7 +205,6 @@ internal abstract class EngineEntryPoint : IDisposable
     private void ShutdownAndExitWithError()
     {
         Dispose();
-        Logger.Shutdown();
         Environment.Exit(-1);
     }
 

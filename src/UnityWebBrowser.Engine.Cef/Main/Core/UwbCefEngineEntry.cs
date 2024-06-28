@@ -5,8 +5,8 @@
 
 using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core;
@@ -17,20 +17,11 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 internal class UwbCefEngineEntry : EngineEntryPoint
 {
     private CefEngineControlsManager cefEngineControlsManager;
-
-    protected override bool ShouldInitLogger(LaunchArguments launchArguments, string[] args)
-    {
-        return !args.Any(arg => arg.StartsWith("--type="));
-    }
-
-    protected override void EarlyInit(LaunchArguments launchArguments, string[] args)
-    {
-        cefEngineControlsManager = new CefEngineControlsManager();
-        cefEngineControlsManager.EarlyInit(launchArguments, args);
-    }
-
+    
     protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
     {
+        cefEngineControlsManager = new CefEngineControlsManager(LoggerManagerFactory);
+        cefEngineControlsManager.EarlyInit(launchArguments, args);
         cefEngineControlsManager.Init(ClientControlsActions, PopupManager);
 
         SetupIpc(cefEngineControlsManager, launchArguments);
@@ -40,7 +31,6 @@ internal class UwbCefEngineEntry : EngineEntryPoint
         CefRuntime.RunMessageLoop();
 
         //If the message loop quits
-        Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Message loop quit.");
         Dispose();
         Environment.Exit(0);
     }

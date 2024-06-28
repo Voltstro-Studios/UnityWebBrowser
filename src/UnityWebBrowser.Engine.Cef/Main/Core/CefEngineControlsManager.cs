@@ -5,13 +5,12 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Browser;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
@@ -25,6 +24,9 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// </summary>
 internal class CefEngineControlsManager : IEngineControls, IDisposable
 {
+    private readonly ILogger mainLogger;
+    private readonly ILogger browserConsoleLogger;
+    
     private string[] args;
     private UwbCefApp cefApp;
 
@@ -38,10 +40,16 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="DllNotFoundException"></exception>
     /// <exception cref="CefVersionMismatchException"></exception>
     /// <exception cref="Exception"></exception>
-    public CefEngineControlsManager()
+    public CefEngineControlsManager(LoggerManager loggerManagerManager)
     {
         //Setup CEF
         CefRuntime.Load();
+
+        //this.loggerManager = loggerManager;
+        mainLogger = loggerManagerManager.CreateLogger("CEF Engine");
+        browserConsoleLogger = loggerManagerManager.CreateLogger("CEF Engine Browser Console");
+        
+        CefLoggerWrapper.Init(mainLogger);
     }
 
     /// <summary>
@@ -126,7 +134,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled
         };
 
-        Logger.Debug($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF with these options:" +
+        mainLogger.LogDebug($"Starting CEF with these options:" +
                      $"\nProcess Path: {Environment.ProcessPath}" +
                      $"\nJS: {launchArguments.JavaScript}" +
                      $"\nLocal Storage: {launchArguments.LocalStorage}" +
@@ -135,13 +143,17 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
                      $"\nPopup Action: {launchArguments.PopupAction}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
-        Logger.Info($"{CefLoggerWrapper.FullCefMessageTag} Starting CEF client...");
+        mainLogger.LogInformation($"Starting CEF client...");
 
         //Create cef browser
-        cefClient = new UwbCefClient(new CefSize(launchArguments.Width, launchArguments.Height),
-            launchArguments.PopupAction, popupManager,
-            new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword,
-                launchArguments.ProxyEnabled), clientControlsActions);
+        cefClient = new UwbCefClient(
+            new CefSize(launchArguments.Width, launchArguments.Height),
+            launchArguments.PopupAction,
+            popupManager,
+            new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled),
+            clientControlsActions,
+            mainLogger,
+            browserConsoleLogger);
         CefBrowserHost.CreateBrowser(cefWindowInfo, cefClient, cefBrowserSettings, launchArguments.InitialUrl);
     }
 
@@ -165,7 +177,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             return;
         }
 
-        Logger.Debug("Quitting message loop...");
+        mainLogger.LogDebug($"Quitting message loop...");
         CefRuntime.QuitMessageLoop();
     }
 

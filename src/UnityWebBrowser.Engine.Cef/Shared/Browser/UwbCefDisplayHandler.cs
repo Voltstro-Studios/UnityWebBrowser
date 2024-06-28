@@ -4,9 +4,9 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
+using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
-using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Browser;
@@ -17,38 +17,41 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 internal class UwbCefDisplayHandler : CefDisplayHandler
 {
     private readonly ClientControlsActions clientControls;
+    private readonly ILogger mainLogger;
+    private readonly ILogger browserConsoleLogger;
 
-    public UwbCefDisplayHandler(UwbCefClient client)
+    public UwbCefDisplayHandler(UwbCefClient client, ILogger mainLogger, ILogger browserConsoleLogger)
     {
-        this.clientControls = client.ClientControls;
+        clientControls = client.ClientControls;
+        this.mainLogger = mainLogger;
+        this.browserConsoleLogger = browserConsoleLogger;
     }
 
     protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} URL change: {url}");
+        mainLogger.LogDebug($"URL change: {url}");
         clientControls.UrlChange(url);
     }
 
     protected override void OnFullscreenModeChange(CefBrowser browser, bool fullscreen)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Fullscreen change: {fullscreen}");
+        mainLogger.LogDebug($"Fullscreen change: {fullscreen}");
         clientControls.Fullscreen(fullscreen);
     }
 
     protected override void OnTitleChange(CefBrowser browser, string title)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Title change: {title}");
+        mainLogger.LogDebug($"Title change: {title}");
         clientControls.TitleChange(title);
     }
 
     protected override void OnLoadingProgressChange(CefBrowser browser, double progress)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Progress change: {progress}");
+        mainLogger.LogDebug($"Progress change: {progress}");
         clientControls.ProgressChange(progress);
     }
 
-    protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message,
-        string source, int line)
+    protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
     {
         switch (level)
         {
@@ -56,17 +59,19 @@ internal class UwbCefDisplayHandler : CefDisplayHandler
                 break;
             case CefLogSeverity.Default:
             case CefLogSeverity.Info:
-                CefLoggerWrapper.Info($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
+                browserConsoleLogger.LogInformation($"[{source}:{line}]: {message}");
                 break;
             case CefLogSeverity.Warning:
-                CefLoggerWrapper.Warn($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
+                browserConsoleLogger.LogWarning($"[{source}:{line}]: {message}");
                 break;
             case CefLogSeverity.Error:
+                browserConsoleLogger.LogError($"[{source}:{line}]: {message}");
+                break;
             case CefLogSeverity.Fatal:
-                CefLoggerWrapper.Error($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
+                browserConsoleLogger.LogCritical($"[{source}:{line}]: {message}");
                 break;
             case CefLogSeverity.Verbose:
-                CefLoggerWrapper.Debug($"{CefLoggerWrapper.ConsoleMessageTag} {message}");
+                //browserConsoleLogger.ZLogDebug($"[{source}:{line}]: {message}");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(level), level, null);

@@ -4,7 +4,7 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
+using Microsoft.Extensions.Logging;
 using Xilium.CefGlue;
 
 namespace UnityWebBrowser.Engine.Cef.Core;
@@ -14,10 +14,13 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// </summary>
 public static class CefLoggerWrapper
 {
-    private const string CefMessageTag = "CEF Engine";
-    public const string FullCefMessageTag = $"[{CefMessageTag}]:";
-    public const string ConsoleMessageTag = $"[{CefMessageTag} Console]:";
+    private static ILogger logger;
 
+    internal static void Init(ILogger mainLogger)
+    {
+        logger = mainLogger;
+    }
+    
     #region Debug Log
 
     /// <summary>
@@ -32,7 +35,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Debug(message);
+        logger.LogDebug(message);
     }
 
     /// <summary>
@@ -48,7 +51,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Debug(message, values);
+        logger.LogDebug(message, values);
     }
 
     #endregion
@@ -67,7 +70,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Info(message);
+        logger.LogInformation(message);
     }
 
     /// <summary>
@@ -83,7 +86,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Info(message, values);
+        logger.LogInformation(message, values);
     }
 
     #endregion
@@ -102,7 +105,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Warn(message);
+        logger.LogWarning(message);
     }
 
     /// <summary>
@@ -118,7 +121,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Warn(message, values);
+        logger.LogWarning(message, values);
     }
 
     #endregion
@@ -137,7 +140,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Error(message);
+        logger.LogError(message);
     }
 
     /// <summary>
@@ -153,7 +156,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Error(message, values);
+        logger.LogError(message, values);
     }
 
     /// <summary>
@@ -169,7 +172,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Error(exception, message);
+        logger.LogError(exception, message);
     }
 
     /// <summary>
@@ -186,7 +189,7 @@ public static class CefLoggerWrapper
             return;
         }
 
-        Logger.Error(exception, message, values);
+        logger.LogError(exception, message, values);
     }
 
     #endregion

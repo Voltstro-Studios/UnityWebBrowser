@@ -176,7 +176,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
     protected override bool Open(CefRequest request, out bool handleRequest, CefCallback callback)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Open() called.");
+        CefLoggerWrapper.Debug($"Stream Cef Resource Handler Open() called.");
         CefReturnValue processRequest = ProcessRequestAsync(request, callback);
 
         //Process the request in an async fashion
@@ -202,8 +202,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
     protected override void GetResponseHeaders(CefResponse response, out long responseLength, out string redirectUrl)
     {
-        CefLoggerWrapper.Debug(
-            $"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler GetResponseHeaders() called.");
+        CefLoggerWrapper.Debug("Stream Cef Resource Handler GetResponseHeaders() called.");
         redirectUrl = string.Empty;
         responseLength = -1;
 
@@ -231,7 +230,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
     protected override bool Skip(long bytesToSkip, out long bytesSkipped, CefResourceSkipCallback callback)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Skip() called.");
+        CefLoggerWrapper.Debug("Stream Cef Resource Handler Skip() called.");
         //No Stream or Stream cannot seek then we indicate failure
         if (Stream is null || !Stream.CanSeek)
         {
@@ -251,7 +250,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
     protected override bool Read(Stream dataStream, int bytesToRead, out int bytesRead, CefResourceReadCallback callback)
     {
-        CefLoggerWrapper.Debug($"{CefLoggerWrapper.FullCefMessageTag} Stream Cef Resource Handler Read() called.");
+        CefLoggerWrapper.Debug(" Stream Cef Resource Handler Read() called.");
         bytesRead = 0;
 
         //We don't need the callback, as it's an unmanaged resource we should dispose it (could wrap it in a using statement).
