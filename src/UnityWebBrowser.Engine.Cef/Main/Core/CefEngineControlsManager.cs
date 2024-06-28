@@ -99,6 +99,13 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         };
 
         //Setup the CEF settings
+#if WINDOWS
+        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess.exe";
+#else
+        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess";
+#endif
+        
+        
         CefSettings cefSettings = new()
         {
             WindowlessRenderingEnabled = true,
@@ -114,7 +121,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             PersistUserPreferences = true,
             ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
             LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
-            BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, "UnityWebBrowser.Engine.Cef.SubProcess.exe")
+            BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, subprocessName)
         };
 
         //Init CEF
