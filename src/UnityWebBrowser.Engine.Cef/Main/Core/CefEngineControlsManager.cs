@@ -8,7 +8,7 @@ using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
-using UnityWebBrowser.Engine.Cef.Browser;
+using UnityWebBrowser.Engine.Cef.Shared.Browser;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;

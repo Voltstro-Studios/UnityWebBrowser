@@ -7,18 +7,18 @@ using System;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Popups;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
 
 /// <summary>
-///     A <see cref="CefClient"/> that is for popups
+///     A <see cref="CefClient" /> that is for popups
 /// </summary>
 public class UwbCefPopupClient : CefClient
 {
-    private readonly UwbCefRequestHandler requestHandler;
     private readonly UwbCefPopupLifeSpanHandler lifeSpanHandler;
+    private readonly UwbCefRequestHandler requestHandler;
 
     /// <summary>
-    ///     Creates a new <see cref="UwbCefPopupClient"/> instance
+    ///     Creates a new <see cref="UwbCefPopupClient" /> instance
     /// </summary>
     /// <param name="proxySettings"></param>
     /// <param name="onShutdown"></param>
@@ -29,7 +29,7 @@ public class UwbCefPopupClient : CefClient
     }
 
     /// <summary>
-    ///     Closes this <see cref="UwbCefPopupClient"/>
+    ///     Closes this <see cref="UwbCefPopupClient" />
     /// </summary>
     public void Close()
     {
@@ -37,13 +37,13 @@ public class UwbCefPopupClient : CefClient
     }
 
     /// <summary>
-    ///     Executes js in this <see cref="UwbCefPopupClient"/>
+    ///     Executes js in this <see cref="UwbCefPopupClient" />
     /// </summary>
     public void ExecuteJs(string js)
     {
         lifeSpanHandler.ExecuteJs(js);
     }
-    
+
     protected override CefRequestHandler GetRequestHandler()
     {
         return requestHandler;

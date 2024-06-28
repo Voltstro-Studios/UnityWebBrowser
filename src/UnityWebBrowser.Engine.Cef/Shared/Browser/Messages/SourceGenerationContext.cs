@@ -5,10 +5,10 @@
 
 using System;
 using System.Text.Json.Serialization;
-using UnityWebBrowser.Engine.Cef.Browser.Js;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
 using VoltstroStudios.UnityWebBrowser.Shared.Js;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Messages;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Messages;
 
 [JsonSourceGenerationOptions(WriteIndented = false)]
 [JsonSerializable(typeof(ExecuteJsMethodMessage))]

@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Schemes;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Schemes;
 
 public sealed class PageResourceScheme : CefSchemeHandlerFactory, IDisposable
 {

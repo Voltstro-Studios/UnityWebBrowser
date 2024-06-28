@@ -12,7 +12,7 @@ using Xilium.CefGlue;
 
 //From: https://github.com/chromelyapps/Chromely/blob/989d74141aabb8d874b2ad9b75757f56f3e6fdba/src_5.2/Chromely/Browser/Handlers/ResourceHandler.cs
 #nullable enable
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     Default implementation of <see cref="CefResourceHandler" />. This latest implementation provides some
@@ -150,7 +150,7 @@ public class StreamCefResourceHandler : CefResourceHandler
             byte[] preamble = encoding.GetPreamble();
             byte[] bytes = encoding.GetBytes(text);
 
-            MemoryStream memoryStream = new MemoryStream(preamble.Length + bytes.Length);
+            MemoryStream memoryStream = new(preamble.Length + bytes.Length);
 
             memoryStream.Write(preamble, 0, preamble.Length);
             memoryStream.Write(bytes, 0, bytes.Length);
@@ -176,7 +176,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
     protected override bool Open(CefRequest request, out bool handleRequest, CefCallback callback)
     {
-        CefLoggerWrapper.Debug($"Stream Cef Resource Handler Open() called.");
+        CefLoggerWrapper.Debug("Stream Cef Resource Handler Open() called.");
         CefReturnValue processRequest = ProcessRequestAsync(request, callback);
 
         //Process the request in an async fashion
@@ -248,7 +248,8 @@ public class StreamCefResourceHandler : CefResourceHandler
         return true;
     }
 
-    protected override bool Read(Stream dataStream, int bytesToRead, out int bytesRead, CefResourceReadCallback callback)
+    protected override bool Read(Stream dataStream, int bytesToRead, out int bytesRead,
+        CefResourceReadCallback callback)
     {
         CefLoggerWrapper.Debug(" Stream Cef Resource Handler Read() called.");
         bytesRead = 0;
@@ -267,7 +268,7 @@ public class StreamCefResourceHandler : CefResourceHandler
 
         // To indicate response completion set bytesRead to 0 and return false
         if (bytesRead == 0) return false;
-        
+
         dataStream.Write(tempBuffer, 0, bytesRead);
 
         return bytesRead > 0;

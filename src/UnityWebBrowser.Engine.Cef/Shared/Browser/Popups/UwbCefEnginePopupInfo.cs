@@ -9,18 +9,18 @@ using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Popups;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
 
 /// <summary>
-///     Cef implementation of <see cref="EnginePopupInfo"/>
+///     Cef implementation of <see cref="EnginePopupInfo" />
 /// </summary>
 public class UwbCefEnginePopupInfo : EnginePopupInfo
 {
-    private readonly EnginePopupManager popupManager;
     private readonly UwbCefPopupClient popupClient;
-    
+    private readonly EnginePopupManager popupManager;
+
     /// <summary>
-    ///     Creates a new <see cref="UwbCefEnginePopupInfo"/>
+    ///     Creates a new <see cref="UwbCefEnginePopupInfo" />
     /// </summary>
     /// <param name="proxySettings"></param>
     /// <param name="popupManager"></param>
@@ -32,7 +32,7 @@ public class UwbCefEnginePopupInfo : EnginePopupInfo
         popupClient = new UwbCefPopupClient(proxySettings, DisposeNoClose);
         client = popupClient;
     }
-    
+
     public override void ExecuteJs(string js)
     {
         popupClient.ExecuteJs(js);

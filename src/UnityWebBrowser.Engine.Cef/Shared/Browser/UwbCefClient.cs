@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
-using UnityWebBrowser.Engine.Cef.Browser.Js;
-using UnityWebBrowser.Engine.Cef.Browser.Messages;
-using UnityWebBrowser.Engine.Cef.Browser.Popups;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Messages;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
@@ -18,7 +18,7 @@ using VoltstroStudios.UnityWebBrowser.Shared.Events;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     Offscreen CEF
@@ -32,20 +32,20 @@ internal class UwbCefClient : CefClient, IDisposable
     private readonly UwbCefLifespanHandler lifespanHandler;
 
     private readonly UwbCefLoadHandler loadHandler;
-    private readonly UwbCefRenderHandler renderHandler;
-    private readonly UwbCefRequestHandler requestHandler;
 
     private readonly ILogger mainLogger;
 
     private readonly ProxySettings proxySettings;
+    private readonly UwbCefRenderHandler renderHandler;
+    private readonly UwbCefRequestHandler requestHandler;
 
     private CefBrowser browser;
     private CefBrowserHost browserHost;
+    private CefBrowserSettings devToolsBrowserSettings;
+    private UwbCefPopupClient devToolsClient;
 
     //Dev Tools
     private CefWindowInfo devToolsWindowInfo;
-    private UwbCefPopupClient devToolsClient;
-    private CefBrowserSettings devToolsBrowserSettings;
 
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -147,7 +147,7 @@ internal class UwbCefClient : CefClient, IDisposable
         foreach (WindowsKey i in keyboardEvent.KeysDown)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = (int) i,
+                WindowsKeyCode = (int)i,
                 EventType = CefKeyEventType.KeyDown
             });
 
@@ -155,7 +155,7 @@ internal class UwbCefClient : CefClient, IDisposable
         foreach (WindowsKey i in keyboardEvent.KeysUp)
             KeyEvent(new CefKeyEvent
             {
-                WindowsKeyCode = (int) i,
+                WindowsKeyCode = (int)i,
                 EventType = CefKeyEventType.KeyUp
             });
 
@@ -196,7 +196,7 @@ internal class UwbCefClient : CefClient, IDisposable
                 X = mouseClickEvent.MouseX,
                 Y = mouseClickEvent.MouseY
             }, mouseClickEvent.MouseClickCount,
-            (CefMouseButtonType) mouseClickEvent.MouseClickType,
+            (CefMouseButtonType)mouseClickEvent.MouseClickType,
             mouseClickEvent.MouseEventType == MouseEventType.Up);
     }
 
@@ -283,7 +283,7 @@ internal class UwbCefClient : CefClient, IDisposable
         }
         catch (Exception ex)
         {
-            mainLogger.LogError(ex, $"An error occured while trying to open the dev tools!");
+            mainLogger.LogError(ex, "An error occured while trying to open the dev tools!");
         }
     }
 
@@ -306,7 +306,7 @@ internal class UwbCefClient : CefClient, IDisposable
 
     public void Resize(Resolution resolution)
     {
-        renderHandler.Resize(new CefSize((int) resolution.Width, (int) resolution.Height));
+        renderHandler.Resize(new CefSize((int)resolution.Width, (int)resolution.Height));
         browserHost.WasResized();
     }
 
@@ -315,7 +315,7 @@ internal class UwbCefClient : CefClient, IDisposable
     #region Messages
 
     private readonly Dictionary<string, IMessageBase> messageTypes;
-    
+
     protected override bool OnProcessMessageReceived(CefBrowser browser, CefFrame frame, CefProcessId sourceProcess,
         CefProcessMessage message)
     {
@@ -327,23 +327,21 @@ internal class UwbCefClient : CefClient, IDisposable
 
             string messageType = message.Name[..index];
             string messageValue = message.Name[(index + 2)..];
-            
+
             mainLogger.LogDebug($"Received message of type {messageType}: {messageValue}");
 
             foreach (KeyValuePair<string, IMessageBase> messageBase in messageTypes)
-            {
                 if (messageBase.Key == messageType)
                 {
                     object value = messageBase.Value.Deserialize(messageValue);
                     messageBase.Value.Execute(value);
                 }
-            }
         }
         catch (Exception ex)
         {
-            mainLogger.LogError(ex, $"Error handling message received!");
+            mainLogger.LogError(ex, "Error handling message received!");
         }
-        
+
         return false;
     }
 

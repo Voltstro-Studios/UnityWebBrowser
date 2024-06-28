@@ -22,7 +22,7 @@ public class CefActionTask : CefTask
         action();
         action = null;
     }
-    
+
     public static void PostTask(CefThreadId threadId, Action action)
     {
         CefRuntime.PostTask(threadId, new CefActionTask(action));

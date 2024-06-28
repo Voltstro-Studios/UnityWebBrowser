@@ -7,7 +7,7 @@ using System.Linq;
 using UnityWebBrowser.Engine.Cef.Core;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     <see cref="CefLoadHandler" /> implementation
@@ -15,7 +15,7 @@ namespace UnityWebBrowser.Engine.Cef.Browser;
 public class UwbCefLoadHandler : CefLoadHandler
 {
     private readonly UwbCefClient client;
-    private readonly string[] ignoredLoadUrls = {"about:blank"};
+    private readonly string[] ignoredLoadUrls = { "about:blank" };
 
     internal UwbCefLoadHandler(UwbCefClient client)
     {
@@ -65,7 +65,7 @@ font-family: 'Ubuntu', sans-serif;
 }}
 </style>
 <h2>An error occurred while trying to load '{failedUrl}'!</h2>
-<p>Error: {errorText}<br>(Code: {(int) errorCode})</p>";
+<p>Error: {errorText}<br>(Code: {(int)errorCode})</p>";
         client.LoadHtml(html);
     }
 }

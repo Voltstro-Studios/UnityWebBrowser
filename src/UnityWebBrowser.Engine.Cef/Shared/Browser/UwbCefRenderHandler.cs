@@ -12,29 +12,23 @@ using UnityWebBrowser.Engine.Cef.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     <see cref="CefRenderHandler" /> implementation
 /// </summary>
 internal class UwbCefRenderHandler : CefRenderHandler
 {
-    private CefSize cefSize;
+    private readonly ClientControlsActions clientControls;
 
     private readonly object pixelsLock;
-    private Memory<byte> userPixelsBuffer;
+    private CefSize cefSize;
     private byte[] pixelsBuffer;
     private int pixelsLength;
-
-    private readonly ClientControlsActions clientControls;
-    
-    private int viewWidth;
+    private Memory<byte> userPixelsBuffer;
     private int viewHeight;
-    
-    /// <summary>
-    ///     Tracked mouse scroll position
-    /// </summary>
-    public Vector2 MouseScrollPosition { get; private set; }
+
+    private int viewWidth;
 
     public UwbCefRenderHandler(UwbCefClient client, CefSize size)
     {
@@ -42,7 +36,12 @@ internal class UwbCefRenderHandler : CefRenderHandler
         Resize(size);
         clientControls = client.ClientControls;
     }
-    
+
+    /// <summary>
+    ///     Tracked mouse scroll position
+    /// </summary>
+    public Vector2 MouseScrollPosition { get; private set; }
+
     public ReadOnlyMemory<byte> Pixels
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,13 +59,13 @@ internal class UwbCefRenderHandler : CefRenderHandler
     public void Resize(CefSize size)
     {
         pixelsLength = size.Width * size.Height * 4;
-        
+
         lock (pixelsLock)
         {
             pixelsBuffer = new byte[pixelsLength];
             userPixelsBuffer = new Memory<byte>(new byte[pixelsLength]);
         }
-        
+
         cefSize = size;
     }
 
@@ -95,72 +94,9 @@ internal class UwbCefRenderHandler : CefRenderHandler
         rect = new CefRectangle(0, 0, cefSize.Width, cefSize.Height);
     }
 
-    #region Popups
-
-    //Popups are widgets, like the select element
-
-    private int popupDataBufferSize;
-    private byte[] popupDataBuffer;
-    
-    private bool showPopup;
-
-    private int popupX;
-    private int popupY;
-    
-    private int popupWidth;
-    private int popupHeight;
-    
-    protected override void OnPopupSize(CefBrowser browser, CefRectangle rect)
-    {
-        rect = GetPopupRectInWebView(rect);
-        
-        int popupDataLength = rect.Width * rect.Height * 4;
-        if (popupDataBufferSize == popupDataLength || !showPopup)
-            return;
-        
-        popupDataBuffer = new byte[popupDataLength];
-        popupDataBufferSize = popupDataLength;
-
-        popupWidth = rect.Width * 4;
-        popupHeight = rect.Height * 4;
-        popupX = rect.X * 4;
-            
-        popupY = rect.Y * 4;
-    }
-
-    private CefRectangle GetPopupRectInWebView(CefRectangle rc)
-    {
-        // if x or y are negative, move them to 0.
-        if (rc.X < 0)
-            rc.X = 0;
-
-        if (rc.Y < 0)
-            rc.Y = 0;
-        
-        // if popup goes outside the view, try to reposition origin
-        if (rc.X + rc.Width > viewWidth)
-            rc.X = viewWidth - rc.Width;
-        if (rc.Y + rc.Height > viewHeight)
-            rc.Y = viewHeight - rc.Height;
-        
-        // if x or y became negative, move them to 0 again.
-        if (rc.X < 0)
-            rc.X = 0;
-        if (rc.Y < 0)
-            rc.Y = 0;
-
-        return rc;
-    }
-
-    protected override void OnPopupShow(CefBrowser browser, bool show)
-    {
-        showPopup = show;
-    }
-
-    #endregion
-
     [SecurityCritical]
-    protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects, IntPtr buffer, int width, int height)
+    protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects,
+        IntPtr buffer, int width, int height)
     {
         if (type == CefPaintElementType.Popup && showPopup)
         {
@@ -168,15 +104,15 @@ internal class UwbCefRenderHandler : CefRenderHandler
             DrawPopupToMainBuffer();
             return;
         }
-        
+
         //Ensure buffer sizes are the same
         int myBufferSize = width * height * 4;
-        if(myBufferSize != pixelsLength)
+        if (myBufferSize != pixelsLength)
             return;
 
         viewHeight = height;
         viewWidth = width;
-        
+
         //Copy our pixel buffer to our pixels
         lock (pixelsLock)
         {
@@ -229,4 +165,68 @@ internal class UwbCefRenderHandler : CefRenderHandler
         CefLoggerWrapper.Debug($"Input mode changed to: {inputMode}");
         clientControls.InputFocusChange(inputMode == CefTextInputMode.Default);
     }
+
+    #region Popups
+
+    //Popups are widgets, like the select element
+
+    private int popupDataBufferSize;
+    private byte[] popupDataBuffer;
+
+    private bool showPopup;
+
+    private int popupX;
+    private int popupY;
+
+    private int popupWidth;
+    private int popupHeight;
+
+    protected override void OnPopupSize(CefBrowser browser, CefRectangle rect)
+    {
+        rect = GetPopupRectInWebView(rect);
+
+        int popupDataLength = rect.Width * rect.Height * 4;
+        if (popupDataBufferSize == popupDataLength || !showPopup)
+            return;
+
+        popupDataBuffer = new byte[popupDataLength];
+        popupDataBufferSize = popupDataLength;
+
+        popupWidth = rect.Width * 4;
+        popupHeight = rect.Height * 4;
+        popupX = rect.X * 4;
+
+        popupY = rect.Y * 4;
+    }
+
+    private CefRectangle GetPopupRectInWebView(CefRectangle rc)
+    {
+        // if x or y are negative, move them to 0.
+        if (rc.X < 0)
+            rc.X = 0;
+
+        if (rc.Y < 0)
+            rc.Y = 0;
+
+        // if popup goes outside the view, try to reposition origin
+        if (rc.X + rc.Width > viewWidth)
+            rc.X = viewWidth - rc.Width;
+        if (rc.Y + rc.Height > viewHeight)
+            rc.Y = viewHeight - rc.Height;
+
+        // if x or y became negative, move them to 0 again.
+        if (rc.X < 0)
+            rc.X = 0;
+        if (rc.Y < 0)
+            rc.Y = 0;
+
+        return rc;
+    }
+
+    protected override void OnPopupShow(CefBrowser browser, bool show)
+    {
+        showPopup = show;
+    }
+
+    #endregion
 }

@@ -6,7 +6,7 @@
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     <see cref="CefApp" /> for CefBrowserProcess
@@ -17,7 +17,7 @@ public class UwbCefApp : CefApp
     private readonly bool noProxyServer;
     private readonly bool remoteDebugging;
     private readonly string[] remoteDebuggingOrigins;
-    
+
     private UwbCefBrowserProcessHandler browserProcessHandler;
 
     public UwbCefApp(LaunchArguments launchArguments)

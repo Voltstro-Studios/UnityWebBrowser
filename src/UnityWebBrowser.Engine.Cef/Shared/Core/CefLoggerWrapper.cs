@@ -20,7 +20,7 @@ public static class CefLoggerWrapper
     {
         logger = mainLogger;
     }
-    
+
     #region Debug Log
 
     /// <summary>

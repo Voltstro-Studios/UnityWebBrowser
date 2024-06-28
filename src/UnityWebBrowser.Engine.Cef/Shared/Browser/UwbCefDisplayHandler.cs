@@ -5,20 +5,19 @@
 
 using System;
 using Microsoft.Extensions.Logging;
-using UnityWebBrowser.Engine.Cef.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     <see cref="CefDisplayHandler" /> implementation
 /// </summary>
 internal class UwbCefDisplayHandler : CefDisplayHandler
 {
+    private readonly ILogger browserConsoleLogger;
     private readonly ClientControlsActions clientControls;
     private readonly ILogger mainLogger;
-    private readonly ILogger browserConsoleLogger;
 
     public UwbCefDisplayHandler(UwbCefClient client, ILogger mainLogger, ILogger browserConsoleLogger)
     {
@@ -51,7 +50,8 @@ internal class UwbCefDisplayHandler : CefDisplayHandler
         clientControls.ProgressChange(progress);
     }
 
-    protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
+    protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source,
+        int line)
     {
         switch (level)
         {

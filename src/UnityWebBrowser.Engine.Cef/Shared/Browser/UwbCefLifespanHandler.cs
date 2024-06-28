@@ -4,33 +4,34 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using UnityWebBrowser.Engine.Cef.Browser.Popups;
 using UnityWebBrowser.Engine.Cef.Core;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
 ///     <see cref="CefLifeSpanHandler" /> implementation
 /// </summary>
 public class UwbCefLifespanHandler : CefLifeSpanHandler
 {
-    public event Action<CefBrowser> AfterCreated;
+    private readonly PopupAction popupAction;
 
     private readonly EnginePopupManager popupManager;
     private readonly ProxySettings proxySettings;
-    
-    private readonly PopupAction popupAction;
 
-    public UwbCefLifespanHandler(PopupAction popupAction, EnginePopupManager enginePopupManager, ProxySettings proxySettings)
+    public UwbCefLifespanHandler(PopupAction popupAction, EnginePopupManager enginePopupManager,
+        ProxySettings proxySettings)
     {
         this.proxySettings = proxySettings;
         this.popupAction = popupAction;
         popupManager = enginePopupManager;
     }
+
+    public event Action<CefBrowser> AfterCreated;
 
     protected override void OnAfterCreated(CefBrowser browser)
     {
@@ -59,7 +60,7 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+
         return true;
     }
 

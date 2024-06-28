@@ -5,7 +5,7 @@
 
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 public class UwbCefContextMenuHandler : CefContextMenuHandler
 {

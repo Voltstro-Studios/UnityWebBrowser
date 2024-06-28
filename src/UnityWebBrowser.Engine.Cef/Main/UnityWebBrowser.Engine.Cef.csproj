@@ -24,6 +24,13 @@
     <ItemGroup>
         <ProjectReference Include="..\Shared\UnityWebBrowser.Engine.Cef.Shared.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.139">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
 
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <!-- Prevents XML and PDB files being copied -->

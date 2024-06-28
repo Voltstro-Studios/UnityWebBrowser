@@ -4,7 +4,7 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using UnityWebBrowser.Engine.Cef.Browser;
+using UnityWebBrowser.Engine.Cef.Shared.Browser;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 

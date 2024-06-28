@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../../Imports/NativeDefines.props" />
-    <Import Project="../../Imports/Properties.props" />
-    
+    <Import Project="../../Imports/NativeDefines.props"/>
+    <Import Project="../../Imports/Properties.props"/>
+
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -12,13 +12,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj" />
-        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj" />
-        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj" />
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+        <ProjectReference Include="..\..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
+        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj"/>
+        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj"/>
     </ItemGroup>
 
     <!-- We need to copy different files depending on the OS -->
@@ -155,6 +151,13 @@
         </Content>
     </ItemGroup>
 
-    <Import Project="../../Imports/NatvieDefines.targets" />
+    <ItemGroup>
+      <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.139">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <Import Project="../../Imports/NatvieDefines.targets"/>
 
 </Project>

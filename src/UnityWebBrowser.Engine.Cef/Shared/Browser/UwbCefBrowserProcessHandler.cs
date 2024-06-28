@@ -4,11 +4,11 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using UnityWebBrowser.Engine.Cef.Browser.Schemes;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Schemes;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Pages;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 public class UwbCefBrowserProcessHandler : CefBrowserProcessHandler, IDisposable
 {

@@ -7,24 +7,24 @@ using System;
 using UnityWebBrowser.Engine.Cef.Core;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Popups;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
 
 /// <summary>
-///     <see cref="CefLifeSpanHandler"/> for a popup
+///     <see cref="CefLifeSpanHandler" /> for a popup
 /// </summary>
 public class UwbCefPopupLifeSpanHandler : CefLifeSpanHandler
 {
+    private readonly Action onShutdown;
+    private CefBrowser cefBrowser;
+
     /// <summary>
-    ///     Creates a new <see cref="UwbCefPopupLifeSpanHandler"/> instance
+    ///     Creates a new <see cref="UwbCefPopupLifeSpanHandler" /> instance
     /// </summary>
     /// <param name="onShutdown"></param>
     public UwbCefPopupLifeSpanHandler(Action onShutdown)
     {
         this.onShutdown = onShutdown;
     }
-
-    private readonly Action onShutdown;
-    private CefBrowser cefBrowser;
 
     /// <summary>
     ///     Closes the popup
@@ -42,14 +42,14 @@ public class UwbCefPopupLifeSpanHandler : CefLifeSpanHandler
     {
         cefBrowser?.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
     }
-    
+
     protected override void OnAfterCreated(CefBrowser browser)
     {
         cefBrowser = browser;
     }
 
     protected override void OnBeforeClose(CefBrowser browser)
-    { 
+    {
         CefLoggerWrapper.Debug("Closing popup...");
         onShutdown.Invoke();
     }

@@ -3,14 +3,13 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-using UnityWebBrowser.Engine.Cef.Browser.Js;
+using UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 
 /// <summary>
-///     UWB's custom <see cref="CefRenderProcessHandler"/>
-///
+///     UWB's custom <see cref="CefRenderProcessHandler" />
 ///     The render process handles JS callbacks. So custom JS stuff is done here
 /// </summary>
 public class UwbCefRenderProcessHandler : CefRenderProcessHandler
@@ -25,7 +24,7 @@ public class UwbCefRenderProcessHandler : CefRenderProcessHandler
         //Version info
         CefV8Value versionValue = CefV8Value.CreateString(ThisAssembly.AssemblyFileVersion);
         uwbObject.SetValue("EngineVersion", versionValue);
-        
+
         CefV8Value engineName = CefV8Value.CreateString("CEF (Chromium Embedded Framework)");
         uwbObject.SetValue("EngineName", engineName);
 
@@ -33,7 +32,8 @@ public class UwbCefRenderProcessHandler : CefRenderProcessHandler
         uwbObject.SetValue("CefVersion", cefVersion);
 
         //UWB's uwbExecuteJsMethod function
-        CefV8Value executeMethod = CefV8Value.CreateFunction(UwbCefJsMethodHandler.ExecuteJsMethodsFunctionName, new UwbCefJsMethodHandler());
+        CefV8Value executeMethod = CefV8Value.CreateFunction(UwbCefJsMethodHandler.ExecuteJsMethodsFunctionName,
+            new UwbCefJsMethodHandler());
         uwbObject.SetValue(UwbCefJsMethodHandler.ExecuteJsMethodsFunctionName, executeMethod);
 
         //Add uwb to global value

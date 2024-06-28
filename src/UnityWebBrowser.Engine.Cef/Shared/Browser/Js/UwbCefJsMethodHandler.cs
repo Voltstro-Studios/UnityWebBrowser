@@ -7,16 +7,17 @@ using System;
 using VoltstroStudios.UnityWebBrowser.Shared.Js;
 using Xilium.CefGlue;
 
-namespace UnityWebBrowser.Engine.Cef.Browser.Js;
+namespace UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
 
 /// <summary>
-///     <see cref="CefV8Handler"/> for uwbExecuteMethod
+///     <see cref="CefV8Handler" /> for uwbExecuteMethod
 /// </summary>
 internal class UwbCefJsMethodHandler : CefV8Handler
 {
     public const string ExecuteJsMethodsFunctionName = "ExecuteJsMethod";
-    
-    protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
+
+    protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue,
+        out string exception)
     {
         if (name == ExecuteJsMethodsFunctionName && arguments.Length > 0)
         {
@@ -64,7 +65,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
                 return true;
             }
         }
-        
+
         returnValue = null;
         exception = null;
         return false;
@@ -74,14 +75,12 @@ internal class UwbCefJsMethodHandler : CefV8Handler
     {
         object value = null;
         JsValueType type = JsValueType.Null;
-        
+
         //Ensure value is not a promise, function, array buffer.
         //TODO: Support arrays?
         if (cefValue.IsPromise || cefValue.IsFunction || cefValue.IsArrayBuffer || cefValue.IsArray)
-        {
             throw new InvalidValueTypeException("Value cannot be a promise, function, an array or an array buffer!");
-        }
-        
+
         if (cefValue.IsNull || cefValue.IsUndefined)
         {
             value = null;
@@ -97,7 +96,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
                 string key = keys[i];
                 values[i] = new JsObjectKeyValue(key, ReadCefValueToJsValue(cefValue.GetValue(key)));
             }
-            
+
             //Custom objects are held by a JsObjectHolder
             JsObjectHolder objectHolder = new(values);
 
@@ -132,7 +131,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
         else if (cefValue.IsDate)
         {
             CefBaseTime time = cefValue.GetDateValue();
-            
+
             //Time logic from CefSharp:
             //https://github.com/cefsharp/CefSharp/blob/bbe7260fe8d0fa4507cf0e36dea36ffe63b35f91/CefSharp/Internals/BaseTimeConverter.cs
             const long maxFileTime = 2650467743999999999;
@@ -156,7 +155,7 @@ internal class UwbCefJsMethodHandler : CefV8Handler
                     value = DateTime.FromFileTimeUtc(fileTime);
                 }
             }
-            
+
             type = JsValueType.Date;
         }
 
