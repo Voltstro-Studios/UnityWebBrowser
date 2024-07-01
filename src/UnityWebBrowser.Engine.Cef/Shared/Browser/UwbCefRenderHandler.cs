@@ -124,6 +124,11 @@ internal class UwbCefRenderHandler : CefRenderHandler
         }
     }
 
+    protected override void OnAcceleratedPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects,
+        CefAcceleratedPaintInfo acceleratedPaintInfo)
+    {
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void DrawPopupToMainBuffer()
     {
@@ -144,12 +149,7 @@ internal class UwbCefRenderHandler : CefRenderHandler
     {
         return false;
     }
-
-    protected override void OnAcceleratedPaint(CefBrowser browser, CefPaintElementType type,
-        CefRectangle[] dirtyRects, IntPtr sharedHandle)
-    {
-    }
-
+    
     protected override void OnScrollOffsetChanged(CefBrowser browser, double x, double y)
     {
         MouseScrollPosition = new Vector2((float)x, (float)y);
