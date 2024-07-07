@@ -56,6 +56,9 @@ public sealed class LaunchArgumentsParser
         Option<PopupAction> popupAction = new("-popup-action", 
             () => PopupAction.Ignore,
             "What action to take when dealing with a popup");
+        Option<bool> noSandbox = new("-no-sandbox",
+            () => false,
+            "Disables browser engine sandboxing");
 
         //Background color
         Option<string> backgroundColor = new("-background-color",
@@ -136,6 +139,7 @@ public sealed class LaunchArgumentsParser
             remoteDebuggingAllowedOrigins,
             cachePath,
             popupAction,
+            noSandbox,
             backgroundColor,
             proxyServer,
             proxyUsername,

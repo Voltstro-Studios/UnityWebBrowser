@@ -48,6 +48,11 @@ public class LaunchArguments
     ///     How to handle popups
     /// </summary>
     public PopupAction PopupAction { get; init; }
+    
+    /// <summary>
+    ///     Disables sandbox
+    /// </summary>
+    internal bool NoSandbox { get; set; }
 
     /// <summary>
     ///     The port to use for remote debugging
