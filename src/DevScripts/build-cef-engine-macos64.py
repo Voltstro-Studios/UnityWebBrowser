@@ -65,4 +65,8 @@ for type in subprocess_types:
 if not os.path.exists(cef_engine_macos_path):
     os.makedirs(cef_engine_macos_path, exist_ok=True)
 
-shutil.copytree(cef_engine_app_path, os.path.join(cef_engine_macos_path, 'UnityWebBrowser.Engine.Cef.app'))
+cef_app_final_path = os.path.join(cef_engine_macos_path, 'UnityWebBrowser.Engine.Cef.app')
+if os.path.exists(cef_app_final_path):
+    shutil.rmtree(cef_app_final_path)
+
+shutil.copytree(cef_engine_app_path, cef_app_final_path)

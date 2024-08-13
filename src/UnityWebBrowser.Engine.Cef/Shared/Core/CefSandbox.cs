@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace UnityWebBrowser.Engine.Cef.Core;
+namespace UnityWebBrowser.Engine.Cef.Shared.Core;
 
 /// <summary>
 ///     CEF Sandbox methods
@@ -33,9 +33,11 @@ public static class CefSandbox
 #endif
 
 #if MACOS
-    //void* cef_sandbox_initialize(int argc, char** argv);
     [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_initialize", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr cef_sandbox_initialize(int argc, IntPtr argv);
-    
+    public static extern IntPtr cef_sandbox_initialize(int argc, [In] string[] argv);
+
+    [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_destroy", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void cef_sandbox_destroy(IntPtr sandbox_context);
+
 #endif
 }
