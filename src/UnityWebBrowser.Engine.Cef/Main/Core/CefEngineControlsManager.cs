@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Shared.Browser;
+using UnityWebBrowser.Engine.Cef.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
@@ -45,6 +46,10 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="Exception"></exception>
     public CefEngineControlsManager(LoggerManager loggerManagerManager)
     {
+#if MACOS
+        CefMacOsFrameworkLoader.AddFrameworkLoader();
+#endif
+        
         //Setup CEF
         CefRuntime.Load();
         
@@ -75,7 +80,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         argv[0] = "-";
 #endif
 
-#if LINUX
+#if LINUX || MACOS //MacOS temp
         //Linux we force sandbox to be disabled
         arguments.NoSandbox = true;
 #endif
@@ -130,10 +135,22 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         };
 
         //Setup the CEF settings
-#if WINDOWS
-        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess.exe";
+#if WINDOWS || LINUX
+        string baseCefPath = Path.GetFullPath(Environment.CurrentDirectory);
+        string resourcesPath = baseCefPath;
+        string localesPath = Path.Combine(baseCefPath, "locales");
+        const string subprocessPath = null;
+        
 #else
-        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess";
+        string frameworksPath = Path.GetFullPath(Path.Join(Environment.CurrentDirectory, "../Frameworks/"));
+        string baseCefPath = Path.Join(frameworksPath, "Chromium Embedded Framework.framework");
+        string resourcesPath = Path.Combine(baseCefPath, "Resources");
+        string localesPath = null;
+        
+        string subprocessPath = Path.Combine(frameworksPath, "UnityWebBrowser.Engine.Cef.SubProcess.app/Contents/MacOS/UnityWebBrowser.Engine.Cef.SubProcess");
+
+        if (!File.Exists(subprocessPath))
+            throw new FileNotFoundException($"Failed to find subprocess app at '{subprocessPath}'!");
 #endif
         
         
@@ -150,9 +167,12 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
             PersistSessionCookies = true,
             PersistUserPreferences = true,
-            ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
-            LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
-            //BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, subprocessName)
+            ResourcesDirPath = resourcesPath,
+            LocalesDirPath = localesPath,
+            BrowserSubprocessPath = subprocessPath,
+#if MACOS
+            FrameworkDirPath = baseCefPath
+#endif
         };
 
         //Init CEF

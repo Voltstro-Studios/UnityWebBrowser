@@ -5,6 +5,7 @@
 
 using System;
 using UnityWebBrowser.Engine.Cef.Shared.Browser;
+using UnityWebBrowser.Engine.Cef.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
@@ -14,6 +15,10 @@ public static class Program
 {
     public static int Main(string[] args)
     {
+#if MACOS
+        CefMacOsFrameworkLoader.AddFrameworkLoader();
+#endif
+        
         //Setup CEF
         CefRuntime.Load();
 

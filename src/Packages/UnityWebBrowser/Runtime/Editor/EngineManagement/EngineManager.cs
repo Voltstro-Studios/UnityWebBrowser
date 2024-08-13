@@ -24,7 +24,8 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                 return null;
             }
 
-            return Path.GetFullPath(files.engineFileLocation);
+            return null;
+            //return Path.GetFullPath(Path.Combine(files.engineFileLocation, files.engineBaseLocation));
         }
 
         public static string GetEngineDirectory(Engine engine)
@@ -34,7 +35,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
 
         public static string GetEngineProcessFullPath(Engine engine, Platform platform)
         {
-            string appPath = $"{GetEngineDirectory(engine, platform)}{engine.GetEngineExecutableName()}";
+            string appPath = Path.Combine(GetEngineDirectory(engine, platform), engine.GetEngineExecutableName());
             if (platform == Platform.Windows64)
                 appPath += ".exe";
 

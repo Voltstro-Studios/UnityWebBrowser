@@ -292,7 +292,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
             
             //Get the path to the UWB process we are using and make sure it exists
-            string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
+            string browserEnginePath = engine.GetEngineAppPath(WebBrowserUtils.GetRunningPlatform());
             logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
 
             if (!File.Exists(browserEnginePath))

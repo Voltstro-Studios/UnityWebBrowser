@@ -32,6 +32,21 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
+        <None Update="info-subprocess.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-gpu.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-plugin.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-renderer.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <!-- Prevents XML and PDB files being copied -->
         <AllowedReferenceRelatedFileExtensions>

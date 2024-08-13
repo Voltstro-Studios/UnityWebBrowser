@@ -125,32 +125,6 @@
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
-        <Content Include="..\..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\libcef.dylib" Link="Libs/%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </Content>
-
-        <Content Include="..\..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\Libraries\*.*" Link="Libs/%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </Content>
-
-        <Content Include="..\..\ThirdParty\Libs\cef\macosx64\Chromium Embedded Framework.framework\Resources\**\*.*" Link="Libs/%(RecursiveDir)%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </Content>
-
-        <Content Include="..\..\ThirdParty\Libs\cef\macosx64\*.txt" Link="Libs/%(Filename)%(Extension)">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>%(Filename)%(Extension)</TargetPath>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </Content>
-    </ItemGroup>
-
     <ItemGroup>
       <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.139">
         <PrivateAssets>all</PrivateAssets>

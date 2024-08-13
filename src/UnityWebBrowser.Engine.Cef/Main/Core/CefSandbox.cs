@@ -31,4 +31,11 @@ public static class CefSandbox
     [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_info_destroy", CallingConvention = CallingConvention.Cdecl)]
     public static extern void cef_sandbox_info_destroy(IntPtr sandbox_info);
 #endif
+
+#if MACOS
+    //void* cef_sandbox_initialize(int argc, char** argv);
+    [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_initialize", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr cef_sandbox_initialize(int argc, IntPtr argv);
+    
+#endif
 }

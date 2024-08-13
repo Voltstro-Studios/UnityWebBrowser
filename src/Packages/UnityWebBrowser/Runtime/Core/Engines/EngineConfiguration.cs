@@ -3,9 +3,11 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 #if UNITY_EDITOR
 using VoltstroStudios.UnityWebBrowser.Editor.EngineManagement;
 #endif
@@ -15,38 +17,29 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
     [CreateAssetMenu(menuName = "UWB/UWB Engine Configuration", fileName = "New UWB Engine Configuration")]
     public class EngineConfiguration : Engine
     {
+        /// <summary>
+        ///     Array of <see cref="Engine.EnginePlatformFiles"/>
+        /// </summary>
+        public EnginePlatformFiles[] engineFiles;
+        
+        /// <summary>
+        ///     Main application app name
+        /// </summary>
         public string engineAppName;
 
         public override string GetEngineExecutableName()
         {
             return engineAppName;
         }
-
-#if UNITY_EDITOR
-
+        
+        [Obsolete]
+        [HideInInspector]
         public string engineFilesNotFoundError =
             "The engine files for this platform were not found! You may need to install a dedicated platform package.";
 
-        public EnginePlatformFiles[] engineFiles;
-
-        public override string EngineFilesNotFoundError => engineFilesNotFoundError;
+        [Obsolete]
+        public override string EngineFilesNotFoundError => null;
+        
         public override IEnumerable<EnginePlatformFiles> EngineFiles => engineFiles;
-
-#if UWB_ENGINE_PRJ
-        public void OnValidate()
-        {
-            if(Application.isBatchMode) //CI
-                return;
-            
-            foreach (EnginePlatformFiles engineFile in engineFiles)
-            {
-                string path = EngineManager.GetEngineProcessFullPath(this, engineFile.platform);
-                if (path == null || !File.Exists(path))
-                    Debug.LogError($"Error with engines files for {name} on platform {engineFile.platform}!");
-            }
-        }
-#endif
-
-#endif
     }
 }

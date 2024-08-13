@@ -42,6 +42,10 @@ public class UwbCefApp : CefApp
 #if LINUX || MACOS
         if (!commandLine.HasSwitch("--no-zygote")) commandLine.AppendSwitch("--no-zygote");
 #endif
+
+#if MACOS
+        if (!commandLine.HasSwitch("--use-mock-keychain")) commandLine.AppendSwitch("--use-mock-keychain");
+#endif
     }
 
     protected override CefBrowserProcessHandler GetBrowserProcessHandler()

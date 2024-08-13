@@ -27,6 +27,7 @@ using UnityEngine.Scripting;
 using UnityEngine.UI;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
 using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 #if UWB_NEED_UNIX
 using VoltstroStudios.UnityWebBrowser.UnixSupport;
 #endif
@@ -48,7 +49,8 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             RuntimePlatform.WindowsEditor,
             RuntimePlatform.LinuxPlayer,
             RuntimePlatform.LinuxEditor,
-            RuntimePlatform.OSXEditor
+            RuntimePlatform.OSXEditor,
+            RuntimePlatform.OSXPlayer
         };
         
         /// <summary>
@@ -70,6 +72,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         ///     Gets the folder that the UWB process application lives in
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetBrowserEnginePath(Engine engine)
         {
             //Editor
@@ -90,6 +93,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         ///     Get a direct path to the UWB process application
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetBrowserEngineProcessPath(Engine engine)
         {
 #if UNITY_EDITOR
@@ -149,6 +153,17 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
 
             return true;
         }
+
+        public static Platform GetRunningPlatform()
+        {
+#if UNITY_STANDALONE_WIN
+            return Platform.Windows64;
+#elif UNITY_STANDALONE_LINUX
+            return Platform.Linux64;
+#elif UNITY_STANDALONE_OSX
+            return Platform.MacOS;
+#endif
+        }
         
         /// <summary>
         ///     Checks if UWB is running on a supported platform
@@ -167,51 +182,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         {
             return ColorUtility.ToHtmlStringRGBA(color);
         }
-
-        /// <summary>
-        ///     Creates a <see cref="Process" /> for an engine
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="engine"></param>
-        /// <param name="arguments"></param>
-        /// <param name="onLogEvent"></param>
-        /// <param name="onErrorLogEvent"></param>
-        /// <returns></returns>
-        internal static Process CreateEngineProcess(IWebBrowserLogger logger, Engine engine, string arguments,
-            DataReceivedEventHandler onLogEvent, DataReceivedEventHandler onErrorLogEvent)
-        {
-            string engineFullProcessPath = GetBrowserEngineProcessPath(engine);
-            string engineDirectory = GetBrowserEnginePath(engine);
-
-            logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
-            logger.Debug($"Arguments: '{arguments}'");
-
-#if UWB_NEED_UNIX
-            if (PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(engineFullProcessPath))
-                logger.Warn(
-                    "UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
-#endif
-
-            Process process = new()
-            {
-                StartInfo = new ProcessStartInfo(engineFullProcessPath, arguments)
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    WorkingDirectory = engineDirectory
-                },
-                EnableRaisingEvents = true
-            };
-            process.OutputDataReceived += onLogEvent;
-            process.ErrorDataReceived += onErrorLogEvent;
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            return process;
-        }
-
+        
         /// <summary>
         ///     Sets every single pixel in a <see cref="Texture2D" /> to one <see cref="Color32" />
         /// </summary>
