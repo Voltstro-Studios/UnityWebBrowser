@@ -101,7 +101,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                         engine.EngineFiles.First(x => x.platform == buildPlatform);
 
                     //Get the location where we are copying all the files
-                    string engineFilesDir = Path.GetFullPath(engineFiles.engineFileLocation);
+                    string engineFilesDir = Path.GetFullPath(engineFiles.engineEditorLocation);
                     if (!Directory.Exists(engineFilesDir))
                     {
                         Debug.LogError("The engine files directory doesn't exist!");

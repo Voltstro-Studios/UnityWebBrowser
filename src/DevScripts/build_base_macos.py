@@ -27,7 +27,7 @@ def build_cef_engine_macos(arch) -> None:
     print('Building CEF Engine SubProcess from {0}'.format(cef_engine_subprocess_path))
     subprocess.run(['dotnet', 'publish', '-r=osx-{0}'.format(arch), '-c=Release'], cwd=cef_engine_subprocess_path)
 
-    cef_framework_path = os.path.abspath(os.path.join(__file__, '../../ThirdParty/Libs/cef/macos{0}/Chromium Embedded Framework.framework'.format(arch)))
+    cef_framework_path = os.path.abspath(os.path.join(__file__, '../../ThirdParty/Libs/cef/macos{0}/Release/Chromium Embedded Framework.framework'.format(arch)))
 
     cef_engine_app_path = os.path.join(cef_engine_build_path, 'UnityWebBrowser.Engine.Cef.app')
     cef_engine_app_contents_path = os.path.join(cef_engine_app_path, 'Contents')
