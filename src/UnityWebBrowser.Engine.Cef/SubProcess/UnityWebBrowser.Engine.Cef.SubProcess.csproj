@@ -37,7 +37,7 @@
 
         <LinkerArg Include="-lsandbox" />
         <LinkerArg Include="-lc++" />
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/cef_sandbox.a" />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" />
         
         <None Update="info-subprocess.plist">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

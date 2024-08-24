@@ -44,9 +44,9 @@
         <NativeLibrary Include="WindowsApp.lib" />
         <NativeLibrary Include="winmm.lib" />
         
-        <NativeLibrary Include="..\..\ThirdParty\Libs\cef\windows64\cef_sandbox.lib" />
+        <NativeLibrary Include="..\..\ThirdParty\Libs\cef\windows64\Release\cef_sandbox.lib" />
 
-        <LinkerArg Include="/LIBPATH:..\..\ThirdParty\Libs\cef\windows64" />
+        <LinkerArg Include="/LIBPATH:..\..\ThirdParty\Libs\cef\windows64\Release\" />
     </ItemGroup>
     
     <!--
