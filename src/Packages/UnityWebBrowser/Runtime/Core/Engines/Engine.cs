@@ -16,8 +16,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 {
     public abstract class Engine : ScriptableObject
     {
-        
-        
         public abstract string GetEngineExecutableName();
 
         public virtual string GetEngineWorkingPath(Platform platform)

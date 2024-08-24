@@ -5,6 +5,7 @@
 
 #if UNITY_EDITOR
 
+using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
 {
     public static class EngineManager
     {
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetEngineDirectory(Engine engine, Platform platform)
         {
             Engine.EnginePlatformFiles files = engine.EngineFiles.FirstOrDefault(x => x.platform == platform);
@@ -28,11 +30,13 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             //return Path.GetFullPath(Path.Combine(files.engineFileLocation, files.engineBaseLocation));
         }
 
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetEngineDirectory(Engine engine)
         {
             return GetEngineDirectory(engine, GetCurrentEditorPlatform());
         }
 
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetEngineProcessFullPath(Engine engine, Platform platform)
         {
             string appPath = Path.Combine(GetEngineDirectory(engine, platform), engine.GetEngineExecutableName());
@@ -42,6 +46,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             return Path.GetFullPath(appPath);
         }
 
+        [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
         public static string GetEngineProcessFullPath(Engine engine)
         {
             return GetEngineProcessFullPath(engine, GetCurrentEditorPlatform());
@@ -57,9 +62,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             Platform platform = Platform.MacOS;
 #else
 #error Unsupported platform!
-
 #endif
-
             return platform;
         }
     }
