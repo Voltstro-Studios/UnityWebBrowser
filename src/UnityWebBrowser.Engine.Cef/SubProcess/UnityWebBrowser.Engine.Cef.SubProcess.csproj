@@ -37,7 +37,8 @@
 
         <LinkerArg Include="-lsandbox" />
         <LinkerArg Include="-lc++" />
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" Conition="$(RuntimeIdentifier.EndsWith('x64'))"  />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosarm64/Release/cef_sandbox.a" Conition="$(RuntimeIdentifier.EndsWith('arm64'))"  />
         
         <None Update="info-subprocess.plist">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

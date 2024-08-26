@@ -23,3 +23,8 @@ def build_cef_engine(platform: str) -> None:
     subprocess.run(['dotnet', 'publish', cef_project_path, '-r=' + platform, '-p:PublishDir=' + cef_publish_path, '--nologo'])
 
 
+def build_project(project: str) -> None:
+    project_path = os.path.abspath(os.path.join(__file__, '../../{0}/{0}.csproj'.format(project)))
+
+    subprocess.run(['dotnet', 'build', project_path, '-c=ReleaseUnity'])
+

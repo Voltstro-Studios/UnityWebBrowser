@@ -46,7 +46,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
 
             string buildFullOutputPath = report.summary.outputPath;
             string buildAppName = Path.GetFileNameWithoutExtension(buildFullOutputPath);
-            string buildOutputPath = Path.GetDirectoryName(buildFullOutputPath);
+            string buildOutputPath = Path.GetDirectoryName(buildFullOutputPath)!;
 
             Debug.Log("Copying engine process files...");
 
@@ -59,10 +59,11 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             }
 
             //We need to get the build's data folder
-            string buildDataPath = Path.GetFullPath($"{buildOutputPath}/{buildAppName}_Data/");
-            if (buildTarget == BuildTarget.StandaloneOSX)
-                buildDataPath =
-                    Path.GetFullPath($"{buildOutputPath}/{buildAppName}.app/Contents/Resources/Data/");
+            string buildDataPath =
+                Path.GetFullPath(
+                    buildTarget == BuildTarget.StandaloneOSX 
+                        ? Path.Combine(buildOutputPath, $"{buildAppName}.app", "Contents/Resources/Data/") 
+                        : Path.Combine(buildOutputPath, $"{buildAppName}_Data"));
 
             //Make sure the data folder exists
             if (!Directory.Exists(buildDataPath))
@@ -73,25 +74,10 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             }
 
             //UWB folder in the data folder
-            string buildUwbPath = $"{buildDataPath}/UWB/";
-
-            //Make sure it exists
-            DirectoryInfo buildUwbInfo = new(buildUwbPath);
-            if (!buildUwbInfo.Exists)
-            {
-                Directory.CreateDirectory(buildUwbPath);
-            }
-            else //If the directory exists, clear it
-            {
-                foreach (FileInfo fileInfo in buildUwbInfo.EnumerateFiles())
-                    fileInfo.Delete();
-
-                foreach (DirectoryInfo directoryInfo in buildUwbInfo.EnumerateDirectories())
-                    directoryInfo.Delete(true);
-            }
-
-            buildUwbPath = Path.GetFullPath(buildUwbPath);
-
+            string buildUwbPath = Path.Combine(buildDataPath, "UWB/");
+            if (Directory.Exists(buildUwbPath))
+                Directory.Delete(buildUwbPath, true);
+            
             foreach (Engine engine in engines)
                 if (engine.EngineFiles.Any(x => x.platform == buildPlatform))
                 {
@@ -107,41 +93,12 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                         Debug.LogError("The engine files directory doesn't exist!");
                         continue;
                     }
-
-                    string engineFilesParentDir = Directory.GetParent(engineFilesDir)?.Name;
-
-                    //Get all files that aren't Unity .meta files
-                    //NOTE: UWB 2.0 stores it's engine files in '~' folder, which is excluded by Unity, so we shouldn't need this anymore, but we will keep it anyway
-                    string[] files = Directory.EnumerateFiles(engineFilesDir, "*.*", SearchOption.AllDirectories)
-                        .Where(fileType => !fileType.EndsWith(".meta"))
-                        .ToArray();
-
-                    int size = files.Length;
-                    Debug.Log($"Found {size} number of files to copy...");
-
-                    //Now to copy all the files.
-                    //We need to keep the structure of the process
-                    for (int i = 0; i < size; i++)
-                    {
-                        string file = files[i];
-                        string destFileName = Path.GetFileName(file);
-                        EditorUtility.DisplayProgressBar("Copying UWB Engine Files",
-                            $"Copying {destFileName}", i / size);
-
-                        //If the file is not at the parent directory, then we need to create the directory in the UWB folder
-                        string parentDirectory = "";
-                        if (Directory.GetParent(file)?.Name != engineFilesParentDir)
-                        {
-                            parentDirectory = $"{Directory.GetParent(file)?.Name}/";
-
-                            if (!Directory.Exists($"{buildUwbPath}{parentDirectory}"))
-                                Directory.CreateDirectory($"{buildUwbPath}{parentDirectory}");
-                        }
-
-                        //Copy the file
-                        File.Copy(file, $"{buildUwbPath}{parentDirectory}{destFileName}", true);
-                    }
-
+                    
+                    Debug.Log($"Copying engine files from {engineFilesDir} to {buildUwbPath}...");
+                    EditorUtility.DisplayProgressBar("Copying UWB Engine Files", $"Copying engine files from {engineFilesDir} to {buildUwbPath}...", 0);
+                    
+                    FileUtil.CopyFileOrDirectory(engineFilesDir, buildUwbPath);
+                    
                     EditorUtility.ClearProgressBar();
                 }
 

@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Unity.Collections;
 using UnityEngine;
@@ -161,7 +162,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
 #elif UNITY_STANDALONE_LINUX
             return Platform.Linux64;
 #elif UNITY_STANDALONE_OSX
-            return Platform.MacOS;
+            return RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? Platform.MacOSArm64 : Platform.MacOS;
 #endif
         }
         

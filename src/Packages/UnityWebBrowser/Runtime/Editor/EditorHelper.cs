@@ -38,7 +38,15 @@ namespace VoltstroStudios.UnityWebBrowser.Editor
                 case BuildTarget.StandaloneWindows64:
                     return Platform.Windows64;
                 case BuildTarget.StandaloneOSX:
-                    return Platform.MacOS;
+                    //Need to check if target is Arm or x64
+                    string architecture = EditorUserBuildSettings.GetPlatformSettings("Standalone", "OSXUniversal", "Architecture");
+                    return architecture switch
+                    {
+                        "ARM64" => Platform.MacOSArm64,
+                        "x64" => Platform.MacOS,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
