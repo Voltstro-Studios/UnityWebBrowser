@@ -58,26 +58,32 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                 return;
             }
 
-            //We need to get the build's data folder
-            string buildDataPath =
-                Path.GetFullPath(
-                    buildTarget == BuildTarget.StandaloneOSX 
-                        ? Path.Combine(buildOutputPath, $"{buildAppName}.app", "Contents/Resources/Data/") 
-                        : Path.Combine(buildOutputPath, $"{buildAppName}_Data"));
-
-            //Make sure the data folder exists
-            if (!Directory.Exists(buildDataPath))
+            string builtAppFolder = Path.GetFullPath(buildTarget == BuildTarget.StandaloneOSX
+                ? Path.Combine(buildOutputPath, $"{buildAppName}.app", "Contents/Frameworks/")
+                : buildOutputPath);
+            
+            //Make sure the build folder exists
+            if (!Directory.Exists(builtAppFolder))
             {
                 Debug.LogError(
-                    "Failed to get the build's data folder! Make sure your build is the same name as your product name (In your project settings).");
+                    "Failed to get the build's folder! Make sure your build is the same name as your product name (In your project settings).");
                 return;
             }
 
-            //UWB folder in the data folder
-            string buildUwbPath = Path.Combine(buildDataPath, "UWB/");
-            if (Directory.Exists(buildUwbPath))
-                Directory.Delete(buildUwbPath, true);
-            
+            //We need to get folder where UWB will live
+            string buildDataPath =
+                Path.GetFullPath(
+                    buildTarget == BuildTarget.StandaloneOSX 
+                        ? Path.Combine(buildOutputPath, $"{buildAppName}.app", "Contents/Frameworks/") 
+                        : Path.Combine(buildOutputPath, $"{buildAppName}_Data/UWB/"));
+
+            //MacOS has a more customized way of deleting
+            if (buildTarget != BuildTarget.StandaloneOSX)
+            {
+                if (Directory.Exists(buildDataPath))
+                    Directory.Delete(buildDataPath, true);
+            }
+
             foreach (Engine engine in engines)
                 if (engine.EngineFiles.Any(x => x.platform == buildPlatform))
                 {
@@ -93,11 +99,22 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                         Debug.LogError("The engine files directory doesn't exist!");
                         continue;
                     }
+
+                    //Delete app path first on MacOS (if it exists)
+                    string engineBuildPath = buildDataPath;
+                    if (buildTarget == BuildTarget.StandaloneOSX)
+                    {
+                        engineBuildPath = Path.Combine(buildDataPath, $"{engine.GetEngineExecutableName()}.app");
+                        if(Directory.Exists(engineBuildPath))
+                            Directory.Delete(engineBuildPath, true);
+                        
+                        engineFilesDir = Path.Combine(engineFilesDir, $"{engine.GetEngineExecutableName()}.app");
+                    }
                     
-                    Debug.Log($"Copying engine files from {engineFilesDir} to {buildUwbPath}...");
-                    EditorUtility.DisplayProgressBar("Copying UWB Engine Files", $"Copying engine files from {engineFilesDir} to {buildUwbPath}...", 0);
+                    Debug.Log($"Copying engine files from {engineFilesDir} to {buildDataPath}...");
+                    EditorUtility.DisplayProgressBar("Copying UWB Engine Files", $"Copying engine files from {engineFilesDir} to {buildDataPath}...", 0);
                     
-                    FileUtil.CopyFileOrDirectory(engineFilesDir, buildUwbPath);
+                    FileUtil.CopyFileOrDirectory(engineFilesDir, engineBuildPath);
                     
                     EditorUtility.ClearProgressBar();
                 }

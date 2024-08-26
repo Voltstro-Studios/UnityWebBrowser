@@ -25,12 +25,12 @@ MonoBehaviour:
     engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.linux.x64/Engine~/
   - platform: 2
     engineBaseAppLocation: UnityWebBrowser.Engine.Cef.app/Contents/MacOS/
-    engineRuntimeLocation: Resources/Data/UWB/
+    engineRuntimeLocation: Frameworks/
     engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
     engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
   - platform: 3
     engineBaseAppLocation: UnityWebBrowser.Engine.Cef.app/Contents/MacOS/
-    engineRuntimeLocation: Resources/Data/UWB/
+    engineRuntimeLocation: Frameworks/
     engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.arm64/Engine~/
     engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
   engineAppName: UnityWebBrowser.Engine.Cef
