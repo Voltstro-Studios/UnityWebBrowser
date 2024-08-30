@@ -13,6 +13,6 @@
     "typescript": "^5.5.4",
     "vite": "^5.3.5",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-singlefile": "^2.0.0"
+    "vite-plugin-singlefile": "^2.0.1"
   }
 }
