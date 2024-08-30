@@ -26,8 +26,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
                 return null;
             }
 
-            return null;
-            //return Path.GetFullPath(Path.Combine(files.engineFileLocation, files.engineBaseLocation));
+            return Path.GetFullPath(files.engineFileLocation);
         }
 
         [Obsolete("Fetching of engine paths is now handled by the Engine class.")]
