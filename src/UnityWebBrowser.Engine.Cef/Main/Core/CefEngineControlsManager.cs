@@ -80,7 +80,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         argv[0] = "-";
 #endif
 
-#if LINUX || MACOS //MacOS temp
+#if LINUX
         //Linux we force sandbox to be disabled
         arguments.NoSandbox = true;
 #endif
