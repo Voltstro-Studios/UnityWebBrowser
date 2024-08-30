@@ -23,8 +23,7 @@ jobs:
 
     #Build shared
     - name: Build Shared
-      shell: pwsh
-      run: '& ./publish-shared.ps1'
+      run: 'python build_shared.py'
       working-directory: UnityWebBrowserSource/src/DevScripts/
         
     #Restore Unity's cache
@@ -57,18 +56,6 @@ jobs:
       shell: pwsh
       run: npm pack --pack-destination ~/UWBStaging/
       working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser
-
-    #Pack UWB Communication Pipes
-    - name: Pack Communication Pipes Package
-      shell: pwsh
-      run: npm pack --pack-destination ~/UWBStaging/
-      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser.Communication.Pipes
-
-    #Pack UWB UNIX Support
-    - name: Pack Unix Support Package
-      shell: pwsh
-      run: npm pack --pack-destination ~/UWBStaging/
-      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser.Unix-Support
 
     # Upload Packed Packages
     - name: Upload Artifacts
