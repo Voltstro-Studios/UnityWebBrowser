@@ -27,7 +27,7 @@ src/
 
 - `docs/`, `media/` and `src/` are all fairly explanatory.
 
-- `DevScripts/` and `DevTools/` provide developer scripts and other external applications that are needed.
+- `DevScripts/` provide developer scripts that are used for automating certain tasks while developing UWB.
 
 - `Imports/` contains shared `.targets` and `.props` files that are used by the .NET projects.
 
@@ -43,11 +43,11 @@ Quick description of all the individual projects.
 
 ### UnityWebBrowser.UnityProject
 
-This is the provided Unity project that can be used for UWB development. It has all of UWB's packages included locally.
+This is the provided Unity project that can be used for UWB development. It has all of UWB's packages included locally. It uses the lowest Unity version that UWB supports (Unity 2021.3.x).
 
 ### UnityWebBrowser.Pages
 
-NodeJs/Yarn project that used to build out HTML that engines use for internal pages.
+NodeJs/Yarn project that is used to build out HTML files that engines use for internal pages.
 
 ### VoltstroStudios.UnityWebBrowser.Shared
 
@@ -59,4 +59,4 @@ NodeJs/Yarn project that used to build out HTML that engines use for internal pa
 
 ### UnityWebBrowser.Engine.Cef
 
-UWB's CEF Engine. .NET project that is built out as an application. In publish mode it will build the app into a single file.
+UWB's CEF Engine. .NET project that is built out as an application. Is compiled using .NET's [NativeAOT deployment](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/) mode.

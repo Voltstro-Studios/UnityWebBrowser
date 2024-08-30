@@ -27,6 +27,8 @@
       href: dev/dev-guide.md
     - name: Setup
       href: dev/setup.md
+    - name: Dev Scripts
+      href: dev/dev-scripts.md
     - name: How Things Work
       href: dev/how-things-work.md
     - name: Project Layout

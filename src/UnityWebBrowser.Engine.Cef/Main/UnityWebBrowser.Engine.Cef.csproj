@@ -19,7 +19,47 @@
         <DebuggerSupport>false</DebuggerSupport>
         <UseSystemResourceKeys>true</UseSystemResourceKeys>
         <PublishAot>true</PublishAot>
+        <StripSymbols>true</StripSymbols>
     </PropertyGroup>
+    
+    <!-- Include cef_sandbox for windows --> 
+    <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
+        <DirectPInvoke Include="cef_sandbox" />
+        
+        <NativeLibrary Include="shlwapi.lib" />
+        <NativeLibrary Include="Advapi32.lib" />
+        <NativeLibrary Include="dbghelp.lib" />
+        <NativeLibrary Include="Delayimp.lib" />
+        <NativeLibrary Include="ntdll.lib" />
+        <NativeLibrary Include="OleAut32.lib" />
+        <NativeLibrary Include="PowrProf.lib" />
+        <NativeLibrary Include="Propsys.lib" />
+        <NativeLibrary Include="psapi.lib" />
+        <NativeLibrary Include="SetupAPI.lib" />
+        <NativeLibrary Include="Shell32.lib" />
+        <NativeLibrary Include="Shcore.lib" />
+        <NativeLibrary Include="Userenv.lib" />
+        <NativeLibrary Include="version.lib" />
+        <NativeLibrary Include="wbemuuid.lib" />
+        <NativeLibrary Include="WindowsApp.lib" />
+        <NativeLibrary Include="winmm.lib" />
+        
+        <NativeLibrary Include="..\..\ThirdParty\Libs\cef\windows64\Release\cef_sandbox.lib" />
+
+        <LinkerArg Include="/LIBPATH:..\..\ThirdParty\Libs\cef\windows64\Release\" />
+    </ItemGroup>
+    
+    <!--
+    MacOS Custom Build
+    -->
+    <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
+        <None Update="info.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="icon.icns">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
     
     <ItemGroup>
         <ProjectReference Include="..\Shared\UnityWebBrowser.Engine.Cef.Shared.csproj" />
@@ -31,7 +71,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
-
+    
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <!-- Prevents XML and PDB files being copied -->
         <AllowedReferenceRelatedFileExtensions>

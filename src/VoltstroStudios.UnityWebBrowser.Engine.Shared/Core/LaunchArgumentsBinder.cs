@@ -31,6 +31,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<string[]> remoteDebuggingAllowedOrigins;
     private readonly Option<FileInfo> cachePath;
     private readonly Option<PopupAction> popupAction;
+    private readonly Option<bool> noSandbox;
     
     //Background color
     private readonly Option<string> backgroundColor;
@@ -63,6 +64,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<string[]> remoteDebuggingAllowedOrigins,
         Option<FileInfo> cachePath,
         Option<PopupAction> popupAction,
+        Option<bool> noSandbox,
         Option<string> backgroundColor,
         Option<bool> proxyServer,
         Option<string> proxyUsername,
@@ -85,6 +87,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.remoteDebuggingAllowedOrigins = remoteDebuggingAllowedOrigins;
         this.cachePath = cachePath;
         this.popupAction = popupAction;
+        this.noSandbox = noSandbox;
         
         this.backgroundColor = backgroundColor;
         
@@ -118,6 +121,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
             PopupAction = bindingContext.ParseResult.GetValueForOption(popupAction),
+            NoSandbox = bindingContext.ParseResult.GetValueForOption(noSandbox),
 
             BackgroundColor = new Color(bindingContext.ParseResult.GetValueForOption(backgroundColor)),
 

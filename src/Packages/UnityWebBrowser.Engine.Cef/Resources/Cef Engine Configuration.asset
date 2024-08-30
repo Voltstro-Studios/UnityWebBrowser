@@ -12,13 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9692e60c1a314ca98f6bb7656e12aa54, type: 3}
   m_Name: Cef Engine Configuration
   m_EditorClassIdentifier: 
+  engineFiles:
+  - platform: 0
+    engineBaseAppLocation: 
+    engineRuntimeLocation: UWB/
+    engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.win.x64/Engine~/
+    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.win.x64/Engine~/
+  - platform: 1
+    engineBaseAppLocation: 
+    engineRuntimeLocation: UWB/
+    engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.linux.x64/Engine~/
+    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.linux.x64/Engine~/
+  - platform: 2
+    engineBaseAppLocation: UnityWebBrowser.Engine.Cef.app/Contents/MacOS/
+    engineRuntimeLocation: Frameworks/
+    engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
+    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
+  - platform: 3
+    engineBaseAppLocation: UnityWebBrowser.Engine.Cef.app/Contents/MacOS/
+    engineRuntimeLocation: Frameworks/
+    engineEditorLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.arm64/Engine~/
+    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/
   engineAppName: UnityWebBrowser.Engine.Cef
   engineFilesNotFoundError: The engine files for this platform were not found! You
     may need to install a dedicated platform package.
-  engineFiles:
-  - platform: 0
-    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.win.x64/Engine~/
-  - platform: 1
-    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.linux.x64/Engine~/
-  - platform: 2
-    engineFileLocation: Packages/dev.voltstro.unitywebbrowser.engine.cef.macos.x64/Engine~/

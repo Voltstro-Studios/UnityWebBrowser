@@ -5,10 +5,12 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Shared.Browser;
+using UnityWebBrowser.Engine.Cef.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
@@ -34,6 +36,8 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     private CefMainArgs cefMainArgs;
     private LaunchArguments launchArguments;
 
+    private IntPtr sandboxInfo;
+
     /// <summary>
     ///     Creates a new <see cref="CefEngineControlsManager" /> instance
     /// </summary>
@@ -42,14 +46,19 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="Exception"></exception>
     public CefEngineControlsManager(LoggerManager loggerManagerManager)
     {
+#if MACOS
+        CefMacOsFrameworkLoader.AddFrameworkLoader();
+#endif
+        
         //Setup CEF
         CefRuntime.Load();
-
-        //this.loggerManager = loggerManager;
+        
         mainLogger = loggerManagerManager.CreateLogger("CEF Engine");
         browserConsoleLogger = loggerManagerManager.CreateLogger("CEF Engine Browser Console");
         
         CefLoggerWrapper.Init(mainLogger);
+        
+        sandboxInfo = IntPtr.Zero;
     }
 
     /// <summary>
@@ -71,9 +80,36 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         argv[0] = "-";
 #endif
 
+#if LINUX
+        //Linux we force sandbox to be disabled
+        arguments.NoSandbox = true;
+#endif
+
         //Set up CEF args and the CEF app
         cefMainArgs = new CefMainArgs(argv);
         cefApp = new UwbCefApp(launchArguments);
+
+#if WINDOWS
+        if(!launchArguments.NoSandbox)
+            sandboxInfo = CefSandbox.cef_sandbox_info_create();
+#endif
+        
+        //Run our sub-processes
+        int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, sandboxInfo);
+        if (exitCode != -1)
+        {
+            CefLoggerWrapper.Debug("Sub-Process exit: {ExitCode}", exitCode);
+            Environment.Exit(exitCode);
+            return;
+        }
+
+        //Backup
+        if (argv.Any(arg => arg.StartsWith("--type=")))
+        {
+            CefLoggerWrapper.Error("Invalid process type!");
+            Environment.Exit(-2);
+            throw new Exception("Invalid process type!");
+        }
     }
 
     /// <summary>
@@ -99,17 +135,29 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         };
 
         //Setup the CEF settings
-#if WINDOWS
-        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess.exe";
+#if WINDOWS || LINUX
+        string baseCefPath = Path.GetFullPath(Environment.CurrentDirectory);
+        string resourcesPath = baseCefPath;
+        string localesPath = Path.Combine(baseCefPath, "locales");
+        const string subprocessPath = null;
+        
 #else
-        const string subprocessName = "UnityWebBrowser.Engine.Cef.SubProcess";
+        string frameworksPath = Path.GetFullPath(Path.Join(Environment.CurrentDirectory, "../Frameworks/"));
+        string baseCefPath = Path.Join(frameworksPath, "Chromium Embedded Framework.framework");
+        string resourcesPath = Path.Combine(baseCefPath, "Resources");
+        string localesPath = null;
+        
+        string subprocessPath = Path.Combine(frameworksPath, "UnityWebBrowser.Engine.Cef.SubProcess.app/Contents/MacOS/UnityWebBrowser.Engine.Cef.SubProcess");
+
+        if (!File.Exists(subprocessPath))
+            throw new FileNotFoundException($"Failed to find subprocess app at '{subprocessPath}'!");
 #endif
         
         
         CefSettings cefSettings = new()
         {
             WindowlessRenderingEnabled = true,
-            NoSandbox = true,
+            NoSandbox = launchArguments.NoSandbox,
             LogFile = launchArguments.LogPath.FullName,
             CachePath = cachePathArgument,
             MultiThreadedMessageLoop = false,
@@ -119,13 +167,21 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
             PersistSessionCookies = true,
             PersistUserPreferences = true,
-            ResourcesDirPath = Path.Combine(Environment.CurrentDirectory),
-            LocalesDirPath = Path.Combine(Environment.CurrentDirectory, "locales"),
-            BrowserSubprocessPath = Path.Combine(Environment.CurrentDirectory, subprocessName)
+            ResourcesDirPath = resourcesPath,
+            LocalesDirPath = localesPath,
+            BrowserSubprocessPath = subprocessPath,
+#if MACOS
+            FrameworkDirPath = baseCefPath
+#endif
         };
 
         //Init CEF
-        CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, IntPtr.Zero);
+        CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, sandboxInfo);
+        
+#if WINDOWS
+        if(!launchArguments.NoSandbox)
+            CefSandbox.cef_sandbox_info_destroy(sandboxInfo);
+#endif
 
         //Create a CEF window and set it to windowless
         CefWindowInfo cefWindowInfo = CefWindowInfo.Create();

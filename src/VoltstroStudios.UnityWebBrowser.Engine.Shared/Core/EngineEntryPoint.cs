@@ -39,6 +39,8 @@ internal abstract class EngineEntryPoint : IDisposable
     /// </summary>
     protected EnginePopupManager PopupManager { get; private set; }
 
+    protected abstract void EarlyInit(LaunchArguments launchArguments, string[] args);
+
     /// <summary>
     ///     Called when the arguments are parsed.
     ///     <para>Remember to lock if you don't want to immediately exit</para>
@@ -84,8 +86,12 @@ internal abstract class EngineEntryPoint : IDisposable
                 if(parsedArgs.StartDelay != 0)
                     Thread.Sleep((int)parsedArgs.StartDelay);
             
+                
+                
                 ClientControlsActions = new ClientControlsActions();
                 PopupManager = new EnginePopupManager();
+                
+                EarlyInit(parsedArgs, args);
                 
                 EntryPoint(parsedArgs, args);
             }

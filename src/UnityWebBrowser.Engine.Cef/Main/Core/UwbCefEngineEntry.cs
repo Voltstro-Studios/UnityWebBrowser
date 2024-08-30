@@ -17,11 +17,16 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 internal class UwbCefEngineEntry : EngineEntryPoint
 {
     private CefEngineControlsManager cefEngineControlsManager;
-    
-    protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
+
+    protected override void EarlyInit(LaunchArguments launchArguments, string[] args)
     {
         cefEngineControlsManager = new CefEngineControlsManager(LoggerManagerFactory);
         cefEngineControlsManager.EarlyInit(launchArguments, args);
+    }
+
+    protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
+    {
+        
         cefEngineControlsManager.Init(ClientControlsActions, PopupManager);
 
         SetupIpc(cefEngineControlsManager, launchArguments);

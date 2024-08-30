@@ -8,12 +8,12 @@ These prerequisites are **mandatory** to compile UWB.
 
 ```
 Unity 2021.3.x
-.NET 8 SDK
-PowerShell (formally PowerShell Core)*
+.NET 8 SDK (With NativeAOT)
+Python 3
 Git
 ```
 
-*[Modern PowerShell](https://github.com/powershell/powershell#get-powershell) is required! The one built into Windows does **NOT** work.
+UWB compiles engines using .NET's [NativeAOT deployment mode](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/). NativeAOT it self has some prerequisites, please [see the docs for what you will need](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows#prerequisites).
 
 ### Additional Optional Prerequisites
 
@@ -42,19 +42,14 @@ git clone --recursive https://github.com/Voltstro-Studios/UnityWebBrowser.git
 > git submodule update
 > ```
 
-Once you have the repo cloned with the submodules, you must now run the `src/setup-all.ps1` script with PowerShell.
+Once you have the repo cloned with submodules, you can run the inital setup script.
 
-You can go into PowerShell with the command:
-
-```shell
-pwsh
+```
+python src/DevScripts/setup_all.py
 ```
 
-Once in PowerShell, go to the `src/` directory, and run the `setup-all.ps1` script:
-
-```powershell
-./setup-all.ps1
-```
+> [!NOTE]
+> On some platforms, you may need to run python using `python3` instead of just `python`.
 
 Depending on your system, and your download speeds, this script could take upto a minute or even longer. You only need to run the setup script once.
 
@@ -88,7 +83,4 @@ You can open `src/UnityWebBrowser.sln` with your preferred IDE. The rest of the 
 
 ## Dev Scripts
 
-There a many dev scripts in the `src/DevScripts` directory. The main ones that you will most likely use are:
-
-- `download-cef-<OS>.ps1`
-- `publish-<Section>-<OS>.ps1`
+There are many DevScripts which you may need to use. For details on what dev scripts does what, see [Dev Scripts](dev-scripts.md).

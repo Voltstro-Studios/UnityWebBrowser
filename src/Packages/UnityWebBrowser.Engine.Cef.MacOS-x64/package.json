@@ -16,8 +16,7 @@
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6",
-    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
   },
   "unity": "2021.2"
 }

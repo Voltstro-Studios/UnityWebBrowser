@@ -185,13 +185,20 @@
         "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
       }
     },
+    "dev.voltstro.unitywebbrowser.engine.cef.macos.arm64": {
+      "version": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-arm64",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
+      }
+    },
     "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": {
       "version": "file:../../Packages/UnityWebBrowser.Engine.Cef.MacOS-x64",
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.0.0-preview.3-99.2.6",
-        "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {

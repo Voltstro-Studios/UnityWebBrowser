@@ -32,6 +32,28 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
+        <DirectPInvoke Include="cef_sandbox" />
+
+        <LinkerArg Include="-lsandbox" />
+        <LinkerArg Include="-lc++" />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" Conition="$(RuntimeIdentifier.EndsWith('x64'))"  />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosarm64/Release/cef_sandbox.a" Conition="$(RuntimeIdentifier.EndsWith('arm64'))"  />
+        
+        <None Update="info-subprocess.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-gpu.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-plugin.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="info-subprocess-renderer.plist">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <!-- Prevents XML and PDB files being copied -->
         <AllowedReferenceRelatedFileExtensions>
