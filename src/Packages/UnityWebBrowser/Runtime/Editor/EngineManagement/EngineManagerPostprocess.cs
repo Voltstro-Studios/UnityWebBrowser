@@ -47,9 +47,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             string buildFullOutputPath = report.summary.outputPath;
             string buildAppName = Path.GetFileNameWithoutExtension(buildFullOutputPath);
             string buildOutputPath = Path.GetDirectoryName(buildFullOutputPath)!;
-
-            Debug.Log("Copying engine process files...");
-
+            
             List<Engine> engines = EditorHelper.FindAssetsByType<Engine>();
 
             if (engines.Count == 0)
