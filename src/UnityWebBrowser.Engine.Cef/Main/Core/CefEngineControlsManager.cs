@@ -166,7 +166,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             ExternalMessagePump = false,
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
             PersistSessionCookies = true,
-            PersistUserPreferences = true,
+            //PersistUserPreferences = true,
             ResourcesDirPath = resourcesPath,
             LocalesDirPath = localesPath,
             BrowserSubprocessPath = subprocessPath,
