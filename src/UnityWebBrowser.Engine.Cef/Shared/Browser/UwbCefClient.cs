@@ -46,6 +46,9 @@ internal class UwbCefClient : CefClient, IDisposable
 
     //Dev Tools
     private CefWindowInfo devToolsWindowInfo;
+    
+    //State of mouse click events that needs to be persisted for dragging
+    private CefEventFlags modifiers = CefEventFlags.None;
 
     /// <summary>
     ///     Creates a new <see cref="UwbCefClient" /> instance
@@ -137,46 +140,44 @@ internal class UwbCefClient : CefClient, IDisposable
 
     #region Engine Events
 
-    private CefEventFlags GetKeyDirection(WindowsKey key) => key switch
-    {
-        WindowsKey.LShiftKey | WindowsKey.LControlKey | WindowsKey.LMenu => CefEventFlags.IsLeft,
-        WindowsKey.RShiftKey | WindowsKey.RControlKey | WindowsKey.RMenu => CefEventFlags.ShiftDown,
-        _ => CefEventFlags.None
-    };
-
     /// <summary>
     ///     Process a <see cref="KeyboardEvent" />
     /// </summary>
     /// <param name="keyboardEvent"></param>
     public void ProcessKeyboardEvent(KeyboardEvent keyboardEvent)
     {
-        UpdateModifiers(keyboardEvent);
+        UpdateModifiersWithKeyboard(keyboardEvent);
 
         //Keys down
         foreach (WindowsKey key in keyboardEvent.KeysDown)
         {
-            KeyEvent(new CefKeyEvent
+            CefKeyEvent keyEvent = new()
             {
                 WindowsKeyCode = (int)key,
                 EventType = CefKeyEventType.KeyDown,
-                Modifiers = Modifiers | GetKeyDirection(key)
-            });
+                Modifiers = modifiers | UwbCefClientUtils.GetKeyDirection(key)
+            };
+            
+            browserHost.SendKeyEvent(keyEvent);
         }
 
         //Keys up
         foreach (WindowsKey key in keyboardEvent.KeysUp)
         {
-            KeyEvent(new CefKeyEvent
+            CefKeyEvent keyEvent = new()
             {
                 WindowsKeyCode = (int)key,
                 EventType = CefKeyEventType.KeyUp,
-                Modifiers = Modifiers | GetKeyDirection(key)
-            });
+                Modifiers = modifiers | UwbCefClientUtils.GetKeyDirection(key)
+            };
+            
+            browserHost.SendKeyEvent(keyEvent);
         }
 
         //Chars
         foreach (char c in keyboardEvent.Chars)
-            KeyEvent(new CefKeyEvent
+        {
+            CefKeyEvent keyEvent = new()
             {
 #if WINDOWS
                 WindowsKeyCode = c,
@@ -184,18 +185,16 @@ internal class UwbCefClient : CefClient, IDisposable
                 Character = c,
 #endif
                 EventType = CefKeyEventType.Char,
-                Modifiers = Modifiers
-            });
+                Modifiers = modifiers
+            };
+            
+            browserHost.SendKeyEvent(keyEvent);
+        }
     }
 
-    /// <summary>
-    /// State of mouse click events that needs to be persisted for dragging
-    /// </summary>
-    private CefEventFlags Modifiers = CefEventFlags.None;
-
-    private void UpdateModifiers(MouseClickEvent mouseClickEvent)
+    private void UpdateModifiersWithMouse(MouseClickEvent mouseClickEvent)
     {
-        var flag = mouseClickEvent.MouseClickType switch
+        CefEventFlags flag = mouseClickEvent.MouseClickType switch
         {
             MouseClickType.Left => CefEventFlags.LeftMouseButton,
             MouseClickType.Right => CefEventFlags.RightMouseButton,
@@ -204,67 +203,32 @@ internal class UwbCefClient : CefClient, IDisposable
         };
 
         if (mouseClickEvent.MouseEventType == MouseEventType.Up)
-        {
-            Modifiers &= ~flag;
-        }
+            modifiers &= ~flag;
         else
-        {
-            Modifiers |= flag;
-        }
+            modifiers |= flag;
     }
 
-    private CefEventFlags KeyToFlag(WindowsKey key) => key switch
+    private void UpdateModifiersWithKeyboard(KeyboardEvent keyboardEvent)
     {
-        // Stateful keys
-        WindowsKey.CapsLock => CefEventFlags.CapsLockOn,
-        WindowsKey.NumLock => CefEventFlags.NumLockOn,
-
-        WindowsKey.Shift => CefEventFlags.ShiftDown,
-        WindowsKey.ShiftKey => CefEventFlags.ShiftDown,
-        WindowsKey.LShiftKey => CefEventFlags.ShiftDown,
-        WindowsKey.RShiftKey => CefEventFlags.ShiftDown,
-
-        WindowsKey.Control => CefEventFlags.ControlDown,
-        WindowsKey.ControlKey => CefEventFlags.ControlDown,
-        WindowsKey.LControlKey => CefEventFlags.ControlDown,
-        WindowsKey.RControlKey => CefEventFlags.ControlDown,
-
-        WindowsKey.Alt => CefEventFlags.AltGrDown,
-        WindowsKey.Menu => CefEventFlags.AltDown,
-        WindowsKey.LMenu => CefEventFlags.AltDown,
-        WindowsKey.RMenu => CefEventFlags.AltDown,
-        // No support for command
-
-        _ => CefEventFlags.None
-    };
-
-    private void UpdateModifiers(KeyboardEvent keyboardEvent)
-    {
-        foreach (var key in keyboardEvent.KeysDown)
+        foreach (WindowsKey key in keyboardEvent.KeysDown)
         {
-            var flag = KeyToFlag(key);
+            CefEventFlags flag = UwbCefClientUtils.KeyToFlag(key);
 
-            if ((key is WindowsKey.CapsLock && ((Modifiers & CefEventFlags.CapsLockOn) != CefEventFlags.None))
-                || (key is WindowsKey.NumLock && ((Modifiers & CefEventFlags.NumLockOn) != CefEventFlags.None)))
-            {
-                Modifiers &= ~flag;
-            }
+            if ((key is WindowsKey.CapsLock && (modifiers & CefEventFlags.CapsLockOn) != CefEventFlags.None)
+                || (key is WindowsKey.NumLock && (modifiers & CefEventFlags.NumLockOn) != CefEventFlags.None))
+                modifiers &= ~flag;
             else
-            {
-                Modifiers |= flag;
-            }
+                modifiers |= flag;
         }
 
-        foreach (var key in keyboardEvent.KeysUp)
+        foreach (WindowsKey key in keyboardEvent.KeysUp)
         {
-            var flag = KeyToFlag(key);
+            CefEventFlags flag = UwbCefClientUtils.KeyToFlag(key);
 
-            if (key is WindowsKey.CapsLock || key is WindowsKey.NumLock)
-            {
+            if (key is WindowsKey.CapsLock or WindowsKey.NumLock)
                 return;
-            }
 
-            Modifiers &= ~flag;
+            modifiers &= ~flag;
         }
     }
 
@@ -274,12 +238,14 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="mouseMoveEvent"></param>
     public void ProcessMouseMoveEvent(MouseMoveEvent mouseMoveEvent)
     {
-        MouseMoveEvent(new CefMouseEvent
+        CefMouseEvent mouseEvent = new CefMouseEvent
         {
             X = mouseMoveEvent.MouseX,
             Y = mouseMoveEvent.MouseY,
-            Modifiers = Modifiers
-        });
+            Modifiers = modifiers
+        };
+        
+        browserHost.SendMouseMoveEvent(mouseEvent, false);
     }
 
     /// <summary>
@@ -288,16 +254,20 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="mouseClickEvent"></param>
     public void ProcessMouseClickEvent(MouseClickEvent mouseClickEvent)
     {
-        UpdateModifiers(mouseClickEvent);
+        UpdateModifiersWithMouse(mouseClickEvent);
 
-        MouseClickEvent(new CefMouseEvent
+        CefMouseEvent mouseEvent = new()
         {
             X = mouseClickEvent.MouseX,
             Y = mouseClickEvent.MouseY,
-            Modifiers = Modifiers
-        }, mouseClickEvent.MouseClickCount,
+            Modifiers = modifiers
+        };
+        
+        browserHost.SendMouseClickEvent(
+            mouseEvent,
             (CefMouseButtonType)mouseClickEvent.MouseClickType,
-            mouseClickEvent.MouseEventType == MouseEventType.Up);
+            mouseClickEvent.MouseEventType == MouseEventType.Up,
+            mouseClickEvent.MouseClickCount);
     }
 
     /// <summary>
@@ -306,64 +276,73 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="mouseScrollEvent"></param>
     public void ProcessMouseScrollEvent(MouseScrollEvent mouseScrollEvent)
     {
-        MouseScrollEvent(new CefMouseEvent
+        CefMouseEvent mouseEvent = new()
         {
             X = mouseScrollEvent.MouseX,
             Y = mouseScrollEvent.MouseY,
-            Modifiers = Modifiers
-        }, mouseScrollEvent.MouseScroll);
+            Modifiers = modifiers
+        };
+        
+        browserHost.SendMouseWheelEvent(mouseEvent, 0, mouseScrollEvent.MouseScroll);
     }
-
-    private void KeyEvent(CefKeyEvent keyEvent)
-    {
-        browserHost.SendKeyEvent(keyEvent);
-    }
-
-    private void MouseMoveEvent(CefMouseEvent mouseEvent)
-    {
-        browserHost.SendMouseMoveEvent(mouseEvent, false);
-    }
-
-    private void MouseClickEvent(CefMouseEvent mouseEvent, int clickCount, CefMouseButtonType button, bool mouseUp)
-    {
-        browserHost.SendMouseClickEvent(mouseEvent, button, mouseUp, clickCount);
-    }
-
-    private void MouseScrollEvent(CefMouseEvent mouseEvent, int scroll)
-    {
-        browserHost.SendMouseWheelEvent(mouseEvent, 0, scroll);
-    }
-
+    
+    /// <summary>
+    ///     Load a URL
+    /// </summary>
+    /// <param name="url"></param>
     public void LoadUrl(string url)
     {
         browser.GetMainFrame()?.LoadUrl(url);
     }
 
+    /// <summary>
+    ///     Gets current mouse scroll position
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetMouseScrollPosition()
     {
         return renderHandler.MouseScrollPosition;
     }
 
+    /// <summary>
+    ///     Loads HTML content
+    /// </summary>
+    /// <param name="html"></param>
     public void LoadHtml(string html)
     {
         browser.GetMainFrame()?.LoadUrl($"data:text/html,{html}");
     }
 
+    /// <summary>
+    ///     Executes JS
+    /// </summary>
+    /// <param name="js"></param>
     public void ExecuteJs(string js)
     {
         browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
     }
 
+    /// <summary>
+    ///     Sets a zoom level
+    /// </summary>
+    /// <param name="zoomLevel"></param>
     public void SetZoomLevel(double zoomLevel)
     {
         browserHost.SetZoomLevel(zoomLevel);
     }
 
+    /// <summary>
+    ///     Gets current zoom level
+    /// </summary>
+    /// <returns></returns>
     public double GetZoomLevel()
     {
         return browserHost.GetZoomLevel();
     }
 
+    /// <summary>
+    ///     Opens DevTools window
+    /// </summary>
     public void OpenDevTools()
     {
         try
@@ -388,23 +367,36 @@ internal class UwbCefClient : CefClient, IDisposable
         }
     }
 
+    /// <summary>
+    ///     Goes back a page
+    /// </summary>
     public void GoBack()
     {
         if (browser.CanGoBack)
             browser.GoBack();
     }
 
+    /// <summary>
+    ///     Goes forward a page
+    /// </summary>
     public void GoForward()
     {
         if (browser.CanGoForward)
             browser.GoForward();
     }
 
+    /// <summary>
+    ///     Refreshes current page
+    /// </summary>
     public void Refresh()
     {
         browser.Reload();
     }
 
+    /// <summary>
+    ///     Resizes render window to a new resolution
+    /// </summary>
+    /// <param name="resolution"></param>
     public void Resize(Resolution resolution)
     {
         renderHandler.Resize(new CefSize((int)resolution.Width, (int)resolution.Height));
