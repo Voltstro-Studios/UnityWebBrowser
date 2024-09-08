@@ -3,6 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+using System;
 using JetBrains.Annotations;
 using UnityEngine;
 using VoltRpc.Communication;
@@ -21,6 +22,8 @@ namespace VoltstroStudios.UnityWebBrowser.Communication
         /// <summary>
         ///     Timeout time for connection
         /// </summary>
+        [Obsolete]
+        [HideInInspector]
         public int connectionTimeout = 7000;
 
         /// <summary>

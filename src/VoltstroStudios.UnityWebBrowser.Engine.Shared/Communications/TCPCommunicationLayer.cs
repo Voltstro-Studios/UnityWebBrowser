@@ -38,7 +38,7 @@ internal class TCPCommunicationLayer : ICommunicationLayer
     public Client CreateTCPClient(int port)
     {
         IPEndPoint ipEndPoint = new(IPAddress.Loopback, port);
-        return new TCPClient(ipEndPoint);
+        return new TCPClient(ipEndPoint, int.MaxValue);
     }
 
     /// <summary>
@@ -49,6 +49,6 @@ internal class TCPCommunicationLayer : ICommunicationLayer
     public Host CreateTCPHost(int port)
     {
         IPEndPoint ipEndPoint = new(IPAddress.Loopback, port);
-        return new TCPHost(ipEndPoint);
+        return new TCPHost(ipEndPoint, int.MaxValue, int.MaxValue);
     }
 }
