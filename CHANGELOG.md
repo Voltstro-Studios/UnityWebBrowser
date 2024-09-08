@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - Unreleased
+
+### Added
+
+- Added MacOS support (x64, arm64)
+- Added CEF engine sandboxing (Windows, MacOS)
+- Added remote debugging allowed origins
+- Added CEF Event flags support (allows dragging)
+
+### Changed
+
+- Bump deps
+- Updated CEF to 126.2.9
+- CEF engine gets compiled using .NET Native AOT
+- Updated logging tags
+- Mouse click events will always send `clickCount` with at least a value of 1.
+- Changed control of engine pathing from being fixed (hardcoded) to being controlled by the `Engine` scriptable object.
+- Improve copying in engine build post-processor
+- (Dev) Change builds scripts to Python
+
+### Deprecated
+
+- `CommunicationLayer.connectionTimeout` - Timeouts are now set to max
+- `Engine.engineFileLocation` - Replaced with `Engine.engineEditorLocation`.
+- `Engine.EngineFilesNotFoundError` - No longer needed
+- `EngineManager.GetEngineDirectory` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineDirectory` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineProcessFullPath` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineProcessFullPath` - Fetching of engine paths is now handled by the engine class
+- `WebBrowserUtils.GetBrowserEnginePath` - Fetching of engine paths is now handled by the engine class
+- `WebBrowserUtils.GetBrowserEngineProcessPath` - Fetching of engine paths is now handled by the engine class
+
+### Fixed
+
+- Fix select popups not working (#314)
+- Change TCP timeouts to max allowed (#300)
+
 ## [2.1.1] - 2024-03-22
 
 ### Added
