@@ -46,7 +46,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<LogSeverity> logSeverity;
     
     //IPC settings
-    private readonly Option<FileInfo> communicationLayerPath;
+    private readonly Option<string> communicationLayerName;
     private readonly Option<string> inLocation;
     private readonly Option<string> outLocation;
 
@@ -71,7 +71,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<string> proxyPassword,
         Option<FileInfo> logPath,
         Option<LogSeverity> logSeverity,
-        Option<FileInfo> communicationLayerPath,
+        Option<string> communicationLayerName,
         Option<string> inLocation,
         Option<string> outLocation,
         Option<uint> startDelay)
@@ -98,7 +98,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.logPath = logPath;
         this.logSeverity = logSeverity;
         
-        this.communicationLayerPath = communicationLayerPath;
+        this.communicationLayerName = communicationLayerName;
         this.inLocation = inLocation;
         this.outLocation = outLocation;
 
@@ -132,7 +132,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             LogPath = bindingContext.ParseResult.GetValueForOption(logPath),
             LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity),
 
-            CommunicationLayerPath = bindingContext.ParseResult.GetValueForOption(communicationLayerPath),
+            CommunicationLayerName = bindingContext.ParseResult.GetValueForOption(communicationLayerName),
             InLocation = bindingContext.ParseResult.GetValueForOption(inLocation),
             OutLocation = bindingContext.ParseResult.GetValueForOption(outLocation),
 

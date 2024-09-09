@@ -98,11 +98,11 @@ public class LaunchArguments
     ///     What is the log severity
     /// </summary>
     public LogSeverity LogSeverity { get; init; }
-
+    
     /// <summary>
-    ///     Path for the assembly containing the communication layer
+    ///     Communication layer name
     /// </summary>
-    internal FileInfo CommunicationLayerPath { get; init; }
+    public string CommunicationLayerName { get; init; }
 
     /// <summary>
     ///     In location (Either the pipe name or port)

@@ -85,8 +85,6 @@ internal abstract class EngineEntryPoint : IDisposable
             
                 if(parsedArgs.StartDelay != 0)
                     Thread.Sleep((int)parsedArgs.StartDelay);
-            
-                
                 
                 ClientControlsActions = new ClientControlsActions();
                 PopupManager = new EnginePopupManager();
@@ -97,7 +95,7 @@ internal abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                engineLogger.LogCritical(ex, $"Uncaught exception occured in the entry point!");
+                engineLogger.LogCritical(ex, "Uncaught exception occured in the entry point!");
                 ShutdownAndExitWithError();
             }
         });
@@ -112,27 +110,17 @@ internal abstract class EngineEntryPoint : IDisposable
     {
         try
         {
-            //Logger.Debug($"{Logger.BaseLoggingTag}: SetupIcp.");
-            engineLogger.LogDebug($"SetupUp");
-            
-            ICommunicationLayer communicationLayer = new TCPCommunicationLayer();
-            
-            /*
-            if (arguments.CommunicationLayerPath == null)
+            engineLogger.LogDebug("Doing IPC Setup...");
+
+            //Create communication layer 
+            ICommunicationLayer communicationLayer = arguments.CommunicationLayerName switch
             {
-                //Use TCP
-                Logger.Debug($"{Logger.BaseLoggingTag}: No communication layer provided, using default TCP...");
-                communicationLayer = new TCPCommunicationLayer();
-                Logger.Debug($"{Logger.BaseLoggingTag}: Created default TCP communication layer.");
-            }
-            else
-            {
-                communicationLayer = CommunicationLayerLoader.GetCommunicationLayerFromAssembly(
-                    arguments.CommunicationLayerPath.FullName);
-            }
-            */
-            
-            engineLogger.LogDebug($"Created communication layer of type '{communicationLayer.GetType().FullName}'...");
+                "TCP" => new TCPCommunicationLayer(),
+                "Pipes" => new PipesCommunicationLayer(),
+                _ => throw new NullReferenceException("Unknown communication layer!")
+            };
+
+            engineLogger.LogDebug("Created communication layer of type '{communicationLayerName}'...", communicationLayer.GetType().FullName);
 
             try
             {
@@ -141,7 +129,7 @@ internal abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                engineLogger.LogCritical(ex, $"An error occured setting up the communication layer!");
+                engineLogger.LogError(ex, "An error occured setting up the communication layer!");
                 ShutdownAndExitWithError();
                 return;
             }
@@ -152,7 +140,7 @@ internal abstract class EngineEntryPoint : IDisposable
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
-            engineLogger.LogDebug($"Installed services on host.");
+            engineLogger.LogDebug("Installed services on host.");
             
             Task.Run(() =>
             {
@@ -162,41 +150,41 @@ internal abstract class EngineEntryPoint : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    engineLogger.LogError(ex, $"An error occured listening on host!");
+                    engineLogger.LogError(ex, "An error occured listening on host!");
                     ShutdownAndExitWithError();
                 }
             });
             
-            engineLogger.LogDebug($"Host has started listening.");
+            engineLogger.LogDebug("Host has started listening.");
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClientControls));
             ipcClient.AddService(typeof(IPopupEngineControls));
             
-            engineLogger.LogDebug($"Installed services on client.");
+            engineLogger.LogDebug("Installed services on client.");
 
             //Connect the engine (us) back to Unity
             try
             {
                 ipcClient.Connect();
                 
-                engineLogger.LogDebug($"Client has connected back to Unity.");
+                engineLogger.LogDebug("Client has connected back to Unity.");
                 
                 ClientControlsActions.SetIpcClient(ipcClient);
                 PopupManager.SetIpcClient(ipcClient);
             }
             catch (ConnectionFailedException)
             {
-                engineLogger.LogWarning($"The engine failed to connect back to the Unity client! Client events will not fire!");
+                engineLogger.LogWarning("The engine failed to connect back to the Unity client! Client events will not fire!");
                 ipcClient.Dispose();
                 ipcClient = null;
             }
 
-            engineLogger.LogDebug($"IPC Setup done.");
+            engineLogger.LogDebug("IPC Setup done.");
         }
         catch (Exception ex)
         {
-            engineLogger.LogCritical(ex, $"Error setting up IPC!");
+            engineLogger.LogError(ex, "Error setting up IPC!");
         }
     }
 

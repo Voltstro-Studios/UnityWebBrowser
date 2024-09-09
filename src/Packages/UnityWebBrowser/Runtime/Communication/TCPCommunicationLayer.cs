@@ -40,11 +40,11 @@ namespace VoltstroStudios.UnityWebBrowser.Communication
             return new TCPHost(ipEndPoint, int.MaxValue, int.MaxValue);
         }
 
-        public override void GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation)
+        public override void GetIpcSettings(out object outLocation, out object inLocation, out string layerName)
         {
             outLocation = outPort;
             inLocation = inPort;
-            assemblyLocation = null;
+            layerName = "TCP";
         }
     }
 }

@@ -85,9 +85,9 @@ public sealed class LaunchArgumentsParser
             "The severity of the logs");
 
         //IPC settings
-        Option<FileInfo> communicationLayerPath = new("-comms-layer-path",
-            () => null,
-            "The location of where the dll for the communication layer is. If none is provided then the in-built TCP layer will be used.");
+        Option<string> communicationLayerName = new("-comms-layer-name",
+            () => "TCP",
+            "The name of the communication layer to use.");
         Option<string> inLocation = new("-in-location",
             () => "5555",
             "In location for IPC (Pipes location or TCP port in TCP mode)");
@@ -118,7 +118,7 @@ public sealed class LaunchArgumentsParser
             proxyPassword,
             logPath,
             logSeverity,
-            communicationLayerPath,
+            communicationLayerName,
             inLocation,
             outLocation,
             startDelay
@@ -146,7 +146,7 @@ public sealed class LaunchArgumentsParser
             proxyPassword,
             logPath,
             logSeverity,
-            communicationLayerPath,
+            communicationLayerName,
             inLocation,
             outLocation,
             startDelay);

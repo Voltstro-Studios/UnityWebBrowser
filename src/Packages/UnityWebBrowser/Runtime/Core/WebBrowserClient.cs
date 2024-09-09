@@ -343,14 +343,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 out string assemblyLocation);
             if (assemblyLocation != null)
             {
-                if (!File.Exists(assemblyLocation))
-                {
-                    logger.Error("Failed to find provided communication layer assembly!");
-                    throw new FileNotFoundException("Failed to find provided communication layer assembly!");
-                }
-
-                argsBuilder.AppendArgument("comms-layer-path", assemblyLocation, true);
-                logger.Debug($"Using communication layer assembly at '{assemblyLocation}'.");
+                argsBuilder.AppendArgument("comms-layer-name", assemblyLocation, true);
+                logger.Debug($"Using communication layer of '{assemblyLocation}'.");
             }
 
             argsBuilder.AppendArgument("in-location", inLocation, true);

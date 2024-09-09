@@ -54,12 +54,10 @@ namespace VoltstroStudios.UnityWebBrowser.Communication
         ///     The "location" (whether that be a pipe name or port) that will allow the client to
         ///     communication to the engine.
         /// </param>
-        /// <param name="assemblyLocation">
-        ///     The location of the assembly that the engine needs to load.
-        ///     <para>To provide the location of an assembly <see cref="System.Reflection.Assembly.Location" /> can be used.</para>
-        ///     <para>This can be null to say that no additional assembly is needed.</para>
+        /// <param name="layerName">
+        ///    The name of comms layer
         /// </param>
         public abstract void GetIpcSettings(out object outLocation, out object inLocation,
-            [CanBeNull] out string assemblyLocation);
+            [CanBeNull] out string layerName);
     }
 }

@@ -165,7 +165,8 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser": "2.0.0"
+        "dev.voltstro.unitywebbrowser": "2.0.0",
+        "org.nuget.voltrpc.communication.pipes": "3.1.0"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
@@ -236,6 +237,15 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://upm-pkgs.voltstro.dev"
+    },
+    "org.nuget.voltrpc.communication.pipes": {
+      "version": "3.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.voltrpc": "3.2.0"
+      },
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.modules.imgui": {

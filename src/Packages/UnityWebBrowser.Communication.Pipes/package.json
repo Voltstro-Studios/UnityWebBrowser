@@ -14,7 +14,8 @@
     "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git"
   },
   "dependencies": {
-    "dev.voltstro.unitywebbrowser": "2.0.0"
+    "dev.voltstro.unitywebbrowser": "2.0.0",
+    "org.nuget.voltrpc.communication.pipes": "3.1.0"
   },
   "hideInEditor": false,
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",

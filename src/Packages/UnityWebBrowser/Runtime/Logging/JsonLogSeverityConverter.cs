@@ -27,6 +27,8 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
         {
             if (reader.Value is string value)
             {
+                if (value == "Fatal")
+                    return LogSeverity.Fatal;
                 if (value == "Error")
                     return LogSeverity.Error;
                 if (value == "Warning")
