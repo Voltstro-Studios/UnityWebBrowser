@@ -66,9 +66,9 @@ jobs:
     build-engine-cef:
         strategy:
             matrix:
-                os: [windows-2022]
-                build: ['windows64']
-                package: ['Win-x64']
+                os: [windows-2022, ubuntu-22.04]
+                build: ['windows64', 'linux64']
+                package: ['Win-x64', 'Linux-x64']
 
         runs-on: ${{ matrix.os }}
         name: Build-UWB-Engine-CEF-${{ matrix.package }}
