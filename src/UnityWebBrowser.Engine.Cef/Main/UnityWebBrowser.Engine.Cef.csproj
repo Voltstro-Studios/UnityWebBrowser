@@ -26,7 +26,6 @@
     <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
         <DirectPInvoke Include="cef_sandbox" />
         
-        <NativeLibrary Include="shlwapi.lib" />
         <NativeLibrary Include="Advapi32.lib" />
         <NativeLibrary Include="dbghelp.lib" />
         <NativeLibrary Include="Delayimp.lib" />
@@ -43,7 +42,14 @@
         <NativeLibrary Include="wbemuuid.lib" />
         <NativeLibrary Include="WindowsApp.lib" />
         <NativeLibrary Include="winmm.lib" />
+
         
+        <NativeLibrary Include="comctl32.lib" />
+        <NativeLibrary Include="gdi32.lib" />
+        <NativeLibrary Include="rpcrt4.lib" />
+        <NativeLibrary Include="shlwapi.lib" />
+        <NativeLibrary Include="ws2_32.lib" />
+
         <NativeLibrary Include="..\..\ThirdParty\Libs\cef\windows64\Release\cef_sandbox.lib" />
 
         <LinkerArg Include="/LIBPATH:..\..\ThirdParty\Libs\cef\windows64\Release\" />

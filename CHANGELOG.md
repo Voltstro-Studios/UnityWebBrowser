@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump deps
-- Updated CEF to 126.2.9
+- Updated CEF to 128.4.9
 - CEF engine gets compiled using .NET Native AOT
 - Updated logging tags
 - Mouse click events will always send `clickCount` with at least a value of 1.
