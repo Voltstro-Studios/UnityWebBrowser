@@ -1,65 +1,95 @@
 name: Build
 
-on:
-  push
+on: push
 
 jobs:
-  #This job builds the Unity project
-  build-core:
-    name: 'Build-UWB-Core'
-    runs-on: ubuntu-22.04
-    steps:
+    #This job builds the Unity project
+    build-core:
+        name: "Build-UWB-Core"
+        runs-on: ubuntu-22.04
+        steps:
+            #Restore
+            - uses: actions/checkout@v4
+              with:
+                  path: "UnityWebBrowserSource/"
 
-    #Restore
-    - uses: actions/checkout@v4
-      with:
-        path: 'UnityWebBrowserSource/'
+            #Setup the Environment
+            - uses: actions/setup-dotnet@v4
+              name: Setup .NET
+              with:
+                  dotnet-version: "8.0.x"
 
-    #Setup the Environment
-    - uses: actions/setup-dotnet@v4
-      name: Setup .NET
-      with:
-        dotnet-version: '8.0.x'
+            #Build shared
+            - name: Build Shared
+              run: "python build_shared.py"
+              working-directory: UnityWebBrowserSource/src/DevScripts/
 
-    #Build shared
-    - name: Build Shared
-      run: 'python build_shared.py'
-      working-directory: UnityWebBrowserSource/src/DevScripts/
-        
-    #Restore Unity's cache
-    - name: Unity Cache
-      uses: actions/cache@v4
-      with:
-        path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
-        key: Cache-Unity
+            #Restore Unity's cache
+            - name: Unity Cache
+              uses: actions/cache@v4
+              with:
+                  path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
+                  key: Cache-Unity
 
-    #Build the Unity project
-    - name: Build Unity Project
-      uses: game-ci/unity-builder@v4
-      env:
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      with:
-        projectPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/'
-        targetPlatform: StandaloneLinux64
-        buildsPath: 'UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds'
-        versioning: Tag
+            #Build the Unity project
+            - name: Build Unity Project
+              uses: game-ci/unity-builder@v4
+              env:
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+              with:
+                  projectPath: "UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/"
+                  targetPlatform: StandaloneLinux64
+                  buildsPath: "UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Builds"
+                  versioning: Tag
 
-    #Create an output directory for artifacts
-    - name: Create Artifacts Staging Directory
-      shell: pwsh
-      run: mkdir ~/UWBStaging/
+            #Create an output directory for artifacts
+            - name: Create Artifacts Staging Directory
+              shell: pwsh
+              run: mkdir ~/UWBStaging/
 
-    #Pack UWB Core
-    - name: Pack Core Package
-      shell: pwsh
-      run: npm pack --pack-destination ~/UWBStaging/
-      working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser
+            #Pack UWB Core
+            - name: Pack Core Package
+              shell: pwsh
+              run: npm pack --pack-destination ~/UWBStaging/
+              working-directory: UnityWebBrowserSource/src/Packages/UnityWebBrowser
 
-    # Upload Packed Packages
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: UWB-Core
-        path: ~/UWBStaging/*.tgz
+            # Upload Packed Packages
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: UWB-Core
+                  path: ~/UWBStaging/*.tgz
+
+    build-engine-cef:
+        strategy:
+            matrix:
+                os: [windows-2022]
+                build: ['windows64']
+                package: ['Win-x64']
+
+        runs-on: ${{ matrix.os }}
+        name: Build-UWB-Engine-${{ matrix.build }}
+        steps:
+            #Restore
+            - uses: actions/checkout@v4
+              with:
+                path: "UnityWebBrowserSource/"
+                submodules: true
+
+            #Setup the Environment
+            - uses: actions/setup-dotnet@v4
+              name: Setup .NET
+              with:
+                dotnet-version: "8.0.x"
+
+            #Download CEF
+            - name: Download CEF ${{ matrix.build }}
+              run: python download_cef_${{ matrix.build }}.py
+              working-directory: UnityWebBrowserSource/src/DevScripts/
+
+            #Build CEF Engine
+            - name: Download CEF ${{ matrix.build }}
+              run: python build_cef_${{ matrix.build }}.py
+              working-directory: UnityWebBrowserSource/src/DevScripts/
