@@ -98,12 +98,12 @@ jobs:
             # Create an output directory for artifacts
             - name: Create Artifacts Staging Directory
               shell: pwsh
-              run: mkdir ~/UWBStaging/
+              run: mkdir ${{ github.workspace }}/UWBStaging/
 
             # Pack UWB Core
-            - name: Pack Core Package
+            - name: Pack CEF Engine ${{ matrix.package }} Package
               shell: pwsh
-              run: npm pack --pack-destination ~/UWBStaging/
+              run: npm pack --pack-destination ${{ github.workspace }}/UWBStaging/
               working-directory: src/Packages/UnityWebBrowser.Engine.Cef.${{ matrix.package }}
 
             # Upload Packed Packages
@@ -111,4 +111,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: UWB-Engine-CEF-${{ matrix.package }}
-                path: ~/UWBStaging/*.tgz
+                path: ${{ github.workspace }}/UWBStaging/*.tgz
