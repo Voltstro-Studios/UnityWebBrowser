@@ -12,7 +12,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                 path: "UnityWebBrowserSource/"
-                fetch-depth: 2
+                fetch-depth: 0
 
             #Setup the Environment
             - uses: actions/setup-dotnet@v4
@@ -77,7 +77,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                 submodules: true
-                fetch-depth: 2
+                fetch-depth: 0
 
             # Setup the Environment
             - uses: actions/setup-dotnet@v4
