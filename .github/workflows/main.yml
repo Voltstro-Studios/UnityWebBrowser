@@ -11,12 +11,12 @@ jobs:
     steps:
 
     #Restore
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         path: 'UnityWebBrowserSource/'
 
     #Setup the Environment
-    - uses: actions/setup-dotnet@v2
+    - uses: actions/setup-dotnet@v4
       name: Setup .NET
       with:
         dotnet-version: '8.0.x'
@@ -28,7 +28,7 @@ jobs:
         
     #Restore Unity's cache
     - name: Unity Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: UnityWebBrowserSource/src/UnityWebBrowser.UnityProject/Library
         key: Cache-Unity
