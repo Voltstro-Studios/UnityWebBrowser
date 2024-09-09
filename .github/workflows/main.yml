@@ -77,6 +77,9 @@ jobs:
                     - os: macos-14
                       build: macosx64
                       package: MacOS-x64
+                    - os: macos-14
+                      build: macosarm64
+                      package: MacOS-arm64
 
         runs-on: ${{ matrix.os }}
         name: Build-UWB-Engine-CEF-${{ matrix.package }}
