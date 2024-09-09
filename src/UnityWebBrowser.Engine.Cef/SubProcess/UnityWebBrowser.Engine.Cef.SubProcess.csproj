@@ -7,7 +7,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ApplicationIcon>../Shared/chromium-logo.ico</ApplicationIcon>
-        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
         
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <OutDir>../bin/$(Configuration)/</OutDir>
@@ -37,8 +37,8 @@
 
         <LinkerArg Include="-lsandbox" />
         <LinkerArg Include="-lc++" />
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" Conition="'$(RuntimeIdentifier.EndsWith('x64'))'=='true'"  />
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosarm64/Release/cef_sandbox.a" Conition="'$(RuntimeIdentifier.EndsWith('arm64'))'=='true'"  />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a" Conition="'$(RuntimeIdentifier)'=='osx-x64'"  />
+        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosarm64/Release/cef_sandbox.a" Conition="'$(RuntimeIdentifier)'=='osx-arm64'"  />
         
         <None Update="info-subprocess.plist">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
