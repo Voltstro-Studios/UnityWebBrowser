@@ -72,10 +72,11 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+          <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143">
+                <PrivateAssets>all</PrivateAssets>
+                <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
     
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
@@ -87,6 +88,10 @@
 
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
         <SelfContained>true</SelfContained>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     </PropertyGroup>
 
     <Import Project="../../Imports/NatvieDefines.targets" />
