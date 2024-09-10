@@ -124,13 +124,6 @@
       "dependencies": {},
       "url": "https://upm-pkgs.voltstro.dev"
     },
-    "dev.voltstro.nuget.mono.unix": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://upm-pkgs.voltstro.dev"
-    },
     "dev.voltstro.unityimgui": {
       "version": "5.0.1",
       "depth": 0,
@@ -182,8 +175,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13",
-        "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.macos.arm64": {
@@ -214,9 +206,7 @@
       "version": "file:../../Packages/UnityWebBrowser.Unix-Support",
       "depth": 0,
       "source": "local",
-      "dependencies": {
-        "dev.voltstro.nuget.mono.unix": "1.0.0"
-      }
+      "dependencies": {}
     },
     "org.nuget.microsoft.unity.analyzers": {
       "version": "1.18.0",

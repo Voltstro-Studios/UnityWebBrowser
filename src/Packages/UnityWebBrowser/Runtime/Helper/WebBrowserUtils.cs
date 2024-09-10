@@ -3,35 +3,15 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-//Defines
-#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX && !UWB_DOCS
-
-//We need the Unix support package installed on UNIX systems
-#if !UNIX_SUPPORT
-#error Need UNIX support package!
-#else
-#define UWB_NEED_UNIX
-#endif
-
-#endif
-
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
-using VoltstroStudios.UnityWebBrowser.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
-#if UWB_NEED_UNIX
-using VoltstroStudios.UnityWebBrowser.UnixSupport;
-#endif
+
 #if UNITY_EDITOR
 using VoltstroStudios.UnityWebBrowser.Editor.EngineManagement;
 #endif
@@ -44,8 +24,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
     [Preserve]
     public static class WebBrowserUtils
     {
-        private static RuntimePlatform[] supportedPlatforms = new[]
-        {
+        private static readonly RuntimePlatform[] SupportedPlatforms = {
             RuntimePlatform.WindowsPlayer,
             RuntimePlatform.WindowsEditor,
             RuntimePlatform.LinuxPlayer,
@@ -155,6 +134,10 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
             return true;
         }
 
+        /// <summary>
+        ///     Gets the current running platform
+        /// </summary>
+        /// <returns></returns>
         public static Platform GetRunningPlatform()
         {
 #if UNITY_STANDALONE_WIN
@@ -172,7 +155,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         /// <returns></returns>
         public static bool IsRunningOnSupportedPlatform()
         {
-            return supportedPlatforms.Any(x => x == UnityEngine.Device.Application.platform);
+            return SupportedPlatforms.Any(x => x == UnityEngine.Device.Application.platform);
         }
 
         /// <summary>

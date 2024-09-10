@@ -13,8 +13,7 @@
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
   "unity": "2021.2",
   "dependencies": {
-    "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13",
-    "dev.voltstro.unitywebbrowser.unix-support": "1.0.0"
+    "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
   },
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
   "description": "CEF Engine for Unity Web Browser (Linux x64)",

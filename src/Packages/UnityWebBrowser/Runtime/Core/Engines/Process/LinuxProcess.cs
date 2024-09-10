@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using VoltstroStudios.UnityWebBrowser.Logging;
-using VoltstroStudios.UnityWebBrowser.UnixSupport;
 
 namespace VoltstroStudios.UnityWebBrowser.Core.Engines.Process
 {
@@ -24,17 +23,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines.Process
             process = new System.Diagnostics.Process();
             this.logger = logger;
         }
-        
-        public bool HasExited { get; }
-        public int ExitCode { get; }
+
+        public bool HasExited => process.HasExited;
+        public int ExitCode => process.ExitCode;
 
         public void StartProcess(string executable, string workingDir, string arguments, DataReceivedEventHandler onLogEvent,
             DataReceivedEventHandler onErrorLogEvent)
         {
-            if (PermissionsManager.CheckAndSetIfNeededFileExecutablePermission(executable))
-                logger.Warn(
-                    "UWB engine process did not have +rwx permissions! Engine process permission's were updated for the user.");
-            
             ProcessStartInfo startInfo = new(executable, arguments)
             {
                 CreateNoWindow = true,
