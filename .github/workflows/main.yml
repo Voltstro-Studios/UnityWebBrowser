@@ -7,9 +7,9 @@ on:
           - release
 
 jobs:
-    #This job builds the Unity project
+    #This job builds the main non-platform depent packages
     build-core:
-        name: "Build-UWB-Core"
+        name: "Build-UWB-Main"
         runs-on: ubuntu-22.04
         steps:
             # Checkout Repo
@@ -58,6 +58,12 @@ jobs:
               shell: pwsh
               run: npm pack --pack-destination ${{ github.workspace }}/UWBStaging/
               working-directory: src/Packages/UnityWebBrowser
+
+            # Pack UWB Pipes Communication
+            - name: Pack Pipes Communication Package
+              shell: pwsh
+              run: npm pack --pack-destination ${{ github.workspace }}/UWBStaging/
+              working-directory: src/Packages/UnityWebBrowser.Communication.Pipes
 
             # Upload Packed Packages
             - name: Upload Artifacts
