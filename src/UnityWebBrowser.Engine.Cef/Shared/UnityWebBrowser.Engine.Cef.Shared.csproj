@@ -124,14 +124,7 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-    </ItemGroup>
-
+    
     <Import Project="../../Imports/NatvieDefines.targets"/>
 
 </Project>

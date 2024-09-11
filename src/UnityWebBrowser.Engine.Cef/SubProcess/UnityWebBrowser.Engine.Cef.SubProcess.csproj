@@ -24,15 +24,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Shared\UnityWebBrowser.Engine.Cef.Shared.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-    </ItemGroup>
-
+    
     <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
         <DirectPInvoke Include="cef_sandbox" />
 
