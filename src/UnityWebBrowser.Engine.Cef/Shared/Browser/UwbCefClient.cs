@@ -179,11 +179,8 @@ internal class UwbCefClient : CefClient, IDisposable
         {
             CefKeyEvent keyEvent = new()
             {
-#if WINDOWS
                 WindowsKeyCode = c,
-#else
                 Character = c,
-#endif
                 EventType = CefKeyEventType.Char,
                 Modifiers = modifiers
             };
