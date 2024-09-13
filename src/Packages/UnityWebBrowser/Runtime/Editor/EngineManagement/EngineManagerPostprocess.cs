@@ -3,7 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !UWB_DISABLE_POSTPROCESSOR
 
 using System;
 using System.Collections.Generic;
