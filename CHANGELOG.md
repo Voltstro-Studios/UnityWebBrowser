@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added CEF engine sandboxing (Windows, MacOS)
 - Added remote debugging allowed origins
 - Added CEF Event flags support (allows dragging)
+- Added `UWB_DISABLE_POSTPROCESSOR` define to UWB's postprocessor
 
 ### Changed
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mouse click events will always send `clickCount` with at least a value of 1
 - Changed control of engine pathing from being fixed (hardcoded) to being controlled by the `Engine` scriptable object
 - Improve copying in engine build post-processor
+- Change TCP timeouts to max allowed (#300)
 - (Dev) Build all projects in CI
 - (Dev) Change builds scripts to Python
 
@@ -42,8 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix select popups not working (#314)
-- Change TCP timeouts to max allowed (#300)
+- Fixed select popups not working (#314)
+- Fixed keyboard events not firing (#335)
 
 ## [2.1.1] - 2024-03-22
 
