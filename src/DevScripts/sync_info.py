@@ -31,7 +31,7 @@ def sync_package(package: str, version: str, sub_version: str, license_path: str
     dependencies = package_json.get('dependencies')
     if dependencies:
         for dep in dependencies:
-            if not dep.startswith('dev.voltstro'):
+            if not dep.startswith('dev.voltstro.unitywebbrowser'):
                 continue
 
             # Main dependencies will just be main version

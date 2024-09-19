@@ -1,6 +1,6 @@
 ﻿// UnityWebBrowser (UWB)
 // Copyright (c) 2021-2022 Voltstro-Studios
-// 
+//
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System.Reflection;
@@ -34,8 +34,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.1")]
-[assembly: AssemblyFileVersion("2.1.1")]
+[assembly: AssemblyVersion("2.2.0")]
+[assembly: AssemblyFileVersion("2.2.0")]
 
 [assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Prj")]
 [assembly: InternalsVisibleTo("VoltstroStudios.UnityWebBrowser.Editor")]
