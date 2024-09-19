@@ -1,5 +1,5 @@
 {
-  "name": "dev.voltstro.unitywebbrowser.engine.cef.macos.win.64",
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.win.x64",
   "displayName": "Unity Web Browser CEF Engine (Win x64)",
   "description": "CEF engine for Unity Web Browser (Win x64).",
   "version": "2.1.1-122.1.13",
