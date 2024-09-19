@@ -3,7 +3,7 @@
   "displayName": "Unity Web Browser Unix Support",
   "version": "1.1.0",
   "unity": "2021.3",
-  "description": "Unix Support package is no longer needed and is now depreacted.",
+  "description": "Unix Support package is no longer needed and is now deprecated.",
   "author": {
     "name": "Voltstro",
     "email": "me@voltstro.dev",

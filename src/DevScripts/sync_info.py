@@ -24,7 +24,26 @@ def sync_package(package: str, version: str, sub_version: str, license_path: str
     if sub_version:
         new_package_version += '-{0}'.format(sub_version)
 
+    # Set new package version
     package_json['version'] = new_package_version
+
+    # Deal with package dependencies
+    dependencies = package_json.get('dependencies')
+    if dependencies:
+        for dep in dependencies:
+            if not dep.startswith('dev.voltstro'):
+                continue
+
+            # Main dependencies will just be main version
+            dep_version = version
+
+            # Engine dependencies will have sub version
+            if dep.find('engine') != -1:
+                dep_version = new_package_version
+                
+            dependencies[dep] = dep_version
+    package_json['dependencies'] = dependencies    
+
     write_json_to_file(package_json, package_json_path)
     copy(license_path, package_path)
 
@@ -36,7 +55,7 @@ version_json = read_json_from_file(version_json_path)
 version = version_json['version']
 license_path = path.abspath(path.join(__file__, '../../../LICENSE.md'))
 
-# Sync CEF Engine version.json
+# Sync CEF Engine version.json  
 cef_engine_version_json_path = path.abspath(path.join(__file__, '../../UnityWebBrowser.Engine.Cef/version.json'))
 cef_engine_version_json = read_json_from_file(cef_engine_version_json_path)
 cef_engine_versions = cef_engine_version_json['version'].split('-')

@@ -3,9 +3,8 @@
 # Unity Web Browser
 
 [![License](https://img.shields.io/github/license/Voltstro-Studios/UnityWebBrowser.svg)](/LICENSE.md)
-[![Build](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml/badge.svg)](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml)
-[![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev) 
-[![YouTube](https://img.shields.io/badge/Youtube-Voltstro-red.svg?logo=youtube)](https://www.youtube.com/Voltstro)
+[![Build Status](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml/badge.svg)](https://github.com/Voltstro-Studios/UnityWebBrowser/actions/workflows/main.yml)
+[![Docs Status](https://img.shields.io/uptimerobot/status/m794227043-7e2bf837661fcd75d2af6804?label=Docs)](https://projects.voltstro.dev/UnityWebBrowser/latest/)
 
 Unity Web Browser (UWB) is a Unity package that allows displaying and interacting with the web from within Unity.
 
@@ -14,8 +13,9 @@ This project is capable of using any desired web engine you want, however for no
 ## Features
 
 - Easy Installation with UPM
-- Multi-Platform Desktop Support
+- Multi-Platform Desktop Support (Windows, Linux & MacOS)
 - API to interact with the web engine
+- JS Interop
 - Extendable
 - 100% Open-Source
 
@@ -29,18 +29,15 @@ Unity 2021.3.x
 
 ### Install
 
-1. Setup [VoltstroUPM](https://github.com/Voltstro/VoltstroUPM#setup)
-2. Define the additional scopes `org.nuget` and `com.cysharp.unitask` with VoltstroUPM
-3. Install the required packages!
-    - UnityWebBrowser
-4. Install an engine:
-    - E.G.: UnityWebBrowser CEF Engine with Windows natives
+1. Setup [VoltUPM](https://github.com/Voltstro/VoltstroUPM#setup)
+2. Define the additional scopes `org.nuget` and `com.cysharp.unitask` with VoltUPM
+3. Install UnityWebBrowser packages
 
-For a more in-depth installation guide, check out the [setup article](https://projects.voltstro.dev/UnityWebBrowser/articles/user/setup/).
+For a more in-depth installation guide, check out the [setup article](https://projects.voltstro.dev/UnityWebBrowser/latest/articles/user/setup/).
 
 ## Documentation
 
-For further documentation, see [UWB's project site](https://projects.voltstro.dev/UnityWebBrowser/articles/).
+For further documentation, see [UWB's project site](https://projects.voltstro.dev/UnityWebBrowser/latest/articles/).
 
 The project site covers information such as Engines, Platform support, advance setup, plus more.
 
@@ -56,7 +53,11 @@ PLEASE DO NOT USE DISCORD FOR SUPPORT!
 
 ## Contributing
 
-For learning how to setup UWB repo for development, please see the [developer guide article](https://projects.voltstro.dev/UnityWebBrowser/articles/dev/dev-guide/) on the project's site.
+We will gladly accept contributions from anyone!
+
+Contributions don't just have to be code, contributions can be good [bug reports](https://github.com/Voltstro-Studios/UnityWebBrowser/issues), good [questions/feature requests](https://github.com/Voltstro-Studios/UnityWebBrowser/discussions), or even simple updates to our docs.
+
+But, if you do wish to contribute code wise to project, please see the [dev docs]([dev/dev-guide.md](https://projects.voltstro.dev/UnityWebBrowser/latest/articles/dev/dev-guide/)) for setting up the project. Pickup a feature request or bug report, do the required changes then submit a PR to the `master` branch for review.
 
 ## Screenshots
 
@@ -90,6 +91,16 @@ For learning how to setup UWB repo for development, please see the [developer gu
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE.md) file for details.
+
+## Socials
+
+Here are our socials, please don't use these for support!
+
+[![Discord](https://img.shields.io/discord/424080906232266753)](https://discord.voltstro.dev)
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/Voltstro?style=social)](https://twitter.com/Voltstro)
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/VoltstroStudios?style=social)](https://twitter.com/VoltstroStudios)
 
 ## Thanks
 

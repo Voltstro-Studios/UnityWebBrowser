@@ -1,6 +1,9 @@
 {
+  "name": "dev.voltstro.unitywebbrowser.engine.cef.macos.x64",
+  "displayName": "Unity Web Browser CEF Engine (MacOS x64)",
+  "description": "CEF engine for Unity Web Browser (MacOS x64).",
   "version": "2.0.0-preview.3-99.2.6",
-  "description": "CEF Engine for Unity Web Browser (MacOS x64)",
+  "unity": "2021.2",
   "author": {
     "name": "Voltstro",
     "email": "me@voltstro.dev",
@@ -10,13 +13,10 @@
     "type": "git",
     "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git"
   },
-  "name": "dev.voltstro.unitywebbrowser.engine.cef.macos.x64",
-  "displayName": "Unity Web Browser CEF Engine (MacOS x64)",
-  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
-  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/articles/user/engines/#cef-engine",
   "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "dependencies": {
     "dev.voltstro.unitywebbrowser.engine.cef": "2.1.1-122.1.13"
-  },
-  "unity": "2021.2"
+  }
 }
