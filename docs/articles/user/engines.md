@@ -8,40 +8,40 @@ UWB can support using many different types of web engines using this approach.
 
 To change what engine you are using, goto the Web Browser component, and change the 'Engine' value to the new engine configuration you want to use.
 
-## Cef Engine
+## Engine List
 
-The Cef engine uses [CEF](https://bitbucket.org/chromiumembedded/cef/src/master/) as it's web engine. CEF is built using [Chromium](https://www.chromium.org/) (the engine that powers many different browsers including Chrome, Edge, Opera and Brave).
+### CEF Engine
 
-The downsides of using CEF come from the downside of Chromium, it's a memory hog (~400 MB at idle), and has quite large binaries.
+The CEF engine uses [CEF](https://bitbucket.org/chromiumembedded/cef/src/master/) as it's web engine. CEF is built using [Chromium](https://www.chromium.org/) (the engine that powers most web browsers including Chrome, Edge, etc).
 
-### Platform Support
+#### Platform Support
 
-|OS           |Supported                  |Notes                                         |
-|-------------|---------------------------|----------------------------------------------|
-|Windows      |✔                         |Works natively                                |
-|Linux        |✔ (Tested on Ubuntu 22.04)|Works natively                                |
-|MacOS (Intel)|✖                         |Planned                                       |
-|MacOS (M1)   |✖                         |No physical hardware to test or develop on    |
+|Platform     |Supported                  |Notes                                             |
+|-------------|---------------------------|--------------------------------------------------|
+|Windows      |✔                         |Works natively                                    |
+|Linux        |✔ (Tested on Ubuntu 22.04)|Works natively                                    |
+|MacOS (Intel)|✔                         |Works natively                                    |
+|MacOS (Arm)  |✔                         |While we provide ARM builds, they are not tested  |
 
-### Packages
+#### Packages
 
 - 'Unity Web Browser CEF Engine' (`unitywebbrowser.engine.cef`)
 
-#### Natives
+##### Natives
 
 - 'Unity Web Browser CEF Engine (Windows x64)' (`unitywebbrowser.engine.cef.win.x64`)
 - 'Unity Web Browser CEF Engine (Linux x64)' (`unitywebbrowser.engine.cef.linux.x64`)
+- 'Unity Web Browser CEF Engine (MacOS x64)' (`unitywebbrowser.engine.cef.macos.x64`)
+- 'Unity Web Browser CEF Engine (MacOS arm64)' (`unitywebbrowser.engine.cef.macos.arm64`)
 
-## WebView2 Engine
+#### MacOS Support
 
-The WebView2 Engine is a planned engine. No development has been done on it yet, and no promises have been made on developing it!
+Builds of CEF engine are provided for MacOs (both x64 and ARM). However the builds are not code signed! You will need to sign the UnityWebBrowser.Engine.Cef app your self.
 
-[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) is Microsoft's embedded version of Edge.
+## Engine Communication
 
-### Platform Support
+By default, communication between the engine and core is done using TCP. If the optional pipes communication layer package is installed, pipes may be used instead.
 
-WebView2 will be Windows only.
+You can change what communication system is used in the client settings.
 
-### Packages
-
-Is only a planned engine, nothing has been done yet.
+![Packages](~/assets/images/articles/user/engines/CommunicationLayer.webp)

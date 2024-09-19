@@ -2,7 +2,7 @@
 
 The <xref:VoltstroStudios.UnityWebBrowser.Core.WebBrowserClient> includes a fair number of [events](https://learn.microsoft.com/en-us/dotnet/standard/events/). You can use these events to listen to certain actions and perform an action. All events are fired on the main Unity thread.
 
-You can subscribe to an even like so:
+You can subscribe to an event like so:
 
 ```csharp
 public class UWBPrjDemo : MonoBehaviour

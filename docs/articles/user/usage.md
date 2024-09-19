@@ -2,15 +2,6 @@
 
 Alright, lets get to actually using UWB.
 
-## Platform Support
-
-UWB aims to support all desktop platforms (Windows, Linux, MacOS). The core currently does support all desktop platforms, however you will have to factor in what engine you want to use. Each engine has their own different platform support. See the [engine page](engines.md) for each engine's platform support.
-
-> [!WARNING]
-> UWB does **NOT** support [IL2CPP](https://docs.unity3d.com/Manual/IL2CPP.html). This is because UWB requires launching a separate process, which uses System.Diagnostics.Process API that [IL2CPP doesn't support](https://docs.unity3d.com/2021.3/Documentation/Manual/ScriptingRestrictions.html).
->
-> UWB does however support being code trimmed.
-
 ## Components
 
 By default, UWB provides two different components for handling web viewing from a [Raw Image](https://docs.unity3d.com/2021.3/Documentation/Manual/script-RawImage.html):
@@ -22,13 +13,23 @@ While both of these components are fundamentally the same (they both inherit fro
 
 A <xref:VoltstroStudios.UnityWebBrowser.WebBrowserUIControls> component is also provided, to wrap around some methods provided in <xref:VoltstroStudios.UnityWebBrowser.Core.WebBrowserClient> and expose them to Unity's UI system.
 
+## Basic Setup
+
+At a bare minimum, you will need a gameobject with a raw image component and either a <xref:VoltstroStudios.UnityWebBrowser.WebBrowserUIBasic> or <xref:VoltstroStudios.UnityWebBrowser.WebBrowserUIFull> component attached. Both components need to live on the same game object.
+
+Once added, configure options with an engine, a communication layer and an input handler, and you should be ready to go.
+
+![Basic Setup](~/assets/images/articles/user/usage/BasicSetup.webp)
+
+If you are still having difficulties setting up the components, [take a look at the sample](#samples).
+
 ## Options
 
 Most options that you will ever need is in the <xref:VoltstroStudios.UnityWebBrowser.Core.WebBrowserClient>, which is the core class for interfacing with UWB.
 
-A lot options are exposed in the editor.
+A lot of options are exposed in the editor.
 
-![Web Browser Basic](~/assets/images/articles/user/usage/UWBOptions.webp)
+![Options](~/assets/images/articles/user/usage/UWBOptions.webp)
 
 The options are all very self-explanatory. If you need more info about one, hover over it for it's tooltip. Some options are explained in more details further along in the docs.
 

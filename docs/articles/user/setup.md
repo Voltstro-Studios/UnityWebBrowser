@@ -1,6 +1,6 @@
 # Setup 
 
-We first need to setup your project for UWB.
+Welcome! To start using UWB in your project, there is first some initial setup that needs to be done first.
 
 ## Prerequisites
 
@@ -10,39 +10,53 @@ Unity 2021.3.x
 
 Newer Unity versions should work, but are untested!
 
-## Registry Setup
+## Platform Support
 
-To install UWB, the Voltstro UPM registry needs to be added to your project.
+At a base level, UWB supports all major desktop platforms (Windows, Linux and MacOS). However, different engines may have different platform support. Platform different engines support are listed in the [engines section](engines.md).
 
-To setup the registry with your project, [see here](https://github.com/Voltstro/VoltstroUPM#setup). The Voltstro UPM page also lists some other info that you may be interested in.
+> [!WARNING]
+> UWB does **NOT** support [IL2CPP](https://docs.unity3d.com/Manual/IL2CPP.html). This is because UWB requires launching a separate process, which uses System.Diagnostics.Process API that [IL2CPP doesn't support](https://docs.unity3d.com/2021.3/Documentation/Manual/ScriptingRestrictions.html).
+>
+> UWB does however support being code trimmed.
+
+## VoltUPM Setup
+
+VoltUPM is a Unity registry that we provide for hosting some of our packages, including all of UWB's packages. To use it, your project needs to be configured to use the VoltUPM registry.
+
+To setup the registry with your project, [see here](https://github.com/Voltstro/VoltstroUPM#setup). The VoltUPM page also lists some other info that you may be interested in.
 
 **HOWEVER**, an additional scope needs to be added. You need to make sure `com.cysharp.unitask` is added (more details are provided in the [UniTask part](#unitask)). Once you are done configuring your projects registries, your configuration should look like:
 
 ![Registry](~/assets/images/articles/user/setup/Registry.webp)
 
 > [!NOTE]
-> If are using [UnityNuGet](https://github.com/xoofx/UnityNuGet), and you choose not to use the Voltstro UPM as a `org.nuget.*` scope mirror, then don't have the `org.nuget` scope defined for the Voltstro UPM.
+> If you are using [UnityNuGet](https://github.com/xoofx/UnityNuGet), and you choose not to use VoltUPM as a `org.nuget.*` scope mirror, then don't have the `org.nuget` scope defined for VoltUPM.
 
 ### UniTask
 
-> [!TIP]
-> You are not already using UniTask, you can [skip this part](#installation).
-
-The reason why we need to add the additional `com.cysharp.unitask` scope to VoltstroUPM is because UWB depends on [UniTask](https://github.com/Cysharp/UniTask). VoltstroUPM does provide a mirror copy (from OpenUPM) of UniTask,
-however you may already have UniTask installed via [OpenUPM](https://openupm.com/packages/com.cysharp.unitask/), or via [Git](https://github.com/Cysharp/UniTask#install-via-git-url). If you do have it installed already,
-and you don't want to use VoltstroUPM's mirror of it, then DO NOT define the additional scope as apart of VoltstroUPM.
+The reason why we need to add the additional `com.cysharp.unitask` scope to VoltUPM is because UWB depends on [UniTask](https://github.com/Cysharp/UniTask). VoltUPM does provide a mirror copy of UniTask (from OpenUPM),
+however you may already have UniTask installed either via [OpenUPM](https://openupm.com/packages/com.cysharp.unitask/), or via [Git](https://github.com/Cysharp/UniTask#install-via-git-url). If you do have it installed already,
+and you don't want to use VoltUPM's mirror of it, then DO NOT define the additional scope as apart of VoltUPM.
 
 > [!WARNING]
 > If you already have UniTask installed via Git, please make sure it is the latest version!
 
-## Installation
+## Packages Installation
 
-Once you have your registries setup, you can install the packages via UPM GUI.
+Once you have VoltUPM registry added to your project, you can install the packages via the Unity package manager GUI.
 
 ![Packages](~/assets/images/articles/user/setup/Packages.webp)
 
-You will need the core "Unity Web Browser" package (`dev.voltstro.unitywebbrowser`). An engine package (and it's engine native package) is also required. For more details on what engines are available and their packages, see the [engines section](engines.md).
+To know what packages you need, checkout the [packages section](packages.md).
 
-For more information on the different packages, see the [packages section](packages.md).
+### Standard Loadout
 
-Once you are ready, you can move onto the [usage section](usage.md).
+Most developers will probably only need the 'Core' package, and a single engine with it's native Windows binaries. A basic installation might look like this.
+
+![Packages](~/assets/images/articles/user/packages/StandardPackages.webp)
+
+If you plan on providing builds of your game for Linux and MacOS, install their native engine packages as well.
+
+## Usage
+
+Once you have all the required packages that you might need, you can move onto the [usage section](usage.md).

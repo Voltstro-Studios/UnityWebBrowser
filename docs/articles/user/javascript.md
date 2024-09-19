@@ -1,5 +1,7 @@
 # JavaScript
 
+UWB supports JS interop, allowing both the core (Unity) to call JS, as well the JS side to invoke .NET methods using a system in UWB called "JS Methods".
+
 ## Executing JS
 
 You can execute JS in the browser using the <xref:VoltstroStudios.UnityWebBrowser.Core.WebBrowserClient.ExecuteJs(System.String)> method. The method takes in a string containing your full JS code, and executes it on the current page loaded in the browser.
@@ -14,7 +16,7 @@ Which will result in the log message being logged out:
 
 ## JS Methods
 
-JS methods are a way of calling .NET methods from JS code. JS methods are invoked on the JS side by calling `uwb.ExecuteJsMethod(<method name>, arguments);`. The `ExecuteJsMethod` function, on success, will immediately return `true`.
+JS methods are a way of calling .NET methods from JS code. JS methods are invoked on the JS side by calling the `uwb.ExecuteJsMethod(<method name>, arguments);` function. The `ExecuteJsMethod` function, on success, will immediately return `true`.
 
 ### Argument Data Types
 
