@@ -1,9 +1,9 @@
 {
   "name": "dev.voltstro.unitywebbrowser.unix-support",
   "displayName": "Unity Web Browser Unix Support",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "unity": "2021.3",
-  "description": "Additional requirement for UWB on Unix systems (Linux & MacOS).",
+  "description": "Unix Support package is no longer needed and is now deprecated.",
   "author": {
     "name": "Voltstro",
     "email": "me@voltstro.dev",
@@ -12,9 +12,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git"
-  },
-  "dependencies": {
-    "dev.voltstro.nuget.mono.unix": "1.0.0"
   },
   "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
   "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",

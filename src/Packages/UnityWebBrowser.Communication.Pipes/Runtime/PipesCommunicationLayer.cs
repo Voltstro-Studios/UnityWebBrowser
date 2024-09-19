@@ -5,7 +5,7 @@
 
 using UnityEngine;
 using VoltRpc.Communication;
-using VoltstroStudios.UnityWebBrowser.Communication.Pipes.Base;
+using VoltRpc.Communication.Pipes;
 
 namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes
 {
@@ -27,7 +27,7 @@ namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes
 
         public override Client CreateClient()
         {
-            return new PipesClient(inPipeName, connectionTimeout, Client.DefaultBufferSize);
+            return new PipesClient(inPipeName);
         }
 
         public override Host CreateHost()
@@ -35,11 +35,11 @@ namespace VoltstroStudios.UnityWebBrowser.Communication.Pipes
             return new PipesHost(outPipeName);
         }
 
-        public override void GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation)
+        public override void GetIpcSettings(out object outLocation, out object inLocation, out string layerName)
         {
             outLocation = outPipeName;
             inLocation = inPipeName;
-            assemblyLocation = typeof(EnginePipesCommunicationLayer).Assembly.Location;
+            layerName = "Pipes";
         }
     }
 }

@@ -24,4 +24,4 @@ Here are some common questions we get. As time goes on, and we get asked more co
 
 **Q**: Does UWB support mobile or WebGl?
 
-**A**: UWB does not support any other platform that is not a desktop platform (Windows, Linux).
+**A**: UWB does not support any other platform that is not a desktop platform (Windows, Linux & MacOS).

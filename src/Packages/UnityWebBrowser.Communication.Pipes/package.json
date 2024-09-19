@@ -1,9 +1,9 @@
 {
   "name": "dev.voltstro.unitywebbrowser.communication.pipes",
   "displayName": "Unity Web Browser Pipes Communication",
-  "version": "1.0.1",
-  "unity": "2021.3",
   "description": "Adds support to use pipes in UWB.",
+  "version": "2.2.0",
+  "unity": "2021.3",
   "author": {
     "name": "Voltstro",
     "email": "me@voltstro.dev",
@@ -13,11 +13,12 @@
     "type": "git",
     "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git"
   },
-  "dependencies": {
-    "dev.voltstro.unitywebbrowser": "2.0.0"
-  },
   "hideInEditor": false,
-  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
-  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
-  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md"
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser": "2.2.0",
+    "org.nuget.voltrpc.communication.pipes": "3.1.0"
+  }
 }

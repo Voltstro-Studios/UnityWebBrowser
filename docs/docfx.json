@@ -7,6 +7,9 @@
                     "src": "../src/Packages/UnityWebBrowser",
                     "files": [
                         "**/*.cs"
+                    ],
+                    "exclude": [
+                        "Samples~/**"
                     ]
                 },
                 {
@@ -67,7 +70,8 @@
         ],
         "xref": [
             "https://github.com/dotnet/docfx/raw/main/.xrefmap.json",
-            "https://normanderwan.github.io/UnityXrefMaps/2021.3/xrefmap.yml"
+            "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/2021.3/xrefmap.yml",
+            "https://voltstro-studios.gitlab.io/UnityDocs/UnityXrefMaps/pkgs/com.unity.ugui@1.0/xrefmap.yml"
         ],
         "dest": "_site"
     }

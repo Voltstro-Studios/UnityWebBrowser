@@ -4,6 +4,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2024-09-20
+
+### Added
+
+- Added MacOS support (x64, arm64)
+- Added CEF engine sandboxing (Windows, MacOS)
+- Added remote debugging allowed origins
+- Added CEF Event flags support (allows dragging)
+- Added `UWB_DISABLE_POSTPROCESSOR` define to UWB's postprocessor
+
+### Changed
+
+- Bump deps
+- Updated CEF to 128.4.9
+- CEF engine gets compiled using .NET Native AOT
+- Updated logging tags
+- Communication layers are loaded by name instead of assemblies
+- Update pipes package to use VoltRpc.Communication.Pipes package, instead of embedding
+- Mouse click events will always send `clickCount` with at least a value of 1
+- Changed control of engine pathing from being fixed (hardcoded) to being controlled by the `Engine` scriptable object
+- Improve copying in engine build post-processor
+- Change TCP timeouts to max allowed (#300)
+- (Dev) Build all projects in CI
+- (Dev) Change builds scripts to Python
+
+### Deprecated
+
+- Unix Support Package (`dev.voltstro.unitywebbrowser.unix-support`) - Packages should include the right execute permission from the get-go
+- `CommunicationLayer.connectionTimeout` - Timeouts are now set to max
+- `Engine.engineFileLocation` - Replaced with `Engine.engineEditorLocation`
+- `Engine.EngineFilesNotFoundError` - No longer needed
+- `EngineManager.GetEngineDirectory` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineDirectory` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineProcessFullPath` - Fetching of engine paths is now handled by the engine class
+- `EngineManager.GetEngineProcessFullPath` - Fetching of engine paths is now handled by the engine class
+- `WebBrowserUtils.GetBrowserEnginePath` - Fetching of engine paths is now handled by the engine class
+- `WebBrowserUtils.GetBrowserEngineProcessPath` - Fetching of engine paths is now handled by the engine class
+
+### Fixed
+
+- Fixed select popups not working (#314)
+- Fixed keyboard events not firing (#335)
+
 ## [2.1.1] - 2024-03-22
 
 ### Added

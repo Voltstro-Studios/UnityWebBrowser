@@ -1,0 +1,130 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="../../Imports/NativeDefines.props"/>
+    <Import Project="../../Imports/Properties.props"/>
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutDir>../bin/$(Configuration)/</OutDir>
+
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\ThirdParty\CefGlue\CefGlue\CefGlue.csproj"/>
+        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj"/>
+        <ProjectReference Include="..\..\VoltstroStudios.UnityWebBrowser.Shared\VoltstroStudios.UnityWebBrowser.Shared.csproj"/>
+    </ItemGroup>
+
+    <!-- We need to copy different files depending on the OS -->
+    <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Release\*.dll" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Resources\*.pak" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Release\*.bin" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Resources\*.dat" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Release\*.json" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\LICENSE.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>LICENSE.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\README.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>README.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Resources\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+    </ItemGroup>
+
+    <!-- Files we need on Linux -->
+    <ItemGroup Condition="'$(IsLinuxBuild)'=='true'">
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.so" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.so.1" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Resources\*.pak" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.bin" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.dat" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.json" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\LICENSE.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>LICENSE.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\README.txt" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>README.CEF.txt</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Resources\locales\*.pak" Link="Libs/locales/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>locales/%(Filename)%(Extension)</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
+    </ItemGroup>
+    
+    <Import Project="../../Imports/NatvieDefines.targets"/>
+
+</Project>

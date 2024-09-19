@@ -137,6 +137,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The port to use for remote debugging")] [Range(1024, 65353)]
         public uint remoteDebuggingPort = 9022;
+
+        /// <summary>
+        ///     Origins that are allowed to access remote debugging when <see cref="remoteDebugging"/> is enabled
+        /// </summary>
+        [Tooltip("Origins that are allowed to access remote debugging when remoteDeubgging is enabled")]
+        public string[] remoteDebuggingAllowedOrigins = new[] { "http://127.0.0.1:9022" };
         
         /// <summary>
         ///     Manager for JS methods
@@ -286,7 +292,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
             
             //Get the path to the UWB process we are using and make sure it exists
-            string browserEnginePath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
+            string browserEnginePath = engine.GetEngineAppPath(WebBrowserUtils.GetRunningPlatform());
             logger.Debug($"Starting browser engine process from '{browserEnginePath}'...");
 
             if (!File.Exists(browserEnginePath))
@@ -337,14 +343,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 out string assemblyLocation);
             if (assemblyLocation != null)
             {
-                if (!File.Exists(assemblyLocation))
-                {
-                    logger.Error("Failed to find provided communication layer assembly!");
-                    throw new FileNotFoundException("Failed to find provided communication layer assembly!");
-                }
-
-                argsBuilder.AppendArgument("comms-layer-path", assemblyLocation, true);
-                logger.Debug($"Using communication layer assembly at '{assemblyLocation}'.");
+                argsBuilder.AppendArgument("comms-layer-name", assemblyLocation, true);
+                logger.Debug($"Using communication layer of '{assemblyLocation}'.");
             }
 
             argsBuilder.AppendArgument("in-location", inLocation, true);
@@ -368,7 +368,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
             //Setup remote debugging
             if (remoteDebugging)
+            {
                 argsBuilder.AppendArgument("remote-debugging", remoteDebuggingPort);
+                argsBuilder.AppendArgument("remote-debugging-allowed-origins", string.Join(",", remoteDebuggingAllowedOrigins));
+            }
 
             //Setup proxy
             argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);

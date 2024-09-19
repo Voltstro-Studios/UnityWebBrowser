@@ -56,9 +56,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 PointerEventData.InputButton.Middle => MouseClickType.Middle,
                 _ => throw new ArgumentOutOfRangeException()
             };
+            
+            int clickCount = eventData.clickCount > 0 ? eventData.clickCount : 1;
 
             if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Down);
+                browserClient.SendMouseClick(pos, clickCount, clickType, MouseEventType.Down);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -89,9 +91,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 PointerEventData.InputButton.Middle => MouseClickType.Middle,
                 _ => throw new ArgumentOutOfRangeException()
             };
+            
+            int clickCount = eventData.clickCount > 0 ? eventData.clickCount : 1;
 
             if (GetMousePosition(out Vector2 pos))
-                browserClient.SendMouseClick(pos, eventData.clickCount, clickType, MouseEventType.Up);
+                browserClient.SendMouseClick(pos, clickCount, clickType, MouseEventType.Up);
         }
 
         protected override void OnStart()

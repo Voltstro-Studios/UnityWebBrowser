@@ -1,23 +1,23 @@
 {
-  "hideInEditor": false,
-  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/changelog/",
-  "description": "CEF Engine for Unity Web Browser",
-  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/",
-  "version": "2.1.1-122.1.13",
-  "author": {
-    "email": "me@voltstro.dev",
-    "url": "https://voltstro.dev",
-    "name": "Voltstro"
-  },
+  "name": "dev.voltstro.unitywebbrowser.engine.cef",
+  "displayName": "Unity Web Browser CEF Engine",
+  "description": "CEF engine for Unity Web Browser.",
+  "version": "2.2.0-128.4.9",
   "unity": "2021.3",
-  "dependencies": {
-    "dev.voltstro.unitywebbrowser": "2.1.1"
+  "author": {
+    "name": "Voltstro",
+    "email": "me@voltstro.dev",
+    "url": "https://voltstro.dev"
   },
-  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/Voltstro-Studios/UnityWebBrowser.git"
   },
-  "name": "dev.voltstro.unitywebbrowser.engine.cef",
-  "displayName": "Unity Web Browser CEF Engine"
+  "hideInEditor": false,
+  "changelogUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/changelog/",
+  "documentationUrl": "https://projects.voltstro.dev/UnityWebBrowser/latest/articles/user/engines/#cef-engine",
+  "licensesUrl": "https://github.com/Voltstro-Studios/UnityWebBrowser/blob/master/LICENSE.md",
+  "dependencies": {
+    "dev.voltstro.unitywebbrowser": "2.2.0"
+  }
 }

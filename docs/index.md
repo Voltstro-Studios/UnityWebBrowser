@@ -16,19 +16,25 @@
     <section>
         <h2>Easy installation with UPM</h2>
         <div class="content">
-            <p>Add the custom registry to your Unity project, and then install like any other Unity package.</p>
+            <p>Add the custom registry to your Unity project, and then install and manage like any other Unity package</p>
         </div>
     </section>
     <section>
         <h2>Multi-Platform Desktop Support</h2>
         <div class="content">
-            <p>Supports Windows and Linux Natively</p>
+            <p>Supports Windows, Linux and MacOS natively</p>
         </div>
     </section>
     <section>
         <h2>API to interact with the web engine</h2>
         <div class="content">
             <p>The provided UWB API allows for easily interacting with the engine</p>
+        </div>
+    </section>
+    <section>
+        <h2>JS Interop</h2>
+        <div class="content">
+            <p>Both be able to call JS from Unity, or have JS call your .NET methods</p>
         </div>
     </section>
     <section>

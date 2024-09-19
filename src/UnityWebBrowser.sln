@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef", "UnityWebBrowser.Engine.Cef\UnityWebBrowser.Engine.Cef.csproj", "{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef", "UnityWebBrowser.Engine.Cef\Main\UnityWebBrowser.Engine.Cef.csproj", "{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue", "ThirdParty\CefGlue\CefGlue\CefGlue.csproj", "{703FF300-34B9-48D4-A5D6-E741F48D5F95}"
 EndProject
@@ -25,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltstroStudios.UnityWebBrowser.Engine.Shared", "VoltstroStudios.UnityWebBrowser.Engine.Shared\VoltstroStudios.UnityWebBrowser.Engine.Shared.csproj", "{2AC661BC-6119-49AF-876C-52F756B10E42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoltstroStudios.UnityWebBrowser.Tests", "VoltstroStudios.UnityWebBrowser.Tests\VoltstroStudios.UnityWebBrowser.Tests.csproj", "{A96CD9A3-9F63-4BDB-91DA-227759EABE99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef.SubProcess", "UnityWebBrowser.Engine.Cef\SubProcess\UnityWebBrowser.Engine.Cef.SubProcess.csproj", "{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityWebBrowser.Engine.Cef.Shared", "UnityWebBrowser.Engine.Cef\Shared\UnityWebBrowser.Engine.Cef.Shared.csproj", "{BC675B69-6047-4300-85A7-EA96364D11B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,18 @@ Global
 		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.ReleaseUnity|Any CPU.ActiveCfg = Release|Any CPU
 		{A96CD9A3-9F63-4BDB-91DA-227759EABE99}.ReleaseUnity|Any CPU.Build.0 = Release|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.ReleaseUnity|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE}.ReleaseUnity|Any CPU.Build.0 = Debug|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.ReleaseUnity|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC675B69-6047-4300-85A7-EA96364D11B9}.ReleaseUnity|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,5 +91,7 @@ Global
 		{703FF300-34B9-48D4-A5D6-E741F48D5F95} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
 		{6CBD8A48-C470-4C2E-8CE6-A48A75C64A46} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
 		{2AC661BC-6119-49AF-876C-52F756B10E42} = {EED92CF1-3876-4F9B-BC3C-531156F5FA37}
+		{6C27FD7F-FD3A-4846-8705-ABFA1AB179EE} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
+		{BC675B69-6047-4300-85A7-EA96364D11B9} = {E02545D4-75BA-47FA-A075-7D43750FA7A7}
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,9 @@
 - name: FAQ
   href: faq.md
 
+- name: Contributing
+  href: contributing.md
+
 - name: User
   items:
     - name: Setup
@@ -20,6 +23,8 @@
       href: user/javascript.md
     - name: Client Events
       href: user/events.md
+    - name: Player Build
+      href: user/player-build.md
 
 - name: Developer
   items:
@@ -27,7 +32,11 @@
       href: dev/dev-guide.md
     - name: Setup
       href: dev/setup.md
+    - name: Dev Scripts
+      href: dev/dev-scripts.md
     - name: How Things Work
       href: dev/how-things-work.md
     - name: Project Layout
       href: dev/project-layout.md
+    - name: Publishing
+      href: dev/publishing.md

@@ -3,7 +3,6 @@
     "rootNamespace": "VoltstroStudios.UnityWebBrowser",
     "references": [
         "VoltstroStudios.NativeArraySpanExtensions",
-        "VoltstroStudios.UnityWebBrowser.UnixSupport",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "UniTask"
@@ -36,7 +35,6 @@
     "precompiledReferences": [
         "VoltstroStudios.UnityWebBrowser.Shared.dll",
         "VoltRpc.dll",
-        "VoltRpc.Extension.Memory.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,

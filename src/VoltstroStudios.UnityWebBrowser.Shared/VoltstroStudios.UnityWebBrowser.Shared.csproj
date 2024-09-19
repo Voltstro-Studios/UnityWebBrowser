@@ -16,6 +16,8 @@
     <ItemGroup>
         <PackageReference Include="VoltRpc" Version="3.2.0" />
         <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.3.0" />
+
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
     <!-- Create debug symbols since this will be shared with Unity as well -->
@@ -39,5 +41,9 @@
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).xml" />
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).pdb" DestinationFiles="../Packages/UnityWebBrowser/Plugins/$(AssemblyName).pdb" />
     </Target>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
 
 </Project>

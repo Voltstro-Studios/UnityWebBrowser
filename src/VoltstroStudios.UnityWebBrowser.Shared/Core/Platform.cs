@@ -23,5 +23,10 @@ public enum Platform
     /// <summary>
     ///     MacOS 64-bit (Intel)
     /// </summary>
-    MacOS
+    MacOS,
+    
+    /// <summary>
+    ///     MacOS Arm64
+    /// </summary>
+    MacOSArm64,
 }

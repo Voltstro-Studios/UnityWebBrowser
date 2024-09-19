@@ -48,11 +48,21 @@ public class LaunchArguments
     ///     How to handle popups
     /// </summary>
     public PopupAction PopupAction { get; init; }
+    
+    /// <summary>
+    ///     Disables sandbox
+    /// </summary>
+    internal bool NoSandbox { get; set; }
 
     /// <summary>
     ///     The port to use for remote debugging
     /// </summary>
     public int RemoteDebugging { get; init; }
+    
+    /// <summary>
+    ///     Remote debugging allowed origins
+    /// </summary>
+    public string[] RemoteDebuggingAllowedOrigins { get; init; }
 
     /// <summary>
     ///     The <see cref="Color" /> to use for the background
@@ -88,11 +98,11 @@ public class LaunchArguments
     ///     What is the log severity
     /// </summary>
     public LogSeverity LogSeverity { get; init; }
-
+    
     /// <summary>
-    ///     Path for the assembly containing the communication layer
+    ///     Communication layer name
     /// </summary>
-    internal FileInfo CommunicationLayerPath { get; init; }
+    public string CommunicationLayerName { get; init; }
 
     /// <summary>
     ///     In location (Either the pipe name or port)

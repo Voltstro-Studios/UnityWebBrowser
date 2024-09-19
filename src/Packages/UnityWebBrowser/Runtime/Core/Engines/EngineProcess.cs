@@ -5,9 +5,11 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using VoltstroStudios.UnityWebBrowser.Core.Engines.Process;
 using VoltstroStudios.UnityWebBrowser.Helper;
 using VoltstroStudios.UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Shared.Core;
 
 namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 {
@@ -31,6 +33,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
             processHandle = new WindowProcess();
 #elif UNITY_STANDALONE_LINUX
             processHandle = new LinuxProcess(logger);
+#elif UNITY_STANDALONE_OSX
+            processHandle = new MacOsProcess();
 #endif
             
             this.engine = engine;
@@ -55,8 +59,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
         /// <param name="onErrorLogEvent"></param>
         public void StartProcess(string arguments, DataReceivedEventHandler onLogEvent, DataReceivedEventHandler onErrorLogEvent)
         {
-            string engineFullProcessPath = WebBrowserUtils.GetBrowserEngineProcessPath(engine);
-            string engineDirectory = WebBrowserUtils.GetBrowserEnginePath(engine);
+            Platform platform = WebBrowserUtils.GetRunningPlatform();
+            string engineFullProcessPath = engine.GetEngineAppPath(platform);
+            string engineDirectory = engine.GetEngineWorkingPath(platform);
             
             logger.Debug($"Process Path: '{engineFullProcessPath}'\nWorking: '{engineDirectory}'");
             logger.Debug($"Arguments: '{arguments}'");

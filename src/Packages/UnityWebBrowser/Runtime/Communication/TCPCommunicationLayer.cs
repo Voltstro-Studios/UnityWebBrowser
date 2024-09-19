@@ -31,20 +31,20 @@ namespace VoltstroStudios.UnityWebBrowser.Communication
         public override Client CreateClient()
         {
             IPEndPoint ipEndPoint = new(IPAddress.Loopback, inPort);
-            return new TCPClient(ipEndPoint, connectionTimeout);
+            return new TCPClient(ipEndPoint, int.MaxValue);
         }
 
         public override Host CreateHost()
         {
             IPEndPoint ipEndPoint = new(IPAddress.Loopback, outPort);
-            return new TCPHost(ipEndPoint);
+            return new TCPHost(ipEndPoint, int.MaxValue, int.MaxValue);
         }
 
-        public override void GetIpcSettings(out object outLocation, out object inLocation, out string assemblyLocation)
+        public override void GetIpcSettings(out object outLocation, out object inLocation, out string layerName)
         {
             outLocation = outPort;
             inLocation = inPort;
-            assemblyLocation = null;
+            layerName = "TCP";
         }
     }
 }

@@ -4,17 +4,14 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
-using System.CommandLine;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using VoltstroStudios.UnityWebBrowser.Shared;
+using Microsoft.Extensions.Logging;
 using VoltstroStudios.UnityWebBrowser.Shared.Communications;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
 using VoltRpc.Communication;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Communications;
-using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core.Logging;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Popups;
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.ReadWriters;
 
@@ -42,16 +39,6 @@ internal abstract class EngineEntryPoint : IDisposable
     /// </summary>
     protected EnginePopupManager PopupManager { get; private set; }
 
-    /// <summary>
-    ///     Is the <see cref="Client" /> side of the connection connected
-    /// </summary>
-    protected bool IsConnected => ipcClient.IsConnected;
-
-    protected abstract bool ShouldInitLogger(LaunchArguments launchArguments, string[] args);
-
-    /// <summary>
-    ///     Do your early init stuff here
-    /// </summary>
     protected abstract void EarlyInit(LaunchArguments launchArguments, string[] args);
 
     /// <summary>
@@ -68,6 +55,12 @@ internal abstract class EngineEntryPoint : IDisposable
     protected abstract void EntryPoint(LaunchArguments launchArguments, string[] args);
 
     /// <summary>
+    ///     <see cref="LoggerManager"/> for creating <see cref="ILogger{TCategoryName}"/>s
+    /// </summary>
+    protected LoggerManager LoggerManagerFactory;
+    private ILogger engineLogger;
+
+    /// <summary>
     ///     Call this in your engine's Program.Main method.
     /// </summary>
     /// <param name="args"></param>
@@ -80,148 +73,32 @@ internal abstract class EngineEntryPoint : IDisposable
         //Arg2: 9 -> SIGKILL (arch/x86/include/uapi/asm/signal.h)
         SysPrctl.prctl(1, 9);
         #endif
-        
-        //We got a lot of arguments
 
-        //Url to start with
-        Option<string> initialUrl = new("-initial-url",
-            () => "https://voltstro.dev",
-            "The initial URL that the browser will first load to");
-
-        //Resolution
-        Option<int> width = new("-width",
-            () => 1920,
-            "The width of the window");
-        Option<int> height = new("-height",
-            () => 1080,
-            "The height of the window");
-
-        //General browser settings
-        Option<bool> javaScript = new("-javascript",
-            () => true,
-            "Enable or disable javascript");
-        Option<bool> webRtc = new("-web-rtc",
-            () => false,
-            "Enable or disable web RTC");
-        Option<bool> localStorage = new("-local-storage",
-            () => true,
-            "Enable or disable local storage");
-        Option<int> remoteDebugging = new("-remote-debugging",
-            () => 0,
-            "If the engine has remote debugging, what port to use (0 for disable)");
-        Option<FileInfo> cachePath = new("-cache-path",
-            () => null,
-            "The path to the cache (null for no cache)");
-        Option<PopupAction> popupAction = new("-popup-action", 
-            () => PopupAction.Ignore,
-            "What action to take when dealing with a popup");
-
-        //Background color
-        Option<string> backgroundColor = new("-background-color",
-            () => "ffffffff",
-            "The color to use for the background");
-
-        //Proxy settings
-        Option<bool> proxyServer = new("-proxy-server",
-            () => true,
-            "Use a proxy server or direct connect");
-        Option<string> proxyUsername = new("-proxy-username",
-            () => null,
-            "The username to use in the proxy auth");
-        Option<string> proxyPassword = new("-proxy-password",
-            () => null,
-            "The password to use in the proxy auth");
-        
-        //Logging
-        Option<FileInfo> logPath = new("-log-path",
-            () => new FileInfo("engine.log"),
-            "The path to where the log file will be");
-        Option<LogSeverity> logSeverity = new("-log-severity",
-            () => LogSeverity.Info,
-            "The severity of the logs");
-
-        //IPC settings
-        Option<FileInfo> communicationLayerPath = new("-comms-layer-path",
-            () => null,
-            "The location of where the dll for the communication layer is. If none is provided then the in-built TCP layer will be used.");
-        Option<string> inLocation = new("-in-location",
-            () => "5555",
-            "In location for IPC (Pipes location or TCP port in TCP mode)");
-        Option<string> outLocation = new("-out-location",
-            () => "5556",
-            "Out location for IPC (Pipes location or TCP port in TCP mode)");
-
-        //Debugging
-        Option<uint> startDelay = new("-start-delay",
-            () => 0,
-            "Delays the starting process. Used for testing reasons.");
-
-        RootCommand rootCommand = new()
+        LaunchArgumentsParser launchArgumentsParser = new();
+        return launchArgumentsParser.Run(args, parsedArgs =>
         {
-            initialUrl,
-            width, height,
-            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
-            backgroundColor,
-            proxyServer, proxyUsername, proxyPassword,
-            logPath, logSeverity,
-            communicationLayerPath, inLocation, outLocation,
-            startDelay
-        };
-        rootCommand.Description =
-            "Unity Web Browser (UWB) Engine - Dedicated process for rendering with a browser engine.";
-        //Some browser engines will launch multiple processes from the same process, they will most likely use custom arguments
-        rootCommand.TreatUnmatchedTokensAsErrors = false;
-
-        //The new version of System.CommandLine is very boiler platey
-        LaunchArgumentsBinder launchArgumentBinder = new(
-            initialUrl,
-            width, height,
-            javaScript, webRtc, localStorage, remoteDebugging, cachePath, popupAction,
-            backgroundColor,
-            proxyServer, proxyUsername, proxyPassword,
-            logPath, logSeverity,
-            communicationLayerPath, inLocation, outLocation,
-            startDelay);
-        rootCommand.SetHandler(parsedArgs =>
-        {
-            if(parsedArgs.StartDelay != 0)
-                Thread.Sleep((int)parsedArgs.StartDelay);
-            
-            if (ShouldInitLogger(parsedArgs, args))
-                Logger.Init(parsedArgs.LogSeverity);
-            
-            ClientControlsActions = new ClientControlsActions();
-            PopupManager = new EnginePopupManager();
-
-            //Run early init
             try
             {
+                //Start logging services
+                LoggerManagerFactory = new LoggerManager(parsedArgs.LogSeverity);
+                engineLogger = LoggerManagerFactory.CreateLogger("Engine");
+            
+                if(parsedArgs.StartDelay != 0)
+                    Thread.Sleep((int)parsedArgs.StartDelay);
+                
+                ClientControlsActions = new ClientControlsActions();
+                PopupManager = new EnginePopupManager();
+                
                 EarlyInit(parsedArgs, args);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in early init!");
-                ShutdownAndExitWithError();
-                return;
-            }
-
-            //Run the entry point
-            try
-            {
+                
                 EntryPoint(parsedArgs, args);
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: Uncaught exception occured in the entry point!");
+                engineLogger.LogCritical(ex, "Uncaught exception occured in the entry point!");
                 ShutdownAndExitWithError();
-                return;
             }
-
-            Logger.Shutdown();
-        }, launchArgumentBinder);
-
-        //Invoke the command line parser and start the handler (the stuff above)
-        return rootCommand.Invoke(args);
+        });
     }
 
     /// <summary>
@@ -233,23 +110,17 @@ internal abstract class EngineEntryPoint : IDisposable
     {
         try
         {
-            Logger.Debug($"{Logger.BaseLoggingTag}: SetupIcp.");
-            
-            ICommunicationLayer communicationLayer;
-            if (arguments.CommunicationLayerPath == null)
+            engineLogger.LogDebug("Doing IPC Setup...");
+
+            //Create communication layer 
+            ICommunicationLayer communicationLayer = arguments.CommunicationLayerName switch
             {
-                //Use TCP
-                Logger.Debug($"{Logger.BaseLoggingTag}: No communication layer provided, using default TCP...");
-                communicationLayer = new TCPCommunicationLayer();
-                Logger.Debug($"{Logger.BaseLoggingTag}: Created default TCP communication layer.");
-            }
-            else
-            {
-                communicationLayer = CommunicationLayerLoader.GetCommunicationLayerFromAssembly(
-                    arguments.CommunicationLayerPath.FullName);
-            }
-            
-            Logger.Debug($"{Logger.BaseLoggingTag}: Created communication layer of type '{communicationLayer.GetType().FullName}'...");
+                "TCP" => new TCPCommunicationLayer(),
+                "Pipes" => new PipesCommunicationLayer(),
+                _ => throw new NullReferenceException("Unknown communication layer!")
+            };
+
+            engineLogger.LogDebug("Created communication layer of type '{communicationLayerName}'...", communicationLayer.GetType().FullName);
 
             try
             {
@@ -258,18 +129,18 @@ internal abstract class EngineEntryPoint : IDisposable
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured setting up the communication layer!");
+                engineLogger.LogError(ex, "An error occured setting up the communication layer!");
                 ShutdownAndExitWithError();
                 return;
             }
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Created host and client from communication layer.");
+            engineLogger.LogDebug($"Created host and client from communication layer.");
 
             //Add type readers
             EngineReadWritersManager.AddTypeReadWriters(ipcHost.TypeReaderWriterManager);
             ipcHost.AddService(typeof(IEngineControls), engineControls);
             ipcHost.AddService(typeof(IPopupClientControls), PopupManager);
-            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on host.");
+            engineLogger.LogDebug("Installed services on host.");
             
             Task.Run(() =>
             {
@@ -279,42 +150,41 @@ internal abstract class EngineEntryPoint : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, $"{Logger.BaseLoggingTag}: An error occured listening on host!");
+                    engineLogger.LogError(ex, "An error occured listening on host!");
                     ShutdownAndExitWithError();
                 }
             });
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Host has started listening.");
+            engineLogger.LogDebug("Host has started listening.");
 
             EngineReadWritersManager.AddTypeReadWriters(ipcClient.TypeReaderWriterManager);
             ipcClient.AddService(typeof(IClientControls));
             ipcClient.AddService(typeof(IPopupEngineControls));
             
-            Logger.Debug($"{Logger.BaseLoggingTag}: Installed services on client.");
+            engineLogger.LogDebug("Installed services on client.");
 
             //Connect the engine (us) back to Unity
             try
             {
                 ipcClient.Connect();
                 
-                Logger.Debug($"{Logger.BaseLoggingTag}: Client has connected back to Unity.");
+                engineLogger.LogDebug("Client has connected back to Unity.");
                 
                 ClientControlsActions.SetIpcClient(ipcClient);
                 PopupManager.SetIpcClient(ipcClient);
             }
             catch (ConnectionFailedException)
             {
-                Logger.Error(
-                    $"{Logger.BaseLoggingTag}: The engine failed to connect back to the Unity client! Client events will not fire!");
+                engineLogger.LogWarning("The engine failed to connect back to the Unity client! Client events will not fire!");
                 ipcClient.Dispose();
                 ipcClient = null;
             }
 
-            Logger.Debug($"{Logger.BaseLoggingTag}: IPC Setup done.");
+            engineLogger.LogDebug("IPC Setup done.");
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, $"{Logger.BaseLoggingTag}: Error setting up IPC!");
+            engineLogger.LogError(ex, "Error setting up IPC!");
         }
     }
 
@@ -329,7 +199,6 @@ internal abstract class EngineEntryPoint : IDisposable
     private void ShutdownAndExitWithError()
     {
         Dispose();
-        Logger.Shutdown();
         Environment.Exit(-1);
     }
 

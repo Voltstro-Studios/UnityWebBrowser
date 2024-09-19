@@ -47,13 +47,13 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
                 JsonLogStructure logStructure = ReadJsonLog(e.Data);
 
                 if (logStructure.Level is LogSeverity.Debug or LogSeverity.Info)
-                    logger.Debug(logStructure.Message);
+                    logger.Debug($"[{logStructure.Category}]: {logStructure.Message}");
                 else if (logStructure.Level == LogSeverity.Warn)
-                    logger.Warn(logStructure.Message);
+                    logger.Warn($"[{logStructure.Category}]: {logStructure.Message}");
                 else if (logStructure.Level == LogSeverity.Error)
-                    logger.Error($"{logStructure.Message}\n{logStructure.Exception}");
+                    logger.Error($"[{logStructure.Category}]: {logStructure.Message}\n{logStructure.Exception}");
                 else if (logStructure.Level == LogSeverity.Fatal)
-                    logger.Error($"{logStructure.Message}\n{logStructure.Exception}");
+                    logger.Error($"[{logStructure.Category}]: {logStructure.Message}\n{logStructure.Exception}");
             }
             catch (Exception ex)
             {

@@ -28,8 +28,10 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<bool> webRtc;
     private readonly Option<bool> localStorage;
     private readonly Option<int> remoteDebugging;
+    private readonly Option<string[]> remoteDebuggingAllowedOrigins;
     private readonly Option<FileInfo> cachePath;
     private readonly Option<PopupAction> popupAction;
+    private readonly Option<bool> noSandbox;
     
     //Background color
     private readonly Option<string> backgroundColor;
@@ -44,7 +46,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<LogSeverity> logSeverity;
     
     //IPC settings
-    private readonly Option<FileInfo> communicationLayerPath;
+    private readonly Option<string> communicationLayerName;
     private readonly Option<string> inLocation;
     private readonly Option<string> outLocation;
 
@@ -53,12 +55,25 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
 
     public LaunchArgumentsBinder(
         Option<string> initialUrl,
-        Option<int> width, Option<int> height,
-        Option<bool> javaScript, Option<bool> webRtc, Option<bool> localStorage, Option<int> remoteDebugging, Option<FileInfo> cachePath, Option<PopupAction> popupAction,
+        Option<int> width,
+        Option<int> height,
+        Option<bool> javaScript,
+        Option<bool> webRtc, 
+        Option<bool> localStorage,
+        Option<int> remoteDebugging,
+        Option<string[]> remoteDebuggingAllowedOrigins,
+        Option<FileInfo> cachePath,
+        Option<PopupAction> popupAction,
+        Option<bool> noSandbox,
         Option<string> backgroundColor,
-        Option<bool> proxyServer, Option<string> proxyUsername, Option<string> proxyPassword,
-        Option<FileInfo> logPath, Option<LogSeverity> logSeverity,
-        Option<FileInfo> communicationLayerPath, Option<string> inLocation, Option<string> outLocation,
+        Option<bool> proxyServer,
+        Option<string> proxyUsername,
+        Option<string> proxyPassword,
+        Option<FileInfo> logPath,
+        Option<LogSeverity> logSeverity,
+        Option<string> communicationLayerName,
+        Option<string> inLocation,
+        Option<string> outLocation,
         Option<uint> startDelay)
     {
         this.initialUrl = initialUrl;
@@ -69,8 +84,10 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.webRtc = webRtc;
         this.localStorage = localStorage;
         this.remoteDebugging = remoteDebugging;
+        this.remoteDebuggingAllowedOrigins = remoteDebuggingAllowedOrigins;
         this.cachePath = cachePath;
         this.popupAction = popupAction;
+        this.noSandbox = noSandbox;
         
         this.backgroundColor = backgroundColor;
         
@@ -81,7 +98,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.logPath = logPath;
         this.logSeverity = logSeverity;
         
-        this.communicationLayerPath = communicationLayerPath;
+        this.communicationLayerName = communicationLayerName;
         this.inLocation = inLocation;
         this.outLocation = outLocation;
 
@@ -100,9 +117,11 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             JavaScript = bindingContext.ParseResult.GetValueForOption(javaScript),
             WebRtc = bindingContext.ParseResult.GetValueForOption(webRtc),
             LocalStorage = bindingContext.ParseResult.GetValueForOption(localStorage),
+            RemoteDebuggingAllowedOrigins = bindingContext.ParseResult.GetValueForOption(remoteDebuggingAllowedOrigins),
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
             PopupAction = bindingContext.ParseResult.GetValueForOption(popupAction),
+            NoSandbox = bindingContext.ParseResult.GetValueForOption(noSandbox),
 
             BackgroundColor = new Color(bindingContext.ParseResult.GetValueForOption(backgroundColor)),
 
@@ -113,7 +132,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             LogPath = bindingContext.ParseResult.GetValueForOption(logPath),
             LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity),
 
-            CommunicationLayerPath = bindingContext.ParseResult.GetValueForOption(communicationLayerPath),
+            CommunicationLayerName = bindingContext.ParseResult.GetValueForOption(communicationLayerName),
             InLocation = bindingContext.ParseResult.GetValueForOption(inLocation),
             OutLocation = bindingContext.ParseResult.GetValueForOption(outLocation),
 
