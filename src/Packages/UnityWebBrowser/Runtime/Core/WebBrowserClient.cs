@@ -217,8 +217,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             set
             {
                 if (HasInitialized)
-                    throw new UwbHasInitializedException(
-                        "You cannot change the log path once the browser engine is connected");
+                    throw new UwbHasInitializedException("You cannot change the log path once UWB has initialized!");
 
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
             }
@@ -241,8 +240,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             set
             {
                 if (HasInitialized)
-                    throw new UwbHasInitializedException(
-                        "You cannot change the cache path once the browser engine is connected");
+                    throw new UwbHasInitializedException("You cannot change the cache path once UWB has initialized!");
 
                 cachePath = value ?? throw new ArgumentNullException(nameof(value));
             }
