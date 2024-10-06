@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updated CEF to 129.0.11
 - CachePath can only be set before HasInitialized
 - LogPath can only be set before HasInitialized
 - Change some path building to use `Path.Combine` instead

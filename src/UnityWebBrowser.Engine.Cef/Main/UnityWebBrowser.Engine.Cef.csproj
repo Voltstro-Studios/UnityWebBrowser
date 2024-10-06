@@ -42,7 +42,6 @@
         <NativeLibrary Include="wbemuuid.lib" />
         <NativeLibrary Include="WindowsApp.lib" />
         <NativeLibrary Include="winmm.lib" />
-
         
         <NativeLibrary Include="comctl32.lib" />
         <NativeLibrary Include="gdi32.lib" />
