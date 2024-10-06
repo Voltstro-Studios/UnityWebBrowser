@@ -53,7 +53,7 @@ To know what packages you need, checkout the [packages section](packages.md).
 
 Most developers will probably only need the 'Core' package, and a single engine with it's native Windows binaries. A basic installation might look like this.
 
-![Packages](~/assets/images/articles/user/packages/StandardPackages.webp)
+![Packages](~/assets/images/articles/user/setup/StandardPackages.webp)
 
 If you plan on providing builds of your game for Linux and MacOS, install their native engine packages as well.
 
