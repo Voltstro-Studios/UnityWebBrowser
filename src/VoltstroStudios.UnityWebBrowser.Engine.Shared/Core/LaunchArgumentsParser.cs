@@ -50,6 +50,10 @@ public sealed class LaunchArgumentsParser
         Option<string[]> remoteDebuggingAllowedOrigins = new("-remote-debugging-allowed-origins",
                         () => new []{"http://127.0.0.1:9022"},
                 "Allowed origins for remote debugging.");
+        Option<bool> incognitoMode =
+            new Option<bool>("-incognito-mode", 
+                () => false,
+                "Run the browser in incognito/private mode");
         Option<FileInfo> cachePath = new("-cache-path",
             () => null,
             "The path to the cache (null for no cache)");
@@ -110,6 +114,7 @@ public sealed class LaunchArgumentsParser
             localStorage,
             remoteDebugging,
             remoteDebuggingAllowedOrigins,
+            incognitoMode,
             cachePath,
             popupAction,
             backgroundColor,
@@ -137,6 +142,7 @@ public sealed class LaunchArgumentsParser
             localStorage,
             remoteDebugging,
             remoteDebuggingAllowedOrigins,
+            incognitoMode,
             cachePath,
             popupAction,
             noSandbox,

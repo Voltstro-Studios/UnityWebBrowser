@@ -103,7 +103,16 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         ///     Enable or disable the cache
         /// </summary>
         [Tooltip("Enable or disable the cache")]
+        [Obsolete("Cache control is no longer used. A cache path will always be used now. To use a incognito/private mode, where no profile-specific data is persisted to disk, set incognitoMode to true.")]
+        [HideInInspector]
         public bool cache = true;
+
+        /// <summary>
+        ///     Enable or disable incognito/private mode.
+        ///     When true, no profile-specific data is persisted to disk, but cache is sill used to persist installation-specific data.
+        /// </summary>
+        [Tooltip("Enable or disable incognito/private mode. When true, no profile-specific data is persisted to disk, but cache is still used to persist installation-specific data.")]
+        public bool incognitoMode;
 
         /// <summary>
         ///     Enable or disable WebRTC
@@ -200,16 +209,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <summary>
         ///     The path that UWB engine will log to
         /// </summary>
-        /// <exception cref="UwbIsConnectedException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="UwbHasInitializedException">Thrown if value is attempted to be changed once UWB has already initialized</exception>
+        /// <exception cref="ArgumentNullException">Thrown is value provide is null</exception>
         public FileInfo LogPath
         {
             get => logPath;
             set
             {
-                if (IsConnected)
-                    throw new UwbIsConnectedException(
-                        "You cannot change the log path once the browser engine is connected");
+                if (HasInitialized)
+                    throw new UwbHasInitializedException("You cannot change the log path once UWB has initialized!");
 
                 logPath = value ?? throw new ArgumentNullException(nameof(value));
             }
@@ -224,20 +232,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// <summary>
         ///     The path to the cache
         /// </summary>
-        /// <exception cref="UwbIsConnectedException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="UwbHasInitializedException">Thrown if value is attempted to be changed once UWB has already initialized</exception>
+        /// <exception cref="ArgumentNullException">Thrown is value provide is null</exception>
         public FileInfo CachePath
         {
             get => cachePath;
             set
             {
-                if (IsConnected)
-                    throw new UwbIsConnectedException(
-                        "You cannot change the cache path once the browser engine is connected");
-
-                if (!cache)
-                    throw new ArgumentException("The cache is disabled!");
+                if (HasInitialized)
+                    throw new UwbHasInitializedException("You cannot change the cache path once UWB has initialized!");
 
                 cachePath = value ?? throw new ArgumentNullException(nameof(value));
             }
@@ -334,7 +337,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             argsBuilder.AppendArgument("background-color", WebBrowserUtils.ColorToHex(backgroundColor));
 
             //Logging
-            LogPath ??= new FileInfo($"{browserEngineMainDir}/{engine.GetEngineExecutableName()}.log");
+            LogPath ??= new FileInfo(Path.Combine(browserEngineMainDir, $"{Path.GetFileNameWithoutExtension(engine.GetEngineExecutableName())}.log"));
             argsBuilder.AppendArgument("log-path", LogPath.FullName, true);
             argsBuilder.AppendArgument("log-severity", logSeverity);
 
@@ -350,12 +353,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             argsBuilder.AppendArgument("in-location", inLocation, true);
             argsBuilder.AppendArgument("out-location", outLocation, true);
 
-            //If we have a cache, set the cache path
-            if (cache)
-            {
-                cachePath ??= new FileInfo($"{browserEngineMainDir}/UWBCache");
-                argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
-            }
+            //Set cache path
+            cachePath ??= new FileInfo(Path.Combine(browserEngineMainDir, "UWBCache"));
+            argsBuilder.AppendArgument("cache-path", cachePath.FullName, true);
+            
+            argsBuilder.AppendArgument("incognito-mode", incognitoMode);
 
             //Popups
             argsBuilder.AppendArgument("popup-action", popupAction, true);
@@ -374,12 +376,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
 
             //Setup proxy
-            argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);
-            if (!string.IsNullOrWhiteSpace(proxySettings.Username))
-                argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
+            if (proxySettings.ProxyServer)
+            {
+                argsBuilder.AppendArgument("proxy-server", true);
+                if (!string.IsNullOrWhiteSpace(proxySettings.Username))
+                    argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
 
-            if (!string.IsNullOrWhiteSpace(proxySettings.Password))
-                argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+                if (!string.IsNullOrWhiteSpace(proxySettings.Password))
+                    argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+            }
 
             //Make sure not to include this, its for testing
 #if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 

@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2024-10-06
+
+### Added
+
+- Added Incognito mode
+
+### Changed
+
+- Updated CEF to 129.0.11
+- CachePath can only be set before HasInitialized
+- LogPath can only be set before HasInitialized
+- Change some path building to use `Path.Combine` instead
+
+### Deprecated
+
+- Cache control is no longer used. A cache path will always be used now. To use a incognito/private mode, where no profile-specific data is persisted to disk, set incognito mode to true.
+
+### Fixed
+
+- Do not pass proxy settings if ProxyServer is false
+- Fix missing icudtl.dat on Linux cef (#346)
+
 ## [2.2.0] - 2024-09-20
 
 ### Added

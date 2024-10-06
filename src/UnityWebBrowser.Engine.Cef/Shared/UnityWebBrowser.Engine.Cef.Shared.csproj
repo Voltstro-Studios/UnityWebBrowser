@@ -94,7 +94,7 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ContentWithTargetPath>
 
-        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Release\*.dat" Link="Libs/%(Filename)%(Extension)">
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\linux64\Resources\*.dat" Link="Libs/%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>%(Filename)%(Extension)</TargetPath>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

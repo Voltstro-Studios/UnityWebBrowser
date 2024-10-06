@@ -68,6 +68,11 @@ public class LaunchArguments
     ///     The <see cref="Color" /> to use for the background
     /// </summary>
     public Color BackgroundColor { get; init; }
+    
+    /// <summary>
+    ///     Browser incognito mode
+    /// </summary>
+    public bool IncognitoMode { get; init; }
 
     /// <summary>
     ///     The path you should use for your cache
