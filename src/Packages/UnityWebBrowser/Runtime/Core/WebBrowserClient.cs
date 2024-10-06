@@ -376,12 +376,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             }
 
             //Setup proxy
-            argsBuilder.AppendArgument("proxy-server", proxySettings.ProxyServer);
-            if (!string.IsNullOrWhiteSpace(proxySettings.Username))
-                argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
+            if (proxySettings.ProxyServer)
+            {
+                argsBuilder.AppendArgument("proxy-server", true);
+                if (!string.IsNullOrWhiteSpace(proxySettings.Username))
+                    argsBuilder.AppendArgument("proxy-username", proxySettings.Username, true);
 
-            if (!string.IsNullOrWhiteSpace(proxySettings.Password))
-                argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+                if (!string.IsNullOrWhiteSpace(proxySettings.Password))
+                    argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+            }
 
             //Make sure not to include this, its for testing
 #if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 

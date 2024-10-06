@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Cache control is no longer used. A cache path will always be used now. To use a incognito/private mode, where no profile-specific data is persisted to disk, set incognito mode to true.
 
+### Fixed
+
+- Do not pass proxy settings if ProxyServer is false
+
 ## [2.2.0] - 2024-09-20
 
 ### Added
