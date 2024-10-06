@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Do not pass proxy settings if ProxyServer is false
+- Fix missing icudtl.dat on Linux cef (#346)
 
 ## [2.2.0] - 2024-09-20
 
