@@ -40,7 +40,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         public static string GetAdditionFilesDirectory()
         {
 #if UNITY_EDITOR
-            return Path.GetFullPath($"{Directory.GetParent(Application.dataPath).FullName}/Library");
+            return Path.GetFullPath(Path.Combine(Directory.GetParent(Application.dataPath)!.FullName, "Library"));
 #elif UNITY_STANDALONE_OSX
             return Application.persistentDataPath;
 #else

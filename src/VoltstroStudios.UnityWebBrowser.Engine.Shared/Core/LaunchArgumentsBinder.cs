@@ -29,6 +29,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<bool> localStorage;
     private readonly Option<int> remoteDebugging;
     private readonly Option<string[]> remoteDebuggingAllowedOrigins;
+    private readonly Option<bool> incognitoMode;
     private readonly Option<FileInfo> cachePath;
     private readonly Option<PopupAction> popupAction;
     private readonly Option<bool> noSandbox;
@@ -62,6 +63,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<bool> localStorage,
         Option<int> remoteDebugging,
         Option<string[]> remoteDebuggingAllowedOrigins,
+        Option<bool> incognitoMode,
         Option<FileInfo> cachePath,
         Option<PopupAction> popupAction,
         Option<bool> noSandbox,
@@ -85,6 +87,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.localStorage = localStorage;
         this.remoteDebugging = remoteDebugging;
         this.remoteDebuggingAllowedOrigins = remoteDebuggingAllowedOrigins;
+        this.incognitoMode = incognitoMode;
         this.cachePath = cachePath;
         this.popupAction = popupAction;
         this.noSandbox = noSandbox;
@@ -119,6 +122,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             LocalStorage = bindingContext.ParseResult.GetValueForOption(localStorage),
             RemoteDebuggingAllowedOrigins = bindingContext.ParseResult.GetValueForOption(remoteDebuggingAllowedOrigins),
             RemoteDebugging = bindingContext.ParseResult.GetValueForOption(remoteDebugging),
+            IncognitoMode = bindingContext.ParseResult.GetValueForOption(incognitoMode),
             CachePath = bindingContext.ParseResult.GetValueForOption(cachePath),
             PopupAction = bindingContext.ParseResult.GetValueForOption(popupAction),
             NoSandbox = bindingContext.ParseResult.GetValueForOption(noSandbox),

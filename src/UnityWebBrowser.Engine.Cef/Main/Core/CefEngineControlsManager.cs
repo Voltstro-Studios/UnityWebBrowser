@@ -118,10 +118,17 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="Exception"></exception>
     public void Init(ClientControlsActions clientControlsActions, EnginePopupManager popupManager)
     {
-        //Do we have a cache or not, if not CEF will run in "incognito" mode.
-        string cachePathArgument = null;
-        if (launchArguments.CachePath != null)
-            cachePathArgument = launchArguments.CachePath.FullName;
+        //Always need a cache path. Should usually be provided
+        string cachePath = launchArguments.CachePath?.FullName;
+        if (cachePath == null)
+        {
+            cachePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            mainLogger.LogWarning("No cache path was set. Using {TempPath} for cache.", cachePath);
+        }
+
+        //Log this as it handy to know
+        if (launchArguments.IncognitoMode)
+            mainLogger.LogInformation("Incognito mode is enabled. No profile-specific data will be persisted to disk.");
 
         //Convert UnityWebBrowser log severity to CefLogSeverity
         CefLogSeverity logSeverity = launchArguments.LogSeverity switch
@@ -159,13 +166,14 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             WindowlessRenderingEnabled = true,
             NoSandbox = launchArguments.NoSandbox,
             LogFile = launchArguments.LogPath.FullName,
-            CachePath = cachePathArgument,
+            CachePath = launchArguments.IncognitoMode ? null : Path.Combine(cachePath, "UserDefaultCache"),
+            RootCachePath = cachePath,
             MultiThreadedMessageLoop = false,
             LogSeverity = logSeverity,
             Locale = "en-US",
             ExternalMessagePump = false,
             RemoteDebuggingPort = launchArguments.RemoteDebugging,
-            PersistSessionCookies = true,
+            //PersistSessionCookies = true,
             //PersistUserPreferences = true,
             ResourcesDirPath = resourcesPath,
             LocalesDirPath = localesPath,
@@ -202,7 +210,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
                      $"\nJS: {launchArguments.JavaScript}" +
                      $"\nLocal Storage: {launchArguments.LocalStorage}" +
                      $"\nBackgroundColor: {suppliedColor}" +
-                     $"\nCache Path: {cachePathArgument}" +
+                     $"\nCache Path: {cachePath}" +
                      $"\nPopup Action: {launchArguments.PopupAction}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
