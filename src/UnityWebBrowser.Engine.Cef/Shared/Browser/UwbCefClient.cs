@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
 using UnityWebBrowser.Engine.Cef.Shared.Browser.Messages;
@@ -289,7 +290,7 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="url"></param>
     public void LoadUrl(string url)
     {
-        browser.GetMainFrame()?.LoadUrl(url);
+        browser.GetMainFrame()!.LoadUrl(url);
     }
 
     /// <summary>
@@ -305,9 +306,12 @@ internal class UwbCefClient : CefClient, IDisposable
     ///     Loads HTML content
     /// </summary>
     /// <param name="html"></param>
-    public void LoadHtml(string html)
+    public unsafe void LoadHtml(string html)
     {
-        browser.GetMainFrame()?.LoadUrl($"data:text/html,{html}");
+        html = CefRuntime.Base64Encode(Encoding.UTF8.GetBytes(html));
+        html = CefRuntime.UriEncode(html, false);
+        
+        browser.GetMainFrame()!.LoadUrl($"data:text/html;base64,{html}");
     }
 
     /// <summary>
@@ -316,7 +320,7 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="js"></param>
     public void ExecuteJs(string js)
     {
-        browser.GetMainFrame()?.ExecuteJavaScript(js, "", 0);
+        browser.GetMainFrame()!.ExecuteJavaScript(js, "", 0);
     }
 
     /// <summary>
