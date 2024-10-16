@@ -158,7 +158,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser": "2.2.0",
+        "dev.voltstro.unitywebbrowser": "2.2.2",
         "org.nuget.voltrpc.communication.pipes": "3.1.0"
       }
     },
@@ -167,7 +167,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser": "2.2.1"
+        "dev.voltstro.unitywebbrowser": "2.2.2"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": {
@@ -175,7 +175,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.1-129.0.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.2-129.0.11"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.macos.arm64": {
@@ -183,7 +183,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.1-129.0.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.2-129.0.11"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.macos.x64": {
@@ -191,7 +191,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.1-129.0.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.2-129.0.11"
       }
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
@@ -199,7 +199,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.1-129.0.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "2.2.2-129.0.11"
       }
     },
     "dev.voltstro.unitywebbrowser.unix-support": {
