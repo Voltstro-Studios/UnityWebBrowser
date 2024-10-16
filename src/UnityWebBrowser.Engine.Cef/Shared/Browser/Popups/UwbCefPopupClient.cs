@@ -22,9 +22,15 @@ public class UwbCefPopupClient : CefClient
     /// </summary>
     /// <param name="proxySettings"></param>
     /// <param name="onShutdown"></param>
-    public UwbCefPopupClient(ProxySettings proxySettings, Action onShutdown)
+    /// <param name="ignoreSslErrors"></param>
+    /// <param name="ignoreSslErrorsDomains"></param>
+    public UwbCefPopupClient(
+        ProxySettings proxySettings,
+        Action onShutdown,
+        bool ignoreSslErrors,
+        string[] ignoreSslErrorsDomains)
     {
-        requestHandler = new UwbCefRequestHandler(proxySettings);
+        requestHandler = new UwbCefRequestHandler(proxySettings, ignoreSslErrors, ignoreSslErrorsDomains);
         lifeSpanHandler = new UwbCefPopupLifeSpanHandler(onShutdown);
     }
 

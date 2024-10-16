@@ -3,6 +3,9 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+using System.Linq;
+using System.Threading.Tasks;
+using UnityWebBrowser.Engine.Cef.Core;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using Xilium.CefGlue;
 
@@ -14,10 +17,14 @@ namespace UnityWebBrowser.Engine.Cef.Shared.Browser;
 public class UwbCefRequestHandler : CefRequestHandler
 {
     private readonly ProxySettings proxySettings;
+    private readonly bool ignoreSslErrors;
+    private readonly string[] ignoreSslErrorsDomains;
 
-    public UwbCefRequestHandler(ProxySettings proxySettings)
+    public UwbCefRequestHandler(ProxySettings proxySettings, bool ignoreSslErrors, string[] ignoreSslErrorsDomains)
     {
         this.proxySettings = proxySettings;
+        this.ignoreSslErrors = ignoreSslErrors;
+        this.ignoreSslErrorsDomains = ignoreSslErrorsDomains;
     }
 
     protected override CefResourceRequestHandler GetResourceRequestHandler(CefBrowser browser, CefFrame frame,
@@ -34,5 +41,23 @@ public class UwbCefRequestHandler : CefRequestHandler
         if (isProxy) callback.Continue(proxySettings.Username, proxySettings.Password);
 
         return base.GetAuthCredentials(browser, originUrl, isProxy, host, port, realm, scheme, callback);
+    }
+
+    protected override bool OnCertificateError(CefBrowser browser, CefErrorCode certError, string requestUrl, CefSslInfo sslInfo,
+        CefCallback callback)
+    {
+        if (ignoreSslErrors && ignoreSslErrorsDomains != null)
+        {
+            requestUrl = requestUrl!.ToLower();
+            bool contains = ignoreSslErrorsDomains.Any(x => requestUrl.Contains(x));
+            if(contains)
+                callback!.Continue();
+            else
+                callback!.Cancel();
+            
+            return true;
+        }
+
+        return false;
     }
 }

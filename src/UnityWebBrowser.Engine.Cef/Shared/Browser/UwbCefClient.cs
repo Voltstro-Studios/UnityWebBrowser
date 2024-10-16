@@ -46,6 +46,8 @@ internal class UwbCefClient : CefClient, IDisposable
     private UwbCefPopupClient devToolsClient;
 
     //Dev Tools
+    private readonly bool ignoreSslErrors;
+    private readonly string[] ignoreSslErrorsDomains;
     private CefWindowInfo devToolsWindowInfo;
     
     //State of mouse click events that needs to be persisted for dragging
@@ -59,6 +61,8 @@ internal class UwbCefClient : CefClient, IDisposable
         PopupAction popupAction,
         EnginePopupManager popupManager,
         ProxySettings proxySettings,
+        bool ignoreSslErrors,
+        string[] ignoreSslErrorsDomains,
         ClientControlsActions clientControlsActions,
         ILogger mainLogger,
         ILogger browserConsoleLogger)
@@ -72,15 +76,18 @@ internal class UwbCefClient : CefClient, IDisposable
         //Setup our handlers
         loadHandler = new UwbCefLoadHandler(this);
         renderHandler = new UwbCefRenderHandler(this, size);
-        lifespanHandler = new UwbCefLifespanHandler(popupAction, popupManager, proxySettings);
+        lifespanHandler = new UwbCefLifespanHandler(popupAction, popupManager, proxySettings, ignoreSslErrors, ignoreSslErrorsDomains);
         lifespanHandler.AfterCreated += cefBrowser =>
         {
             browser = cefBrowser;
             browserHost = cefBrowser.GetHost();
         };
         displayHandler = new UwbCefDisplayHandler(this, mainLogger, browserConsoleLogger);
-        requestHandler = new UwbCefRequestHandler(proxySettings);
+        requestHandler = new UwbCefRequestHandler(proxySettings, ignoreSslErrors, ignoreSslErrorsDomains);
         contextMenuHandler = new UwbCefContextMenuHandler();
+
+        this.ignoreSslErrors = ignoreSslErrors;
+        this.ignoreSslErrorsDomains = ignoreSslErrorsDomains;
 
         //Create message types
         messageTypes = new Dictionary<string, IMessageBase>
@@ -306,7 +313,7 @@ internal class UwbCefClient : CefClient, IDisposable
     ///     Loads HTML content
     /// </summary>
     /// <param name="html"></param>
-    public unsafe void LoadHtml(string html)
+    public void LoadHtml(string html)
     {
         html = CefRuntime.Base64Encode(Encoding.UTF8.GetBytes(html));
         html = CefRuntime.UriEncode(html, false);
@@ -351,12 +358,15 @@ internal class UwbCefClient : CefClient, IDisposable
             if (devToolsWindowInfo == null)
             {
                 devToolsWindowInfo = CefWindowInfo.Create();
-                devToolsClient = new UwbCefPopupClient(proxySettings, () =>
-                {
-                    devToolsWindowInfo = null;
-                    devToolsClient = null;
-                    devToolsBrowserSettings = null;
-                });
+                devToolsClient = new UwbCefPopupClient(
+                    proxySettings, () =>
+                    {
+                        devToolsWindowInfo = null;
+                        devToolsClient = null;
+                        devToolsBrowserSettings = null;
+                    },
+                    ignoreSslErrors,
+                    ignoreSslErrorsDomains);
                 devToolsBrowserSettings = new CefBrowserSettings();
             }
 

@@ -41,6 +41,10 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<bool> proxyServer;
     private readonly Option<string> proxyUsername;
     private readonly Option<string> proxyPassword;
+    
+    //Ignore SSL Error Settings
+    private readonly Option<bool> ignoreSslErrors;
+    private readonly Option<string[]> ignoreSslErrorsDomains;
 
     //Logging
     private readonly Option<FileInfo> logPath;
@@ -71,6 +75,8 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<bool> proxyServer,
         Option<string> proxyUsername,
         Option<string> proxyPassword,
+        Option<bool> ignoreSslErrors,
+        Option<string[]> ignoreSslErrorsDomains,
         Option<FileInfo> logPath,
         Option<LogSeverity> logSeverity,
         Option<string> communicationLayerName,
@@ -97,6 +103,9 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.proxyServer = proxyServer;
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
+
+        this.ignoreSslErrors = ignoreSslErrors;
+        this.ignoreSslErrorsDomains = ignoreSslErrorsDomains;
         
         this.logPath = logPath;
         this.logSeverity = logSeverity;
@@ -132,6 +141,9 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             ProxyEnabled = bindingContext.ParseResult.GetValueForOption(proxyServer),
             ProxyUsername = bindingContext.ParseResult.GetValueForOption(proxyUsername),
             ProxyPassword = bindingContext.ParseResult.GetValueForOption(proxyPassword),
+            
+            IgnoreSslErrors = bindingContext.ParseResult.GetValueForOption(ignoreSslErrors),
+            IgnoreSslErrorsDomains = bindingContext.ParseResult.GetValueForOption(ignoreSslErrorsDomains),
             
             LogPath = bindingContext.ParseResult.GetValueForOption(logPath),
             LogSeverity = bindingContext.ParseResult.GetValueForOption(logSeverity),

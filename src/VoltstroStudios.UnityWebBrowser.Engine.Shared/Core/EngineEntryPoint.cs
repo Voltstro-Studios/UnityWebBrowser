@@ -89,6 +89,9 @@ internal abstract class EngineEntryPoint : IDisposable
                 ClientControlsActions = new ClientControlsActions();
                 PopupManager = new EnginePopupManager();
                 
+                if(parsedArgs.IgnoreSslErrors && parsedArgs.IgnoreSslErrorsDomains != null)
+                    engineLogger.LogWarning("Ignore Ssl Errors is enabled! Proceed with caution on these domains: {Domains}", string.Join(", ", parsedArgs.IgnoreSslErrorsDomains));
+                
                 EarlyInit(parsedArgs, args);
                 
                 EntryPoint(parsedArgs, args);

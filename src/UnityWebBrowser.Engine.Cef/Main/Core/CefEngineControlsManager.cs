@@ -222,6 +222,8 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             launchArguments.PopupAction,
             popupManager,
             new ProxySettings(launchArguments.ProxyUsername, launchArguments.ProxyPassword, launchArguments.ProxyEnabled),
+            launchArguments.IgnoreSslErrors,
+            launchArguments.IgnoreSslErrorsDomains,
             clientControlsActions,
             mainLogger,
             browserConsoleLogger);

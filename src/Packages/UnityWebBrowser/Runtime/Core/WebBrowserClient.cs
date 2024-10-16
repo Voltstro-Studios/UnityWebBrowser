@@ -115,11 +115,6 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         public bool incognitoMode;
 
         /// <summary>
-        ///     Enable or disable WebRTC
-        /// </summary>
-        [Tooltip("Enable or disable WebRTC")] public bool webRtc;
-
-        /// <summary>
         ///     Enable or disable local storage
         /// </summary>
         [Tooltip("Enable or disable local storage")]
@@ -134,6 +129,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         ///     Proxy Settings
         /// </summary>
         [Tooltip("Proxy settings")] public ProxySettings proxySettings;
+        
+        /// <summary>
+        ///     Enable or disable WebRTC
+        /// </summary>
+        [Header("Advanced")]
+        [Tooltip("Enable or disable WebRTC")] public bool webRtc;
 
         /// <summary>
         ///     Enable or disable remote debugging
@@ -158,6 +159,18 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("Manager for JS methods")]
         public JsMethodManager jsMethodManager = new();
+
+        /// <summary>
+        ///     Will ignore SSL errors on provided domains in <see cref="ignoreSslErrorsDomains"/>
+        /// </summary>
+        [Tooltip("Will ignore SSL errors on provided domains in ignoreSSLErrorsDomains")]
+        public bool ignoreSslErrors = false;
+
+        /// <summary>
+        ///     Domains to ignore SSL errors on if <see cref="ignoreSslErrors"/> is enabled
+        /// </summary>
+        [Tooltip("Domains to ignore SSL errors on if ignoreSSLErrors is enabled")]
+        public string[] ignoreSslErrorsDomains;
 
         /// <summary>
         ///     The <see cref="CommunicationLayer" /> to use
@@ -384,6 +397,13 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
                 if (!string.IsNullOrWhiteSpace(proxySettings.Password))
                     argsBuilder.AppendArgument("proxy-password", proxySettings.Password, true);
+            }
+            
+            //Ignore ssl errors
+            if (ignoreSslErrors)
+            {
+                argsBuilder.AppendArgument("ignore-ssl-errors", true);
+                argsBuilder.AppendArgument("ignore-ssl-errors-domains", string.Join(",", ignoreSslErrorsDomains));
             }
 
             //Make sure not to include this, its for testing
