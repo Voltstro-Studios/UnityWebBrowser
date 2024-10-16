@@ -24,12 +24,20 @@ public class UwbCefEnginePopupInfo : EnginePopupInfo
     /// </summary>
     /// <param name="proxySettings"></param>
     /// <param name="popupManager"></param>
-    public UwbCefEnginePopupInfo(EnginePopupManager popupManager, ProxySettings proxySettings, ref CefClient client)
+    /// <param name="client"></param>
+    /// <param name="ignoreSslErrors"></param>
+    /// <param name="ignoreSslErrorsDomains"></param>
+    public UwbCefEnginePopupInfo(
+        EnginePopupManager popupManager,
+        ProxySettings proxySettings,
+        ref CefClient client,
+        bool ignoreSslErrors,
+        string[] ignoreSslErrorsDomains)
     {
         this.popupManager = popupManager;
 
         //Create a new client for it, and properly create the window
-        popupClient = new UwbCefPopupClient(proxySettings, DisposeNoClose);
+        popupClient = new UwbCefPopupClient(proxySettings, DisposeNoClose, ignoreSslErrors, ignoreSslErrorsDomains);
         client = popupClient;
     }
 

@@ -43,29 +43,4 @@ public class UwbCefLoadHandler : CefLoadHandler
 
         if (frame.IsMain) client.ClientControls.LoadFinish(url);
     }
-
-    protected override void OnLoadError(CefBrowser browser, CefFrame frame, CefErrorCode errorCode,
-        string errorText, string failedUrl)
-    {
-        CefLoggerWrapper.Error(
-            $"An error occurred while trying to load '{failedUrl}'! Error details: {errorText} (Code: {errorCode})");
-
-        if (errorCode is CefErrorCode.Aborted
-            or CefErrorCode.BLOCKED_BY_RESPONSE
-            or CefErrorCode.BLOCKED_BY_CLIENT
-            or CefErrorCode.BLOCKED_BY_CSP)
-            return;
-
-        //TODO: We should move this to an internal scheme page thingy
-        string html =
-            $@"<style>
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
-body {{
-font-family: 'Ubuntu', sans-serif;
-}}
-</style>
-<h2>An error occurred while trying to load '{failedUrl}'!</h2>
-<p>Error: {errorText}<br>(Code: {(int)errorCode})</p>";
-        client.LoadHtml(html);
-    }
 }

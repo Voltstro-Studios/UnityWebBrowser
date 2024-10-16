@@ -3,6 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+#nullable enable
 using System.IO;
 using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Popups;
@@ -62,7 +63,7 @@ public class LaunchArguments
     /// <summary>
     ///     Remote debugging allowed origins
     /// </summary>
-    public string[] RemoteDebuggingAllowedOrigins { get; init; }
+    public string[]? RemoteDebuggingAllowedOrigins { get; init; }
 
     /// <summary>
     ///     The <see cref="Color" /> to use for the background
@@ -77,7 +78,7 @@ public class LaunchArguments
     /// <summary>
     ///     The path you should use for your cache
     /// </summary>
-    public FileInfo CachePath { get; init; }
+    public FileInfo? CachePath { get; init; }
 
     /// <summary>
     ///     Should we use a proxy or direct
@@ -87,12 +88,22 @@ public class LaunchArguments
     /// <summary>
     ///     Username of the proxy
     /// </summary>
-    public string ProxyUsername { get; init; }
+    public string? ProxyUsername { get; init; }
 
     /// <summary>
     ///     Password of the proxy
     /// </summary>
-    public string ProxyPassword { get; init; }
+    public string? ProxyPassword { get; init; }
+    
+    /// <summary>
+    ///     Will ignore SSL errors on provided domains in <see cref="IgnoreSslErrorsDomains"/>
+    /// </summary>
+    public bool IgnoreSslErrors { get; init; }
+    
+    /// <summary>
+    ///     Domains to ignore if <see cref="IgnoreSslErrors"/> is enabled
+    /// </summary>
+    public string[]? IgnoreSslErrorsDomains { get; set; }
 
     /// <summary>
     ///     The path you should log browser events to

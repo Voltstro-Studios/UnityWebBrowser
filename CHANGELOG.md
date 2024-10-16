@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.2] - 2024-10-16
+
+### Added
+
+- Added ignore SSL errors option (#350)
+
+### Changed
+
+- Move some web browser client options to a new section called "Advanced"
+
+### Fixed
+
+- Fixed `LoadHtml` not working correctly (#351)
+
+### Removed
+
+- Removed CEF engine custom error page. It shows the default chrome one now.
+
 ## [2.2.1] - 2024-10-06
 
 ### Added

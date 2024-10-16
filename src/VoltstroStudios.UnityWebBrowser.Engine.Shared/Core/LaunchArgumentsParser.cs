@@ -80,6 +80,14 @@ public sealed class LaunchArgumentsParser
             () => null,
             "The password to use in the proxy auth");
         
+        //Ignore SSL Errors
+        Option<bool> ignoreSslErrors = new("-ignore-ssl-errors", 
+            () => false,
+            "Will ignore SSL errors on provided domains in ignoreSSLErrorsDomains");
+        Option<string[]> ignoreSslErrorsDomains = new("-ignore-ssl-errors-domains",
+            () => null,
+            "Domains to ignore SSL errors on if ignoreSSLErrors is enabled");
+        
         //Logging
         Option<FileInfo> logPath = new("-log-path",
             () => new FileInfo("engine.log"),
@@ -121,6 +129,8 @@ public sealed class LaunchArgumentsParser
             proxyServer,
             proxyUsername,
             proxyPassword,
+            ignoreSslErrors,
+            ignoreSslErrorsDomains,
             logPath,
             logSeverity,
             communicationLayerName,
@@ -150,6 +160,8 @@ public sealed class LaunchArgumentsParser
             proxyServer,
             proxyUsername,
             proxyPassword,
+            ignoreSslErrors,
+            ignoreSslErrorsDomains,
             logPath,
             logSeverity,
             communicationLayerName,

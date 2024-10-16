@@ -22,13 +22,21 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
 
     private readonly EnginePopupManager popupManager;
     private readonly ProxySettings proxySettings;
+    private readonly bool ignoreSslErrors;
+    private readonly string[] ignoreSslErrorsDomains;
 
-    public UwbCefLifespanHandler(PopupAction popupAction, EnginePopupManager enginePopupManager,
-        ProxySettings proxySettings)
+    public UwbCefLifespanHandler(
+        PopupAction popupAction,
+        EnginePopupManager enginePopupManager,
+        ProxySettings proxySettings,
+        bool ignoreSslErrors,
+        string[] ignoreSslErrorsDomains)
     {
         this.proxySettings = proxySettings;
         this.popupAction = popupAction;
         popupManager = enginePopupManager;
+        this.ignoreSslErrors = ignoreSslErrors;
+        this.ignoreSslErrorsDomains = ignoreSslErrorsDomains;
     }
 
     public event Action<CefBrowser> AfterCreated;
@@ -52,7 +60,7 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
             case PopupAction.Ignore:
                 break;
             case PopupAction.OpenExternalWindow:
-                popupManager.OnPopup(new UwbCefEnginePopupInfo(popupManager, proxySettings, ref client));
+                popupManager.OnPopup(new UwbCefEnginePopupInfo(popupManager, proxySettings, ref client, ignoreSslErrors, ignoreSslErrorsDomains));
                 return false;
             case PopupAction.Redirect:
                 frame.LoadUrl(targetUrl);

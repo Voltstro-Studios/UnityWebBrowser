@@ -3,6 +3,7 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
+#nullable enable
 using VoltstroStudios.UnityWebBrowser.Engine.Shared.Core;
 using Xilium.CefGlue;
 
@@ -16,9 +17,9 @@ public class UwbCefApp : CefApp
     private readonly bool mediaStreamingEnabled;
     private readonly bool noProxyServer;
     private readonly bool remoteDebugging;
-    private readonly string[] remoteDebuggingOrigins;
+    private readonly string[]? remoteDebuggingOrigins;
 
-    private UwbCefBrowserProcessHandler browserProcessHandler;
+    private UwbCefBrowserProcessHandler browserProcessHandler = null!;
 
     public UwbCefApp(LaunchArguments launchArguments)
     {
@@ -36,7 +37,7 @@ public class UwbCefApp : CefApp
         if (mediaStreamingEnabled && !commandLine.HasSwitch("--enable-media-stream"))
             commandLine.AppendSwitch("--enable-media-stream");
 
-        if (remoteDebugging && !commandLine.HasSwitch("--remote-allow-origins"))
+        if (remoteDebugging && remoteDebuggingOrigins != null && !commandLine.HasSwitch("--remote-allow-origins"))
             commandLine.AppendSwitch("--remote-allow-origins", string.Join(',', remoteDebuggingOrigins));
 
 #if LINUX || MACOS
