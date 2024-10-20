@@ -9,6 +9,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using UnityWebBrowser.Engine.Cef.Core;
 using UnityWebBrowser.Engine.Cef.Shared.Browser.Js;
 using UnityWebBrowser.Engine.Cef.Shared.Browser.Messages;
 using UnityWebBrowser.Engine.Cef.Shared.Browser.Popups;
@@ -81,6 +82,7 @@ internal class UwbCefClient : CefClient, IDisposable
         {
             browser = cefBrowser;
             browserHost = cefBrowser.GetHost();
+            ClientControls.Ready();
         };
         displayHandler = new UwbCefDisplayHandler(this, mainLogger, browserConsoleLogger);
         requestHandler = new UwbCefRequestHandler(proxySettings, ignoreSslErrors, ignoreSslErrorsDomains);
@@ -412,6 +414,11 @@ internal class UwbCefClient : CefClient, IDisposable
     {
         renderHandler.Resize(new CefSize((int)resolution.Width, (int)resolution.Height));
         browserHost.WasResized();
+    }
+
+    public void AudioMute(bool muted)
+    {
+        browserHost.SetAudioMuted(muted);
     }
 
     #endregion

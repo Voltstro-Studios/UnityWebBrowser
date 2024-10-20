@@ -30,7 +30,7 @@ internal class UwbCefEngineEntry : EngineEntryPoint
         cefEngineControlsManager.Init(ClientControlsActions, PopupManager);
 
         SetupIpc(cefEngineControlsManager, launchArguments);
-        Ready();
+        //Ready();
 
         //Calling run message loop will cause the main thread to lock (what we want)
         CefRuntime.RunMessageLoop();

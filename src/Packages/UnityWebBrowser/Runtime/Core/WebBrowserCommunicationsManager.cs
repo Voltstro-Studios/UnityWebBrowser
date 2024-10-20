@@ -197,6 +197,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             ExecuteTask(() => engineProxy.Resize(resolution));
         }
 
+        public void AudioMute(bool muted)
+        {
+            ExecuteTask(() => engineProxy.AudioMute(muted));
+        }
+
         public void Connect()
         {
             ipcClient.Connect();
