@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.unitask": {
-      "version": "2.5.5",
+      "version": "2.5.10",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -149,8 +149,8 @@
       "dependencies": {
         "dev.voltstro.nativearrayspanextensions": "1.0.1",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.cysharp.unitask": "2.5.5",
-        "org.nuget.voltrpc": "3.2.0"
+        "com.cysharp.unitask": "2.5.10",
+        "org.nuget.voltrpc": "3.2.1"
       }
     },
     "dev.voltstro.unitywebbrowser.communication.pipes": {
@@ -223,7 +223,7 @@
       "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.voltrpc": {
-      "version": "3.2.0",
+      "version": "3.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

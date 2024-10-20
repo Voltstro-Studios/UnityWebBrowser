@@ -20,8 +20,8 @@
   "dependencies": {
     "dev.voltstro.nativearrayspanextensions": "1.0.1",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.cysharp.unitask": "2.5.5",
-    "org.nuget.voltrpc": "3.2.0"
+    "com.cysharp.unitask": "2.5.10",
+    "org.nuget.voltrpc": "3.2.1"
   },
   "samples": [
     {
