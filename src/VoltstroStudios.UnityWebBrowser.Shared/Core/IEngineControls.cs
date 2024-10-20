@@ -114,4 +114,10 @@ internal interface IEngineControls
     /// </summary>
     /// <param name="resolution"></param>
     public void Resize(Resolution resolution);
+
+    /// <summary>
+    ///     Mutes browser audio
+    /// </summary>
+    /// <param name="muted"></param>
+    public void AudioMute(bool muted);
 }

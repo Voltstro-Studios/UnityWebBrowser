@@ -951,6 +951,17 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             logger.Debug($"Resized to {newResolution}.");
         }
 
+        /// <summary>
+        ///     Mutes browser audio
+        /// </summary>
+        /// <param name="muted"></param>
+        public void AudioMute(bool muted)
+        {
+            CheckIfIsReadyAndConnected();
+            
+            communicationsManager.AudioMute(muted);
+        }
+
         [DebuggerStepThrough]
         private void CheckIfIsReadyAndConnected()
         {

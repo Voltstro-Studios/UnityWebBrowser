@@ -2,7 +2,7 @@
   "name": "dev.voltstro.unitywebbrowser",
   "displayName": "Unity Web Browser",
   "description": "Unity Web Browser (UWB) is a Unity package that allows displaying and interacting with the web from within Unity.",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "unity": "2021.3",
   "author": {
     "name": "Voltstro",
@@ -20,8 +20,8 @@
   "dependencies": {
     "dev.voltstro.nativearrayspanextensions": "1.0.1",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.cysharp.unitask": "2.5.5",
-    "org.nuget.voltrpc": "3.2.0"
+    "com.cysharp.unitask": "2.5.10",
+    "org.nuget.voltrpc": "3.2.1"
   },
   "samples": [
     {

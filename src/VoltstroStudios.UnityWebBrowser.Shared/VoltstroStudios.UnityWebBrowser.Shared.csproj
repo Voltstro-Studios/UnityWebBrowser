@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="VoltRpc" Version="3.2.0" />
+        <PackageReference Include="VoltRpc" Version="3.2.1" />
         <PackageReference Include="VoltRpc.Proxy.Generator" Version="2.3.0" />
 
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>

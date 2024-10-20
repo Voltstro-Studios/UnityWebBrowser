@@ -329,6 +329,11 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         cefClient.Resize(resolution);
     }
 
+    public void AudioMute(bool muted)
+    {
+        cefClient.AudioMute(muted);
+    }
+
     #endregion
 
     #region Destroy

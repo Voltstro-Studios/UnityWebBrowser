@@ -68,6 +68,9 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         
         //Zoom
         private double zoomLevel = double.MinValue;
+        
+        //Audio
+        private bool audioMuted = false;
 
         private void Awake()
         {
@@ -134,7 +137,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             
             hasConnected = true;
         }
-
+        
         private void Update()
         {
             if(webBrowserUIBasic.browserClient.HasDisposed || !hasConnected)
@@ -195,6 +198,11 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
                     
                     //Buttons for getting details
                     {
+                        if(ImGui.Checkbox("Audio Mute", ref audioMuted))
+                            webBrowserUIBasic.browserClient.AudioMute(audioMuted);
+                        
+                        ImGui.SameLine();
+                        
                         if (ImGui.Button("Get Scroll Pos"))
                             Debug.Log(webBrowserUIBasic.browserClient.GetScrollPosition());
                         
