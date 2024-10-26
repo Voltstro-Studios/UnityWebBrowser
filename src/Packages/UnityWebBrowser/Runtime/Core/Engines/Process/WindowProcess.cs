@@ -21,7 +21,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines.Process
         {
             //Job handle code from SO
             //https://stackoverflow.com/questions/3342941/kill-child-process-when-parent-process-is-killed
-            string jobName = "UWBChildProcesses" + System.Diagnostics.Process.GetCurrentProcess().Id;
+            string jobName = "UWBChildProcesses" + Guid.NewGuid().ToString("N");
             jobHandle = CreateJobObject(IntPtr.Zero, jobName);
             
             JOBOBJECT_BASIC_LIMIT_INFORMATION info = new()
