@@ -145,7 +145,7 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
 #elif UNITY_STANDALONE_LINUX
             return Platform.Linux64;
 #elif UNITY_STANDALONE_OSX
-            return RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? Platform.MacOSArm64 : Platform.MacOS;
+            return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64 ? Platform.MacOSArm64 : Platform.MacOS;
 #endif
         }
         
