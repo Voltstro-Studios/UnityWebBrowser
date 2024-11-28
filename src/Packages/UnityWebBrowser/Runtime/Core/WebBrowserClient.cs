@@ -167,6 +167,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         public bool ignoreSslErrors = false;
 
         /// <summary>
+        ///     Disables sandbox
+        /// </summary>
+        [Tooltip("Disables sandbox")]
+        public bool noSandbox = false;
+
+        /// <summary>
         ///     Domains to ignore SSL errors on if <see cref="ignoreSslErrors"/> is enabled
         /// </summary>
         [Tooltip("Domains to ignore SSL errors on if ignoreSSLErrors is enabled")]
@@ -410,6 +416,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 #if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 
             //argsBuilder.AppendArgument("start-delay", 2000);
 #endif
+
+            //Disable sandbox
+            if (noSandbox)
+            {
+                argsBuilder.AppendArgument("no-sandbox", true);
+            }
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
