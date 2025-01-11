@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -213,7 +212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &298048589
 Transform:
   m_ObjectHideFlags: 0
@@ -322,8 +321,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.ignoreSslErrors
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.jsMethodManager.jsMethodsEnable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.ignoreSslErrorsDomains.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.ignoreSslErrorsDomains.Array.data[0]
+      value: https://expired.badssl.com
       objectReference: {fileID: 0}
     - target: {fileID: 7454210984458747666, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: m_Name
