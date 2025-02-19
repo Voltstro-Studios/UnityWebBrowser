@@ -195,6 +195,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
         public LogSeverity logSeverity = LogSeverity.Info;
+        
+        /// <summary>
+        ///     Ignores errors related to log messages from the engine process being in a non-json format
+        /// </summary>
+        [Tooltip("Ignores errors related to log messages from the engine process being in a non-json format")]
+        public bool ignoreLogProcessJsonErrors = false;
 
         /// <summary>
         ///     Texture that the browser will paint to
