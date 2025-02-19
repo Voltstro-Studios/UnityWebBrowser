@@ -19,10 +19,12 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
     public class ProcessLogHandler
     {
         private readonly IWebBrowserLogger logger;
+        private readonly bool ignoreLogProcessJsonErrors;
 
         internal ProcessLogHandler(WebBrowserClient client)
         {
             logger = client.logger;
+            ignoreLogProcessJsonErrors = client.ignoreLogProcessJsonErrors;
         }
 
         public event Action<string> OnProcessOutputLog;
@@ -54,6 +56,13 @@ namespace VoltstroStudios.UnityWebBrowser.Logging
                     logger.Error($"[{logStructure.Category}]: {logStructure.Message}\n{logStructure.Exception}");
                 else if (logStructure.Level == LogSeverity.Fatal)
                     logger.Error($"[{logStructure.Category}]: {logStructure.Message}\n{logStructure.Exception}");
+            }
+            catch (JsonException)
+            {
+                if(ignoreLogProcessJsonErrors)
+                    return;
+                
+                logger.Error($"A log message from the UWB engine was not in a JSON format!\n\nRaw Log Message:\n{e.Data}");
             }
             catch (Exception ex)
             {
