@@ -2,7 +2,9 @@ using UnityEngine;
 using VoltstroStudios.UnityWebBrowser.Communication;
 using VoltstroStudios.UnityWebBrowser.Core;
 using VoltstroStudios.UnityWebBrowser.Core.Engines;
+using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Core;
+using Resolution = VoltstroStudios.UnityWebBrowser.Shared.Resolution;
 
 namespace VoltstroStudios.UnityWebBrowser.Prj
 {
@@ -58,6 +60,7 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
             
             webBrowserClient.engine = engineConfig;
             webBrowserClient.communicationLayer = comsLayer;
+            webBrowserClient.logSeverity = LogSeverity.Debug;
             
             webBrowserClient.Init();
         }
@@ -75,6 +78,11 @@ namespace VoltstroStudios.UnityWebBrowser.Prj
         public void ExecuteJs()
         {
             webBrowserClient.ExecuteJs("console.log('Hello World!');");
+        }
+
+        public void Resize()
+        {
+            webBrowserClient.Resize(new Resolution(1920, 1080));
         }
     }
 }

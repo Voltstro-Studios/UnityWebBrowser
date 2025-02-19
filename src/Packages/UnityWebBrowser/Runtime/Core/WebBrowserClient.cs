@@ -203,7 +203,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         public bool ignoreLogProcessJsonErrors = false;
 
         /// <summary>
-        ///     Texture that the browser will paint to
+        ///     Texture that the browser will paint to.
+        ///     <para>In headless mode this will be null</para>
         /// </summary>
         public Texture2D BrowserTexture { get; private set; }
 
@@ -975,17 +976,20 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             CheckIfIsReadyAndConnected();
 
-            lock (resizeLock)
+            if (!headless)
             {
-                BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
-                textureData = BrowserTexture.GetRawTextureData<byte>();
-                communicationsManager.Resize(newResolution);
+                lock (resizeLock)
+                {
+                    BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
+                    textureData = BrowserTexture.GetRawTextureData<byte>();
 
-                nextTextureData.Dispose();
-                nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
-                communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
+                    nextTextureData.Dispose();
+                    nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
+                    communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
+                }
             }
-
+            
+            communicationsManager.Resize(newResolution);
             logger.Debug($"Resized to {newResolution}.");
         }
 
