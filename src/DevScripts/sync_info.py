@@ -14,15 +14,13 @@ def write_json_to_file(content: Any, file_path: str) -> None:
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(content, f, ensure_ascii=False, indent=2)
 
-def sync_package(package: str, version: str, sub_version: str, license_path: str) -> None:
+def sync_package(package: str, version: str, license_path: str) -> None:
     package_path = path.abspath(path.join(__file__, '../../Packages/{0}/'.format(package)))
     package_json_path = path.join(package_path, 'package.json')
 
     package_json = read_json_from_file(package_json_path)
 
     new_package_version = version
-    if sub_version:
-        new_package_version += '+{0}'.format(sub_version)
 
     # Set new package version
     package_json['version'] = new_package_version
@@ -55,33 +53,19 @@ version_json = read_json_from_file(version_json_path)
 version = version_json['version']
 license_path = path.abspath(path.join(__file__, '../../../LICENSE.md'))
 
-# Sync CEF Engine version.json  
-cef_engine_version_json_path = path.abspath(path.join(__file__, '../../UnityWebBrowser.Engine.Cef/version.json'))
-cef_engine_version_json = read_json_from_file(cef_engine_version_json_path)
-cef_engine_versions = cef_engine_version_json['version'].split('+')
-
-cef_engine_versions[0] = version
-
-cef_engine_version = '+'.join(cef_engine_versions)
-cef_engine_version_json['version'] = cef_engine_version
-write_json_to_file(cef_engine_version_json, cef_engine_version_json_path)
-
-cef_version = cef_engine_versions[1]
-
 # Package Name - Sub Version
-packages = {
-    'UnityWebBrowser': None,
-    'UnityWebBrowser.Communication.Pipes': None,
-    'UnityWebBrowser.Engine.Cef': cef_version,
-    'UnityWebBrowser.Engine.Cef.Win-x64': cef_version,
-    'UnityWebBrowser.Engine.Cef.Linux-x64': cef_version,
-    'UnityWebBrowser.Engine.Cef.MacOS-x64': cef_version,
-    'UnityWebBrowser.Engine.Cef.MacOS-arm64': cef_version,
-}
+packages = [
+    'UnityWebBrowser',
+    'UnityWebBrowser.Communication.Pipes',
+    'UnityWebBrowser.Engine.Cef',
+    'UnityWebBrowser.Engine.Cef.Win-x64',
+    'UnityWebBrowser.Engine.Cef.Linux-x64',
+    'UnityWebBrowser.Engine.Cef.MacOS-x64',
+    'UnityWebBrowser.Engine.Cef.MacOS-arm64'
+]
 
 for package in packages:
-    sub_version = packages[package]
-    sync_package(package, version, sub_version, license_path)
+    sync_package(package, version, license_path)
 
 # Update assembly info
 assembly_info_path = path.abspath(path.join(__file__, '../../Packages/UnityWebBrowser/Runtime/AssemblyInfo.cs'))

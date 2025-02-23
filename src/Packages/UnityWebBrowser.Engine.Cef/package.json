@@ -2,7 +2,7 @@
   "name": "dev.voltstro.unitywebbrowser.engine.cef",
   "displayName": "Unity Web Browser CEF Engine",
   "description": "CEF engine for Unity Web Browser.",
-  "version": "2.2.6+13342",
+  "version": "2.2.6",
   "unity": "2021.3",
   "author": {
     "name": "Voltstro",
