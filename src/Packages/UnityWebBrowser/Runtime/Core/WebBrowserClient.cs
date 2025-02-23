@@ -200,7 +200,7 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         ///     Ignores errors related to log messages from the engine process being in a non-json format
         /// </summary>
         [Tooltip("Ignores errors related to log messages from the engine process being in a non-json format")]
-        public bool ignoreLogProcessJsonErrors = false;
+        public bool ignoreLogProcessJsonErrors = true;
 
         /// <summary>
         ///     Texture that the browser will paint to.
