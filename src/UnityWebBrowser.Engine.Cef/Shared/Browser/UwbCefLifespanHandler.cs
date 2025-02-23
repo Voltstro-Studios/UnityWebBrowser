@@ -46,7 +46,7 @@ public class UwbCefLifespanHandler : CefLifeSpanHandler
         AfterCreated?.Invoke(browser);
     }
 
-    protected override bool OnBeforePopup(CefBrowser browser, CefFrame frame, string targetUrl,
+    protected override bool OnBeforePopup(CefBrowser browser, CefFrame frame, int popupId, string targetUrl,
         string targetFrameName,
         CefWindowOpenDisposition targetDisposition, bool userGesture, CefPopupFeatures popupFeatures,
         CefWindowInfo windowInfo, ref CefClient client, CefBrowserSettings settings,
