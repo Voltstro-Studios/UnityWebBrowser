@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [2.2.6] - 2025-02-23
+
+### Added
+
+- Added no sandbox flag (#369)
+- Added headless mode (#370)
+
+### Changed
+
+- Update CEF to 133.4.2
+- Bump copyright year
+
+### Fixed
+
+- Fixed Unity 6 showing engine packages as "pre-release" (#387)
+    - Engine packages are now version as `x.x.x+<cef-major><cef-minor><cef-patch>`, instead of `x.x.x-<cef-major>.<cef-minor>.<cef-patch>`
+- Fixed non-json logs causing errors by adding `ignoreLogProcessJsonErrors` option (#395)
+
 ## [2.2.5] - 2024-11-13
 
 ### Changed

@@ -10,7 +10,7 @@ jobs:
     #This job builds the main non-platform depent packages
     build-core:
         name: "Build-UWB-Main"
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             # Checkout Repo
             - uses: actions/checkout@v4

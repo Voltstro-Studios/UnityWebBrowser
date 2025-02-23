@@ -167,6 +167,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         public bool ignoreSslErrors = false;
 
         /// <summary>
+        ///     Disables sandbox
+        /// </summary>
+        [Tooltip("Disables sandbox")]
+        public bool noSandbox = false;
+
+        /// <summary>
         ///     Domains to ignore SSL errors on if <see cref="ignoreSslErrors"/> is enabled
         /// </summary>
         [Tooltip("Domains to ignore SSL errors on if ignoreSSLErrors is enabled")]
@@ -189,9 +195,16 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The log severity. Only messages of this severity level or higher will be logged")]
         public LogSeverity logSeverity = LogSeverity.Info;
+        
+        /// <summary>
+        ///     Ignores errors related to log messages from the engine process being in a non-json format
+        /// </summary>
+        [Tooltip("Ignores errors related to log messages from the engine process being in a non-json format")]
+        public bool ignoreLogProcessJsonErrors = true;
 
         /// <summary>
-        ///     Texture that the browser will paint to
+        ///     Texture that the browser will paint to.
+        ///     <para>In headless mode this will be null</para>
         /// </summary>
         public Texture2D BrowserTexture { get; private set; }
 
@@ -282,6 +295,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         #endregion
 
+        private bool headless;
+        private bool hasInitialized;
         private EngineProcess engineProcess;
         private WebBrowserCommunicationsManager communicationsManager;
         private CancellationTokenSource cancellationSource;
@@ -290,16 +305,33 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         private NativeArray<byte> textureData;
         internal NativeArray<byte> nextTextureData;
 
-        internal WebBrowserClient()
+        /// <summary>
+        ///     Creates a new <see cref="WebBrowserClient"/> instance
+        /// </summary>
+        /// <param name="headless">
+        ///     Creates the browser client in headless mode.
+        ///     Headless mode will not create a <see cref="BrowserTexture"/> for you to use
+        /// </param>
+        public WebBrowserClient(bool headless = false)
         {
+            this.headless = headless;
         }
 
         /// <summary>
-        ///     Inits the browser client
+        ///     Inits the browser client.
+        ///     In normal operation you do not need to call this method.
         /// </summary>
         /// <exception cref="FileNotFoundException"></exception>
-        internal void Init()
+        /// <exception cref="InitializationException"></exception>
+        public void Init()
         {
+            //Initialized check
+            if (hasInitialized)
+                throw new InitializationException("The browser client has already been initialized!");
+
+            hasInitialized = true;
+            
+            //OS support check
             if (!WebBrowserUtils.IsRunningOnSupportedPlatform())
             {
                 logger.Warn("UWB is not supported on the current runtime platform! Not running.");
@@ -323,14 +355,16 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             communicationLayer.IsInUse = true;
 
             //Setup texture
-            BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false,
-                false);
-            WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
-
-            resizeLock = new object();
-            textureData = BrowserTexture.GetRawTextureData<byte>();
-            nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
-
+            if (!headless)
+            {
+                BrowserTexture = new Texture2D((int)resolution.Width, (int)resolution.Height, TextureFormat.BGRA32, false,
+                    false);
+                WebBrowserUtils.SetAllTextureColorToOne(BrowserTexture, backgroundColor);
+                resizeLock = new object();
+                textureData = BrowserTexture.GetRawTextureData<byte>();
+                nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
+            }
+            
             string browserEngineMainDir = WebBrowserUtils.GetAdditionFilesDirectory();
 
             //Start to build our arguments
@@ -406,10 +440,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                 argsBuilder.AppendArgument("ignore-ssl-errors-domains", string.Join(",", ignoreSslErrorsDomains));
             }
 
-            //Make sure not to include this, its for testing
-#if UWB_ENGINE_PRJ //Define for backup, cause I am dumb as fuck and gonna accidentally include this in a release build one day 
-            //argsBuilder.AppendArgument("start-delay", 2000);
-#endif
+            //Disable sandbox
+            if (noSandbox)
+            {
+                argsBuilder.AppendArgument("no-sandbox", true);
+            }
 
             //Final built arguments
             string arguments = argsBuilder.ToString();
@@ -524,6 +559,10 @@ namespace VoltstroStudios.UnityWebBrowser.Core
                     }
                 }
 
+                //Create pixel data loop in headless mode
+                if(headless)
+                    return;
+                
                 Thread pixelDataLoopThread = new(PixelDataLoop)
                 {
                     Name = "UWB Pixel Data Loop Thread"
@@ -937,17 +976,20 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         {
             CheckIfIsReadyAndConnected();
 
-            lock (resizeLock)
+            if (!headless)
             {
-                BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
-                textureData = BrowserTexture.GetRawTextureData<byte>();
-                communicationsManager.Resize(newResolution);
+                lock (resizeLock)
+                {
+                    BrowserTexture.Reinitialize((int)newResolution.Width, (int)newResolution.Height);
+                    textureData = BrowserTexture.GetRawTextureData<byte>();
 
-                nextTextureData.Dispose();
-                nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
-                communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
+                    nextTextureData.Dispose();
+                    nextTextureData = new NativeArray<byte>(textureData.ToArray(), Allocator.Persistent);
+                    communicationsManager.pixelsEventTypeReader.SetPixelDataArray(nextTextureData);
+                }
             }
-
+            
+            communicationsManager.Resize(newResolution);
             logger.Debug($"Resized to {newResolution}.");
         }
 

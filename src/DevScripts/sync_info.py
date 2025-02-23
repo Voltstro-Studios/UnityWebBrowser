@@ -22,7 +22,7 @@ def sync_package(package: str, version: str, sub_version: str, license_path: str
 
     new_package_version = version
     if sub_version:
-        new_package_version += '-{0}'.format(sub_version)
+        new_package_version += '+{0}'.format(sub_version)
 
     # Set new package version
     package_json['version'] = new_package_version
@@ -58,11 +58,11 @@ license_path = path.abspath(path.join(__file__, '../../../LICENSE.md'))
 # Sync CEF Engine version.json  
 cef_engine_version_json_path = path.abspath(path.join(__file__, '../../UnityWebBrowser.Engine.Cef/version.json'))
 cef_engine_version_json = read_json_from_file(cef_engine_version_json_path)
-cef_engine_versions = cef_engine_version_json['version'].split('-')
+cef_engine_versions = cef_engine_version_json['version'].split('+')
 
 cef_engine_versions[0] = version
 
-cef_engine_version = '-'.join(cef_engine_versions)
+cef_engine_version = '+'.join(cef_engine_versions)
 cef_engine_version_json['version'] = cef_engine_version
 write_json_to_file(cef_engine_version_json, cef_engine_version_json_path)
 

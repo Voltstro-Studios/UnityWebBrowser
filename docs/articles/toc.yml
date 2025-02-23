@@ -23,6 +23,8 @@
       href: user/javascript.md
     - name: Client Events
       href: user/events.md
+    - name: Runtime Creation
+      href: user/runtime.md
     - name: Player Build
       href: user/player-build.md
 
