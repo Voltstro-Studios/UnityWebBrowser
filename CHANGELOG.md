@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed Unity 6 showing engine packages as "pre-release" (#387)
-    - Engine packages are now version as `x.x.x+<cef-major><cef-minor><cef-patch>`, instead of `x.x.x-<cef-major>.<cef-minor>.<cef-patch>`
+    - Engine packages are now version as `x.x.x`, instead of `x.x.x-<cef-major>.<cef-minor>.<cef-patch>`
 - Fixed non-json logs causing errors by adding `ignoreLogProcessJsonErrors` option (#395)
 
 ## [2.2.5] - 2024-11-13
