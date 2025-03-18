@@ -3,5 +3,9 @@
   "assignees": ["voltstro"],
   "ignorePaths": [
     "src/Packages/**"
+  ],
+  "timezone": "Australia/Brisbane",
+  "schedule": [
+    "0 0 1 * *"
   ]
 }
