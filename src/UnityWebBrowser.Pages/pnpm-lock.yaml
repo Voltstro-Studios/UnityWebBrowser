@@ -22,7 +22,7 @@ importers:
         version: 2.1.0(vite@6.2.2(@types/node@22.13.5)(terser@5.39.0))
       vite-plugin-singlefile:
         specifier: ^2.1.0
-        version: 2.1.0(rollup@4.36.0)(vite@6.2.2(@types/node@22.13.5)(terser@5.39.0))
+        version: 2.2.0(rollup@4.36.0)(vite@6.2.2(@types/node@22.13.5)(terser@5.39.0))
 
 packages:
 
@@ -434,11 +434,11 @@ packages:
     peerDependencies:
       vite: '>=5'
 
-  vite-plugin-singlefile@2.1.0:
-    resolution: {integrity: sha512-7tJo+UgZABlKpY/nubth/wxJ4+pUGREPnEwNOknxwl2MM0zTvF14KTU4Ln1lc140gjLLV5mjDrvuoquU7OZqCg==}
+  vite-plugin-singlefile@2.2.0:
+    resolution: {integrity: sha512-Ik1wXmJaGzeQtUeIV7JprDUqqy6DlLzXAY27Blei5peE4c9VJF+Kp9xWDJeuX0RJUZmFbIAuw1/RAh06A+Ql7w==}
     engines: {node: '>18.0.0'}
     peerDependencies:
-      rollup: ^4.28.1
+      rollup: ^4.35.0
       vite: ^5.4.11 || ^6.0.0
 
   vite@6.2.2:
@@ -815,7 +815,7 @@ snapshots:
       html-minifier-terser: 7.2.0
       vite: 6.2.2(@types/node@22.13.5)(terser@5.39.0)
 
-  vite-plugin-singlefile@2.1.0(rollup@4.36.0)(vite@6.2.2(@types/node@22.13.5)(terser@5.39.0)):
+  vite-plugin-singlefile@2.2.0(rollup@4.36.0)(vite@6.2.2(@types/node@22.13.5)(terser@5.39.0)):
     dependencies:
       micromatch: 4.0.8
       rollup: 4.36.0
