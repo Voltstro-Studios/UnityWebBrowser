@@ -114,10 +114,13 @@ namespace VoltstroStudios.UnityWebBrowser.Input
                     return WindowsKey.OemQuotes;
                 case KeyCode.Quote:
                     return WindowsKey.OemQuotes;
+                case KeyCode.LeftBracket:
                 case KeyCode.LeftParen:
                     return WindowsKey.OemOpenBrackets;
+                case KeyCode.RightBracket:
                 case KeyCode.RightParen:
                     return WindowsKey.OemCloseBrackets;
+                case KeyCode.Equals:
                 case KeyCode.Plus:
                     return WindowsKey.Oemplus;
                 case KeyCode.Comma:
@@ -129,25 +132,23 @@ namespace VoltstroStudios.UnityWebBrowser.Input
                 case KeyCode.Semicolon:
                     return WindowsKey.OemSemicolon;
                 case KeyCode.RightShift:
-                    return WindowsKey.RShiftKey;
                 case KeyCode.LeftShift:
-                    return WindowsKey.LShiftKey;
+                    return WindowsKey.ShiftKey;
                 case KeyCode.RightControl:
-                    return WindowsKey.RControlKey;
                 case KeyCode.LeftControl:
-                    return WindowsKey.LControlKey;
+                    return WindowsKey.ControlKey;
                 case KeyCode.RightAlt:
-                    return WindowsKey.Alt;
                 case KeyCode.LeftAlt:
-                    return WindowsKey.Alt;
+                    return WindowsKey.Menu;
                 case KeyCode.Print:
                     return WindowsKey.Print;
                 case KeyCode.Backslash:
-                    return WindowsKey.OemBackslash;
+                    return WindowsKey.Oem5;
                 case KeyCode.Slash:
                     return WindowsKey.OemQuestion;
+                case KeyCode.BackQuote:
                 case KeyCode.Tilde:
-                    return WindowsKey.Oemtilde;
+                    return WindowsKey.Oem3;
                 
                 case KeyCode.Alpha1:
                     return WindowsKey.D1;
@@ -265,16 +266,14 @@ namespace VoltstroStudios.UnityWebBrowser.Input
                     return WindowsKey.Oemplus;
                 
                 case Key.LeftShift:
-                    return WindowsKey.LShiftKey;
                 case Key.RightShift:
-                    return WindowsKey.RShiftKey;
+                    return WindowsKey.ShiftKey;
                 case Key.RightAlt:
                 case Key.LeftAlt:
-                    return WindowsKey.Alt;
+                    return WindowsKey.Menu;
                 case Key.LeftCtrl:
-                    return WindowsKey.LControlKey;
                 case Key.RightCtrl:
-                    return WindowsKey.RControlKey;
+                    return WindowsKey.ControlKey;
                 
                 case Key.Escape:
                     return WindowsKey.Escape;
@@ -309,7 +308,7 @@ namespace VoltstroStudios.UnityWebBrowser.Input
                     return WindowsKey.Pause;
                 
                 case Key.Backslash:
-                    return WindowsKey.OemBackslash;
+                    return WindowsKey.Oem5;
                 case Key.Slash:
                     return WindowsKey.OemQuestion;
                 
@@ -347,7 +346,7 @@ namespace VoltstroStudios.UnityWebBrowser.Input
                     return WindowsKey.NumPad9;
                 
                 case Key.Backquote:
-                    return WindowsKey.Oemtilde;
+                    return WindowsKey.Oem3;
                 case Key.F1:
                     return WindowsKey.F1;
                 case Key.F2:
