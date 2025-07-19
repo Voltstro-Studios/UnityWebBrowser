@@ -29,8 +29,8 @@ Unity 2021.3.x
 
 ### Install
 
-1. Setup [VoltUPM](https://github.com/Voltstro/VoltstroUPM#setup)
-2. Define the additional scopes `org.nuget` and `com.cysharp.unitask` with VoltUPM
+1. Setup [VoltUPR](https://upr.voltstro.dev/-/web/about)
+2. Define the additional scopes `org.nuget` and `com.cysharp.unitask` with VoltUPR
 3. Install UnityWebBrowser packages
 
 For a more in-depth installation guide, check out the [setup article](https://projects.voltstro.dev/UnityWebBrowser/latest/articles/user/setup/).

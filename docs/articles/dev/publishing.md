@@ -26,13 +26,13 @@ A PR to the `release` branch should be created. Follow standard PR review proces
 
 Once merged to the `release` branch, wait for CI to complete build. The CI will output the different packages compiled as artifacts. Downloads the artifacts as they will need to be pushed.
 
-## Push to VoltUPM
+## Push to VoltUPR
 
-Use npm to push to VoltUPM.
+Use npm to push to VoltUPR.
 
 > [!NOTE]
 > 
-> Cloudflare does not allow uploads of 100MB or larger. Some packages are larger. Add VoltUPM's server ip to `/etc/hosts`, then push. Ensure VoltUPM's server firewall has whitelisted IP from where push will be done.
+> Cloudflare does not allow uploads of 100MB or larger. Some packages are larger. Add VoltUPR's server ip to `/etc/hosts`, then push. Ensure VoltUPR's server firewall has whitelisted IP from where push will be done.
 
 ## Git Tagging
 
