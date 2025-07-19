@@ -19,31 +19,31 @@ At a base level, UWB supports all major desktop platforms (Windows, Linux and Ma
 >
 > UWB does however support being code trimmed.
 
-## VoltUPM Setup
+## VoltUPR Setup
 
-VoltUPM is a Unity registry that we provide for hosting some of our packages, including all of UWB's packages. To use it, your project needs to be configured to use the VoltUPM registry.
+VoltUPR is a custom Unity registry that we provide for hosting some of our packages, including all of UWB's packages. To use it, your project needs to be configured to use the VoltUPR registry.
 
-To setup the registry with your project, [see here](https://github.com/Voltstro/VoltstroUPM#setup). The VoltUPM page also lists some other info that you may be interested in.
+To setup the registry with your project, [see here](https://upr.voltstro.dev/-/web/about). The VoltUPR page also lists some other info that you may be interested in.
 
 **HOWEVER**, an additional scope needs to be added. You need to make sure `com.cysharp.unitask` is added (more details are provided in the [UniTask part](#unitask)). Once you are done configuring your projects registries, your configuration should look like:
 
 ![Registry](~/assets/images/articles/user/setup/Registry.webp)
 
 > [!NOTE]
-> If you are using [UnityNuGet](https://github.com/xoofx/UnityNuGet), and you choose not to use VoltUPM as a `org.nuget.*` scope mirror, then don't have the `org.nuget` scope defined for VoltUPM.
+> If you are using [UnityNuGet](https://github.com/bdovaz/UnityNuGet) already, and you choose not to use VoltUPR as a `org.nuget.*` scope mirror, then don't have the `org.nuget` scope defined for VoltUPR.
 
 ### UniTask
 
-The reason why we need to add the additional `com.cysharp.unitask` scope to VoltUPM is because UWB depends on [UniTask](https://github.com/Cysharp/UniTask). VoltUPM does provide a mirror copy of UniTask (from OpenUPM),
+The reason why we need to add the additional `com.cysharp.unitask` scope to VoltUPR is because UWB depends on [UniTask](https://github.com/Cysharp/UniTask). VoltUPR does provide a mirror copy of UniTask (from OpenUPM),
 however you may already have UniTask installed either via [OpenUPM](https://openupm.com/packages/com.cysharp.unitask/), or via [Git](https://github.com/Cysharp/UniTask#install-via-git-url). If you do have it installed already,
-and you don't want to use VoltUPM's mirror of it, then DO NOT define the additional scope as apart of VoltUPM.
+and you don't want to use VoltUPR's mirror of it, then DO NOT define the additional scope as apart of VoltUPR.
 
 > [!WARNING]
 > If you already have UniTask installed via Git, please make sure it is the latest version!
 
 ## Packages Installation
 
-Once you have VoltUPM registry added to your project, you can install the packages via the Unity package manager GUI.
+Once you have VoltUPR registry added to your project, you can install the packages via the Unity package manager GUI.
 
 ![Packages](~/assets/images/articles/user/setup/Packages.webp)
 
