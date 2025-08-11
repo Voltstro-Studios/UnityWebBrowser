@@ -4,6 +4,7 @@
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace VoltstroStudios.UnityWebBrowser.Core
@@ -28,6 +29,11 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private void Start()
         {
+            //Give random cache path for the browser client
+            string randomCachePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
+            FileInfo rcpFileInfo = new FileInfo(randomCachePath);
+            browserClient.CachePath = rcpFileInfo;
+
             //Start the browser client
             browserClient.Init();
 
