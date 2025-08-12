@@ -26,11 +26,12 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The browser client, what handles the communication between the UWB engine and Unity")]
         public WebBrowserClient browserClient = new();
-
+        private string randomCachePath;
+        
         private void Start()
         {
             //Give random cache path for the browser client
-            string randomCachePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
+            randomCachePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
             FileInfo rcpFileInfo = new FileInfo(randomCachePath);
             browserClient.CachePath = rcpFileInfo;
 
@@ -53,6 +54,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
 
         private void OnDestroy()
         {
+            // Delete random assigned cache folders
+            Directory.Delete(randomCachePath, true);
+            
             browserClient.Dispose();
             OnDestroyed();
         }
