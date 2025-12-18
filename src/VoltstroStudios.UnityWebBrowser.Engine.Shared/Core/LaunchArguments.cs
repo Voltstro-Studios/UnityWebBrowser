@@ -134,4 +134,10 @@ public class LaunchArguments
     ///     Start delay. Used for testing reasons.
     /// </summary>
     internal uint StartDelay { get; set; }
+
+    /// <summary>
+    ///     The target framerate for windowless rendering (1-60 FPS).
+    ///     Default is 30 FPS.
+    /// </summary>
+    public int WindowlessFrameRate { get; init; }
 }

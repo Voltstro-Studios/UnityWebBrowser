@@ -24,6 +24,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
     private readonly Option<int> height;
 
     //General browser settings
+    private readonly Option<int> windowlessFrameRate;
     private readonly Option<bool> javaScript;
     private readonly Option<bool> webRtc;
     private readonly Option<bool> localStorage;
@@ -62,8 +63,9 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         Option<string> initialUrl,
         Option<int> width,
         Option<int> height,
+        Option<int> windowlessFrameRate,
         Option<bool> javaScript,
-        Option<bool> webRtc, 
+        Option<bool> webRtc,
         Option<bool> localStorage,
         Option<int> remoteDebugging,
         Option<string[]> remoteDebuggingAllowedOrigins,
@@ -87,7 +89,8 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
         this.initialUrl = initialUrl;
         this.width = width;
         this.height = height;
-        
+
+        this.windowlessFrameRate = windowlessFrameRate;
         this.javaScript = javaScript;
         this.webRtc = webRtc;
         this.localStorage = localStorage;
@@ -126,6 +129,7 @@ internal class LaunchArgumentsBinder : BinderBase<LaunchArguments>
             Width = bindingContext.ParseResult.GetValueForOption(width),
             Height = bindingContext.ParseResult.GetValueForOption(height),
 
+            WindowlessFrameRate = bindingContext.ParseResult.GetValueForOption(windowlessFrameRate),
             JavaScript = bindingContext.ParseResult.GetValueForOption(javaScript),
             WebRtc = bindingContext.ParseResult.GetValueForOption(webRtc),
             LocalStorage = bindingContext.ParseResult.GetValueForOption(localStorage),

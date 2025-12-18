@@ -198,11 +198,16 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         //Create our CEF browser settings
         Color suppliedColor = launchArguments.BackgroundColor;
         CefColor backgroundColor = new(suppliedColor.A, suppliedColor.R, suppliedColor.G, suppliedColor.B);
+
+        //Clamp framerate to valid CEF range (1-60)
+        int frameRate = Math.Clamp(launchArguments.WindowlessFrameRate, 1, 60);
+
         CefBrowserSettings cefBrowserSettings = new()
         {
             BackgroundColor = backgroundColor,
             JavaScript = launchArguments.JavaScript ? CefState.Enabled : CefState.Disabled,
-            LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled
+            LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled,
+            WindowlessFrameRate = frameRate
         };
 
         mainLogger.LogDebug($"Starting CEF with these options:" +
@@ -212,6 +217,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePath}" +
                      $"\nPopup Action: {launchArguments.PopupAction}" +
+                     $"\nWindowless Frame Rate: {frameRate}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
         mainLogger.LogInformation($"Starting CEF client...");

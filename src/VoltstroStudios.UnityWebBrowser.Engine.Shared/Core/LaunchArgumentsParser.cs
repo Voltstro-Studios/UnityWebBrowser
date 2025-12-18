@@ -35,6 +35,9 @@ public sealed class LaunchArgumentsParser
             "The height of the window");
 
         //General browser settings
+        Option<int> windowlessFrameRate = new("-windowless-frame-rate",
+            () => 30,
+            "Target framerate for windowless rendering (1-60). Default is 30.");
         Option<bool> javaScript = new("-javascript",
             () => true,
             "Enable or disable javascript");
@@ -117,6 +120,7 @@ public sealed class LaunchArgumentsParser
             initialUrl,
             width,
             height,
+            windowlessFrameRate,
             javaScript,
             webRtc,
             localStorage,
@@ -147,6 +151,7 @@ public sealed class LaunchArgumentsParser
             initialUrl,
             width,
             height,
+            windowlessFrameRate,
             javaScript,
             webRtc,
             localStorage,
