@@ -317,6 +317,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
+      propertyPath: browserClient.noSandbox
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 906994673, guid: eb44fadbfd943194e85df7faf3a9dc5b, type: 3}
       propertyPath: browserClient.logSeverity
       value: 1
       objectReference: {fileID: 0}

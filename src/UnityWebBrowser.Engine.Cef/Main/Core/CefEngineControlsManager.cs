@@ -44,7 +44,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="DllNotFoundException"></exception>
     /// <exception cref="CefVersionMismatchException"></exception>
     /// <exception cref="Exception"></exception>
-    public CefEngineControlsManager(LoggerManager loggerManagerManager)
+    public CefEngineControlsManager(LoggerManager loggerManagerManager, IntPtr sandboxInfo)
     {
 #if MACOS
         CefMacOsFrameworkLoader.AddFrameworkLoader();
@@ -58,7 +58,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         
         CefLoggerWrapper.Init(mainLogger);
         
-        sandboxInfo = IntPtr.Zero;
+        this.sandboxInfo = sandboxInfo;
     }
 
     /// <summary>
@@ -85,14 +85,12 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         arguments.NoSandbox = true;
 #endif
 
+        if (arguments.NoSandbox)
+            sandboxInfo = IntPtr.Zero;
+
         //Set up CEF args and the CEF app
         cefMainArgs = new CefMainArgs(argv);
         cefApp = new UwbCefApp(launchArguments);
-
-#if WINDOWS
-        if(!launchArguments.NoSandbox)
-            sandboxInfo = CefSandbox.cef_sandbox_info_create();
-#endif
         
         //Run our sub-processes
         int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, sandboxInfo);
@@ -185,11 +183,6 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
 
         //Init CEF
         CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, sandboxInfo);
-        
-#if WINDOWS
-        if(!launchArguments.NoSandbox)
-            CefSandbox.cef_sandbox_info_destroy(sandboxInfo);
-#endif
 
         //Create a CEF window and set it to windowless
         CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
