@@ -36,6 +36,11 @@
     <PropertyGroup Condition="'$(IsWindowsBuild)'=='true'">
         <OutputType>Library</OutputType>
     </PropertyGroup>
+
+    <Target Name="PostPublish" AfterTargets="Publish" Condition="'$(IsWindowsBuild)'=='true'">
+        <Exec Command="..\..\DevTools\rcedit\rcedit.exe $(PublishDir)UnityWebBrowser.Engine.Cef.exe --set-icon ..\Shared\chromium-logo.ico" />
+        <Exec Command="..\..\DevTools\rcedit\rcedit.exe $(PublishDir)UnityWebBrowser.Engine.Cef.exe --set-version-string &quot;FileDescription&quot; &quot;UnityWebBrowser.Engine.Cef&quot;" />
+    </Target>
     
     <!--
     MacOS Custom Build
