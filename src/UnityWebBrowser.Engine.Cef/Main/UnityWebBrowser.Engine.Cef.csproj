@@ -8,6 +8,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ApplicationIcon>../Shared/chromium-logo.ico</ApplicationIcon>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <OutDir>../bin/$(Configuration)/</OutDir>
@@ -19,40 +20,27 @@
         <DebuggerSupport>false</DebuggerSupport>
         <UseSystemResourceKeys>true</UseSystemResourceKeys>
         <PublishAot>true</PublishAot>
-        <StripSymbols>true</StripSymbols>
+        <StripSymbols>false</StripSymbols>
     </PropertyGroup>
     
-    <!-- Include cef_sandbox for windows --> 
+    <!-- Include bootstrap on win -->
     <ItemGroup Condition="'$(IsWindowsBuild)'=='true'">
-        <DirectPInvoke Include="cef_sandbox" />
-        
-        <NativeLibrary Include="Advapi32.lib" />
-        <NativeLibrary Include="dbghelp.lib" />
-        <NativeLibrary Include="Delayimp.lib" />
-        <NativeLibrary Include="ntdll.lib" />
-        <NativeLibrary Include="OleAut32.lib" />
-        <NativeLibrary Include="PowrProf.lib" />
-        <NativeLibrary Include="Propsys.lib" />
-        <NativeLibrary Include="psapi.lib" />
-        <NativeLibrary Include="SetupAPI.lib" />
-        <NativeLibrary Include="Shell32.lib" />
-        <NativeLibrary Include="Shcore.lib" />
-        <NativeLibrary Include="Userenv.lib" />
-        <NativeLibrary Include="version.lib" />
-        <NativeLibrary Include="wbemuuid.lib" />
-        <NativeLibrary Include="WindowsApp.lib" />
-        <NativeLibrary Include="winmm.lib" />
-        
-        <NativeLibrary Include="comctl32.lib" />
-        <NativeLibrary Include="gdi32.lib" />
-        <NativeLibrary Include="rpcrt4.lib" />
-        <NativeLibrary Include="shlwapi.lib" />
-        <NativeLibrary Include="ws2_32.lib" />
-
-        <NativeLibrary Include="..\..\ThirdParty\Libs\cef\windows64\Release\cef_sandbox.lib" />
-
-        <LinkerArg Include="/LIBPATH:..\..\ThirdParty\Libs\cef\windows64\Release\" />
+        <ContentWithTargetPath Include="..\..\ThirdParty\Libs\cef\windows64\Release\bootstrapc.exe" Link="Libs/%(Filename)%(Extension)">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>UnityWebBrowser.Engine.Cef.exe</TargetPath>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ContentWithTargetPath>
     </ItemGroup>
+    
+    <!-- Build project out as a lib on Windows since bootstrap will run and the load this dll -->
+    <PropertyGroup Condition="'$(IsWindowsBuild)'=='true'">
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <Target Name="PostPublish" AfterTargets="Publish" Condition="'$(IsWindowsBuild)'=='true'">
+        <Exec Command="..\..\DevTools\rcedit\rcedit.exe $(PublishDir)UnityWebBrowser.Engine.Cef.exe --set-icon ..\Shared\chromium-logo.ico" />
+        <Exec Command="..\..\DevTools\rcedit\rcedit.exe $(PublishDir)UnityWebBrowser.Engine.Cef.exe --set-version-string &quot;FileDescription&quot; &quot;UnityWebBrowser.Engine.Cef&quot;" />
+    </Target>
     
     <!--
     MacOS Custom Build

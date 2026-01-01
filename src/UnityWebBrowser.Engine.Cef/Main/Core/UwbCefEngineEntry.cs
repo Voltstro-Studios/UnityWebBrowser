@@ -16,21 +16,26 @@ namespace UnityWebBrowser.Engine.Cef.Core;
 /// </summary>
 internal class UwbCefEngineEntry : EngineEntryPoint
 {
+    private readonly IntPtr sandboxInfo;
+    
+    public UwbCefEngineEntry(IntPtr sandboxInfo)
+    {
+        this.sandboxInfo = sandboxInfo;
+    }
+    
     private CefEngineControlsManager cefEngineControlsManager;
 
     protected override void EarlyInit(LaunchArguments launchArguments, string[] args)
     {
-        cefEngineControlsManager = new CefEngineControlsManager(LoggerManagerFactory);
+        cefEngineControlsManager = new CefEngineControlsManager(LoggerManagerFactory, sandboxInfo);
         cefEngineControlsManager.EarlyInit(launchArguments, args);
     }
 
     protected override void EntryPoint(LaunchArguments launchArguments, string[] args)
     {
-        
         cefEngineControlsManager.Init(ClientControlsActions, PopupManager);
 
         SetupIpc(cefEngineControlsManager, launchArguments);
-        //Ready();
 
         //Calling run message loop will cause the main thread to lock (what we want)
         CefRuntime.RunMessageLoop();
