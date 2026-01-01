@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Voltstro-Studios")]
 [assembly: AssemblyProduct("Unity Web Browser")]
-[assembly: AssemblyCopyright("Copyright (c) 2021-2025 Voltstro-Studios")]
+[assembly: AssemblyCopyright("Copyright (c) 2021-2026 Voltstro-Studios")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
