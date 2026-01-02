@@ -14,10 +14,10 @@ namespace UnityWebBrowser.Engine.Cef.Shared.Core;
 public static class CefSandbox
 {
 #if MACOS
-    [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_initialize", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("libcef_sandbox", EntryPoint = "cef_sandbox_initialize", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr cef_sandbox_initialize(int argc, [In] string[] argv);
 
-    [DllImport("cef_sandbox", EntryPoint = "cef_sandbox_destroy", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("libcef_sandbox", EntryPoint = "cef_sandbox_destroy", CallingConvention = CallingConvention.Cdecl)]
     public static extern void cef_sandbox_destroy(IntPtr sandbox_context);
 
 #endif

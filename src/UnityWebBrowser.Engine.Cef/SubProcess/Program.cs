@@ -16,8 +16,8 @@ public static class Program
     public static int Main(string[] args)
     {
 #if MACOS
-        var sandboxContext = CefSandbox.cef_sandbox_initialize(args.Length, args);
         CefMacOsFrameworkLoader.AddFrameworkLoader();
+        var sandboxContext = CefSandbox.cef_sandbox_initialize(args.Length, args);
 #endif
         
         //Setup CEF

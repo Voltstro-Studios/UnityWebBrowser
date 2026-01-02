@@ -26,11 +26,6 @@
     </ItemGroup>
     
     <ItemGroup Condition="'$(IsMacOsBuild)'=='true'">
-        <DirectPInvoke Include="cef_sandbox" />
-
-        <LinkerArg Include="-lsandbox" />
-        <LinkerArg Include="-lc++" />
-        
         <None Update="info-subprocess.plist">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -43,14 +38,6 @@
         <None Update="info-subprocess-renderer.plist">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-    </ItemGroup>
-    
-    <ItemGroup Condition="'$(RuntimeIdentifier)'=='osx-x64'">
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosx64/Release/cef_sandbox.a"  />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(RuntimeIdentifier)'=='osx-arm64'">
-        <NativeLibrary Include="../../ThirdParty/Libs/cef/macosarm64/Release/cef_sandbox.a"  />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(IsReleaseBuild)'=='true'">
