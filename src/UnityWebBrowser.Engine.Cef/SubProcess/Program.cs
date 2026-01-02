@@ -24,8 +24,7 @@ public static class Program
         CefRuntime.Load();
 
         LaunchArgumentsParser argumentsParser = new();
-        int subProcessExitCode = 0;
-        argumentsParser.Run(args, launchArguments =>
+        int processExitCode = argumentsParser.Run(args, launchArguments =>
         {
 // ReSharper disable once RedundantAssignment
             string[] argv = args;
@@ -41,13 +40,13 @@ public static class Program
             UwbCefApp cefApp = new UwbCefApp(launchArguments);
 
             //Run our sub-processes
-            subProcessExitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
+            return CefRuntime.ExecuteProcess(cefMainArgs, cefApp, IntPtr.Zero);
         });
 
 #if MACOS
         CefSandbox.cef_sandbox_destroy(sandboxContext);
 #endif
 
-        return subProcessExitCode;
+        return processExitCode;
     }
 }
