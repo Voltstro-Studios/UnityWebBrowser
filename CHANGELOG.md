@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.8] - Unreleased
 
+NOTE: Next release is planned to be 3.x breaking change release. The main reason is to drop deprecated code and to up minimal supported Unity version to Unity 6.x.
+
 ### Added
 
 - Add configurable WindowlessFrameRate setting (#428)
@@ -13,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update CEF to 143.0.13
+- Bump deps
+- Use custom FixUpdate loop that uses Time.unscaledDeltaTime (#422)
+
+### Fixed
+
+- Fixed browser not rendering on resize using a workaround for a CEF issue (#425)
 
 ## [2.2.7] - 2025-07-19
 
