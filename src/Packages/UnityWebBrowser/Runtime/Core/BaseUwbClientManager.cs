@@ -25,6 +25,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         /// </summary>
         [Tooltip("The browser client, what handles the communication between the UWB engine and Unity")]
         public WebBrowserClient browserClient = new();
+        
+        private float timeAccumulator;
 
         private void Start()
         {
@@ -37,12 +39,17 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         private void Update()
         {
             browserClient.UpdateFps();
-        }
-
-        private void FixedUpdate()
-        {
-            browserClient.LoadTextureData();
-            OnFixedUpdate();
+            
+            timeAccumulator += Time.unscaledDeltaTime;
+            
+            //Fixed update
+            //Custom done since people are using Time.deltaTime to pause their games, but want UWB to continue running
+            if (timeAccumulator >= Time.fixedDeltaTime)
+            {
+                browserClient.LoadTextureData();
+                OnFixedUpdate();
+                timeAccumulator -= Time.fixedDeltaTime;
+            }
         }
 
         private void OnDestroy()

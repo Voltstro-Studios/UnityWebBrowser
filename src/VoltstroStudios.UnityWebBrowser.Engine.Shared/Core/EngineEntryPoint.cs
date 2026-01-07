@@ -95,12 +95,15 @@ internal abstract class EngineEntryPoint : IDisposable
                 EarlyInit(parsedArgs, args);
                 
                 EntryPoint(parsedArgs, args);
+                return 0;
             }
             catch (Exception ex)
             {
                 engineLogger.LogCritical(ex, "Uncaught exception occured in the entry point!");
                 ShutdownAndExitWithError();
             }
+
+            return 1;
         });
     }
 

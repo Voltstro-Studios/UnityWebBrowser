@@ -44,7 +44,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
     /// <exception cref="DllNotFoundException"></exception>
     /// <exception cref="CefVersionMismatchException"></exception>
     /// <exception cref="Exception"></exception>
-    public CefEngineControlsManager(LoggerManager loggerManagerManager)
+    public CefEngineControlsManager(LoggerManager loggerManagerManager, IntPtr sandboxInfo)
     {
 #if MACOS
         CefMacOsFrameworkLoader.AddFrameworkLoader();
@@ -58,7 +58,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         
         CefLoggerWrapper.Init(mainLogger);
         
-        sandboxInfo = IntPtr.Zero;
+        this.sandboxInfo = sandboxInfo;
     }
 
     /// <summary>
@@ -85,14 +85,12 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         arguments.NoSandbox = true;
 #endif
 
+        if (arguments.NoSandbox)
+            sandboxInfo = IntPtr.Zero;
+
         //Set up CEF args and the CEF app
         cefMainArgs = new CefMainArgs(argv);
         cefApp = new UwbCefApp(launchArguments);
-
-#if WINDOWS
-        if(!launchArguments.NoSandbox)
-            sandboxInfo = CefSandbox.cef_sandbox_info_create();
-#endif
         
         //Run our sub-processes
         int exitCode = CefRuntime.ExecuteProcess(cefMainArgs, cefApp, sandboxInfo);
@@ -185,11 +183,6 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
 
         //Init CEF
         CefRuntime.Initialize(cefMainArgs, cefSettings, cefApp, sandboxInfo);
-        
-#if WINDOWS
-        if(!launchArguments.NoSandbox)
-            CefSandbox.cef_sandbox_info_destroy(sandboxInfo);
-#endif
 
         //Create a CEF window and set it to windowless
         CefWindowInfo cefWindowInfo = CefWindowInfo.Create();
@@ -198,11 +191,16 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         //Create our CEF browser settings
         Color suppliedColor = launchArguments.BackgroundColor;
         CefColor backgroundColor = new(suppliedColor.A, suppliedColor.R, suppliedColor.G, suppliedColor.B);
+
+        //Clamp framerate to valid CEF range (1-60)
+        int frameRate = Math.Clamp(launchArguments.WindowlessFrameRate, 1, 60);
+
         CefBrowserSettings cefBrowserSettings = new()
         {
             BackgroundColor = backgroundColor,
             JavaScript = launchArguments.JavaScript ? CefState.Enabled : CefState.Disabled,
-            LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled
+            LocalStorage = launchArguments.LocalStorage ? CefState.Enabled : CefState.Disabled,
+            WindowlessFrameRate = frameRate
         };
 
         mainLogger.LogDebug($"Starting CEF with these options:" +
@@ -212,6 +210,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
                      $"\nBackgroundColor: {suppliedColor}" +
                      $"\nCache Path: {cachePath}" +
                      $"\nPopup Action: {launchArguments.PopupAction}" +
+                     $"\nWindowless Frame Rate: {frameRate}" +
                      $"\nLog Path: {launchArguments.LogPath.FullName}" +
                      $"\nLog Severity: {launchArguments.LogSeverity}");
         mainLogger.LogInformation($"Starting CEF client...");

@@ -412,8 +412,15 @@ internal class UwbCefClient : CefClient, IDisposable
     /// <param name="resolution"></param>
     public void Resize(Resolution resolution)
     {
+        //HACK: Workaround to force cef to re-render since browser is not correctly refreshing on resize
+        //https://github.com/chromiumembedded/cef/issues/3826
+        browserHost.WasHidden(true);
+        
+        //Do actual resize
         renderHandler.Resize(new CefSize((int)resolution.Width, (int)resolution.Height));
         browserHost.WasResized();
+        
+        browserHost.WasHidden(false);
     }
 
     public void AudioMute(bool muted)

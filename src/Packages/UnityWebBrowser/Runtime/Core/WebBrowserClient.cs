@@ -131,6 +131,15 @@ namespace VoltstroStudios.UnityWebBrowser.Core
         [Tooltip("Proxy settings")] public ProxySettings proxySettings;
         
         /// <summary>
+        ///     Target framerate for the browser rendering (1-60 FPS).
+        ///     Higher values provide smoother video playback but use more CPU.
+        /// </summary>
+        [Header("Performance")]
+        [Tooltip("Target framerate for browser rendering (1-60). Higher = smoother but more CPU.")]
+        [Range(1, 60)]
+        public int windowlessFrameRate = 30;
+
+        /// <summary>
         ///     Enable or disable WebRTC
         /// </summary>
         [Header("Advanced")]
@@ -376,6 +385,9 @@ namespace VoltstroStudios.UnityWebBrowser.Core
             //Width & Height
             argsBuilder.AppendArgument("width", resolution.Width);
             argsBuilder.AppendArgument("height", resolution.Height);
+
+            //Windowless frame rate
+            argsBuilder.AppendArgument("windowless-frame-rate", windowlessFrameRate);
 
             //Javascript
             argsBuilder.AppendArgument("javascript", javascript);
