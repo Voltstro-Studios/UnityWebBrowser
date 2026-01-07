@@ -4,8 +4,9 @@
     <Import Project="../Imports/Properties.props" />
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <IsTrimmable>false</IsTrimmable>
+        <LangVersion>13</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
