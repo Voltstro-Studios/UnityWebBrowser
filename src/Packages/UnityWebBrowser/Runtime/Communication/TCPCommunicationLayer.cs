@@ -28,10 +28,23 @@ namespace VoltstroStudios.UnityWebBrowser.Communication
         [Range(1024, 65353)] [Tooltip("The out port to communicate on")]
         public int outPort = 5556;
 
+        /// <summary>
+        ///     How long the client keeps trying to reach the engine before giving up, in milliseconds
+        /// </summary>
+        /// <remarks>
+        ///     This was previously hardcoded to <see cref="int.MaxValue" />, i.e. roughly 24 days of
+        ///     retrying. If the engine process is already gone the connect loop therefore never
+        ///     terminates, and because a Unity domain reload has to tear the client down, the reload
+        ///     blocks on it - the editor hangs on "Reloading Domain (busy for ...)" indefinitely
+        ///     rather than reporting a failed connection.
+        /// </remarks>
+        [Range(1000, 600000)] [Tooltip("Give up connecting to the engine after this long (ms)")]
+        public int connectionTimeout = 30000;
+
         public override Client CreateClient()
         {
             IPEndPoint ipEndPoint = new(IPAddress.Loopback, inPort);
-            return new TCPClient(ipEndPoint, int.MaxValue);
+            return new TCPClient(ipEndPoint, connectionTimeout);
         }
 
         public override Host CreateHost()
