@@ -29,7 +29,8 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
 
         public override string GetEngineExecutableName()
         {
-#if UNITY_STANDALONE_WIN
+            //Host-OS gate: a Windows Editor must still look for the .exe whatever the build target.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
             return engineAppName + ".exe";
 #else 
             return engineAppName;

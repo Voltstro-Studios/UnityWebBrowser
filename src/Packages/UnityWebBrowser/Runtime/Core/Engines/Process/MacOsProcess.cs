@@ -6,7 +6,8 @@
 using System.Diagnostics;
 using VoltstroStudios.UnityWebBrowser.Helper;
 
-#if UNITY_STANDALONE_OSX
+//Host-OS gate (parity with WindowProcess).
+#if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
 
 namespace VoltstroStudios.UnityWebBrowser.Core.Engines.Process
 {

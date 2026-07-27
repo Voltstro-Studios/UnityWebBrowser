@@ -3,7 +3,9 @@
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
 
-#if UNITY_STANDALONE_WIN
+//Host-OS gate: this process wrapper has to compile for a Windows Editor whatever the
+//active build target is, because the engine is a child process of the Editor itself.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
 using System;
 using System.ComponentModel;
