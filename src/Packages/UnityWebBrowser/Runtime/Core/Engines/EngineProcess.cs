@@ -29,11 +29,14 @@ namespace VoltstroStudios.UnityWebBrowser.Core.Engines
         /// <param name="logger"></param>
         public EngineProcess(Engine engine, IWebBrowserLogger logger)
         {
-#if UNITY_STANDALONE_WIN
+            //Host-OS gate, matching WebBrowserUtils.GetRunningPlatform(). Without the editor
+            //defines processHandle stayed null in an Editor targeting a non-Standalone platform
+            //and every member that forwards to it threw a NullReferenceException.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
             processHandle = new WindowProcess();
-#elif UNITY_STANDALONE_LINUX
+#elif UNITY_STANDALONE_LINUX || UNITY_EDITOR_LINUX
             processHandle = new LinuxProcess(logger);
-#elif UNITY_STANDALONE_OSX
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
             processHandle = new MacOsProcess();
 #endif
             

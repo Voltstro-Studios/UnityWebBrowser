@@ -140,11 +140,17 @@ namespace VoltstroStudios.UnityWebBrowser.Helper
         /// <returns></returns>
         public static Platform GetRunningPlatform()
         {
-#if UNITY_STANDALONE_WIN
+            //Gated on the HOST OS, not the active build target. The engine is a native child
+            //process of the running Unity process, so in the Editor the platform that matters is
+            //the one the Editor itself runs on - a Windows Editor targeting WebGL/Android/console
+            //still has to launch the Windows engine. Keying this off UNITY_STANDALONE_* alone made
+            //this throw in any Editor whose build target was not Standalone, which stopped UWB
+            //being usable in the Editor for those projects at all.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
             return Platform.Windows64;
-#elif UNITY_STANDALONE_LINUX
+#elif UNITY_STANDALONE_LINUX || UNITY_EDITOR_LINUX
             return Platform.Linux64;
-#elif UNITY_STANDALONE_OSX
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
             return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64 ? Platform.MacOSArm64 : Platform.MacOS;
 #else
             throw new PlatformNotSupportedException();
