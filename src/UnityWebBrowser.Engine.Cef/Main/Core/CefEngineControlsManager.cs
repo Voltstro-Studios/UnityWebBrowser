@@ -148,6 +148,7 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
         
 #else
         string frameworksPath = Path.GetFullPath(Path.Join(Environment.CurrentDirectory, "../Frameworks/"));
+        string mainBundlePath = Path.GetFullPath(Path.Join(Environment.CurrentDirectory, "../.."));
         string baseCefPath = Path.Join(frameworksPath, "Chromium Embedded Framework.framework");
         string resourcesPath = Path.Combine(baseCefPath, "Resources");
         string localesPath = null;
@@ -177,7 +178,8 @@ internal class CefEngineControlsManager : IEngineControls, IDisposable
             LocalesDirPath = localesPath,
             BrowserSubprocessPath = subprocessPath,
 #if MACOS
-            FrameworkDirPath = baseCefPath
+            FrameworkDirPath = baseCefPath,
+            MainBundlePath = mainBundlePath
 #endif
         };
 
